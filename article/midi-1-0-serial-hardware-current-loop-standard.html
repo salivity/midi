@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 1.0 Serial Hardware Current Loop Standard - midi</title>
+    <meta name="description" content="This article provides an overview of the serial hardware layer defined in the Musical Instrument Digital Interface (MIDI) 1.0 specification, focusing on its physical signaling method. Readers will learn about the precise electrical current loop standard">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-1-0-serial-hardware-current-loop-standard">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 1.0 Serial Hardware Current Loop Standard - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-1-0-serial-hardware-current-loop-standard" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the serial hardware layer defined in the Musical Instrument Digital Interface (MIDI) 1.0 specification, focusing on its physical signaling method. Readers will learn about the precise electrical current loop standard" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-10-serial-hardware-current-loop-standard">MIDI 1.0 Serial
+Hardware Current Loop Standard</h1>
+<p>This article provides an overview of the serial hardware layer
+defined in the Musical Instrument Digital Interface (MIDI) 1.0
+specification, focusing on its physical signaling method. Readers will
+learn about the precise electrical current loop standard employed by
+MIDI 1.0, how it transmits binary data, the role of opto-isolation in
+preventing audio interference, and the exact pin configurations used to
+achieve reliable instrument communication.</p>
+<h3 id="the-5-ma-opto-isolated-current-loop">The 5 mA Opto-Isolated
+Current Loop</h3>
+<p>The serial hardware layer of the MIDI 1.0 specification employs a
+<strong>5 milliamp (5 mA) current loop</strong> standard. Unlike
+traditional voltage-level signaling (such as RS-232, which switches
+between positive and negative voltages), MIDI 1.0 relies on the presence
+or absence of electrical current to transmit binary data:</p>
+<ul>
+<li><strong>Logical 0 (Space):</strong> Current is active and flowing at
+5 mA (loop closed).</li>
+<li><strong>Logical 1 (Mark):</strong> Current is inactive at 0 mA (loop
+open).</li>
+</ul>
+<h3 id="operating-voltage-and-resistor-topology">Operating Voltage and
+Resistor Topology</h3>
+<p>The standard was originally designed around a nominal +5-volt DC
+power rail. Current is driven from the transmitting device (MIDI OUT)
+through a source resistor (typically 220 ohms), transmitted over a
+shielded cable, passed through an infrared LED inside an optocoupler at
+the receiving device (MIDI IN), and returned through another 220-ohm
+resistor to the transmitter's data line.</p>
+<p>While the system is powered by a 5V source (with modern 3.3V
+adaptations defined in later updates), the physical signaling standard
+itself is strictly defined as a current loop rather than a specific
+voltage loop.</p>
+<h3 id="opto-isolation-and-ground-loop-prevention">Opto-Isolation and
+Ground Loop Prevention</h3>
+<p>A critical requirement of the MIDI 1.0 hardware layer is
+opto-isolation at every MIDI IN port. The incoming 5 mA current loop
+directly drives an optocoupler's internal LED (historically the Sharp
+PC900 or 6N138), which optically triggers a phototransistor to
+reconstitute the electrical signal on the receiving system's internal
+circuitry.</p>
+<p>Because there is no physical electrical connection between the
+transmitting hardware and the receiving hardware, this current loop
+design completely prevents ground loops. In musical setups involving
+high-gain audio equipment and amplifiers, this isolation eliminates hum,
+buzz, and voltage-offset issues across connected gear.</p>
+<h3 id="transmission-format-and-pin-configuration">Transmission Format
+and Pin Configuration</h3>
+<p>MIDI 1.0 data is transmitted asynchronously at a rate of 31.25
+kilobaud (±1%) using an 8-N-1 frame structure (1 start bit, 8 data bits,
+and 1 stop bit).</p>
+<p>The physical connection uses standard 5-pin DIN connectors
+(180-degree configuration):</p>
+<ul>
+<li><strong>Pin 4:</strong> +5V supply line (via a 220-ohm pull-up
+resistor).</li>
+<li><strong>Pin 5:</strong> Serial data return line (via a 220-ohm
+pull-down resistor to the UART TX output).</li>
+<li><strong>Pin 2:</strong> Cable shield/ground (connected to chassis
+ground at MIDI OUT only; explicitly floating at MIDI IN to preserve
+isolation).</li>
+<li><strong>Pins 1 and 3:</strong> Unconnected.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

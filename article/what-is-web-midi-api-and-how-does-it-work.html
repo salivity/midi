@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is Web MIDI API and How Does It Work? - midi</title>
+    <meta name="description" content="The Web MIDI API bridges the gap between web applications and physical musical hardware, such as synthesizers, drum pads, and MIDI controllers. This article explores the core concepts of the Web MIDI API, explains how the browser communicates with extern">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-web-midi-api-and-how-does-it-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is Web MIDI API and How Does It Work? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-web-midi-api-and-how-does-it-work" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Web MIDI API bridges the gap between web applications and physical musical hardware, such as synthesizers, drum pads, and MIDI controllers. This article explores the core concepts of the Web MIDI API, explains how the browser communicates with extern" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-is-web-midi-api-and-how-does-it-work">What Is Web MIDI API
+and How Does It Work?</h1>
+<p>The Web MIDI API bridges the gap between web applications and
+physical musical hardware, such as synthesizers, drum pads, and MIDI
+controllers. This article explores the core concepts of the Web MIDI
+API, explains how the browser communicates with external devices using
+digital protocols, and details the process of sending and receiving data
+to create interactive music experiences directly in the web browser.</p>
+<h3 id="understanding-midi-and-the-web">Understanding MIDI and the
+Web</h3>
+<p>MIDI, which stands for Musical Instrument Digital Interface, is a
+universal technical standard that allows electronic instruments,
+computers, and other equipment to communicate. MIDI does not transmit
+actual audio signals. Instead, it transmits event messages—data
+representing musical actions such as note pitch, velocity (how hard a
+key is pressed), volume, modulation, and clock tempo.</p>
+<p>Historically, interfacing with MIDI hardware required native desktop
+software. The Web MIDI API changes this by exposing the operating
+system's native MIDI subsystem to JavaScript running in a web browser.
+This allows web applications to detect connected hardware, receive input
+from instruments, and send control data back to physical devices.</p>
+<h3 id="how-the-web-midi-api-interacts-with-hardware">How the Web MIDI
+API Interacts with Hardware</h3>
+<p>The connection between a browser application and a physical hardware
+unit relies on a structured, event-driven API. The communication process
+follows several distinct stages:</p>
+<h4 id="1-requesting-permission-and-access">1. Requesting Permission and
+Access</h4>
+<p>Browsers enforce security protocols before exposing hardware
+interfaces. A web application must request access using the
+<code>navigator.requestMIDIAccess()</code> method. This triggers a
+permission prompt for the user, especially if the application requests
+access to send System Exclusive (SysEx) messages, which can modify
+device firmware and internal configurations.</p>
+<h4 id="2-device-enumeration">2. Device Enumeration</h4>
+<p>Once permission is granted, the browser returns a
+<code>MIDIAccess</code> object. This object inspects the operating
+system's active MIDI connections and creates two distinct lists:</p>
+<ul>
+<li><strong>Inputs:</strong> Ports representing devices that send data
+to the computer (e.g., a keyboard controller or electronic drum
+kit).</li>
+<li><strong>Outputs:</strong> Ports representing devices that receive
+data from the computer (e.g., a hardware synthesizer, sampler, or
+lighting controller).</li>
+</ul>
+<p>The application can iterate through these ports to map available
+hardware automatically or provide a dropdown menu for the user to select
+specific gear.</p>
+<h4 id="3-receiving-data-from-hardware">3. Receiving Data from
+Hardware</h4>
+<p>To capture actions performed on a hardware instrument, the web
+application attaches an event listener to an input port listening for
+the <code>midimessage</code> event.</p>
+<p>When a musician presses a key, turns a knob, or taps a pad, the
+device transmits raw MIDI data packets (typically 1 to 3 bytes). For
+example, pressing middle C generates a "Note On" message containing
+three bytes:</p>
+<ul>
+<li><strong>Status Byte:</strong> Indicates the message type (Note On)
+and the MIDI channel.</li>
+<li><strong>Data Byte 1:</strong> Identifies the specific note number
+(e.g., 60 for middle C).</li>
+<li><strong>Data Byte 2:</strong> Indicates the velocity (ranging from 0
+to 127).</li>
+</ul>
+<p>The browser parses this binary data immediately, allowing the web app
+to trigger digital synthesizers, visualize musical notation, or log
+inputs with minimal latency.</p>
+<h4 id="4-sending-data-to-hardware">4. Sending Data to Hardware</h4>
+<p>Communication is bidirectional. A browser application can send
+commands to hardware via the <code>send()</code> method on an available
+output port. By passing an array of bytes matching standard MIDI
+specifications, the browser can sequence notes on an analog synth,
+synchronize tempo via MIDI clock pulses, or adjust physical parameters
+such as filter cutoffs and LED backlighting on controllers.</p>
+<h3 id="practical-applications">Practical Applications</h3>
+<p>The ability to interface with physical hardware has transformed what
+is possible on the web. Common implementations of the Web MIDI API
+include:</p>
+<ul>
+<li><strong>In-Browser Digital Audio Workstations (DAWs):</strong>
+Recording and sequencing tracks directly in the browser using external
+instruments.</li>
+<li><strong>Hardware Editors and Patch Librarians:</strong> Configuring
+synth parameters, saving presets, and managing hardware firmware without
+installing proprietary desktop software.</li>
+<li><strong>Music Education Tools:</strong> Providing real-time visual
+feedback on student performance through interactive browser-based piano
+lessons.</li>
+<li><strong>Stage and Performance Control:</strong> Triggering web-based
+visuals, browser audio, or external lighting rigs from standard
+performance hardware.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

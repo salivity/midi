@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korg vs Moog MIDI to CV Trigger Standards - midi</title>
+    <meta name="description" content="Interfacing modern MIDI gear with vintage analog synthesizers requires translating digital note data into analog control voltages (CV) and gate triggers. Moog and vintage Korg synthesizers rely on fundamentally different engineering standards for both pi">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/korg-vs-moog-midi-to-cv-trigger-standards">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Korg vs Moog MIDI to CV Trigger Standards - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/korg-vs-moog-midi-to-cv-trigger-standards" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interfacing modern MIDI gear with vintage analog synthesizers requires translating digital note data into analog control voltages (CV) and gate triggers. Moog and vintage Korg synthesizers rely on fundamentally different engineering standards for both pi" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="korg-vs-moog-midi-to-cv-trigger-standards">Korg vs Moog MIDI to
+CV Trigger Standards</h1>
+<p>Interfacing modern MIDI gear with vintage analog synthesizers
+requires translating digital note data into analog control voltages (CV)
+and gate triggers. Moog and vintage Korg synthesizers rely on
+fundamentally different engineering standards for both pitch tracking
+and note triggering. While Moog utilizes a logarithmic 1 Volt per Octave
+(1V/Oct) pitch standard alongside an S-Trig (Switch Trigger) mechanism,
+vintage Korg instruments—particularly the iconic MS series—rely on a
+linear Hertz per Volt (Hz/V) pitch standard and an inverted, active-low
+trigger format. Understanding these technical discrepancies is essential
+for selecting and configuring the correct MIDI-to-CV converter.</p>
+<h3 id="pitch-control-1voctave-vs-hzvolt">Pitch Control: 1V/Octave vs.
+Hz/Volt</h3>
+<p>The primary difference in pitch handling between Moog and vintage
+Korg synthesizers lies in the mathematical scaling of voltage to
+frequency:</p>
+<ul>
+<li><strong>Moog (1V/Oct):</strong> Moog established the logarithmic
+1V/Oct standard, which eventually became the dominant analog format
+across the industry (later adopted by Roland, ARP, and modern Eurorack).
+In this system, adding exactly one volt doubles the pitch frequency,
+shifting the note up by one octave (e.g., 1V = C1, 2V = C2, 3V = C3).
+The internal oscillator circuit contains an exponential converter to
+translate linear voltage changes into exponential frequency shifts.</li>
+<li><strong>Korg (Hz/V):</strong> Classic vintage Korg synths, such as
+the MS-10 and MS-20, use the linear Hertz per Volt standard (also used
+by vintage Yamaha). Instead of voltage steps per octave, the
+relationship between input voltage and oscillator frequency is strictly
+linear (e.g., 1V = 100 Hz, 2V = 200 Hz, 4V = 400 Hz).</li>
+</ul>
+<p>Because the math behind these scales is entirely different, sending a
+standard 1V/Oct pitch signal from a basic MIDI-to-CV converter into an
+MS-series Korg results in severe tracking errors where the pitch
+compresses heavily as you play up the keyboard. A MIDI-to-CV converter
+must explicitly support a Hz/V output profile to play a vintage Korg in
+tune.</p>
+<h3 id="gate-and-trigger-standards-s-trig-vs-v-trig">Gate and Trigger
+Standards: S-Trig vs. V-Trig</h3>
+<p>Pitch CV dictates which note sounds, while the gate or trigger tells
+the synthesizer's envelopes when a note begins and ends. Both Moog and
+vintage Korg depart from the standard positive voltage trigger (V-Trig)
+used in modern gear:</p>
+<ul>
+<li><strong>Moog S-Trig:</strong> Moog instruments employ a "Switch
+Trigger" (S-Trig). In an idle state, the trigger line rests at a
+positive voltage. When a key is pressed, the circuit shorts the
+connection directly to ground (0V), acting as a passive switch closure.
+A standard positive voltage gate (+5V or +10V) from a typical MIDI-to-CV
+converter cannot trigger a Moog envelope without a dedicated transistor
+circuit or an "S-Trig conversion cable" that converts the positive gate
+into a ground short.</li>
+<li><strong>Korg MS-Series Inverted Triggers:</strong> Vintage Korg
+MS-series synthesizers use an active-low (negative-going) voltage
+trigger. The input rests at a positive high voltage (typically around
++5V) and triggers the envelope when the voltage drops to 0V (ground)
+upon note onset. While functional behavior is similar to an S-Trig,
+Korg's implementation accepts negative-edge voltage drops via standard
+1/4-inch or 3.5mm jacks.</li>
+</ul>
+<h3 id="interfacing-with-modern-midi-to-cv-converters">Interfacing with
+Modern MIDI-to-CV Converters</h3>
+<p>To successfully control vintage units from a digital sequencer or
+keyboard, the MIDI-to-CV converter must be configured to match both the
+pitch and trigger requirements of the specific instrument:</p>
+<ul>
+<li><strong>For Moog:</strong> Set the CV pitch output to
+<strong>1V/Oct</strong> and configure the trigger output to
+<strong>S-Trig</strong> (or use an external V-Trig-to-S-Trig converter
+cable connected to the proprietary Moog Cinch-Jones connector).</li>
+<li><strong>For Vintage Korg (MS Series):</strong> Set the CV pitch
+output to <strong>Hz/V</strong> and configure the gate output to
+<strong>Inverted Gate / Negative Trigger</strong> (active-low).</li>
+</ul>
+<p>Certain later vintage Korg models, such as the Mono/Poly and Polysix,
+shifted toward the standard 1V/Oct and positive V-Trig formats. However,
+when interfacing with classic MS-series hardware or authentic Moog
+systems, standard 1V/Oct and V-Trig outputs will fail to track pitch or
+trigger envelopes correctly without these protocol-specific
+adjustments.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

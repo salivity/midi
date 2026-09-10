@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Performance MIDI Routing with Bome MIDI Translator - midi</title>
+    <meta name="description" content="Bome MIDI Translator Pro is a versatile utility that acts as the central nervous system for complex stage setups. By running between physical controllers, synthesizers, and digital audio workstations (DAWs), it intercepts, modifies, and redirects MIDI da">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/live-performance-midi-routing-with-bome-midi-translator">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Live Performance MIDI Routing with Bome MIDI Translator - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/live-performance-midi-routing-with-bome-midi-translator" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Bome MIDI Translator Pro is a versatile utility that acts as the central nervous system for complex stage setups. By running between physical controllers, synthesizers, and digital audio workstations (DAWs), it intercepts, modifies, and redirects MIDI da" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="live-performance-midi-routing-with-bome-midi-translator">Live
+Performance MIDI Routing with Bome MIDI Translator</h1>
+<p>Bome MIDI Translator Pro is a versatile utility that acts as the
+central nervous system for complex stage setups. By running between
+physical controllers, synthesizers, and digital audio workstations
+(DAWs), it intercepts, modifies, and redirects MIDI data in real time.
+This article breaks down how the software manages intricate live
+performance routing through message transformation, dynamic logic,
+multi-device management, and virtual port redundancy.</p>
+<h3 id="universal-message-transformation-and-mapping">Universal Message
+Transformation and Mapping</h3>
+<p>In a live environment, different hardware and software instruments
+often require distinct MIDI message formats. Bome MIDI Translator allows
+performers to convert any incoming MIDI message into virtually any other
+outgoing command:</p>
+<ul>
+<li><strong>Control Change (CC) to Keystrokes or Notes:</strong> A foot
+pedal can trigger software scenes or mute tracks by converting standard
+CC messages into computer keystrokes or discrete MIDI note-on
+events.</li>
+<li><strong>Value Scaling and Inversion:</strong> Performers can scale
+parameter ranges (e.g., restricting a fader from sending values 0–127
+down to a subtle 40–80) or invert sweeps for crossfading between two
+different instruments using a single physical knob.</li>
+<li><strong>Sysex and Complex Data Handling:</strong> The software
+translates standard controller knobs into System Exclusive (SysEx)
+strings, enabling modern USB controllers to dictate parameters on
+vintage rackmount gear that does not support standard MIDI CC.</li>
+</ul>
+<h3 id="dynamic-conditional-routing-and-state-management">Dynamic
+Conditional Routing and State Management</h3>
+<p>Complex live sets often demand that a single physical controller
+change roles between songs or even song sections. Bome MIDI Translator
+uses internal global variables, timers, and conditional rules to handle
+these shifts dynamically:</p>
+<ul>
+<li><strong>Layering and Shift Modes:</strong> Performers can program
+"shift" buttons or toggles. Pressing a button changes a global state,
+instantly remapping a 16-pad controller from triggering drum samples to
+firing backing tracks or changing mixer parameters.</li>
+<li><strong>Song-Specific Presets:</strong> Entire routing maps can be
+grouped into presets that activate automatically upon receiving a
+specific Program Change message from a master setlist DAW.</li>
+<li><strong>Rules and Processing Logic:</strong> Performers can
+implement "if/then" rules—such as dropping specific velocity layers,
+creating split zones across a single keyboard, or delaying specific
+messages with built-in timers to prevent accidental
+double-triggers.</li>
+</ul>
+<h3 id="multi-destination-splitting-and-merging">Multi-Destination
+Splitting and Merging</h3>
+<p>Hardware MIDI setups typically require daisy chains or physical
+patchbays to distribute signals. Bome replaces or augments physical
+hardware routing using comprehensive software routing matrices:</p>
+<ul>
+<li><strong>One-to-Many Routing:</strong> A single controller press can
+simultaneously send a note to a stage synth, trigger a lighting cue via
+an external DMX-over-MIDI app, and update a vocal effects
+processor.</li>
+<li><strong>Many-to-One Merging:</strong> Inputs from multiple
+keyboards, electronic drum kits, and foot controllers can be merged into
+a single clean stream, preventing message collisions and timing jitter
+before reaching the main performance DAW.</li>
+</ul>
+<h3 id="hardware-port-virtualization-and-redundancy">Hardware Port
+Virtualization and Redundancy</h3>
+<p>One of the greatest hazards in a live performance is an accidental
+USB disconnect, which can cause DAWs to lose controller recognition and
+freeze the audio engine. Bome MIDI Translator solves this through
+virtual ports:</p>
+<ul>
+<li><strong>Virtual MIDI Ports:</strong> The performance DAW connects
+exclusively to persistent, virtual MIDI ports created by Bome, rather
+than the physical USB devices directly.</li>
+<li><strong>Hot-Swapping Protection:</strong> If a physical USB cable is
+unplugged on stage, the DAW never sees the disconnection because the
+virtual port remains open. Once the physical cable is reconnected, Bome
+automatically resumes routing without requiring the performer to restart
+the DAW or reconfigure the session mid-show.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

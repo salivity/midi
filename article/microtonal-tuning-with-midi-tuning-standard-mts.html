@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microtonal Tuning with MIDI Tuning Standard (MTS) - midi</title>
+    <meta name="description" content="The MIDI Tuning Standard (MTS) is an official extension of the MIDI specification that allows musicians and developers to define alternate tunings, microtonal scales, and historical temperaments beyond the standard 12-tone equal temperament (12-TET). By">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/microtonal-tuning-with-midi-tuning-standard-mts">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Microtonal Tuning with MIDI Tuning Standard (MTS) - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/microtonal-tuning-with-midi-tuning-standard-mts" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Tuning Standard (MTS) is an official extension of the MIDI specification that allows musicians and developers to define alternate tunings, microtonal scales, and historical temperaments beyond the standard 12-tone equal temperament (12-TET). By" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="microtonal-tuning-with-midi-tuning-standard-mts">Microtonal
+Tuning with MIDI Tuning Standard (MTS)</h1>
+<p>The MIDI Tuning Standard (MTS) is an official extension of the MIDI
+specification that allows musicians and developers to define alternate
+tunings, microtonal scales, and historical temperaments beyond the
+standard 12-tone equal temperament (12-TET). By assigning precise
+microtonal frequencies to MIDI note numbers, MTS eliminates the need for
+clumsy channel-wide pitch-bend workarounds. This article explains how
+MTS works, examines the frequency data structures used, details message
+formats, and outlines how the standard is implemented in modern software
+and hardware synthesizers.</p>
+<h3 id="the-problem-with-traditional-midi-tuning">The Problem with
+Traditional MIDI Tuning</h3>
+<p>Traditional MIDI maps notes 0 through 127 strictly to the 12-TET
+scale, with Note 69 locked to A4 (440 Hz). While musicians historically
+altered pitch using MIDI Pitch Bend messages, this method applies
+globally across an entire MIDI channel. Playing a chord where different
+notes require different offsets (such as pure intervals in Just
+Intonation) required allocating each voice to a separate MIDI channel.
+MTS solves this limitation by redefining the underlying pitch assigned
+to individual note numbers on a single channel.</p>
+<h3 id="pitch-representation-and-microtonal-resolution">Pitch
+Representation and Microtonal Resolution</h3>
+<p>MTS encodes pitch across three data bytes per note, delivering
+exceptional frequency precision:</p>
+<ol type="1">
+<li><strong>Byte 1 (MIDI Note Number):</strong> Represents the basic
+semitone step (0–127).</li>
+<li><strong>Byte 2 (Fractional Semitone MSB):</strong> The most
+significant 7 bits of the fractional semitone.</li>
+<li><strong>Byte 3 (Fractional Semitone LSB):</strong> The least
+significant 7 bits of the fractional semitone.</li>
+</ol>
+<p>Combining Bytes 2 and 3 provides a 14-bit integer representing the
+fraction of a semitone. A semitone (100 cents) is divided into 16,384
+distinct increments (<span class="math inline">\(2^{14}\)</span>). This
+yields a microtonal resolution of:</p>
+<p><span class="math display">\[\frac{100\text{ cents}}{16,384} \approx
+0.0061\text{ cents}\]</span></p>
+<p>This level of resolution is far beyond the human threshold for pitch
+discrimination, allowing for smooth, mathematically exact
+representations of any microtonal scale.</p>
+<h3 id="types-of-mts-messages">Types of MTS Messages</h3>
+<p>The MIDI Tuning Standard transmits tuning data through System
+Exclusive (SysEx) messages. These messages fall into two main functional
+categories:</p>
+<h4 id="1-bulk-tuning-dump">1. Bulk Tuning Dump</h4>
+<p>A bulk dump updates the tuning of all 128 notes simultaneously. This
+format is typically sent prior to performance to configure a
+synthesizer's overall key-to-pitch mapping. A bulk dump contains:</p>
+<ul>
+<li>System Exclusive header and MTS universal sub-ID.</li>
+<li>A tuning program/bank number (0–127).</li>
+<li>A 16-character ASCII name for the tuning.</li>
+<li>384 bytes of tuning data (128 notes <span
+class="math inline">\(\times\)</span> 3 bytes per note).</li>
+<li>A checksum to ensure data integrity.</li>
+</ul>
+<h4 id="2-single-note-tuning-change-real-time-and-non-real-time">2.
+Single-Note Tuning Change (Real-Time and Non-Real-Time)</h4>
+<p>MTS also supports updating individual notes dynamically. Available in
+both real-time (sub-ID 0x08) and non-real-time (sub-ID 0x09) variants,
+this message modifies one specific note or a small cluster of notes on
+demand. It transmits the tuning program number, the target note number,
+and the corresponding 3-byte frequency specification. This enables
+dynamic microtonal changes, such as adaptive tuning algorithms that
+shift pitches mid-performance based on harmonic context.</p>
+<h4 id="3-scaleoctave-tuning">3. Scale/Octave Tuning</h4>
+<p>Added in later revisions of the standard, the Scale/Octave format
+allows tunings to be defined on a repeating octave basis (using 1-byte
+or 2-byte offsets per interval of a 12-note scale) rather than
+specifying all 128 notes individually. This significantly reduces data
+overhead when working with standard 12-note microtonal temperaments.</p>
+<h3 id="mts-vs-other-microtonal-formats">MTS vs. Other Microtonal
+Formats</h3>
+<p>Unlike the Scala standard (<code>.scl</code>), which defines scales
+abstractly through ratios or cent values, MTS is a transport and
+hardware protocol. Synthesizers often import Scala files and convert
+their ratios into MTS SysEx messages internally or via bridge
+utilities.</p>
+<p>Compared to MIDI Polyphonic Expression (MPE)—which allocates notes to
+distinct channels and uses high-resolution pitch-bend curves—MTS
+natively preserves polyphony on a single channel without consuming MIDI
+bandwidth for continuous pitch streams.</p>
+<h3 id="modern-implementation-and-mts-esp">Modern Implementation and
+MTS-ESP</h3>
+<p>MTS is supported natively by several hardware synthesizers and
+software instruments (such as Pianoteq, Surge XT, and U-He plugins). In
+modern digital audio workstations (DAWs), MTS integration has expanded
+through implementations like MTS-ESP by ODDSound. MTS-ESP creates a
+shared memory client-server architecture inside the DAW: a master plugin
+transmits tuning instructions to all connected client plugins
+simultaneously, handling the underlying MTS conversion automatically and
+enabling seamless, synchronized microtonal composition across
+multi-track projects.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjusting MIDI Retrigger on High-Speed Double Kick - midi</title>
+    <meta name="description" content="High-speed double-kick drumming presents a unique challenge for electronic triggers, as beater bounce and vibrations often produce unintended double hits or choked notes. Retrigger cancellation—frequently labeled as mask time or retrigger delay in drum">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/adjusting-midi-retrigger-on-high-speed-double-kick">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Adjusting MIDI Retrigger on High-Speed Double Kick - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/adjusting-midi-retrigger-on-high-speed-double-kick" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High-speed double-kick drumming presents a unique challenge for electronic triggers, as beater bounce and vibrations often produce unintended double hits or choked notes. Retrigger cancellation—frequently labeled as mask time or retrigger delay in drum" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="adjusting-midi-retrigger-on-high-speed-double-kick">Adjusting
+MIDI Retrigger on High-Speed Double Kick</h1>
+<p>High-speed double-kick drumming presents a unique challenge for
+electronic triggers, as beater bounce and vibrations often produce
+unintended double hits or choked notes. Retrigger
+cancellation—frequently labeled as mask time or retrigger delay in drum
+modules—sets the minimum threshold of time the system must wait before
+registering a subsequent hit. This guide explains how to properly
+calibrate retrigger cancellation, balance pedal mechanics with module
+settings, and calculate millisecond timings to achieve articulate,
+flawless tracking at extreme tempos.</p>
+<h3
+id="understanding-retrigger-cancellation-and-mask-time">Understanding
+Retrigger Cancellation and Mask Time</h3>
+<p>When a bass drum beater strikes a mesh head or acoustic trigger pad,
+the initial hit produces a primary transient spike, quickly followed by
+secondary vibrations and beater bounce. Retrigger cancellation works by
+ignoring any signal fluctuations that occur within a specified window of
+milliseconds (ms) immediately following the primary strike.</p>
+<p>If this window is set too low, micro-bounces and head resonance
+trigger phantom notes ("machine-gunning"). If set too high, deliberate
+high-speed strokes are blocked, leading to dropped notes during fast
+double-bass bursts.</p>
+<h3 id="calculating-millisecond-spacing-for-high-tempos">Calculating
+Millisecond Spacing for High Tempos</h3>
+<p>To ensure the trigger module does not ignore genuine consecutive
+hits, the retrigger cancellation window must always be shorter than the
+time between alternating foot strokes.</p>
+<ul>
+<li><strong>At 200 BPM (16th notes):</strong> The time between
+individual alternating strokes is <strong>75 ms</strong>.</li>
+<li><strong>At 240 BPM (16th notes):</strong> The time between
+individual strokes drops to <strong>62.5 ms</strong>.</li>
+<li><strong>At 280 BPM (16th notes):</strong> The time between
+individual strokes is approximately <strong>53.5 ms</strong>.</li>
+</ul>
+<p>Because the retrigger window only needs to filter the micro-rebound
+of a single strike (which typically settles within 4 to 12 ms), your
+retrigger cancellation value will typically sit well below the time
+between alternating strokes. However, issues occur when mechanical
+beater flutter lasts longer than expected or when using an aggressive
+foot technique like heel-toe or swivel.</p>
+<h3 id="step-by-step-adjustment-procedure">Step-by-Step Adjustment
+Procedure</h3>
+<ol type="1">
+<li><strong>Optimize Mechanical Damping First:</strong> Before altering
+software parameters, eliminate excessive head vibration. Tighten the
+kick pad head to reduce slack, and use physical dampening (such as kick
+patches or foam muffling) to shorten the mechanical decay of each
+impact. Keep beaters adjusted to minimize physical recoil flutter.</li>
+<li><strong>Lower Scan Time / Peak Time:</strong> Set the trigger's
+"Scan Time" (the window the module uses to measure peak velocity) to a
+low value, typically between 1.0 ms and 2.5 ms. A shorter scan time
+registers the transient faster, allowing the retrigger process to begin
+and clear sooner.</li>
+<li><strong>Set Retrigger Cancellation to Zero:</strong> Temporarily
+lower the retrigger cancellation (or mask time) to its minimum setting
+(0 to 2 ms).</li>
+<li><strong>Isolate Single-Foot Hits:</strong> Play steady, powerful
+single-pedal strokes at moderate speed. If you hear secondary flutter
+hits or double-triggering on single strokes, increase the retrigger
+value by 1 ms increments until every single strike registers exactly one
+clean MIDI note. On most modern modules (such as Roland, Yamaha, or
+2Box), this clean point lands between <strong>4 ms and 8
+ms</strong>.</li>
+<li><strong>Test at Maximum Double-Kick Speeds:</strong> Play sustained,
+alternating high-speed rolls at your fastest BPM. If notes start
+dropping or alternating hits feel unresponsive, the value is too high;
+decrease it by 1 ms intervals until all hits register consistently.</li>
+<li><strong>Adjust Threshold and Sensitivity:</strong> If phantom
+triggers persist even with optimal retrigger settings, raise the overall
+trigger <strong>Threshold</strong> by a few values. This ensures that
+only deliberate beater contact breaks the threshold, rather than
+residual pad resonance.</li>
+</ol>
+<h3 id="dual-beater-on-a-single-pad-vs-two-independent-pads">Dual-Beater
+on a Single Pad vs. Two Independent Pads</h3>
+<ul>
+<li><strong>Single Kick Pad (Two Beaters):</strong> If both beaters
+strike the same mesh surface, the vibrations from one beater can trigger
+the sensor again or interfere with the alternate hit. Retrigger
+cancellation must be kept as tight as possible (4–6 ms) while increasing
+the threshold slightly to ignore the acoustic shockwave generated by the
+other beater.</li>
+<li><strong>Dual Independent Kick Pads or Direct Triggers:</strong>
+Drummers using separate trigger pads or direct-pedal axis triggers (like
+Trick, FootBlaster, or Czarcie Kopyto triggers) can set retrigger
+cancellation significantly lower (down to 1–4 ms) because there is zero
+head resonance transfer between pedals. If using independent inputs,
+also ensure <strong>Crosstalk (X-Talk)</strong> cancellation between the
+two kick inputs is disabled or set to 0 to prevent one pedal from muting
+the other.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Tuning Bank Dump in Microtonal Research - midi</title>
+    <meta name="description" content="The MIDI tuning bank dump message is a specialized System Exclusive (SysEx) protocol within the MIDI Tuning Standard (MTS) that transmits an entire microtonal scale configuration to compatible hardware and software instruments in a single data stream. In">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-tuning-bank-dump-in-microtonal-research">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Tuning Bank Dump in Microtonal Research - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-tuning-bank-dump-in-microtonal-research" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI tuning bank dump message is a specialized System Exclusive (SysEx) protocol within the MIDI Tuning Standard (MTS) that transmits an entire microtonal scale configuration to compatible hardware and software instruments in a single data stream. In" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-tuning-bank-dump-in-microtonal-research">MIDI Tuning Bank
+Dump in Microtonal Research</h1>
+<p>The MIDI tuning bank dump message is a specialized System Exclusive
+(SysEx) protocol within the MIDI Tuning Standard (MTS) that transmits an
+entire microtonal scale configuration to compatible hardware and
+software instruments in a single data stream. In microtonal acoustic
+research, this message functions as an essential tool for bulk scale
+deployment, experimental reproducibility, high-precision frequency
+mapping, and the systematic investigation of non-standard intonation
+systems. By removing the constraints of standard twelve-tone equal
+temperament (12-TET), it allows acousticians and psychoacoustic
+researchers to reliably control and evaluate microtonal intervals,
+harmonic structures, and human pitch perception across diverse
+experimental environments.</p>
+<h3 id="bulk-scale-transmission-and-automation">Bulk Scale Transmission
+and Automation</h3>
+<p>In microtonal acoustics, researchers frequently evaluate non-standard
+tuning systems, such as historical temperaments, Just Intonation
+matrices, equal divisions of the octave other than twelve (non-12-EDO),
+or completely non-octave scales (such as the Bohlen-Pierce scale). The
+MIDI tuning bank dump message transmits pitch data for all 128 MIDI note
+numbers simultaneously.</p>
+<p>Instead of requiring manual calibration or individual note-by-note
+tuning change messages, the bank dump automatically reconfigures an
+entire sound generator at once. This automation is critical during
+multi-trial experiments where acoustic stimuli must switch rapidly
+between distinct tuning topologies without introducing human error or
+latency.</p>
+<h3 id="high-resolution-pitch-precision">High-Resolution Pitch
+Precision</h3>
+<p>Standard MIDI represents pitches using coarse integer values mapped
+to 12-TET semitones. The MTS bank dump bypasses this limitation by
+assigning a high-resolution frequency value to every key index.</p>
+<p>The format defines target frequencies using a base semitone value
+alongside fractional semitone data encoded in 14-bit resolution. This
+provides an effective resolution of approximately 0.0061 cents
+(fractions of a semitone divided into 16,384 distinct steps). In
+acoustic research, such fine resolution is necessary for:</p>
+<ul>
+<li>Measuring precise sensory dissonance and beating phenomena between
+adjacent frequencies.</li>
+<li>Accurately synthesizing Just Intonation intervals governed by pure
+integer ratios (e.g., 3:2, 5:4, 7:4).</li>
+<li>Evaluating pitch discrimination thresholds (Just Noticeable
+Differences, or JND) in psychoacoustic testing.</li>
+</ul>
+<h3 id="experimental-standardization-and-reproducibility">Experimental
+Standardization and Reproducibility</h3>
+<p>Scientific validity in acoustic research relies on exact replication.
+Because the MIDI tuning bank dump is an established, non-proprietary
+specification defined by the MIDI Manufacturers Association (MMA), it
+serves as a universal format for scale data.</p>
+<p>Researchers can generate mathematical tunings in analytical
+environments such as MATLAB, Python, Max/MSP, or Scala, export them as
+standard MTS bank dump SysEx files, and transmit them uniformly to any
+MTS-compliant synthesizer, physical modeling engine, or sampler. This
+cross-platform consistency ensures that acoustic trials yield identical
+stimuli regardless of the specific audio rendering hardware or digital
+audio workstation used.</p>
+<h3 id="investigation-of-dynamic-and-adaptive-intonation">Investigation
+of Dynamic and Adaptive Intonation</h3>
+<p>Acoustic research into microtonality often involves studying how
+listeners perceive musical cohesion when tunings adapt in real time to
+minimize sensory roughness or accommodate changing root notes. The
+tuning bank dump allows researchers to preload multiple scale banks into
+a synthesizer's memory and switch between them using bank select
+commands, or to stream sequential bank dumps between musical phrases.
+This enables the programmatic analysis of adaptive tuning algorithms,
+dynamic intonation systems, and their psychoacoustic effects on test
+subjects.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

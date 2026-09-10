@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding MIDI CC 0 and CC 32 Bank Select - midi</title>
+    <meta name="description" content="Standard MIDI Program Change commands can only recall up to 128 presets, creating a severe bottleneck for modern hardware and software instruments with extensive sound libraries. MIDI Continuous Controllers CC 0 and CC 32 solve this limitation by serving">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/understanding-midi-cc-0-and-cc-32-bank-select">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding MIDI CC 0 and CC 32 Bank Select - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/understanding-midi-cc-0-and-cc-32-bank-select" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard MIDI Program Change commands can only recall up to 128 presets, creating a severe bottleneck for modern hardware and software instruments with extensive sound libraries. MIDI Continuous Controllers CC 0 and CC 32 solve this limitation by serving" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="understanding-midi-cc-0-and-cc-32-bank-select">Understanding
+MIDI CC 0 and CC 32 Bank Select</h1>
+<p>Standard MIDI Program Change commands can only recall up to 128
+presets, creating a severe bottleneck for modern hardware and software
+instruments with extensive sound libraries. MIDI Continuous Controllers
+CC 0 and CC 32 solve this limitation by serving as Bank Select
+controllers—specifically Bank Select MSB (Most Significant Byte) and
+Bank Select LSB (Least Significant Byte). Working directly alongside
+standard Program Change messages, these two controllers allow
+instruments to organize, address, and access thousands of sound banks
+and sub-banks.</p>
+<h3 id="the-128-preset-limitation">The 128-Preset Limitation</h3>
+<p>The original MIDI 1.0 specification allocates 7 bits of data to
+Program Change (PC) messages. Because <span
+class="math inline">\(2^7\)</span> equals 128, a single MIDI channel can
+natively address values only from 0 to 127. While sufficient for early
+synthesizers, modern sound modules and virtual instruments often host
+thousands of patches, requiring an expanded addressing scheme.</p>
+<h3 id="how-cc-0-and-cc-32-function-together">How CC 0 and CC 32
+Function Together</h3>
+<p>To expand patch memory without rewriting the core MIDI protocol, the
+MIDI Manufacturers Association defined CC 0 and CC 32 as Bank Select
+controllers. Both use 7-bit values (0–127) and work in tandem using a
+dual-byte, coarse/fine adjustment hierarchy:</p>
+<ul>
+<li><strong>MIDI CC 0 (Bank Select MSB):</strong> Acts as the primary or
+"coarse" bank selector. It defines the overarching category, main bank,
+or broad collection of sounds (such as General MIDI banks, User banks,
+or Expansion boards).</li>
+<li><strong>MIDI CC 32 (Bank Select LSB):</strong> Acts as the secondary
+or "fine" bank selector. It functions as the sub-bank selector, dividing
+the primary bank selected by CC 0 into smaller subdivisions.</li>
+</ul>
+<p>By pairing CC 0 (128 possibilities) with CC 32 (128 possibilities),
+MIDI creates a 14-bit addressing system yielding 16,384 possible banks
+(<span class="math inline">\(128 \times 128\)</span>). Because each of
+these banks can contain 128 individual Program Change presets, a system
+can theoretically address up to 2,097,152 unique presets per MIDI
+channel.</p>
+<h3 id="sub-bank-navigation-architecture">Sub-Bank Navigation
+Architecture</h3>
+<p>In practice, hardware synthesizers and sample libraries use CC 32 to
+organize variations of a central instrument category. For example, a
+manufacturer might configure sounds using the following hierarchy:</p>
+<ol type="1">
+<li><strong>CC 0 = 0:</strong> Acoustic Instruments (Main Bank)
+<ul>
+<li><strong>CC 32 = 0:</strong> Grand Pianos (Sub-bank 1)</li>
+<li><strong>CC 32 = 1:</strong> Electric Pianos (Sub-bank 2)</li>
+<li><strong>CC 32 = 2:</strong> Organs (Sub-bank 3)</li>
+</ul></li>
+<li><strong>CC 0 = 1:</strong> Synthesizers (Main Bank)
+<ul>
+<li><strong>CC 32 = 0:</strong> Bass Synths (Sub-bank 1)</li>
+<li><strong>CC 32 = 1:</strong> Lead Synths (Sub-bank 2)</li>
+<li><strong>CC 32 = 2:</strong> Pad Synths (Sub-bank 3)</li>
+</ul></li>
+</ol>
+<p>In this structure, adjusting CC 32 allows the user to switch between
+specialized sub-banks within a primary instrument collection.</p>
+<h3 id="required-transmission-order">Required Transmission Order</h3>
+<p>MIDI devices typically do not load a patch immediately upon receiving
+CC 0 or CC 32. Instead, the device buffers these values until it
+receives a Program Change command. To successfully load a preset from a
+specific sub-bank, data must be transmitted in this exact sequence:</p>
+<ol type="1">
+<li><strong>Send CC 0 (Value 0–127):</strong> Selects the target master
+bank.</li>
+<li><strong>Send CC 32 (Value 0–127):</strong> Selects the target
+sub-bank within that master bank.</li>
+<li><strong>Send Program Change (Value 0–127):</strong> Activates the
+specific patch within that sub-bank and switches the sound engine to the
+new preset.</li>
+</ol>
+<p>If this sequence is interrupted or sent out of order, the synthesizer
+may either switch to an unintended sound within the currently active
+bank or ignore the bank change request entirely.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

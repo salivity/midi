@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Data Bytes Have Their MSB Set to Zero - midi</title>
+    <meta name="description" content="In the MIDI (Musical Instrument Digital Interface) specification, data bytes always have their Most Significant Bit (MSB) set to zero to distinguish them immediately from status bytes, which always have their MSB set to one. This single-bit flag system a">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-data-bytes-have-their-msb-set-to-zero">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Data Bytes Have Their MSB Set to Zero - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-data-bytes-have-their-msb-set-to-zero" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the MIDI (Musical Instrument Digital Interface) specification, data bytes always have their Most Significant Bit (MSB) set to zero to distinguish them immediately from status bytes, which always have their MSB set to one. This single-bit flag system a" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="why-midi-data-bytes-have-their-msb-set-to-zero">Why MIDI Data
+Bytes Have Their MSB Set to Zero</h1>
+<p>In the MIDI (Musical Instrument Digital Interface) specification,
+data bytes always have their Most Significant Bit (MSB) set to zero to
+distinguish them immediately from status bytes, which always have their
+MSB set to one. This single-bit flag system allows receiving hardware to
+instantly differentiate between a command (such as Note On or Note Off)
+and the parameters that follow it (such as pitch and velocity). This
+architectural choice provides robust stream synchronization, simple
+error handling, and support for bandwidth-saving features like running
+status over serial connections.</p>
+<h3 id="the-msb-as-a-type-identifier">The MSB as a Type Identifier</h3>
+<p>MIDI communicates via an asynchronous serial stream of 8-bit bytes.
+Because data flows continuously as a single stream without external
+packet headers, the receiver must be able to parse the incoming stream
+reliably. The specification solves this by reserving the eighth bit (bit
+7, the MSB) as a type flag:</p>
+<ul>
+<li><strong>Status Bytes (MSB = 1):</strong> Binary
+<code>1xxxxxxx</code> (Decimal 128 to 255, or <code>0x80</code> to
+<code>0xFF</code>). These bytes define the action to be taken and the
+target MIDI channel.</li>
+<li><strong>Data Bytes (MSB = 0):</strong> Binary <code>0xxxxxxx</code>
+(Decimal 0 to 127, or <code>0x00</code> to <code>0x7F</code>). These
+bytes deliver the values associated with the preceding status
+command.</li>
+</ul>
+<h3 id="instant-synchronization-and-error-recovery">Instant
+Synchronization and Error Recovery</h3>
+<p>Because MIDI cables can be plugged, unplugged, or interrupted during
+active playback, bytes can occasionally be lost or corrupted. If both
+status and data bytes shared the same value range, a dropped byte would
+cause the receiving device to mistake a data value (such as a velocity
+of 64) for a status command, causing the parser to fall permanently out
+of alignment.</p>
+<p>By setting the MSB of all data bytes to zero, the receiver can never
+misinterpret a data byte as a command. If a communication error occurs,
+the receiver simply ignores incoming data bytes until it detects a byte
+with an MSB of 1, instantly regaining synchronization at the start of
+the next valid command.</p>
+<h3 id="enabling-running-status">Enabling "Running Status"</h3>
+<p>The fixed MSB system enables "running status," an optimization rule
+designed to conserve bandwidth over MIDI's standard 31.25 kbaud serial
+line. Under running status, if a sequence of identical commands is sent
+(such as a passage of Note On messages), the sender transmits the status
+byte only once, followed by multiple pairs of data bytes.</p>
+<p>Because the receiver knows that any byte with an MSB of zero is
+purely data, it automatically applies that data to the most recently
+received status byte. The stream of data bytes continues uninterrupted
+until a new status byte (with an MSB of 1) signals a change in
+command.</p>
+<h3 id="the-7-bit-data-trade-off">The 7-Bit Data Trade-off</h3>
+<p>Reserving the MSB limits MIDI data values to 7 bits, giving a range
+of 0 to 127. For musical performance, 128 discrete values are
+well-matched to human perception and standard instruments:</p>
+<ul>
+<li>128 note numbers cover over 10 octaves, exceeding the range of an
+88-key piano.</li>
+<li>128 velocity levels provide sufficient dynamic variation for musical
+expression.</li>
+</ul>
+<p>When higher resolution is necessary, such as for pitch bend or
+continuous controller automation, MIDI pairs two 7-bit data bytes
+together (a Most Significant Byte and a Least Significant Byte) to
+produce a 14-bit value with 16,384 distinct steps, maintaining the
+protocol's framing rules without sacrificing precision.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

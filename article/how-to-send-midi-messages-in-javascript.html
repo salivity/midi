@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Send MIDI Messages in JavaScript - midi</title>
+    <meta name="description" content="This article provides an overview of how web developers can transmit Musical Instrument Digital Interface (MIDI) messages directly to hardware synthesizers and software DAWs using modern JavaScript libraries. While the browser-native Web MIDI API provide">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-send-midi-messages-in-javascript">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Send MIDI Messages in JavaScript - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-send-midi-messages-in-javascript" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how web developers can transmit Musical Instrument Digital Interface (MIDI) messages directly to hardware synthesizers and software DAWs using modern JavaScript libraries. While the browser-native Web MIDI API provide" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-send-midi-messages-in-javascript">How to Send MIDI
+Messages in JavaScript</h1>
+<p>This article provides an overview of how web developers can transmit
+Musical Instrument Digital Interface (MIDI) messages directly to
+hardware synthesizers and software DAWs using modern JavaScript
+libraries. While the browser-native Web MIDI API provides low-level
+access to connected devices, modern wrapper libraries streamline the
+process by replacing complex raw hexadecimal arrays with clean,
+human-readable APIs for sending note triggers, pitch bends, and control
+changes.</p>
+<h3 id="the-problem-with-native-web-midi">The Problem with Native Web
+MIDI</h3>
+<p>Browsers natively support MIDI communication through
+<code>navigator.requestMIDIAccess()</code>. However, sending a simple
+note requires sending an array of raw binary or hexadecimal bytes:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Native Web MIDI API: Sending Note On (C4, velocity 127) on Channel 1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> output <span class="op">=</span> midiAccess<span class="op">.</span><span class="at">outputs</span><span class="op">.</span><span class="fu">get</span>(outputId)<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>output<span class="op">.</span><span class="fu">send</span>([<span class="bn">0x90</span><span class="op">,</span> <span class="dv">60</span><span class="op">,</span> <span class="bn">0x7F</span>])<span class="op">;</span> </span></code></pre></div>
+<p>Managing byte calculations, device connection lifecycles, and channel
+routing by hand quickly leads to verbose, error-prone code. Modern
+libraries solve this by abstracting the low-level protocols.</p>
+<h3 id="sending-midi-with-webmidijs">Sending MIDI with WebMidi.js</h3>
+<p>The most widely used library for browser-based MIDI communication is
+<strong>WebMidi.js</strong>. It handles device detection, provides
+cross-browser normalization, and turns low-level byte arrays into
+semantic method calls.</p>
+<h4 id="1-installation">1. Installation</h4>
+<p>Install the package via npm:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install webmidi</span></code></pre></div>
+<p>Or load it via a CDN:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span></code></pre></div>
+<h4 id="2-initialization-and-requesting-access">2. Initialization and
+Requesting Access</h4>
+<p>Before sending messages, initialize the library and request user
+permission:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { WebMidi } <span class="im">from</span> <span class="st">&quot;webmidi&quot;</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">setupMIDI</span>() {</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> WebMidi<span class="op">.</span><span class="fu">enable</span>({ <span class="dt">sysex</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&quot;WebMIDI enabled!&quot;</span>)<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> (err) {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">&quot;WebMIDI could not be enabled:&quot;</span><span class="op">,</span> err)<span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">setupMIDI</span>()<span class="op">;</span></span></code></pre></div>
+<h4 id="3-sending-note-messages">3. Sending Note Messages</h4>
+<p>Once enabled, access available output ports via
+<code>WebMidi.outputs</code> and send notes using standard musical
+notation:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Target the first available MIDI output device</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> output <span class="op">=</span> WebMidi<span class="op">.</span><span class="at">outputs</span>[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (output) {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Play Middle C (C4) on channel 1 at full velocity for 1 second</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  output<span class="op">.</span><span class="fu">playNote</span>(<span class="st">&quot;C4&quot;</span><span class="op">,</span> { <span class="dt">channels</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">rawAttack</span><span class="op">:</span> <span class="dv">127</span><span class="op">,</span> <span class="dt">duration</span><span class="op">:</span> <span class="dv">1000</span> })<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Play chords simultaneously</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  output<span class="op">.</span><span class="fu">playNote</span>([<span class="st">&quot;C4&quot;</span><span class="op">,</span> <span class="st">&quot;E4&quot;</span><span class="op">,</span> <span class="st">&quot;G4&quot;</span>]<span class="op">,</span> { <span class="dt">channels</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">duration</span><span class="op">:</span> <span class="dv">2000</span> })<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="4-sending-control-change-cc-and-pitch-bend">4. Sending Control
+Change (CC) and Pitch Bend</h4>
+<p>Beyond triggering notes, modern libraries make parameter modulation
+straightforward:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Send a Control Change (CC) message: Controller 1 (Modulation Wheel), Value 64</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>output<span class="op">.</span><span class="fu">sendControlChange</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">64</span><span class="op">,</span> { <span class="dt">channels</span><span class="op">:</span> <span class="dv">1</span> })<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Send Pitch Bend (value between -1 and 1)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>output<span class="op">.</span><span class="fu">sendPitchBend</span>(<span class="fl">0.5</span><span class="op">,</span> { <span class="dt">channels</span><span class="op">:</span> <span class="dv">1</span> })<span class="op">;</span></span></code></pre></div>
+<h3 id="alternative-jzzjs-for-universal-environments">Alternative:
+JZZ.js for Universal Environments</h3>
+<p>If your application needs to support Node.js alongside modern
+browsers, <strong>JZZ.js</strong> is another powerful alternative. JZZ
+provides a consistent MIDI interface across platforms and supports
+virtual MIDI ports, which are useful for testing without physical
+hardware:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> JZZ <span class="im">from</span> <span class="st">&quot;jzz&quot;</span><span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">JZZ</span>()<span class="op">.</span><span class="fu">openMidiOut</span>()<span class="op">.</span><span class="fu">then</span>((out) <span class="kw">=&gt;</span> {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  out<span class="op">.</span><span class="fu">noteOn</span>(<span class="dv">0</span><span class="op">,</span> <span class="st">&quot;C5&quot;</span><span class="op">,</span> <span class="dv">127</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">.</span><span class="fu">wait</span>(<span class="dv">500</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">.</span><span class="fu">noteOff</span>(<span class="dv">0</span><span class="op">,</span> <span class="st">&quot;C5&quot;</span>)<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h3 id="security-and-browser-requirements">Security and Browser
+Requirements</h3>
+<p>When implementing MIDI in web applications, keep the following
+constraints in mind:</p>
+<ul>
+<li><strong>HTTPS Required:</strong> The Web MIDI API and its wrapper
+libraries only operate in secure contexts (<code>https://</code> or
+<code>localhost</code>).</li>
+<li><strong>Permissions:</strong> Browsers require explicit user
+permission before allowing web pages to access or send data to MIDI
+devices.</li>
+<li><strong>SysEx Permission:</strong> If your application requires
+sending System Exclusive (SysEx) messages for firmware updates or custom
+device configurations, you must pass <code>{ sysex: true }</code> during
+initialization, which triggers a stricter permission prompt.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

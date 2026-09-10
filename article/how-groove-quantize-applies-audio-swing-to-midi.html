@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Groove Quantize Applies Audio Swing to MIDI - midi</title>
+    <meta name="description" content="Groove quantization bridges the gap between the organic feel of vintage drum performances and the mechanical precision of digital sequencing. By analyzing the micro-timing and dynamic fluctuations of iconic sampled drum breaks—such as the "Amen" or "Fu">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-groove-quantize-applies-audio-swing-to-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Groove Quantize Applies Audio Swing to MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-groove-quantize-applies-audio-swing-to-midi" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Groove quantization bridges the gap between the organic feel of vintage drum performances and the mechanical precision of digital sequencing. By analyzing the micro-timing and dynamic fluctuations of iconic sampled drum breaks—such as the "Amen" or "Fu" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-groove-quantize-applies-audio-swing-to-midi">How Groove
+Quantize Applies Audio Swing to MIDI</h1>
+<p>Groove quantization bridges the gap between the organic feel of
+vintage drum performances and the mechanical precision of digital
+sequencing. By analyzing the micro-timing and dynamic fluctuations of
+iconic sampled drum breaks—such as the "Amen" or "Funky Drummer"—digital
+audio workstations (DAWs) extract rhythmic templates that can be mapped
+directly onto rigid MIDI patterns. This process translates human timing
+imperfections and velocity accents into algorithmic rules, enabling
+producers to impart legendary swing and pocket to modern electronic
+productions.</p>
+<h3 id="1-transient-detection-and-audio-slicing">1. Transient Detection
+and Audio Slicing</h3>
+<p>The extraction process begins with transient analysis. The DAW scans
+the waveform of an audio drum break to identify sudden increases in
+acoustic energy, known as transients, which mark the onset of each drum
+hit (kick, snare, hi-hat). Modern audio engines place marker flags at
+these transient peaks. Accurate detection is essential: if the threshold
+is set too high, softer ghost notes will be missed; if set too low,
+audio artifacts or room reverberation will be mistakenly registered as
+drum hits.</p>
+<h3 id="2-micro-timing-offset-calculation">2. Micro-Timing Offset
+Calculation</h3>
+<p>Once transients are located, the software compares their actual
+positions against a strict mathematical grid (such as straight 16th or
+8th notes).</p>
+<p>Human drummers naturally play slightly ahead of the beat (rushing) or
+behind it (dragging) to create feel. The DAW measures the time
+difference—the delta—between the detected transient and the nearest
+theoretical grid line. This deviation is typically calculated in samples
+or MIDI ticks (pulses per quarter note, or PPQN). These time differences
+are compiled into a temporal map representing the specific "swing" of
+that performance.</p>
+<h3 id="3-dynamic-and-velocity-mapping">3. Dynamic and Velocity
+Mapping</h3>
+<p>Groove is not merely a product of timing; it is heavily dependent on
+dynamics. A human drummer hits certain beats harder to establish
+syncopation, while playing subtle ghost notes to maintain momentum.</p>
+<p>During extraction, the software analyzes the peak amplitude and
+envelope of each transient. It then scales these values to the standard
+MIDI velocity range of 1 to 127. The resulting template pairs every
+timing offset with a corresponding velocity value.</p>
+<h3 id="4-compiling-the-groove-template">4. Compiling the Groove
+Template</h3>
+<p>The collected timing deltas, velocity values, and note durations are
+compiled into a proprietary preset file (such as an Ableton
+<code>.agr</code> file or a standard MIDI groove file). This file
+contains no actual audio; it functions purely as a mathematical
+blueprint representing the rhythm and dynamic contours of the original
+performance.</p>
+<h3 id="5-applying-the-template-to-target-midi">5. Applying the Template
+to Target MIDI</h3>
+<p>When you apply this groove template to a MIDI track, the software
+transforms the incoming MIDI notes using the extracted data:</p>
+<ul>
+<li><strong>Timing Realignment:</strong> The start positions of the MIDI
+notes are shifted from the standard grid to match the offsets derived
+from the audio break. Notes fall slightly early or late in the same
+pattern as the original drummer.</li>
+<li><strong>Velocity Scaling:</strong> The static velocities of the
+programmed MIDI notes are recalculated to reflect the accent patterns of
+the source audio.</li>
+<li><strong>Non-Destructive Application:</strong> Most modern DAWs allow
+you to scale the groove’s intensity via percentage sliders. A timing
+setting of 100% moves MIDI notes exactly to the template's positions,
+while a lower percentage blends the groove with the rigid grid, offering
+a balance between human feel and electronic tightness.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Electronic Drums Convert Piezo Vibrations to MIDI - midi</title>
+    <meta name="description" content="Electronic drum kits bridge the gap between acoustic percussion and digital sound production by translating physical strikes into digital music data. This article explains the technical pipeline of this conversion process, covering how the mechanical imp">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-electronic-drums-convert-piezo-vibrations-to-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Electronic Drums Convert Piezo Vibrations to MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-electronic-drums-convert-piezo-vibrations-to-midi" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Electronic drum kits bridge the gap between acoustic percussion and digital sound production by translating physical strikes into digital music data. This article explains the technical pipeline of this conversion process, covering how the mechanical imp" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-electronic-drums-convert-piezo-vibrations-to-midi">How
+Electronic Drums Convert Piezo Vibrations to MIDI</h1>
+<p>Electronic drum kits bridge the gap between acoustic percussion and
+digital sound production by translating physical strikes into digital
+music data. This article explains the technical pipeline of this
+conversion process, covering how the mechanical impact on a drum pad
+deforms a piezoelectric sensor to generate an analog voltage spike, how
+the drum module's internal circuitry cleans and digitizes that signal,
+and how software algorithms ultimately translate the vibration into a
+standardized MIDI Note-On message.</p>
+<h3 id="1-mechanical-impact-and-the-piezoelectric-effect">1. Mechanical
+Impact and the Piezoelectric Effect</h3>
+<p>At the heart of most electronic drum pads lies a piezoelectric
+transducer, commonly consisting of a brass or ceramic disc coated with a
+piezo-ceramic material. When a drumstick strikes a rubber pad or mesh
+head, the impact transfers mechanical stress through a foam transfer
+cone to the piezo element.</p>
+<p>Due to the piezoelectric effect, physical deformation of this
+material displaces electrical charges, instantly generating an
+alternating current (AC) voltage pulse. The amplitude of this voltage is
+directly proportional to the force of the strike: a soft hit produces a
+fraction of a volt, while a hard strike can produce spikes exceeding
+tens of volts.</p>
+<h3 id="2-signal-conditioning">2. Signal Conditioning</h3>
+<p>The raw analog output from a piezo sensor is noisy, chaotic, and
+features both positive and negative voltage swings with natural decay
+vibrations (ringing). Before a microcontroller can read this signal
+safely and accurately, the drum module conditions it through dedicated
+hardware circuitry:</p>
+<ul>
+<li><strong>Protection Clamping:</strong> Diodes clip the voltage to
+prevent high-amplitude spikes from damaging the sensitive
+microelectronics.</li>
+<li><strong>Rectification:</strong> The AC signal is converted into a
+positive-only direct current (DC) waveform.</li>
+<li><strong>Filtering and Enveloping:</strong> Basic resistor-capacitor
+(RC) networks smooth out erratic frequency spikes, shaping the raw
+vibration into a readable voltage curve (envelope).</li>
+</ul>
+<h3 id="3-analog-to-digital-conversion-adc">3. Analog-to-Digital
+Conversion (ADC)</h3>
+<p>Once conditioned, the voltage envelope reaches the drum module’s
+Analog-to-Digital Converter (ADC). The ADC continuously samples the
+incoming voltage thousands of times per second, converting the
+continuous analog wave into discrete digital numerical values
+representing the signal's strength over time.</p>
+<h3 id="4-digital-signal-processing-and-trigger-logic">4. Digital Signal
+Processing and Trigger Logic</h3>
+<p>The module's microcontroller processes these digital readings using
+specialized trigger algorithms designed to isolate a single, intentional
+stroke from unwanted vibrations:</p>
+<ul>
+<li><strong>Threshold Detection:</strong> The processor ignores any
+signal below a predefined voltage floor to eliminate background noise
+and faint stage vibrations.</li>
+<li><strong>Scan Time:</strong> Once the voltage crosses the threshold,
+the processor waits a brief window (typically 1 to 4 milliseconds) to
+measure the absolute peak voltage, which accurately determines the
+strike's velocity.</li>
+<li><strong>Retrigger Cancellation (Mask Time):</strong> The physical
+rebound of the drum head causes the piezo to continue vibrating. The
+algorithm enforces a temporary lockout period, preventing the decaying
+tail of the waveform from registering as additional hits.</li>
+<li><strong>Crosstalk Suppression:</strong> If a strike on one pad sends
+vibrations through the drum rack to a neighboring pad, the module
+compares the arrival times and amplitudes across inputs, suppressing the
+weaker, secondary signal.</li>
+</ul>
+<h3 id="5-midi-message-encoding">5. MIDI Message Encoding</h3>
+<p>After the algorithm isolates the peak value and confirms a valid hit,
+it translates the data into a standard MIDI protocol event:</p>
+<ol type="1">
+<li><strong>Status Byte:</strong> Generates a Note-On command, typically
+assigned to MIDI Channel 10 (the standard channel for percussion).</li>
+<li><strong>Data Byte 1 (Note Number):</strong> Assigns a specific pitch
+number based on the pad input triggered (for example, MIDI Note 38 for
+an acoustic snare).</li>
+<li><strong>Data Byte 2 (Velocity):</strong> Maps the peak voltage value
+logarithmically to the standard MIDI velocity range of 1 to 127.</li>
+</ol>
+<p>Finally, the module transmits this three-byte packet over a USB cable
+or a 5-pin DIN connection to internal sound engines, external
+synthesizers, or Digital Audio Workstations (DAWs) to trigger the
+corresponding drum sample.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

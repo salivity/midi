@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Pitch Bend Range on Hardware Tone Generators - midi</title>
+    <meta name="description" content="Configuring MIDI pitch bend sensitivity on hardware tone generators determines how far a sound's pitch shifts when moving a pitch wheel or sending pitch bend data. This article explains the primary methods used to adjust this behavior, focusing on standa">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/setting-pitch-bend-range-on-hardware-tone-generators">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Setting Pitch Bend Range on Hardware Tone Generators - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/setting-pitch-bend-range-on-hardware-tone-generators" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring MIDI pitch bend sensitivity on hardware tone generators determines how far a sound's pitch shifts when moving a pitch wheel or sending pitch bend data. This article explains the primary methods used to adjust this behavior, focusing on standa" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="setting-pitch-bend-range-on-hardware-tone-generators">Setting
+Pitch Bend Range on Hardware Tone Generators</h1>
+<p>Configuring MIDI pitch bend sensitivity on hardware tone generators
+determines how far a sound's pitch shifts when moving a pitch wheel or
+sending pitch bend data. This article explains the primary methods used
+to adjust this behavior, focusing on standardized MIDI Registered
+Parameter Numbers (RPN), patch-level menu programming, global hardware
+settings, and manufacturer-specific System Exclusive (SysEx)
+commands.</p>
+<h3 id="1-using-midi-registered-parameter-numbers-rpn">1. Using MIDI
+Registered Parameter Numbers (RPN)</h3>
+<p>The most standard, automated method to set pitch bend sensitivity
+from an external controller or digital audio workstation (DAW) is via
+MIDI RPN messages. The standard MIDI specification assigns RPN 0,0
+specifically to Pitch Bend Sensitivity.</p>
+<p>To set this remotely, the sending device transmits a sequence of
+Control Change (CC) messages on the target MIDI channel:</p>
+<ol type="1">
+<li><strong>Select the Parameter:</strong> Send <strong>CC 101 (RPN
+MSB)</strong> with a value of <code>0</code>, followed by <strong>CC 100
+(RPN LSB)</strong> with a value of <code>0</code>. This tells the tone
+generator that the upcoming data controls pitch bend sensitivity.</li>
+<li><strong>Set the Semitones (Coarse Tuning):</strong> Send <strong>CC
+6 (Data Entry MSB)</strong> with a value between <code>0</code> and
+<code>127</code>. Each integer represents one semitone (for example, a
+value of <code>2</code> sets a whole-step range of +/- 2 semitones; a
+value of <code>12</code> sets a full octave).</li>
+<li><strong>Set Cents (Fine Tuning, Optional):</strong> Send <strong>CC
+38 (Data Entry LSB)</strong> with a value between <code>0</code> and
+<code>127</code> to fine-tune the range in fractional cents.</li>
+<li><strong>Reset the RPN Controller:</strong> Send <strong>CC
+101</strong> with a value of <code>127</code> and <strong>CC
+100</strong> with a value of <code>127</code> (Null) to prevent
+accidental data entry changes later.</li>
+</ol>
+<h3 id="2-on-board-patch-and-oscillator-menus">2. On-Board Patch and
+Oscillator Menus</h3>
+<p>Most modern and vintage hardware synthesizers and rack modules allow
+sensitivity configuration directly on the unit per patch or program.</p>
+<ul>
+<li><strong>Oscillator or Pitch Menus:</strong> Navigate to the tone
+generator's voice editing section, commonly labeled <code>OSC</code>,
+<code>PITCH</code>, or <code>MODULATION</code>.</li>
+<li><strong>Bend Range Parameters:</strong> Look for entries labeled
+<code>Bend Range</code>, <code>PB Depth</code>, or
+<code>PB Sensitivity</code>.</li>
+<li><strong>Asymmetrical Bending:</strong> Many hardware units allow
+separate values for upward and downward pitch bends (e.g., +2 semitones
+up, -12 semitones down). Adjusting these values directly on the front
+panel saves the behavior to that specific memory slot, overriding
+default settings when the patch is recalled.</li>
+</ul>
+<h3 id="3-global-and-system-utility-settings">3. Global and System
+Utility Settings</h3>
+<p>On multitimbral tone generators (such as General MIDI sound modules),
+pitch bend depth can often be locked globally to ensure uniform behavior
+across all incoming MIDI channels.</p>
+<ul>
+<li>Enter the unit's <strong>System</strong>, <strong>Global</strong>,
+or <strong>Utility</strong> menu.</li>
+<li>Locate the <strong>MIDI Setup</strong> or <strong>Master
+Bend</strong> parameter.</li>
+<li>Set the desired default range. Some hardware allows you to specify
+whether the device accepts external RPN messages or strictly obeys the
+local global setting.</li>
+</ul>
+<h3 id="4-system-exclusive-sysex-messages">4. System Exclusive (SysEx)
+Messages</h3>
+<p>Certain older hardware units manufactured before the widespread
+adoption of the RPN standard—or units with proprietary multi-part
+architectures (such as early Roland or Yamaha sound modules)—rely on
+SysEx strings to alter bend range.</p>
+<p>Configuring sensitivity via SysEx requires consulting the device's
+MIDI implementation chart to identify the exact address and byte
+structure required to alter the part's pitch bend depth parameter
+remotely.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

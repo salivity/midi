@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Haken Continuum Outputs High-Precision MIDI - midi</title>
+    <meta name="description" content="The Haken Continuum Fingerboard achieves high-precision continuous MIDI output through a specialized array of magnetic Hall-effect sensors, ultra-fast internal scan rates, and modern transmission protocols like MIDI Polyphonic Expression (MPE). By conver">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-haken-continuum-outputs-high-precision-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Haken Continuum Outputs High-Precision MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-haken-continuum-outputs-high-precision-midi" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Haken Continuum Fingerboard achieves high-precision continuous MIDI output through a specialized array of magnetic Hall-effect sensors, ultra-fast internal scan rates, and modern transmission protocols like MIDI Polyphonic Expression (MPE). By conver" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-haken-continuum-outputs-high-precision-midi">How Haken
+Continuum Outputs High-Precision MIDI</h1>
+<p>The Haken Continuum Fingerboard achieves high-precision continuous
+MIDI output through a specialized array of magnetic Hall-effect sensors,
+ultra-fast internal scan rates, and modern transmission protocols like
+MIDI Polyphonic Expression (MPE). By converting continuous physical
+interaction across three dimensions into high-resolution digital data,
+the instrument bypasses traditional keyboard limitations to deliver
+seamless, microtonal control without audible stepping.</p>
+<h3 id="the-sensor-architecture-hall-effect-sensing">The Sensor
+Architecture: Hall-Effect Sensing</h3>
+<p>Beneath the Continuum’s smooth, unpadded neoprene playing surface
+lies a matrix of spring-suspended rods embedded with magnets. As a
+player presses and moves their fingers along the surface, these magnets
+shift relative to an array of Hall-effect sensors located on the circuit
+board below.</p>
+<p>Unlike optical or resistive touchscreens, Hall-effect sensors measure
+the varying magnetic field strength caused by physical displacement.
+This design provides three distinct, continuously tracked axes per
+touch:</p>
+<ul>
+<li><strong>X-Axis (Horizontal):</strong> Measures length along the
+board for continuous pitch.</li>
+<li><strong>Y-Axis (Vertical/Depth):</strong> Measures position from
+front to back, often mapped to timbre, filter cutoff, or user-defined
+control parameters.</li>
+<li><strong>Z-Axis (Pressure):</strong> Measures downward depression,
+dynamically tracking velocity, note-on impact, sustained pressure, and
+release.</li>
+</ul>
+<h3 id="high-rate-internal-scanning-and-dsp">High-Rate Internal Scanning
+and DSP</h3>
+<p>To ensure musical immediacy and accuracy, the internal digital signal
+processor (DSP) scans the sensor array at an exceptionally high
+frequency—typically over 3,000 times per second per finger. This scan
+rate prevents latency and ensures that the initial attack and subsequent
+movements are captured in real time.</p>
+<p>The onboard processor applies smoothing algorithms and calibration
+curves to the raw magnetic readings. This step resolves non-linearities
+in magnetic fields, translating raw physical movement into accurate
+coordinate data before formatting it for output.</p>
+<h3 id="formatting-into-high-precision-midi">Formatting into
+High-Precision MIDI</h3>
+<p>Standard MIDI 1.0 is historically constrained by 7-bit resolution
+(values from 0 to 127), which creates noticeable "zipper noise" or
+stepped transitions when sliding pitch or modulating filters. The
+Continuum solves this through several advanced data formatting
+techniques:</p>
+<ul>
+<li><strong>14-Bit Pitch Bend:</strong> To achieve smooth, microtonal
+pitch slides along the X-axis, the Continuum uses 14-bit MIDI Pitch
+Bend. Combining two 7-bit bytes (Most Significant Byte and Least
+Significant Byte) creates 16,384 discrete values. When combined with
+wide pitch bend ranges (often configured up to +/- 96 semitones), the
+resolution is fine enough that the human ear perceives the transition as
+a completely continuous glide.</li>
+<li><strong>MIDI Polyphonic Expression (MPE):</strong> Standard MIDI
+applies Pitch Bend across an entire MIDI channel simultaneously, making
+polyphonic pitch glides impossible. The Continuum employs MPE, assigning
+each active touch to its own dedicated MIDI channel (channels 2 through
+16). This architecture allows simultaneous, independent control over
+pitch (X-axis pitch bend), timbre (Y-axis, commonly CC 74), and pressure
+(Z-axis, polyphonic aftertouch or channel pressure) for every individual
+finger.</li>
+<li><strong>High-Resolution Continuous Controllers:</strong> For Y and Z
+parameters, the instrument can transmit paired Control Change (CC)
+messages (using standard CCs alongside their LSB counterparts) or
+utilize MIDI 2.0-ready high-resolution data streams, ensuring dynamic
+tracking matches the accuracy of the pitch dimension.</li>
+</ul>
+<p>Through this combination of magnetic measurement, fast internal
+calculation, and multi-channel 14-bit data streams, the Continuum
+Fingerboard provides acoustic-level responsiveness and continuous
+expressive control over standard digital communication protocols.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

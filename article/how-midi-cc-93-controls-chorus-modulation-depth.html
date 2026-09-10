@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI CC 93 Controls Chorus Modulation Depth - midi</title>
+    <meta name="description" content="MIDI Continuous Controller 93 (CC 93) is the designated standard control change message used to adjust chorus depth—specifically the intensity of chorus modulation—on sound modules, synthesizers, and virtual instruments. This article explains the ope">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-cc-93-controls-chorus-modulation-depth">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI CC 93 Controls Chorus Modulation Depth - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-cc-93-controls-chorus-modulation-depth" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Continuous Controller 93 (CC 93) is the designated standard control change message used to adjust chorus depth—specifically the intensity of chorus modulation—on sound modules, synthesizers, and virtual instruments. This article explains the ope" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-midi-cc-93-controls-chorus-modulation-depth">How MIDI CC 93
+Controls Chorus Modulation Depth</h1>
+<p>MIDI Continuous Controller 93 (CC 93) is the designated standard
+control change message used to adjust chorus depth—specifically the
+intensity of chorus modulation—on sound modules, synthesizers, and
+virtual instruments. This article explains the operational role of MIDI
+CC 93, how hardware and software sound generators interpret its data
+values, and how it directly shapes the spatial thickness, detune range,
+and movement of an audio patch.</p>
+<h3 id="the-function-of-midi-cc-93">The Function of MIDI CC 93</h3>
+<p>Under the MIDI 1.0 and General MIDI specifications, MIDI CC 93 is
+formally defined as "Effect 3 Depth," which is overwhelmingly
+implemented as Chorus Depth. MIDI CC messages transmit standard 7-bit
+values ranging from 0 to 127.</p>
+<p>When a sound module receives a CC 93 message, it applies this value
+to the internal chorus processing unit assigned to the corresponding
+MIDI channel. A value of 0 minimizes or disables modulation depth,
+producing either a completely dry signal or an unmodulated delay tap,
+while a value of 127 applies the maximum modulation depth permitted by
+the instrument's chorus architecture.</p>
+<h3 id="chorus-modulation-depth-explained">Chorus Modulation Depth
+Explained</h3>
+<p>To understand how CC 93 alters sound, it is essential to distinguish
+between effect send level (wet/dry mix) and modulation depth:</p>
+<ul>
+<li><strong>Send Level vs. Modulation Depth:</strong> While a send
+control determines how much audio is routed into the chorus processor,
+modulation depth dictates the behavior of the chorus algorithm
+itself.</li>
+<li><strong>LFO Amplitude:</strong> Chorus effects operate by
+duplicating the input signal, delaying it by a few milliseconds, and
+modulating that delay time using a Low-Frequency Oscillator (LFO). CC 93
+directly controls the amplitude (depth) of this LFO.</li>
+<li><strong>Pitch Deviation:</strong> Increasing CC 93 widens the pitch
+sweep of the delayed copies. Low values introduce subtle detuning and
+gentle phase motion, whereas high values create pronounced pitch
+fluctuations, resulting in a dramatic, wide, or warbling ensemble
+texture.</li>
+</ul>
+<h3 id="behavior-across-different-sound-modules">Behavior Across
+Different Sound Modules</h3>
+<p>Different manufacturers implement MIDI CC 93 according to their
+specific architecture:</p>
+<ol type="1">
+<li><strong>General MIDI (GM/GM2) Compatibility:</strong> In
+GM2-compliant modules, CC 93 is strictly mapped to Chorus Level/Depth.
+It ensures that standard MIDI files sound consistent across different
+hardware units by maintaining standardized modulation boundaries.</li>
+<li><strong>Dedicated Parameter Assignment:</strong> On advanced
+synthesizers and workstation modules (such as those from Roland, Yamaha,
+or Korg), CC 93 can be routed in the system's modulation matrix. It can
+be linked specifically to the depth of the chorus LFO, leaving the
+wet/dry balance controlled independently (often by CC 91 or a dedicated
+wet/dry CC).</li>
+<li><strong>Patch-Relative Scaling:</strong> Many modern sound modules
+treat the 0–127 range of CC 93 as a relative offset rather than an
+absolute value. In these units, a value of 64 maintains the preset’s
+stored chorus depth, while values below 64 reduce it and values above 64
+increase it beyond the default program setting.</li>
+</ol>
+<h3 id="practical-applications-in-music-production">Practical
+Applications in Music Production</h3>
+<p>Producers and composers use CC 93 to add dynamic movement and spatial
+contrast to MIDI tracks without manually editing synth patches.
+Automating CC 93 in a digital audio workstation (DAW) allows for:</p>
+<ul>
+<li><strong>Dynamic Expansion:</strong> Increasing modulation depth
+during choruses or lead passages to make pad or string sections sound
+wider and more animated.</li>
+<li><strong>Expressive Detuning:</strong> Simulating vintage tape
+warble, rotary-speaker effects, or acoustic ensemble imperfections by
+modulating CC 93 in real time with an expression controller.</li>
+<li><strong>Clarity Management:</strong> Lowering CC 93 during busy
+musical passages to minimize pitch ambiguity and phase cancellation in
+dense mixes.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 1.0 vs MIDI 2.0: Technical Differences - midi</title>
+    <meta name="description" content="This article examines the core technical differences between the legacy MIDI 1.0 specification and the modernized MIDI 2.0 standard. While MIDI 1.0 served the music industry for nearly four decades with basic unidirectional signaling, MIDI 2.0 introduces">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-1-0-vs-midi-2-0-technical-differences">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 1.0 vs MIDI 2.0: Technical Differences - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-1-0-vs-midi-2-0-technical-differences" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines the core technical differences between the legacy MIDI 1.0 specification and the modernized MIDI 2.0 standard. While MIDI 1.0 served the music industry for nearly four decades with basic unidirectional signaling, MIDI 2.0 introduces" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-10-vs-midi-20-technical-differences">MIDI 1.0 vs MIDI 2.0:
+Technical Differences</h1>
+<p>This article examines the core technical differences between the
+legacy MIDI 1.0 specification and the modernized MIDI 2.0 standard.
+While MIDI 1.0 served the music industry for nearly four decades with
+basic unidirectional signaling, MIDI 2.0 introduces bidirectional
+communication, vastly higher data resolution, improved timing accuracy,
+per-note expression, and a modernized data packet architecture,
+transforming how digital instruments and software communicate.</p>
+<h3 id="unidirectional-vs-bidirectional-communication">Unidirectional
+vs. Bidirectional Communication</h3>
+<p>MIDI 1.0 operates as a one-way (simplex) transmission system. A
+transmitter sends messages blindly to a receiver without knowing the
+receiving device's identity, capabilities, or configuration.</p>
+<p>MIDI 2.0 is built on two-way (duplex) communication using MIDI
+Capability Inquiry (MIDI-CI). Devices engage in an automated digital
+"handshake" to negotiate three main areas:</p>
+<ul>
+<li><strong>Profile Configuration:</strong> Devices agree on specific
+operational sets (e.g., configuring a device specifically as an analog
+synth, a drawbar organ, or a drum machine).</li>
+<li><strong>Property Exchange:</strong> Devices exchange rich metadata,
+including patch names, parameter assignments, controller maps, and state
+dumps via JSON.</li>
+<li><strong>Protocol Negotiation:</strong> Devices determine whether to
+communicate using legacy MIDI 1.0 or shift into the higher-speed MIDI
+2.0 protocol.</li>
+</ul>
+<h3 id="data-resolution-and-expressiveness">Data Resolution and
+Expressiveness</h3>
+<p>MIDI 1.0 uses a 7-bit data architecture, limiting most continuous
+controller (CC) values, velocity levels, and pitch-bend states to 128
+discrete steps (0–127). While MIDI 1.0 supports 14-bit resolution by
+combining two CC messages (coarse and fine), implementation across
+hardware and software has been inconsistent and prone to zipper
+noise.</p>
+<p>MIDI 2.0 upgrades the core architecture to 32-bit resolution:</p>
+<ul>
+<li><strong>Velocity:</strong> Scaled from 7-bit (128 steps) to 16-bit
+(65,535 steps), enabling imperceptible gradations in strike velocity and
+release dynamics.</li>
+<li><strong>Control Change and Pitch Bend:</strong> Scaled to 32-bit
+resolution (over 4.29 billion steps), completely eliminating audible
+stepping and allowing analog-smooth automation and continuous
+modulation.</li>
+</ul>
+<h3
+id="packet-architecture-and-transport-universal-midi-packet-ump">Packet
+Architecture and Transport: Universal MIDI Packet (UMP)</h3>
+<p>MIDI 1.0 relies on a byte stream formatted for 31.25 kbaud serial
+connections via 5-pin DIN cables. Messages consist of a status byte
+followed by one or two data bytes, making integration with modern
+high-speed buses like USB or Ethernet inefficient.</p>
+<p>MIDI 2.0 introduces the Universal MIDI Packet (UMP), a flexible
+format consisting of 32-bit words that can scale from 32 to 128
+bits:</p>
+<ul>
+<li><strong>Native Transport:</strong> UMP is designed natively for
+high-speed protocols (USB, PCIe, Ethernet, Wi-Fi) while retaining the
+ability to encapsulate legacy MIDI 1.0 streams.</li>
+<li><strong>Expanded Channels:</strong> Instead of the 16 channels
+permitted by MIDI 1.0, UMP supports up to 16 "Groups," with each Group
+containing 16 channels, providing a total of 256 individual channels per
+physical or virtual connection.</li>
+</ul>
+<h3 id="timing-accuracy-and-jitter-reduction">Timing Accuracy and Jitter
+Reduction</h3>
+<p>MIDI 1.0 transmits clock messages serially alongside musical data.
+Dense passages, heavy continuous controller modulation, or chords cause
+message queuing, leading to latency and timing jitter.</p>
+<p>MIDI 2.0 addresses this with Jitter Reduction (JR) Timestamps:</p>
+<ul>
+<li><strong>JR Clock:</strong> Transmits high-resolution time points
+alongside data packets.</li>
+<li><strong>JR Timestamp:</strong> Allows messages to be tagged with a
+precise microsecond-level execution time. The receiving device buffers
+and renders the performance with sample-accurate precision, eliminating
+groove disruption caused by transport delays.</li>
+</ul>
+<h3 id="channel-control-vs-per-note-controllers">Channel Control vs.
+Per-Note Controllers</h3>
+<p>In MIDI 1.0, expressive controls like pitch bend, aftertouch, and
+standard CCs apply across an entire MIDI channel, affecting all
+currently sounding notes simultaneously (a limitation partially
+mitigated by MIDI Polyphonic Expression, or MPE).</p>
+<p>MIDI 2.0 incorporates native Per-Note Controllers:</p>
+<ul>
+<li>Each individual note can carry its own independent pitch bend,
+polyphonic aftertouch, and assigned controller values.</li>
+<li>Articulation and tuning can be applied selectively to specific notes
+inside a single polyphonic chord on a single channel without requiring
+MPE workarounds.</li>
+</ul>
+<h3 id="backward-compatibility">Backward Compatibility</h3>
+<p>MIDI 2.0 does not render MIDI 1.0 obsolete. When a MIDI 2.0 device
+connects to a system that does not acknowledge MIDI-CI or fails the
+protocol handshake, the MIDI 2.0 device automatically defaults to
+standard MIDI 1.0 rules, maintaining full backward compatibility across
+legacy hardware and software environments.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

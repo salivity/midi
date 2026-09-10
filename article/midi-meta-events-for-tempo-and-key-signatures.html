@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Meta Events for Tempo and Key Signatures - midi</title>
+    <meta name="description" content="Standard MIDI Files (SMF) use non-routable control instructions called meta events to convey non-musical session information. Within this specification, tempo changes are designated by the Set Tempo meta event (0xFF 0x51), which specifies the speed of pl">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-meta-events-for-tempo-and-key-signatures">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Meta Events for Tempo and Key Signatures - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-meta-events-for-tempo-and-key-signatures" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard MIDI Files (SMF) use non-routable control instructions called meta events to convey non-musical session information. Within this specification, tempo changes are designated by the Set Tempo meta event (0xFF 0x51), which specifies the speed of pl" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-meta-events-for-tempo-and-key-signatures">MIDI Meta Events
+for Tempo and Key Signatures</h1>
+<p>Standard MIDI Files (SMF) use non-routable control instructions
+called meta events to convey non-musical session information. Within
+this specification, tempo changes are designated by the Set Tempo meta
+event (<code>0xFF 0x51</code>), which specifies the speed of playback in
+microseconds per quarter note, while harmonic tonality is managed by the
+Key Signature meta event (<code>0xFF 0x59</code>), which defines the
+number of sharps or flats and the scale mode.</p>
+<h2 id="the-set-tempo-meta-event">The Set Tempo Meta Event</h2>
+<p>In Standard MIDI Files, tempo is defined using the <strong>Set
+Tempo</strong> meta event rather than traditional beats per minute
+(BPM).</p>
+<ul>
+<li><strong>Status Byte:</strong> <code>0xFF</code></li>
+<li><strong>Event Type:</strong> <code>0x51</code></li>
+<li><strong>Length:</strong> <code>0x03</code> (always 3 bytes)</li>
+<li><strong>Format:</strong> <code>FF 51 03 tt tt tt</code></li>
+</ul>
+<p>The three payload bytes (<code>tt tt tt</code>) form a 24-bit integer
+representing the tempo in <strong>microseconds per quarter note</strong>
+(<span class="math inline">\(\mu s\)</span>/qn).</p>
+<p>To convert this value to standard BPM: <span
+class="math display">\[\text{BPM} = \frac{60,000,000}{\text{Microseconds
+Per Quarter Note}}\]</span></p>
+<p>For example, a tempo of 120 BPM corresponds to 500,000 microseconds
+per quarter note, represented in hexadecimal as <code>07 A1 20</code>.
+The full event sequence in the MIDI track chunk appears as:
+<code>FF 51 03 07 A1 20</code></p>
+<p>If an SMF does not contain a Set Tempo event, software sequencers
+default to 120 BPM (500,000 <span class="math inline">\(\mu
+s\)</span>/qn). Multiple Set Tempo events can occur throughout a track
+to trigger mid-piece tempo changes.</p>
+<h2 id="the-key-signature-meta-event">The Key Signature Meta Event</h2>
+<p>The <strong>Key Signature</strong> meta event designates the tonal
+center and mode (major or minor) of the piece or section.</p>
+<ul>
+<li><strong>Status Byte:</strong> <code>0xFF</code></li>
+<li><strong>Event Type:</strong> <code>0x59</code></li>
+<li><strong>Length:</strong> <code>0x02</code> (always 2 bytes)</li>
+<li><strong>Format:</strong> <code>FF 59 02 sf mi</code></li>
+</ul>
+<p>The payload consists of two parameters:</p>
+<ol type="1">
+<li><strong><code>sf</code> (Sharps/Flats):</strong> A signed 8-bit byte
+specifying the number of accidentals:
+<ul>
+<li>Values from <code>-7</code> to <code>-1</code> represent the number
+of flats (e.g., <code>FF</code> in two's complement represents -1,
+indicating F Major or D Minor).</li>
+<li><code>0</code> represents no sharps or flats (C Major or A
+Minor).</li>
+<li>Values from <code>1</code> to <code>7</code> represent the number of
+sharps (e.g., <code>03</code> represents 3 sharps, indicating A Major or
+F# Minor).</li>
+</ul></li>
+<li><strong><code>mi</code> (Major/Minor):</strong> A single byte
+designating the scale mode:
+<ul>
+<li><code>0x00</code> indicates a Major key.</li>
+<li><code>0x01</code> indicates a Minor key.</li>
+</ul></li>
+</ol>
+<p>For example, the key of E♭ Major (3 flats) is represented by the
+bytes: <code>FF 59 02 FD 00</code><br />
+<em>(where <code>FD</code> is the signed byte for -3, and
+<code>00</code> signifies Major)</em></p>
+<h2 id="standard-usage-and-placement">Standard Usage and Placement</h2>
+<p>In Format 0 MIDI files, these events are placed along the single
+track timeline with their corresponding delta-times. In Format 1 MIDI
+files, the convention is to place both Set Tempo and Key Signature
+events within <strong>Track 0</strong> (the tempo map track), ensuring
+global synchronization across all independent instrument tracks.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

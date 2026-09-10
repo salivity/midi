@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI to CV Converters Control Vintage Synths - midi</title>
+    <meta name="description" content="A MIDI to CV converter serves as an essential bridge between modern digital music production and classic analog gear by translating digital data into electrical voltages. Before MIDI became the universal standard in 1983, analog synthesizers relied on Co">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-to-cv-converters-control-vintage-synths">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI to CV Converters Control Vintage Synths - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-to-cv-converters-control-vintage-synths" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI to CV converter serves as an essential bridge between modern digital music production and classic analog gear by translating digital data into electrical voltages. Before MIDI became the universal standard in 1983, analog synthesizers relied on Co" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-midi-to-cv-converters-control-vintage-synths">How MIDI to CV
+Converters Control Vintage Synths</h1>
+<p>A MIDI to CV converter serves as an essential bridge between modern
+digital music production and classic analog gear by translating digital
+data into electrical voltages. Before MIDI became the universal standard
+in 1983, analog synthesizers relied on Control Voltage (CV) and Gate
+signals to dictate musical pitch and note duration. A MIDI to CV
+converter allows modern sequencers, DAWs, and digital controllers to
+communicate seamlessly with these vintage instruments by converting
+digital commands into the precise analog voltages required to trigger
+and shape their sound.</p>
+<p>Modern sequencers output digital MIDI messages, which consist of
+binary data streams indicating musical events such as Note On, Note Off,
+pitch value, velocity, and continuous controller (CC) values. Vintage
+synthesizers cannot interpret this digital binary code. Instead, their
+internal circuits—such as Voltage-Controlled Oscillators (VCO),
+Voltage-Controlled Filters (VCF), and Envelope Generators (EG)—respond
+exclusively to fluctuating direct current (DC) electrical voltages.</p>
+<p>The core of a MIDI to CV converter is a microprocessor paired with a
+high-precision Digital-to-Analog Converter (DAC). When the
+microprocessor receives a MIDI Note On message, it reads the note number
+and directs the DAC to output a specific, calibrated voltage
+corresponding to that pitch.</p>
+<p>Pitch translation typically adheres to one of two main vintage
+standards:</p>
+<ul>
+<li><strong>Volt-per-Octave (1V/Oct):</strong> Popularized by Moog,
+Roland, and Sequential Circuits, this standard increases the pitch by
+one octave for every one-volt increase (or 1/12th of a volt per
+semitone).</li>
+<li><strong>Hertz-per-Volt (Hz/V):</strong> Used predominantly by
+vintage Korg and Yamaha synthesizers, this standard doubles the voltage
+for each octave to reflect the linear frequency doubling of musical
+pitch.</li>
+</ul>
+<p>High-quality converters allow users to switch between these standards
+to accommodate different synthesizer architectures.</p>
+<p>Along with pitch, the converter manages note timing and articulation
+via Gate or Trigger outputs. When a MIDI Note On occurs, the converter
+sends a continuous positive voltage (V-Trig) or shorts a circuit to
+ground (S-Trig, common on vintage Moog instruments) to signal the
+synthesizer’s envelope generator to begin the attack phase. This signal
+remains active until a corresponding MIDI Note Off message is received,
+prompting the gate to close and the synthesizer to enter its release
+phase.</p>
+<p>Beyond basic notes and timing, modern MIDI to CV converters translate
+expressive performance data. Modern sequencers can send automation via
+MIDI CC or velocity. The converter’s secondary DAC channels transform
+these data streams into variable voltages (often termed "Aux CV"), which
+can be patched into a vintage synthesizer’s external inputs to automate
+filter cutoffs, pulse-width modulation, or volume levels.</p>
+<p>By handling these conversion processes in real time with low latency,
+a MIDI to CV converter allows vintage analog synthesizers to function
+alongside modern digital workstations without requiring invasive or
+permanent hardware modifications to the original instruments.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

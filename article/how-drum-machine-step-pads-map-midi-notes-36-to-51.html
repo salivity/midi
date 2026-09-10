@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Drum Machine Step Pads Map MIDI Notes 36 to 51 - midi</title>
+    <meta name="description" content="This article explains how drum machine step pads assign, trigger, and transmit MIDI note numbers 36 through 51 for standard drum kits. By following the General MIDI (GM) percussion standard, modern and vintage drum machines use internal microcontroller f">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-drum-machine-step-pads-map-midi-notes-36-to-51">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Drum Machine Step Pads Map MIDI Notes 36 to 51 - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-drum-machine-step-pads-map-midi-notes-36-to-51" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how drum machine step pads assign, trigger, and transmit MIDI note numbers 36 through 51 for standard drum kits. By following the General MIDI (GM) percussion standard, modern and vintage drum machines use internal microcontroller f" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-drum-machine-step-pads-map-midi-notes-36-to-51">How Drum
+Machine Step Pads Map MIDI Notes 36 to 51</h1>
+<p>This article explains how drum machine step pads assign, trigger, and
+transmit MIDI note numbers 36 through 51 for standard drum kits. By
+following the General MIDI (GM) percussion standard, modern and vintage
+drum machines use internal microcontroller firmware to translate
+physical pad presses or sequenced step events into precise numeric MIDI
+data bytes. Readers will learn the distinction between step-sequencing
+and pad-performance modes, the standard instrument assignments within
+the 36–51 range, and the digital message structure transmitted over MIDI
+Channel 10.</p>
+<h3 id="the-general-midi-percussion-standard">The General MIDI
+Percussion Standard</h3>
+<p>The MIDI protocol designates note numbers 36 through 51 as the core
+foundation of the General MIDI (GM) drum map. In traditional keyboard
+terms, note 36 corresponds to C1 (or C2 depending on octave-numbering
+conventions), extending sequentially up to D#2 (note 51). Because early
+electronic instruments lacked a unified layout, the GM standard was
+established to ensure that triggering note 36 on any compliant device
+reliably sounds a bass drum, rather than an arbitrary pitch or
+effect.</p>
+<p>The standard assignments for MIDI notes 36 through 51 are:</p>
+<ul>
+<li><strong>36:</strong> Bass Drum 1</li>
+<li><strong>37:</strong> Side Stick</li>
+<li><strong>38:</strong> Acoustic Snare</li>
+<li><strong>39:</strong> Hand Clap</li>
+<li><strong>40:</strong> Electric Snare</li>
+<li><strong>41:</strong> Low Floor Tom</li>
+<li><strong>42:</strong> Closed Hi-Hat</li>
+<li><strong>43:</strong> High Floor Tom</li>
+<li><strong>44:</strong> Pedal Hi-Hat</li>
+<li><strong>45:</strong> Low Tom</li>
+<li><strong>46:</strong> Open Hi-Hat</li>
+<li><strong>47:</strong> Low-Mid Tom</li>
+<li><strong>48:</strong> High-Mid Tom</li>
+<li><strong>49:</strong> Crash Cymbal 1</li>
+<li><strong>50:</strong> High Tom</li>
+<li><strong>51:</strong> Ride Cymbal 1</li>
+</ul>
+<h3 id="hardware-detection-and-internal-mapping">Hardware Detection and
+Internal Mapping</h3>
+<p>Drum machine step pads rely on internal microcontrollers connected to
+a sensor matrix. When a user interacts with a physical pad—typically
+made of conductive rubber or mechanical switches—the processor registers
+a closed circuit or a change in capacitance.</p>
+<p>Inside the machine’s firmware lies a look-up table (LUT). This table
+maps the physical pad address to an internal sound voice and its
+corresponding MIDI note number. By default, most drum machines assign
+their standard acoustic or electronic kit presets directly to the GM
+note map. When Pad 1 is struck, the firmware queries the table,
+identifies the pad as the primary kick, and retrieves the integer value
+<code>36</code>.</p>
+<h3
+id="operational-modes-step-sequencing-vs-real-time-input">Operational
+Modes: Step Sequencing vs. Real-Time Input</h3>
+<p>Drum machines generally handle the input of notes 36 through 51 via
+two distinct operating methods:</p>
+<ol type="1">
+<li><strong>Finger Drumming / Performance Mode:</strong> In this layout,
+each physical pad directly represents a distinct instrument. Pad 1
+triggers note 36, Pad 2 triggers note 37, Pad 3 triggers note 38, and so
+on. Striking a pad immediately creates a real-time MIDI event
+corresponding to that specific note.</li>
+<li><strong>Step Sequencer Mode (X0X-Style):</strong> In this mode, the
+row of 16 step pads represents chronological time intervals (typically
+16th notes across a four-beat bar) rather than distinct drum sounds. To
+input MIDI note 36, the musician first selects the Bass Drum track via a
+track selector button. The internal sequencer assigns the destination
+value of note 36 to that track. Activating steps 1, 5, 9, and 13 flags
+the sequencer to output note 36 precisely when the internal clock
+reaches those positions. To program note 38 (Snare), the user switches
+to the snare track and toggles the desired time steps.</li>
+</ol>
+<h3 id="midi-data-generation-and-transmission">MIDI Data Generation and
+Transmission</h3>
+<p>Once a pad press or sequenced step is triggered, the drum machine
+constructs a standard 3-byte MIDI message:</p>
+<ol type="1">
+<li><strong>Status Byte (Note On):</strong> Drum machines typically
+broadcast on MIDI Channel 10, the universal channel reserved for
+percussion. A Note On command on Channel 10 is expressed in hexadecimal
+as <code>0x99</code>.</li>
+<li><strong>Data Byte 1 (Pitch/Note Number):</strong> This byte carries
+the integer identifying the drum voice. For a kick drum, the machine
+outputs <code>0x24</code> (hexadecimal for decimal 36); for an acoustic
+snare, it outputs <code>0x26</code> (decimal 38); up through
+<code>0x33</code> (decimal 51) for the ride cymbal.</li>
+<li><strong>Data Byte 2 (Velocity):</strong> This byte reflects how hard
+the pad was hit (ranging from 1 to 127), or a fixed velocity setting if
+the sequencer pads are non-dynamic switches.</li>
+</ol>
+<p>This 3-byte packet is sent through the 5-pin DIN MIDI Out port,
+USB-MIDI interface, or internal digital audio workstation (DAW) routing,
+allowing external synthesizers, samplers, and software instruments to
+trigger the intended drum sound automatically.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

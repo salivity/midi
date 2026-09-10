@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI to CV Converter Voltage Standards - midi</title>
+    <meta name="description" content="MIDI to Control Voltage (CV) converters bridge modern digital gear and analog synthesizers by translating digital MIDI messages into analog control voltages. This article provides a comprehensive overview of the primary voltage standards supported by the">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-to-cv-converter-voltage-standards">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI to CV Converter Voltage Standards - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-to-cv-converter-voltage-standards" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI to Control Voltage (CV) converters bridge modern digital gear and analog synthesizers by translating digital MIDI messages into analog control voltages. This article provides a comprehensive overview of the primary voltage standards supported by the" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-to-cv-converter-voltage-standards">MIDI to CV Converter
+Voltage Standards</h1>
+<p>MIDI to Control Voltage (CV) converters bridge modern digital gear
+and analog synthesizers by translating digital MIDI messages into analog
+control voltages. This article provides a comprehensive overview of the
+primary voltage standards supported by these converters, including pitch
+standards like 1V/Octave and Hz/V, gate and trigger formats such as
+V-Trigger and S-Trigger, and standard modulation voltage ranges.</p>
+<h3 id="pitch-cv-standards">Pitch CV Standards</h3>
+<p>Analog synthesizers rely on specific voltage curves to track pitch
+accurately across keys. Most MIDI to CV converters support one or both
+of the following primary standards:</p>
+<ul>
+<li><strong>Volt-per-Octave (1V/Oct):</strong> This is the most common
+standard, utilized by Eurorack modular systems, Moog, Roland, ARP, and
+Sequential Circuits. In this linear standard, an increase of one volt
+raises the oscillator's pitch by exactly one octave (roughly 0.0833
+volts per semitone). Pitch CV outputs typically range from 0V to +10V
+(spanning 10 octaves) or -5V to +5V.</li>
+<li><strong>Hertz-per-Volt (Hz/V):</strong> Popularized by vintage Korg
+(such as the MS-20) and Yamaha synthesizers, this exponential standard
+doubles the voltage for every octave increase (e.g., 1V, 2V, 4V, 8V).
+Converters capable of Hz/V typically provide a range from 0V to +8V or
+0V to +10V.</li>
+<li><strong>1.2V-per-Octave:</strong> Less common, this standard is
+primarily used by Buchla modular systems. Some flexible or high-end
+converters include specific calibration options to output 1.2V per
+octave.</li>
+</ul>
+<h3 id="gate-and-trigger-standards">Gate and Trigger Standards</h3>
+<p>Gate and trigger signals tell the receiving synthesizer when a note
+begins, how long it is held, and when it ends. Converters generally
+support two variations:</p>
+<ul>
+<li><strong>V-Trigger (Voltage Trigger / Standard Gate):</strong> The
+standard across Eurorack, Roland, and modern analog gear. The signal
+rests at 0V (off) and switches to a positive voltage when a key is
+pressed. Output gates typically generate +5V, +10V, or +12V pulses.</li>
+<li><strong>S-Trigger (Switch Trigger):</strong> Common on vintage Moog
+and Korg synthesizers, this system uses an inverted, short-to-ground
+mechanism. The line rests at a positive voltage (or open circuit) and
+drops to 0V (ground) when a note is active. Many modern converters allow
+users to toggle their gate outputs between V-Trigger and S-Trigger via
+software or hardware jumpers.</li>
+</ul>
+<h3 id="modulation-and-auxiliary-cv">Modulation and Auxiliary CV</h3>
+<p>Beyond pitch and gates, MIDI to CV converters translate continuous
+controller (CC) messages, velocity, aftertouch, and pitch bend into
+analog voltages using two primary configurations:</p>
+<ul>
+<li><strong>Unipolar Voltages (0V to +5V or 0V to +10V):</strong>
+Typically used for note velocity, aftertouch, and general MIDI CC
+mapping to modulate filter cutoffs, volume levels, or envelope
+stages.</li>
+<li><strong>Bipolar Voltages (-5V to +5V):</strong> Primarily used for
+pitch bend and low-frequency oscillators (LFOs), where the voltage needs
+to swing both above and below a center point of 0V.</li>
+</ul>
+<h3 id="clock-and-sync-signals">Clock and Sync Signals</h3>
+<p>For synchronization, converters translate MIDI clock data into analog
+clock pulses. These outputs typically deliver sharp +5V pulses
+configured to match standard timing intervals, such as 24 PPQN (Pulses
+Per Quarter Note) for DIN Sync, 48 PPQN, or simplified 1 PPQN / 2 PPQN
+triggers for vintage sequencers and drum machines.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

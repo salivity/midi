@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Current Loops Prevent Ground Loops - midi</title>
+    <meta name="description" content="This article explains how the standard MIDI 5mA current loop and its mandatory optical isolation eliminate ground loop hum and guard against electric shocks. By relying on current-driven signaling rather than shared voltage references, MIDI physically br">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-current-loops-prevent-ground-loops">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Current Loops Prevent Ground Loops - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-current-loops-prevent-ground-loops" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how the standard MIDI 5mA current loop and its mandatory optical isolation eliminate ground loop hum and guard against electric shocks. By relying on current-driven signaling rather than shared voltage references, MIDI physically br" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-midi-current-loops-prevent-ground-loops">How MIDI Current
+Loops Prevent Ground Loops</h1>
+<p>This article explains how the standard MIDI 5mA current loop and its
+mandatory optical isolation eliminate ground loop hum and guard against
+electric shocks. By relying on current-driven signaling rather than
+shared voltage references, MIDI physically breaks the conductive ground
+path between interconnected instruments, audio interfaces, and
+computers. This design ensures silent, noise-free audio systems while
+establishing a critical safety barrier against power faults, voltage
+spikes, and equipment damage.</p>
+<h2 id="the-midi-current-loop-design">The MIDI Current Loop Design</h2>
+<p>Traditional analog and digital data connections transmit signals by
+referencing a shared voltage against a common ground wire. If two
+interconnected devices have slightly different ground potentials,
+electrical current flows across that ground connection, introducing
+noise.</p>
+<p>MIDI (Musical Instrument Digital Interface) bypasses this issue
+entirely by using a <strong>5mA current loop</strong>:</p>
+<ul>
+<li><strong>Current-driven logic:</strong> Instead of measuring a
+voltage drop relative to a shared ground, a MIDI receiver detects the
+binary presence or absence of electrical current flowing through a
+closed loop.</li>
+<li><strong>Directional signaling:</strong> A standard 5-pin DIN or TRS
+MIDI cable uses two active data lines: a current source (pull-up via a
+resistor from +5V or +3.3V) and a current sink.</li>
+<li><strong>Logical states:</strong> Current flowing through the loop
+represents a binary "0" (space), while no current flowing represents a
+binary "1" (mark).</li>
+</ul>
+<p>Because the signal relies strictly on the current flowing through
+this isolated loop, it does not require a shared electrical reference to
+transmit data accurately.</p>
+<h2
+id="eliminating-ground-loop-hum-via-broken-ground-connections">Eliminating
+Ground Loop Hum via Broken Ground Connections</h2>
+<p>Ground loops occur when multiple pieces of mains-powered audio gear
+share multiple connections to Earth ground (such as through mains power
+plugs and shielded audio cables). Small potential differences between
+these ground points cause stray AC currents to circulate through audio
+shielding, resulting in an audible 50 Hz or 60 Hz hum.</p>
+<p>The MIDI specification intentionally prevents ground loops through
+strict cabling and port wiring standards:</p>
+<ol type="1">
+<li><strong>One-Ended Shield Grounding:</strong> The cable shield (Pin 2
+on a 5-pin DIN connector) is grounded <em>only</em> at the MIDI Out and
+MIDI Thru ports.</li>
+<li><strong>Floating Ground at MIDI In:</strong> The MIDI In port leaves
+the cable shield completely unconnected (floating).</li>
+<li><strong>No Direct Electrical Path:</strong> Because the shield does
+not connect to the chassis or circuit ground of the receiving device, no
+conductive loop can form between the two pieces of gear via the MIDI
+cable.</li>
+</ol>
+<h2 id="optical-isolation-the-heart-of-the-circuit">Optical Isolation:
+The Heart of the Circuit</h2>
+<p>The core component that enables this architecture is the
+<strong>optoisolator</strong> (or optocoupler) integrated directly into
+every compliant MIDI In port.</p>
+<p>An optoisolator contains two separate components sealed within a
+single light-tight package:</p>
+<ul>
+<li>An <strong>infrared LED</strong> connected to the input loop.</li>
+<li>A <strong>phototransistor</strong> (light detector) connected to the
+receiving device's internal microprocessor.</li>
+</ul>
+<p>When the sending device transmits data, current flows through the
+loop and energizes the internal LED. The LED emits light pulses across a
+physical, non-conductive air gap inside the chip. The phototransistor
+detects these light flashes and reproduces the digital data for the host
+processor.</p>
+<p>Because information travels exclusively via light rather than
+electrical conduction, there is <strong>galvanic isolation</strong>
+between the transmitter and the receiver.</p>
+<h2
+id="protection-against-electric-shocks-and-equipment-damage">Protection
+Against Electric Shocks and Equipment Damage</h2>
+<p>Beyond eliminating audio hum, galvanic isolation via the current loop
+acts as a protective firewall for both musicians and hardware:</p>
+<ul>
+<li><strong>Mains Fault Protection:</strong> If a synthesizer or
+amplifier develops an internal short circuit that exposes its chassis to
+lethal 120V/240V mains voltage, the optoisolator prevents that hazardous
+voltage from traveling down the MIDI cable into other connected hardware
+or into the musician's hands.</li>
+<li><strong>High Voltage Withstand:</strong> Typical MIDI-spec
+optocouplers are rated to withstand isolation voltages between 1,000V
+and 5,000V RMS.</li>
+<li><strong>Static and Surge Suppression:</strong> Electrostatic
+discharge (ESD) and voltage spikes generated by nearby stage lighting,
+power switches, or ground potential shifts are stopped dead at the
+optoisolator's barrier, preventing sensitive microcontrollers from
+frying.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Daisy Chain Routing for Multiple Synthesizers - midi</title>
+    <meta name="description" content="A MIDI daisy chain routes digital performance data from a single master controller to multiple hardware synthesizers connected in a sequential series. By transmitting instructions through standard 5-pin DIN cables using dedicated input and pass-through p">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-daisy-chain-routing-for-multiple-synthesizers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Daisy Chain Routing for Multiple Synthesizers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-daisy-chain-routing-for-multiple-synthesizers" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI daisy chain routes digital performance data from a single master controller to multiple hardware synthesizers connected in a sequential series. By transmitting instructions through standard 5-pin DIN cables using dedicated input and pass-through p" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-daisy-chain-routing-for-multiple-synthesizers">MIDI Daisy
+Chain Routing for Multiple Synthesizers</h1>
+<p>A MIDI daisy chain routes digital performance data from a single
+master controller to multiple hardware synthesizers connected in a
+sequential series. By transmitting instructions through standard 5-pin
+DIN cables using dedicated input and pass-through ports, this
+configuration enables a musician to trigger several sound modules
+simultaneously or address individual instruments independently across
+standard MIDI channels.</p>
+<h3 id="the-core-hardware-ports">The Core Hardware Ports</h3>
+<p>Understanding a MIDI daisy chain requires distinguishing between the
+three physical ports found on traditional MIDI hardware:</p>
+<ul>
+<li><strong>MIDI OUT:</strong> Transmits data generated directly by the
+host device (such as key presses, pitch bends, or sequencer steps).</li>
+<li><strong>MIDI IN:</strong> Receives incoming data from another device
+to trigger internal sounds or synchronize clocks.</li>
+<li><strong>MIDI THRU:</strong> Produces an exact, unprocessed duplicate
+of the data arriving at the device's MIDI IN port.</li>
+</ul>
+<p>The MIDI THRU port is the foundation of the daisy chain. Unlike a
+MIDI OUT port, which only sends data originated by that specific unit,
+the THRU port echoes incoming instructions down the line to the next
+instrument without merging or altering the data stream.</p>
+<h3 id="signal-flow-from-master-to-slaves">Signal Flow from Master to
+Slaves</h3>
+<p>In a standard chain, the routing follows a linear path:</p>
+<ol type="1">
+<li><strong>Master Controller:</strong> The sequence begins at the
+master device (a master keyboard, hardware sequencer, or computer audio
+interface). A cable runs from the master’s <strong>MIDI OUT</strong>
+port to the <strong>MIDI IN</strong> port of the first synthesizer.</li>
+<li><strong>First Synthesizer:</strong> The first instrument reads the
+incoming data to play notes or sync its internal clock. At the same
+time, its hardware replicates that exact data stream and routes it
+directly to its <strong>MIDI THRU</strong> port.</li>
+<li><strong>Subsequent Synthesizers:</strong> A cable connects the first
+synthesizer’s <strong>MIDI THRU</strong> to the second synthesizer’s
+<strong>MIDI IN</strong>. This process repeats—linking MIDI THRU to the
+next MIDI IN—for every subsequent device in the chain.</li>
+<li><strong>Terminal Synthesizer:</strong> The final instrument in the
+sequence only requires a connection to its <strong>MIDI IN</strong>
+port, as there are no further units to receive the signal.</li>
+</ol>
+<h3 id="managing-notes-via-midi-channels">Managing Notes via MIDI
+Channels</h3>
+<p>Because the MIDI THRU port sends an exact duplicate of all incoming
+data, every synthesizer in the chain receives every message sent by the
+master. To prevent every instrument from playing the same notes at the
+same time, data is organized across 16 discrete MIDI channels:</p>
+<ul>
+<li><strong>Channel Assignment:</strong> The master sequencer assigns
+specific parts to specific channels (for example, bass on Channel 1,
+lead on Channel 2, and pads on Channel 3).</li>
+<li><strong>Device Filtering:</strong> Each synthesizer is set to listen
+to a matching channel while ignoring the rest. Synth 1 receives the
+entire stream but only triggers when it detects Channel 1 messages.</li>
+<li><strong>Omni Mode:</strong> If a device is set to "Omni Mode," it
+will respond to data on all channels simultaneously, which is typically
+disabled when sequencing multiple discrete parts.</li>
+</ul>
+<h3 id="limitations-of-daisy-chaining">Limitations of Daisy
+Chaining</h3>
+<p>While cost-effective and simple to set up, standard daisy chains have
+practical limits.</p>
+<p>The primary issue is signal degradation and latency. MIDI THRU ports
+rely on active electronics (opto-isolators) to replicate the signal.
+Passing the stream through multiple hardware stages can introduce minute
+timing delays (jitter) and round off the digital square waves,
+potentially causing dropped notes or stuck data after three or four
+chained devices. For setups with five or more synthesizers, dedicated
+hardware MIDI THRU boxes (star topology) are generally preferred over a
+daisy chain to ensure clean, simultaneous signal distribution.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

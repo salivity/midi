@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI-CI Explained: How Capability Inquiry Works - midi</title>
+    <meta name="description" content="MIDI Capability Inquiry (MIDI-CI) is a foundational extension to the MIDI standard that allows devices to communicate bidirectionally, discover each other's capabilities, and automatically configure advanced features. This article explains what the MIDI-">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-ci-explained-how-capability-inquiry-works">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI-CI Explained: How Capability Inquiry Works - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-ci-explained-how-capability-inquiry-works" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Capability Inquiry (MIDI-CI) is a foundational extension to the MIDI standard that allows devices to communicate bidirectionally, discover each other's capabilities, and automatically configure advanced features. This article explains what the MIDI-" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-ci-explained-how-capability-inquiry-works">MIDI-CI
+Explained: How Capability Inquiry Works</h1>
+<p>MIDI Capability Inquiry (MIDI-CI) is a foundational extension to the
+MIDI standard that allows devices to communicate bidirectionally,
+discover each other's capabilities, and automatically configure advanced
+features. This article explains what the MIDI-CI specification is, why
+it was developed as the gateway to MIDI 2.0, and the exact step-by-step
+mechanisms it uses to negotiate protocols, profiles, and device
+properties.</p>
+<h2 id="what-is-the-midi-ci-specification">What is the MIDI-CI
+Specification?</h2>
+<p>Historically, MIDI 1.0 was a one-way communication protocol. A
+controller transmitted data blindly to a sound module without knowing if
+the receiving device understood the message, what sounds it possessed,
+or what parameters it could control.</p>
+<p>The MIDI Association developed the MIDI-CI specification to transform
+MIDI into a bidirectional conversation. Operating over traditional 5-pin
+DIN cables, USB, or any modern transport layer, MIDI-CI works by
+utilizing specialized System Exclusive (SysEx) messages. It serves as a
+bridge that allows legacy MIDI 1.0 gear and modern MIDI 2.0 hardware to
+coexist seamlessly. Through MIDI-CI, devices ask questions, confirm
+shared abilities, and agree on how to interact before exchanging
+performance data.</p>
+<h2 id="the-discovery-phase-establishing-the-handshake">The Discovery
+Phase: Establishing the Handshake</h2>
+<p>Before any negotiation can take place, connected devices must
+identify each other. MIDI-CI achieves this through a discovery
+process:</p>
+<ol type="1">
+<li><strong>Discovery Request:</strong> When a device (the Initiator)
+connects to a MIDI network, it broadcasts a MIDI-CI Discovery message
+containing a randomly generated 28-bit source identifier known as a MIDI
+Unique Identifier (MUID).</li>
+<li><strong>Device Identification:</strong> The message includes basic
+hardware identification, such as manufacturer ID, device family, and
+model number.</li>
+<li><strong>Discovery Reply:</strong> Receiving devices (Responders)
+generate their own MUIDs and reply, confirming they support MIDI-CI and
+declaring which specific negotiation categories they support.</li>
+<li><strong>Backward Compatibility:</strong> If an older device does not
+respond to the MIDI-CI Discovery message, the Initiator concludes that
+the target only supports traditional MIDI 1.0 and defaults to standard
+behavior.</li>
+</ol>
+<h2 id="how-midi-ci-negotiates-features-the-three-pillars">How MIDI-CI
+Negotiates Features: The Three Pillars</h2>
+<p>Once mutual support is confirmed, MIDI-CI negotiates features across
+three distinct functional categories: Protocol Negotiation, Profile
+Configuration, and Property Exchange.</p>
+<h3 id="1-protocol-negotiation-moving-to-midi-20">1. Protocol
+Negotiation (Moving to MIDI 2.0)</h3>
+<p>Protocol Negotiation determines the language used for musical
+performance data.</p>
+<ul>
+<li><strong>The Inquiry:</strong> An Initiator asks if the Responder can
+communicate using newer protocols, such as the Universal MIDI Packet
+(UMP) format used in MIDI 2.0, which offers 32-bit resolution and
+tighter timing.</li>
+<li><strong>The Response:</strong> The Responder confirms whether it can
+switch to the requested protocol.</li>
+<li><strong>The Switch:</strong> If both devices agree, they execute a
+synchronized switch to the new protocol. If either device declines, the
+connection remains on standard MIDI 1.0.</li>
+</ul>
+<h3 id="2-profile-configuration-standardizing-functional-behaviors">2.
+Profile Configuration (Standardizing Functional Behaviors)</h3>
+<p>Profiles define rules for specific types of musical instruments or
+controllers. For example, an "Analog Synth" profile expects specific
+controls for cutoff frequency and resonance, while a "Drawbar Organ"
+profile expects controls for drawbars, percussion, and rotary speaker
+speed.</p>
+<ul>
+<li><strong>Profile Inquiry:</strong> A controller queries a synthesizer
+to receive a list of its supported profiles.</li>
+<li><strong>Profile Activation:</strong> The controller sends a request
+to turn on a specific profile.</li>
+<li><strong>Auto-Mapping:</strong> Once active, both devices bind their
+controls to the standardized profile mappings. Musicians no longer need
+to spend time manually mapping MIDI Continuous Controllers (CCs) between
+hardware units.</li>
+</ul>
+<h3 id="3-property-exchange-deep-data-and-editor-integration">3.
+Property Exchange (Deep Data and Editor Integration)</h3>
+<p>Property Exchange allows devices to share complex configuration data,
+metadata, and visual assets. It uses standard JSON formatting wrapped
+inside Universal System Exclusive messages.</p>
+<ul>
+<li><strong>Resource Discovery:</strong> Devices query each other for
+available resources, such as program lists, patch names, controller
+assignments, and effect states.</li>
+<li><strong>Real-Time Data Transfer:</strong> A digital audio
+workstation (DAW) or hardware controller can request the current patch
+name and parameter values from a synthesizer. As parameters change on
+the synth, updated values are sent back to the controller via JSON.</li>
+<li><strong>Graphical Interfaces:</strong> Property Exchange can
+transfer data describing a device's user interface, enabling a
+controller or computer to render an interactive software editor for a
+hardware synthesizer without requiring custom drivers.</li>
+</ul>
+<h2 id="summary">Summary</h2>
+<p>The MIDI-CI specification transitions MIDI from an open-loop, one-way
+system into an intelligent, self-configuring network. By utilizing MUID
+handshakes, Profile Configuration, Property Exchange, and Protocol
+Negotiation, MIDI-CI enables devices to automatically discover what they
+can do together, upgrade their performance resolution, and configure
+controls without manual user intervention.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

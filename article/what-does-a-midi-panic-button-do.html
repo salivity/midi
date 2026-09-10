@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Does a MIDI Panic Button Do? - midi</title>
+    <meta name="description" content="A MIDI panic button is an essential utility feature found on hardware synthesizers, MIDI controllers, and digital audio workstations (DAWs) designed to instantly silence "stuck" or endlessly droning notes. By immediately transmitting a burst of reset com">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-does-a-midi-panic-button-do">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Does a MIDI Panic Button Do? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-does-a-midi-panic-button-do" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI panic button is an essential utility feature found on hardware synthesizers, MIDI controllers, and digital audio workstations (DAWs) designed to instantly silence "stuck" or endlessly droning notes. By immediately transmitting a burst of reset com" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-does-a-midi-panic-button-do">What Does a MIDI Panic Button
+Do?</h1>
+<p>A MIDI panic button is an essential utility feature found on hardware
+synthesizers, MIDI controllers, and digital audio workstations (DAWs)
+designed to instantly silence "stuck" or endlessly droning notes. By
+immediately transmitting a burst of reset commands across all MIDI
+channels, the panic button terminates all active voice signals and halts
+runaway data loops without requiring the user to power cycle their
+equipment or restart their software.</p>
+<h3 id="the-problem-why-notes-get-stuck">The Problem: Why Notes Get
+Stuck</h3>
+<p>MIDI (Musical Instrument Digital Interface) does not transmit actual
+audio; instead, it transmits performance data. When you press a key, the
+controller sends a "Note On" command to the synthesizer. When you
+release the key, it sends a "Note Off" command telling the synth voice
+to enter its release phase and silence the note.</p>
+<p>If the connection is interrupted, if a cable is jostled, or if a
+computer buffer overloads between the "Note On" and "Note Off" messages,
+the receiving synthesizer never receives the instruction to stop
+playing. As a result, the note sustains indefinitely. This glitch is
+commonly known as a "MIDI hang" or a "stuck note."</p>
+<h3 id="how-the-panic-button-works">How the Panic Button Works</h3>
+<p>Pressing the MIDI panic button triggers a sequence of global stop
+commands across all 16 standard MIDI channels simultaneously. These
+commands typically include:</p>
+<ul>
+<li><strong>All Notes Off (Control Change 123):</strong> Instructs all
+receiving instruments to trigger the standard release phase for every
+currently active voice.</li>
+<li><strong>All Sound Off (Control Change 120):</strong> An immediate,
+hard mute that bypasses release tails and envelope decay, silencing the
+audio engine instantly.</li>
+<li><strong>Reset All Controllers (Control Change 121):</strong> Returns
+expressive parameters—such as pitch bend, modulation wheels, and sustain
+pedals—back to their default zero positions to resolve stuck pitch or
+modulation loops.</li>
+<li><strong>Individual Note Off Sweep:</strong> Some panic functions
+brute-force the issue by firing an explicit "Note Off" command for every
+single MIDI note number (0 to 127) on every channel to guarantee total
+silence.</li>
+</ul>
+<h3 id="where-to-find-it">Where to Find It</h3>
+<p>On hardware synthesizers and master keyboard controllers, the panic
+command may be an explicitly labeled physical button, a combination of
+key presses (such as pressing the transpose up and down buttons
+together), or a double-tap of the Stop button. In software DAWs, it is
+usually integrated directly into the transport bar, the MIDI setup menu,
+or assigned to a global keyboard shortcut.</p>
+<p>For studio producers and live performers alike, the panic button
+serves as a critical safety net, restoring order to a performance or
+recording session with a single press.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

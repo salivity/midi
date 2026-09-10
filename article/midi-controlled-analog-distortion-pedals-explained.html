@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI-Controlled Analog Distortion Pedals Explained - midi</title>
+    <meta name="description" content="A MIDI-controlled analog guitar distortion pedal combines a traditional, non-digitized audio signal path with a digital control system, allowing players to achieve genuine analog saturation while enjoying modern preset management. This article explains t">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-controlled-analog-distortion-pedals-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI-Controlled Analog Distortion Pedals Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-controlled-analog-distortion-pedals-explained" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI-controlled analog guitar distortion pedal combines a traditional, non-digitized audio signal path with a digital control system, allowing players to achieve genuine analog saturation while enjoying modern preset management. This article explains t" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="midi-controlled-analog-distortion-pedals-explained">MIDI-Controlled
+Analog Distortion Pedals Explained</h1>
+<p>A MIDI-controlled analog guitar distortion pedal combines a
+traditional, non-digitized audio signal path with a digital control
+system, allowing players to achieve genuine analog saturation while
+enjoying modern preset management. This article explains the core
+technology behind these hybrid devices, how digital microprocessors
+interface with analog audio components, and the step-by-step process
+used to save and recall complex drive settings via MIDI.</p>
+<h3 id="what-is-a-midi-controlled-analog-distortion-pedal">What Is a
+MIDI-Controlled Analog Distortion Pedal?</h3>
+<p>A MIDI-controlled analog distortion pedal maintains an entirely
+analog audio signal path from input to output. The guitar’s audio signal
+passes through physical analog components—such as operational
+amplifiers, transistors, and clipping diodes—to generate overdrive,
+distortion, or fuzz. The audio signal never undergoes Analog-to-Digital
+(A/D) or Digital-to-Analog (D/A) conversion, ensuring that the pedal
+retains the dynamic response, harmonic complexity, and feel of classic
+analog gear.</p>
+<p>The digital aspect of the pedal exists solely as an auxiliary control
+layer. A built-in microcontroller receives MIDI (Musical Instrument
+Digital Interface) commands and coordinates internal adjustments,
+functioning like a virtual technician who instantly turns the knobs and
+flips the switches on the player's behalf.</p>
+<h3 id="how-digital-control-interfaces-with-analog-circuitry">How
+Digital Control Interfaces with Analog Circuitry</h3>
+<p>Traditional analog distortion pedals rely on mechanical
+potentiometers (variable resistors) to adjust gain, tone, and volume,
+alongside mechanical switches to select different clipping diodes or
+circuit paths.</p>
+<p>In a MIDI-controlled analog pedal, these mechanical parts are
+replaced or augmented by digitally controllable electronic
+components:</p>
+<ul>
+<li><strong>Digital Potentiometers (Digipots) and Resistor
+Ladders:</strong> These integrated circuits adjust resistance values
+based on binary data sent by the microcontroller. Changing the
+resistance in real time alters circuit gain, equalization, or output
+levels without digitizing the audio.</li>
+<li><strong>Optocouplers and Photofets:</strong> Some designs use
+light-dependent resistors or solid-state optical elements to vary
+resistance while maintaining total electrical isolation between the
+digital control circuit and the sensitive analog audio path.</li>
+<li><strong>Analog Switches and Relays:</strong> Small electronic
+switches (such as CMOS switches) or miniature relays swap between
+different clipping stages (e.g., switching from silicon diodes to LED
+clipping) or toggle frequency-shaping capacitors.</li>
+</ul>
+<h3 id="how-preset-drive-settings-are-stored-and-recalled">How Preset
+Drive Settings Are Stored and Recalled</h3>
+<p>The pedal stores and loads presets through coordinated interactions
+between its physical controls, onboard memory, and MIDI communication
+protocol:</p>
+<ol type="1">
+<li><strong>Setting the Parameters:</strong> The player dials in a sound
+using the pedal’s knobs. In these pedals, the physical knobs are usually
+continuous rotary encoders or potentiometers read by the
+microcontroller's internal Analog-to-Digital Converter (ADC). The
+microcontroller translates the position of each control into a discrete
+numerical value (typically between 0 and 127, aligning with MIDI
+standards).</li>
+<li><strong>Writing to Memory:</strong> When the user initiates a save
+command, the microcontroller writes the current state of every
+parameter—gain level, EQ values, clipping modes, and master volume—into
+onboard non-volatile memory, usually an EEPROM (Electrically Erasable
+Programmable Read-Only Memory) or Flash memory chip. Non-volatile memory
+ensures these settings remain stored even after power is
+disconnected.</li>
+<li><strong>Mapping to MIDI Program Change (PC):</strong> Each saved
+combination of parameters is assigned to a specific preset slot, mapped
+directly to a MIDI Program Change (PC) number (for example, Preset 1
+corresponds to MIDI PC 1).</li>
+<li><strong>Recalling via MIDI:</strong> When an external MIDI foot
+controller sends a PC command (such as "PC 5"), the pedal’s
+microcontroller identifies the incoming message, accesses the memory
+address assigned to Preset 5, and reads the stored parameter
+values.</li>
+<li><strong>Circuit Reconfiguration:</strong> The microcontroller
+instantly transmits these values to the internal digital potentiometers
+and switches. Within milliseconds, the internal resistances and routing
+options snap to the exact configuration saved by the user, immediately
+altering the analog clipping and tone characteristics of the pedal.</li>
+</ol>
+<p>Additionally, most MIDI-controlled analog pedals support MIDI
+Continuous Controller (CC) messages. This allows external expression
+pedals or automated sequencers to sweep analog parameters—such as
+increasing the analog gain continuously during a performance—without
+changing the overall preset.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is MIDI Time Code in Video Post-Production? - midi</title>
+    <meta name="description" content="MIDI Time Code (MTC) is a protocol that translates standard SMPTE timecode into a digital MIDI data stream, allowing audio software, video editing systems, and hardware devices to synchronize along a shared timeline. This article breaks down the technica">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-midi-time-code-in-video-post-production">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is MIDI Time Code in Video Post-Production? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-midi-time-code-in-video-post-production" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Time Code (MTC) is a protocol that translates standard SMPTE timecode into a digital MIDI data stream, allowing audio software, video editing systems, and hardware devices to synchronize along a shared timeline. This article breaks down the technica" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-is-midi-time-code-in-video-post-production">What Is MIDI
+Time Code in Video Post-Production?</h1>
+<p>MIDI Time Code (MTC) is a protocol that translates standard SMPTE
+timecode into a digital MIDI data stream, allowing audio software, video
+editing systems, and hardware devices to synchronize along a shared
+timeline. This article breaks down the technical specifications of MTC,
+explains how it transmits positional data using quarter-frame and
+full-frame messages, and details how post-production professionals use
+it to lock digital audio workstations (DAWs) to video playback
+engines.</p>
+<h2 id="understanding-the-mtc-specification">Understanding the MTC
+Specification</h2>
+<p>Developed as an extension of the standard MIDI specification, MTC
+enables devices to share absolute temporal positioning (hours, minutes,
+seconds, frames) without requiring dedicated analog SMPTE longitudinal
+time code (LTC) cables or audio tracks. It formats time data into
+standard MIDI byte sequences, operating at standard SMPTE frame rates:
+24, 25, 29.97 drop-frame, and 30 frames per second (fps).</p>
+<p>The MTC specification relies on two primary message structures to
+maintain sync without overwhelming the standard MIDI bandwidth:</p>
+<h3 id="1-quarter-frame-messages">1. Quarter-Frame Messages</h3>
+<p>When a timeline plays at normal speed, transmitting a complete
+timecode address with every frame would consume too much MIDI bandwidth.
+Instead, MTC breaks down the timecode address into eight sequential
+"quarter-frame" messages.</p>
+<ul>
+<li>Each message contains a piece of the complete address: frame units,
+frame tens, second units, second tens, minute units, minute tens, hour
+units, and frame rate type.</li>
+<li>It takes eight quarter-frame messages (spanning two complete video
+frames) to transmit an entire timecode position.</li>
+<li>The receiving device interpolates between these messages,
+calculating the exact current position while playback continues
+smoothly.</li>
+</ul>
+<h3 id="2-full-frame-messages">2. Full-Frame Messages</h3>
+<p>When playback stops, jumps, scrubs, or shuttles to a new location,
+interpolation is not sufficient. MTC utilizes a Universal System
+Exclusive (SysEx) "Full-Frame" message:</p>
+<ul>
+<li>A single SysEx packet transmits the complete 10-byte timecode
+address instantly.</li>
+<li>The receiving machine reads this message and immediately parks its
+playhead at the exact requested frame.</li>
+</ul>
+<h2 id="how-mtc-is-used-in-video-post-production">How MTC Is Used in
+Video Post-Production</h2>
+<p>In modern video post-production, MTC serves as a reliable,
+cost-effective method to synchronize separate computer systems, software
+platforms, and external hardware devices.</p>
+<h3 id="locking-daws-to-video-playback">Locking DAWs to Video
+Playback</h3>
+<p>While contemporary non-linear editors (NLEs) like Premiere Pro or
+DaVinci Resolve can host audio, dedicated audio suites like Pro Tools,
+Nuendo, or Logic Pro are preferred for complex sound design, dialogue
+editing, and mixing.</p>
+<p>Post-production facilities often use MTC to bridge these
+applications:</p>
+<ul>
+<li>One machine functions as the <strong>Master</strong> (transmitting
+MTC), while the other acts as the <strong>Slave</strong> (chasing
+MTC).</li>
+<li>When the editor hits play in the video software, the DAW receives
+the MTC signal over a virtual MIDI bus or network session (such as
+Apple's RTP-MIDI) and follows along seamlessly.</li>
+</ul>
+<h3 id="dedicated-video-slaves-for-film-scoring">Dedicated Video Slaves
+for Film Scoring</h3>
+<p>Film composers frequently run massive sample libraries that place
+heavy demands on computer hardware. Running high-resolution video inside
+the same session can cause performance bottlenecks and latency.</p>
+<p>To solve this, composers route MTC out of their music software to a
+secondary computer running dedicated video playback software (such as
+Video Slave or Non-Lethal Applications' Video Sync). The secondary
+machine chases the MTC signal, ensuring the picture stays locked to the
+composer’s timeline without taxing the primary DAW’s processor.</p>
+<h3 id="foley-adr-and-automation-tracking">Foley, ADR, and Automation
+Tracking</h3>
+<p>During Automated Dialogue Replacement (ADR) or Foley recording,
+precise visual reference is mandatory. MTC drives synchronization with
+hardware streamers and punch systems that superimpose visual cues (such
+as wipes or countdown beeps) onto the talent's video monitor, indicating
+the exact start and stop frames for a recording pass.</p>
+<h2 id="positional-sync-vs-clock-sync-a-critical-distinction">Positional
+Sync vs. Clock Sync: A Critical Distinction</h2>
+<p>MTC only provides <strong>positional synchronization</strong>—it
+tells devices <em>where</em> they are on the timeline, but it does not
+dictate the physical speed of the audio clock.</p>
+<p>Over long takes, small hardware clock variations between two
+independent sound cards can cause audio to slowly drift out of sync with
+the video, even while both read the same MTC values. For full
+sample-accurate synchronization over long durations, post-production
+studios pair MTC (for positional location) with a master hardware clock
+(such as Word Clock or Blackburst/Tri-Level Sync) to lock the playback
+speed of all digital converters together.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

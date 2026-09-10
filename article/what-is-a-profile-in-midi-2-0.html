@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a Profile in MIDI 2.0? - midi</title>
+    <meta name="description" content="In MIDI 2.0, a Profile is a standardized set of rules and capabilities that dictates how a device responds to specific musical contexts, workflows, or instrument types. Rather than requiring musicians and engineers to manually map controllers, channels,">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-profile-in-midi-2-0">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a Profile in MIDI 2.0? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-profile-in-midi-2-0" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In MIDI 2.0, a Profile is a standardized set of rules and capabilities that dictates how a device responds to specific musical contexts, workflows, or instrument types. Rather than requiring musicians and engineers to manually map controllers, channels," />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-is-a-profile-in-midi-20">What Is a Profile in MIDI
+2.0?</h1>
+<p>In MIDI 2.0, a Profile is a standardized set of rules and
+capabilities that dictates how a device responds to specific musical
+contexts, workflows, or instrument types. Rather than requiring
+musicians and engineers to manually map controllers, channels, and
+parameters, MIDI 2.0 Profiles allow connected devices to automatically
+negotiate and configure their settings dynamically. This overview covers
+the definition of a Profile, how Profile Configuration works through
+MIDI Capability Inquiry (MIDI-CI), and how it streamlines communication
+between hardware and software.</p>
+<h3 id="the-purpose-of-a-midi-20-profile">The Purpose of a MIDI 2.0
+Profile</h3>
+<p>Under the original MIDI 1.0 specification, devices communicated using
+generic Control Change (CC) messages, requiring manual mapping for each
+parameter (such as mapping CC 74 to filter cutoff). MIDI 2.0 solves this
+inefficiency through Profiles.</p>
+<p>A Profile defines the specific layout and behavior of controls for a
+given role. For example, a "Drawbar Organ" profile establishes standard
+controls for drawbars, percussion, and rotary speaker speed. When a
+controller and a synthesizer both activate that profile, the
+controller's faders and buttons automatically align with the synth's
+corresponding parameters without user intervention.</p>
+<h3 id="how-profile-configuration-works-via-midi-ci">How Profile
+Configuration Works via MIDI-CI</h3>
+<p>Profile configuration relies on MIDI-CI (Capability Inquiry), a
+foundational protocol in MIDI 2.0 that allows devices to query each
+other's features over standard MIDI connections.</p>
+<ol type="1">
+<li><strong>Inquiry:</strong> Device A sends a MIDI-CI message asking
+Device B which profiles it supports.</li>
+<li><strong>Reply:</strong> Device B responds with a list of its
+available profiles, indicating which are enabled and which are
+disabled.</li>
+<li><strong>Negotiation and Activation:</strong> Either device can
+request to turn a specific profile on or off for a designated MIDI
+channel or Function Block.</li>
+<li><strong>Operation:</strong> Once enabled, both devices interpret
+messages according to the rules of that activated profile.</li>
+</ol>
+<h3 id="types-of-profiles">Types of Profiles</h3>
+<p>MIDI 2.0 supports both standardized and proprietary profiles:</p>
+<ul>
+<li><strong>Standard Profiles:</strong> Defined and approved by the MIDI
+Association and the Association of Musical Electronics Industry (AMEI).
+Examples include profiles for standard synthesizers, General MIDI, MPE
+(MIDI Polyphonic Expression), and physical instrument emulations like
+pianos or organs.</li>
+<li><strong>Manufacturer-Specific Profiles:</strong> Custom profiles
+created by individual hardware or software manufacturers to enable
+specialized integrations between their own ecosystem of products while
+maintaining compatibility across standard connections.</li>
+</ul>
+<h3 id="key-benefits">Key Benefits</h3>
+<ul>
+<li><strong>Zero-Setup Interoperability:</strong> Hardware controllers
+immediately adapt to whatever software or hardware sound module is
+loaded.</li>
+<li><strong>Contextual Flexibility:</strong> A single hardware
+controller can switch profiles dynamically—functioning as a mixer in one
+view, an analog synthesizer interface in another, and a drum pad
+controller in a third.</li>
+<li><strong>Backward Compatibility:</strong> Profiles operate alongside
+standard MIDI 1.0 and MIDI 2.0 Channel Voice Messages, ensuring legacy
+setups continue to function while advanced workflows gain automated
+configuration.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

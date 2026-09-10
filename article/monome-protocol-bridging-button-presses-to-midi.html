@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monome Protocol: Bridging Button Presses to MIDI - midi</title>
+    <meta name="description" content="This article explores how the Monome hardware platform communicates with modern music software, detailing the specific protocol used to bridge physical button presses into standard MIDI data. By examining the roles of serial communication, Open Sound Con">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/monome-protocol-bridging-button-presses-to-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Monome Protocol: Bridging Button Presses to MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/monome-protocol-bridging-button-presses-to-midi" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how the Monome hardware platform communicates with modern music software, detailing the specific protocol used to bridge physical button presses into standard MIDI data. By examining the roles of serial communication, Open Sound Con" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="monome-protocol-bridging-button-presses-to-midi">Monome
+Protocol: Bridging Button Presses to MIDI</h1>
+<p>This article explores how the Monome hardware platform communicates
+with modern music software, detailing the specific protocol used to
+bridge physical button presses into standard MIDI data. By examining the
+roles of serial communication, Open Sound Control (OSC), and translation
+utilities like <code>serialosc</code>, you will understand how Monome
+translates grid-based tactile input into musical control signals.</p>
+<h2 id="the-core-protocol-open-sound-control-osc">The Core Protocol:
+Open Sound Control (OSC)</h2>
+<p>The Monome platform does not transmit standard MIDI messages directly
+from its hardware. Instead, it relies on <strong>Open Sound Control
+(OSC)</strong> as its primary communication protocol.</p>
+<p>Because Monome controllers are completely decoupled from any fixed
+internal functionality—meaning the hardware contains no built-in musical
+scales, synthesizer engines, or hardcoded MIDI mappings—they require a
+protocol that is flexible, high-speed, and capable of network-style
+addressing. OSC provides this by formatting data into human-readable
+URL-style packets over UDP (User Datagram Protocol).</p>
+<h2 id="the-hardware-to-software-bridge-serialosc">The
+Hardware-to-Software Bridge: <code>serialosc</code></h2>
+<p>Physical Monome devices connect to a host computer via USB using an
+internal FTDI serial chip. To bridge the raw serial input with software
+applications, Monome uses an open-source background service called
+<strong><code>serialosc</code></strong>.</p>
+<p>The communication pipeline works in the following sequence:</p>
+<ol type="1">
+<li><strong>Physical Input:</strong> When a user presses a button on the
+Monome grid, the hardware registers the action and sends a raw byte
+stream across the USB serial interface.</li>
+<li><strong>Serial Translation:</strong> The <code>serialosc</code>
+daemon detects the attached hardware and automatically translates the
+serial data into formatted OSC messages.</li>
+<li><strong>OSC Packet Generation:</strong> <code>serialosc</code> emits
+an OSC message containing the grid coordinates and state, typically
+formatted as:<br />
+<code>/monome/grid/key x y z</code><br />
+<em>(Where <code>x</code> is the column, <code>y</code> is the row, and
+<code>z</code> indicates whether the key was pressed [1] or released
+[0]).</em></li>
+<li><strong>Application Mapping:</strong> Host applications—such as
+Max/MSP, Pure Data, SuperCollider, or dedicated Max for Live
+devices—listen for these incoming OSC packets on designated UDP
+ports.</li>
+<li><strong>Conversion to MIDI:</strong> The host application's logic
+translates the OSC coordinate values into traditional MIDI data (such as
+Note On, Note Off, Control Change, or Pitch Bend messages) and routes
+them to virtual instruments, external hardware, or digital audio
+workstations (DAWs).</li>
+</ol>
+<h2 id="bi-directional-led-feedback">Bi-Directional LED Feedback</h2>
+<p>The bridge functions bi-directionally. Software environments send OSC
+messages back through <code>serialosc</code> using paths such as
+<code>/monome/grid/led/set x y state</code> or
+<code>/monome/grid/led/level/set x y intensity</code>. This updates the
+internal LED states beneath the buttons, providing real-time visual
+feedback synchronized with the software's MIDI activity.</p>
+<p>By employing OSC as the bridge between raw serial hardware and
+end-point MIDI streams, the Monome platform achieves high-resolution
+timing, flexible reconfiguration, and complete freedom from the legacy
+constraints of traditional MIDI hardware.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

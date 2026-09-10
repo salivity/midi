@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTP-MIDI Explained: Streaming MIDI Over Ethernet - midi</title>
+    <meta name="description" content="RTP-MIDI is an open specification that enables the transmission of Musical Instrument Digital Interface (MIDI) messages over standard IP networks, such as local Ethernet and Wi-Fi. This article provides a comprehensive breakdown of what RTP-MIDI is, its">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/rtp-midi-explained-streaming-midi-over-ethernet">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="RTP-MIDI Explained: Streaming MIDI Over Ethernet - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/rtp-midi-explained-streaming-midi-over-ethernet" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="RTP-MIDI is an open specification that enables the transmission of Musical Instrument Digital Interface (MIDI) messages over standard IP networks, such as local Ethernet and Wi-Fi. This article provides a comprehensive breakdown of what RTP-MIDI is, its" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="rtp-midi-explained-streaming-midi-over-ethernet">RTP-MIDI
+Explained: Streaming MIDI Over Ethernet</h1>
+<p>RTP-MIDI is an open specification that enables the transmission of
+Musical Instrument Digital Interface (MIDI) messages over standard IP
+networks, such as local Ethernet and Wi-Fi. This article provides a
+comprehensive breakdown of what RTP-MIDI is, its structural advantages
+over traditional 5-pin DIN and USB connections, and the technical
+mechanics behind how it encapsulates, synchronizes, and guarantees the
+delivery of musical performance data across a local area network.</p>
+<h3 id="what-is-rtp-midi">What Is RTP-MIDI?</h3>
+<p>RTP-MIDI (Real-time Transport Protocol for MIDI) was standardized by
+the Internet Engineering Task Force (IETF) under RFC 4695 (later updated
+by RFC 6295). It integrates the standard MIDI language into the
+Real-time Transport Protocol, an established network framework commonly
+used for streaming audio and video. Native to macOS and iOS (often
+referred to as AppleMIDI or Network MIDI), it can also be used on
+Windows and Linux systems using open-source drivers.</p>
+<h3 id="how-rtp-midi-transmits-data-over-ethernet">How RTP-MIDI
+Transmits Data Over Ethernet</h3>
+<p>Traditional MIDI relies on point-to-point physical cables with severe
+bandwidth or cable-length limitations. Ethernet, by contrast, provides
+high-bandwidth, long-distance, and multi-device routing capabilities.
+RTP-MIDI bridges the two technologies using several core networking
+mechanisms:</p>
+<h4 id="1-udpip-encapsulation">1. UDP/IP Encapsulation</h4>
+<p>RTP-MIDI uses User Datagram Protocol (UDP) instead of Transmission
+Control Protocol (TCP) for transport. Because TCP requires packet
+acknowledgments and retransmits lost packets sequentially, it introduces
+unpredictable latency that disrupts musical timing. UDP prioritizes
+speed and low latency by transmitting data packets without waiting for
+handshakes, making it ideal for real-time performance.</p>
+<h4 id="2-the-recovery-journal">2. The Recovery Journal</h4>
+<p>Because standard UDP does not guarantee packet delivery, dropped
+packets in a music context could lead to stuck notes or missing
+controller commands. RTP-MIDI solves this through a built-in mechanism
+called the Recovery Journal. Each transmitted packet contains not only
+the current MIDI event but also an encoded history (the journal) of
+recent states—such as currently active notes, pitch bend settings, and
+control changes. If a packet is lost in transit, the receiver
+reconstructs the missing state immediately upon receiving the next
+packet, preventing stuck notes without requiring the retransmission
+delays of TCP.</p>
+<h4 id="3-sub-millisecond-timestamping-and-synchronization">3.
+Sub-Millisecond Timestamping and Synchronization</h4>
+<p>To eliminate timing jitter caused by network traffic, RTP-MIDI uses
+high-resolution timestamps based on a shared clock (typically running at
+10 kHz or 100 microseconds per tick). When a device transmits a note, it
+stamps the packet with the precise execution time. The receiving
+synthesizer or digital audio workstation (DAW) buffers these incoming
+packets briefly to smooth out jitter and executes the MIDI commands
+exactly when their timestamps dictate, preserving the human feel and
+tight groove of a performance.</p>
+<h4 id="4-session-management-and-discovery">4. Session Management and
+Discovery</h4>
+<p>RTP-MIDI operates by establishing peer-to-peer sessions between
+endpoints over specific UDP ports (by default, control data uses port
+5004 and stream data uses port 5005). Devices identify each other on a
+local Ethernet network either via manual IP address assignment or
+automatically through zero-configuration networking protocols like
+mDNS/Bonjour. Once connected, multiple computers, synthesizers, and
+controllers can route dozens of virtual MIDI cables bidirectionally over
+a single standard Ethernet cable.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

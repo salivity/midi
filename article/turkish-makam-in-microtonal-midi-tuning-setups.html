@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turkish Makam in Microtonal MIDI Tuning Setups - midi</title>
+    <meta name="description" content="The Turkish Makam system plays a transformative role in custom microtonal MIDI tuning setups by providing a sophisticated, mathematically rich framework that challenges the limitations of standard 12-tone equal temperament (12-TET). By integrating histor">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/turkish-makam-in-microtonal-midi-tuning-setups">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Turkish Makam in Microtonal MIDI Tuning Setups - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/turkish-makam-in-microtonal-midi-tuning-setups" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Turkish Makam system plays a transformative role in custom microtonal MIDI tuning setups by providing a sophisticated, mathematically rich framework that challenges the limitations of standard 12-tone equal temperament (12-TET). By integrating histor" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="turkish-makam-in-microtonal-midi-tuning-setups">Turkish Makam in
+Microtonal MIDI Tuning Setups</h1>
+<p>The Turkish Makam system plays a transformative role in custom
+microtonal MIDI tuning setups by providing a sophisticated,
+mathematically rich framework that challenges the limitations of
+standard 12-tone equal temperament (12-TET). By integrating historical
+comma-based intervals into digital audio workstations (DAWs) and
+hardware synthesizers, the Makam system enables musicians to produce
+authentic Middle Eastern micro-intervals and explore non-standard
+harmonic relationships. This article explores how Makam intervals are
+structured, how modern MIDI standards accommodate them, and the
+technical mechanisms used to deploy them in microtonal music
+production.</p>
+<h3 id="the-micro-interval-foundation-of-turkish-makam">The
+Micro-Interval Foundation of Turkish Makam</h3>
+<p>Traditional Western music divides the octave into twelve
+logarithmically equal semitones. In contrast, Turkish classical music
+traditionally divides the whole tone into nine smaller units known as
+commas (<em>koma</em>), commonly formalized in the Arel-Ezgi-Uzdilek
+(AEU) system using a 53-tone equal temperament (53-EDO)
+approximation.</p>
+<p>In this system:</p>
+<ul>
+<li>A whole step is divided into 9 commas.</li>
+<li>Standard intervals include the <em>bakiye</em> (4 commas),
+<em>mücenneb-i sağir</em> (5 commas), <em>mücenneb-i kebir</em> (8
+commas), and <em>tanini</em> (9 commas).</li>
+<li>Key notes, such as the neutral second found in makams like
+<em>Rast</em> or <em>Uşşak</em> (often labeled <em>Segâh</em>), fall
+directly between Western major and minor intervals.</li>
+</ul>
+<p>Because these notes do not align with Western semitones, they serve
+as a primary benchmark for testing and utilizing custom microtonal
+scales in digital instruments.</p>
+<h3 id="technical-implementation-via-midi-standards">Technical
+Implementation via MIDI Standards</h3>
+<p>To use Makam tuning in a digital environment, producers rely on
+specific protocols that override default 12-TET pitch tables:</p>
+<ol type="1">
+<li><strong>Scala Files (.scl and .kbm):</strong> Scala is the standard
+file format for microtonal definitions. A Makam scale is defined in an
+<code>.scl</code> file using exact cents or mathematical ratios
+representing commas. An accompanying <code>.kbm</code> file maps these
+specific pitches to physical MIDI keyboard keys, reallocating standard
+black-and-white keys to comma-adjusted degrees.</li>
+<li><strong>MIDI Tuning Standard (MTS):</strong> MTS allows real-time
+sys-ex (system exclusive) messages to re-tune individual MIDI note
+numbers to fractional-cent precision. Systems like MTS-ESP by ODDSound
+allow central control over an entire DAW, forcing all compatible plugins
+to adhere to Makam intervals simultaneously.</li>
+<li><strong>MIDI Polyphonic Expression (MPE):</strong> Modern
+synthesizers without native microtuning support often use MPE to achieve
+Makam tunings. By assigning micro-pitch offsets to individual voices via
+polyphonic pitch bend, MPE enables polyphonic playing within a Makam
+scale without pitch conflicts.</li>
+</ol>
+<h3 id="the-challenge-of-context-dependent-tuning-seyir">The Challenge
+of Context-Dependent Tuning (Seyir)</h3>
+<p>In live performance, Makam music is melodic rather than harmonic and
+relies on a melodic progression known as <em>seyir</em>. In authentic
+performance, pitch is dynamic: an artist may sharpen or flatten a note
+slightly depending on whether the phrase is ascending or descending, or
+to evoke a specific emotional tension.</p>
+<p>In custom MIDI setups, Turkish Makam pushes digital music beyond
+static microtonal scale mappings. Advanced MIDI implementations achieve
+dynamic Makam expression by:</p>
+<ul>
+<li>Mapping pitch bends to foot pedals or mod wheels for real-time
+inflection.</li>
+<li>Using programmatic MIDI scripts (such as Max for Live or Kontakt
+scripts) that adjust note frequencies automatically depending on the
+previous note played.</li>
+<li>Switching tuning tables on the fly using MIDI program change
+messages to accommodate modulations between different makams.</li>
+</ul>
+<h3 id="artistic-significance-in-modern-production">Artistic
+Significance in Modern Production</h3>
+<p>Beyond cultural authenticity, the Turkish Makam provides contemporary
+electronic and avant-garde producers with an established alternative to
+standard Western scales. It offers a structured approach to
+microtonality with centuries of developed theoretical practice, sparing
+producers the need to construct microtonal systems from scratch. By
+integrating Makam tunings into custom MIDI environments, digital
+musicians expand their palette with microtonal tension, unique melodic
+paths, and psychoacoustic resonance that 12-TET cannot replicate.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

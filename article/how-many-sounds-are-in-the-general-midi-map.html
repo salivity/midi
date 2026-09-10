@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Many Sounds Are in the General MIDI Map? - midi</title>
+    <meta name="description" content="The General MIDI (GM1) specification standardizes sound patch assignments so that MIDI files sound consistent across different hardware and software synthesizers. In total, the standard General MIDI sound set catalogs exactly 128 melodic instrument sound">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-many-sounds-are-in-the-general-midi-map">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Many Sounds Are in the General MIDI Map? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-many-sounds-are-in-the-general-midi-map" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The General MIDI (GM1) specification standardizes sound patch assignments so that MIDI files sound consistent across different hardware and software synthesizers. In total, the standard General MIDI sound set catalogs exactly 128 melodic instrument sound" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-many-sounds-are-in-the-general-midi-map">How Many Sounds Are
+in the General MIDI Map?</h1>
+<p>The General MIDI (GM1) specification standardizes sound patch
+assignments so that MIDI files sound consistent across different
+hardware and software synthesizers. In total, the standard General MIDI
+sound set catalogs exactly 128 melodic instrument sounds—spanning both
+traditional acoustic and modern synthetic timbres—alongside a dedicated
+percussion map containing 47 distinct drum and percussion sounds. This
+standardized numbering system ensures that a MIDI command requesting a
+specific sound, such as an acoustic piano or a synthesizer lead, plays
+the correct instrument regardless of the manufacturer.</p>
+<h3 id="the-128-melodic-instruments">The 128 Melodic Instruments</h3>
+<p>The core General MIDI map defines 128 melodic program numbers
+(numbered 1 through 128, or 0 through 127 in zero-indexed software).
+These 128 sounds are evenly divided into 16 distinct instrument
+families, with each family containing eight related instruments:</p>
+<ul>
+<li><strong>Piano (1–8):</strong> Acoustic grand pianos, bright pianos,
+electric grand pianos, honky-tonk, and various electric pianos.</li>
+<li><strong>Chromatic Percussion (9–16):</strong> Celesta, glockenspiel,
+music box, vibraphone, marimba, xylophone, tubular bells, and
+dulcimer.</li>
+<li><strong>Organ (17–24):</strong> Drawbar, percussive, rock, church,
+and reed organs, as well as accordion and harmonica.</li>
+<li><strong>Guitar (25–32):</strong> Nylon-string, steel-string, jazz
+electric, clean electric, muted electric, overdriven, distorted, and
+guitar harmonics.</li>
+<li><strong>Bass (33–40):</strong> Acoustic upright bass, finger-style
+electric, picked electric, fretless, slap basses, and synthesizer
+basses.</li>
+<li><strong>Strings (41–48):</strong> Solo violin, viola, cello,
+contrabass, tremolo strings, pizzicato strings, orchestral harp, and
+timpani.</li>
+<li><strong>Ensemble (49–56):</strong> String ensembles, synth strings,
+choir aahs, voice oohs, synth voice, and orchestra hits.</li>
+<li><strong>Brass (57–64):</strong> Trumpet, trombone, tuba, muted
+trumpet, French horn, brass section, and synth brass variations.</li>
+<li><strong>Reed (65–72):</strong> Soprano, alto, tenor, and baritone
+saxophones, oboe, English horn, bassoon, and clarinet.</li>
+<li><strong>Pipe (73–80):</strong> Piccolo, flute, recorder, pan flute,
+blown bottle, shakuhachi, whistle, and ocarina.</li>
+<li><strong>Synth Lead (81–88):</strong> Classic analog-style lead
+sounds, including square, sawtooth, calliope, chiffer, charang, voice,
+fifths, and bass-and-lead.</li>
+<li><strong>Synth Pad (89–96):</strong> Ambient synthesizer textures
+such as new age, warm, polysynth, choir, bowed, metallic, halo, and
+sweep pads.</li>
+<li><strong>Synth Effects (97–104):</strong> Atmospheric synthesis
+patches including rain, soundtrack, crystal, atmosphere, brightness,
+goblins, echoes, and sci-fi.</li>
+<li><strong>Ethnic (105–112):</strong> Traditional acoustic world
+instruments such as sitar, banjo, shamisen, koto, kalimba, bagpipe,
+fiddle, and shanai.</li>
+<li><strong>Percussive (113–120):</strong> Tinkle bell, agogo, steel
+drums, woodblock, taiko drum, melodic tom, synth drum, and reverse
+cymbal.</li>
+<li><strong>Sound Effects (121–128):</strong> Real-world acoustic
+recordings and effects like guitar fret noise, breath noise, seashore,
+bird tweet, telephone ring, helicopter, applause, and gunshot.</li>
+</ul>
+<h3 id="the-general-midi-percussion-map">The General MIDI Percussion
+Map</h3>
+<p>In addition to the 128 melodic sounds, General MIDI reserves MIDI
+Channel 10 exclusively for rhythm tracks. Rather than changing pitch
+across the keyboard, key numbers on Channel 10 trigger specific drum and
+percussion sounds. The GM standard catalogs 47 standardized percussion
+sounds, mapped from MIDI note 35 (Acoustic Bass Drum) through MIDI note
+81 (Open Triangle). This set includes standard acoustic drum kit
+elements—such as kicks, snares, toms, hi-hats, and cymbals—as well as
+Latin and hand percussion like bongos, congas, timbales, and
+maracas.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

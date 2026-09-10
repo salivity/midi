@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Pitch Wheels Snap Back But Mod Wheels Do Not - midi</title>
+    <meta name="description" content="MIDI controllers feature two primary wheels that behave in fundamentally different ways: the pitch bend wheel snaps back to the center when released, while the modulation wheel stays wherever it is placed. This mechanical difference directly reflects the">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-pitch-wheels-snap-back-but-mod-wheels-do-not">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Pitch Wheels Snap Back But Mod Wheels Do Not - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-pitch-wheels-snap-back-but-mod-wheels-do-not" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI controllers feature two primary wheels that behave in fundamentally different ways: the pitch bend wheel snaps back to the center when released, while the modulation wheel stays wherever it is placed. This mechanical difference directly reflects the" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="why-pitch-wheels-snap-back-but-mod-wheels-do-not">Why Pitch
+Wheels Snap Back But Mod Wheels Do Not</h1>
+<p>MIDI controllers feature two primary wheels that behave in
+fundamentally different ways: the pitch bend wheel snaps back to the
+center when released, while the modulation wheel stays wherever it is
+placed. This mechanical difference directly reflects the musical purpose
+of each control. The pitch wheel is spring-loaded to guarantee that an
+instrument returns to proper concert pitch after a bend, while the
+modulation wheel uses friction so musicians can set a sustained
+expressive value—such as vibrato intensity, volume, or filter cutoff—and
+continue playing with both hands.</p>
+<h3 id="the-purpose-of-the-pitch-bend-wheel">The Purpose of the Pitch
+Bend Wheel</h3>
+<p>The pitch wheel alters the fundamental frequency of the notes being
+played, mirroring techniques like bending a guitar string or sliding
+between notes on a trombone. Musical harmony depends on accurate tuning.
+When a performer bends a note sharp or flat, the gesture is almost
+always temporary.</p>
+<p>Because standard musical intervals require an exact reference point,
+the pitch wheel uses an internal spring mechanism to force the control
+back to dead center the moment the player lets go. Without this
+self-centering design, returning the keyboard to exact standard tuning
+manually would be practically impossible mid-performance, leaving the
+instrument perpetually out of tune.</p>
+<p>Under the MIDI specification, pitch bend even uses a dedicated,
+high-resolution 14-bit message rather than standard controller data. It
+designates its absolute midpoint (a value of 8192) as zero bend,
+reinforcing the necessity of a centered physical baseline.</p>
+<h3 id="the-purpose-of-the-modulation-wheel">The Purpose of the
+Modulation Wheel</h3>
+<p>In contrast, the modulation wheel (assigned by default to MIDI
+Continuous Controller 1, or CC1) is designed to set and maintain
+continuous parameters. Originally used primarily to introduce vibrato
+depth on analog synthesizers, the mod wheel is now routinely mapped to
+orchestral dynamics, filter cutoff frequencies, audio effects, and
+sample-layer crossfades.</p>
+<p>Musicians often need these expressive changes to persist throughout a
+musical section. If the mod wheel snapped back to zero, a performer
+would have to keep one hand glued to the wheel to maintain the desired
+sound, leaving only one hand free to play notes. By remaining stationary
+through internal friction, the wheel allows the player to dial in an
+expression level, release the control, and use both hands on the
+keyboard while the selected effect continues.</p>
+<p>Unlike pitch bend, MIDI CC1 operates on a standard scale from 0 to
+127. Its baseline is at the bottom (0), representing an effect turned
+completely off, rather than in the center.</p>
+<h3 id="ergonomics-matching-musical-function">Ergonomics Matching
+Musical Function</h3>
+<p>The split between spring tension and friction is a deliberate
+ergonomic choice. Pitch changes are transient deviations from a strict
+baseline that demand immediate correction, whereas modulation changes
+are contextual settings meant to sustain and evolve. By combining a
+spring-loaded pitch wheel with a friction-held mod wheel, keyboard
+controllers give musicians instantaneous access to both momentary
+inflections and long-term sonic shaping.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Synths Use Scala Files to Remap MIDI Pitch - midi</title>
+    <meta name="description" content="Modern software synthesizers utilize Scala files to break free from the traditional 12-tone equal temperament (12-TET) system, enabling microtonal and alternative tunings. By reading the mathematical pitch definitions stored within a .scl file—often pa">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-synths-use-scala-files-to-remap-midi-pitch">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Synths Use Scala Files to Remap MIDI Pitch - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-synths-use-scala-files-to-remap-midi-pitch" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern software synthesizers utilize Scala files to break free from the traditional 12-tone equal temperament (12-TET) system, enabling microtonal and alternative tunings. By reading the mathematical pitch definitions stored within a .scl file—often pa" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-synths-use-scala-files-to-remap-midi-pitch">How Synths Use
+Scala Files to Remap MIDI Pitch</h1>
+<p>Modern software synthesizers utilize Scala files to break free from
+the traditional 12-tone equal temperament (12-TET) system, enabling
+microtonal and alternative tunings. By reading the mathematical pitch
+definitions stored within a <code>.scl</code> file—often paired with a
+keyboard mapping <code>.kbm</code> file—the synthesizer intercepts
+incoming standard MIDI note numbers and dynamically recalculates the
+fundamental frequency assigned to each key before passing it to the
+audio generation engine.</p>
+<h3 id="structure-of-a-scala-file">Structure of a Scala File</h3>
+<p>A Scala (<code>.scl</code>) file is a plain-text document defining an
+arbitrary musical scale. Its structure consists of:</p>
+<ol type="1">
+<li>A short text description of the scale.</li>
+<li>The number of notes per scale period (often an octave, though it can
+be any interval).</li>
+<li>A list of pitch values defined either in <strong>cents</strong>
+(represented as floating-point decimals, such as <code>1200.0</code> for
+an octave or <code>701.955</code> for a pure fifth) or
+<strong>ratios</strong> (represented as fractions, such as
+<code>2/1</code> or <code>3/2</code>).</li>
+</ol>
+<h3 id="the-role-of-keyboard-mapping-kbm">The Role of Keyboard Mapping
+(.kbm)</h3>
+<p>While a <code>.scl</code> file defines the interval relationships of
+a scale, it does not specify where those intervals fall on a physical
+MIDI keyboard. For this, synthesizers look for an accompanying Keyboard
+Mapping (<code>.kbm</code>) file. The <code>.kbm</code> file
+provides:</p>
+<ul>
+<li><strong>The Root MIDI Note:</strong> The reference key (e.g., MIDI
+note 69 / A4).</li>
+<li><strong>The Base Frequency:</strong> The exact tuning frequency for
+that reference note in Hertz (e.g., 440.0 Hz).</li>
+<li><strong>Key Assignments:</strong> Explicit routing of specific MIDI
+note numbers to scale degrees, allowing scales with fewer or more than
+12 notes per octave to be mapped linearly, grouped to white keys only,
+or configured cyclically across standard 88-key controllers.</li>
+</ul>
+<p>If no <code>.kbm</code> file is loaded, the software defaults to an
+internal mapping—typically anchoring note 60 (Middle C) or note 69
+(A440) as the root and mapping scale steps sequentially upward and
+downward across adjacent MIDI keys.</p>
+<h3 id="the-real-time-pitch-conversion-pipeline">The Real-Time Pitch
+Conversion Pipeline</h3>
+<p>When a user plays a key on a MIDI controller, the software
+synthesizer processes the tuning change through a deterministic digital
+signal processing (DSP) pipeline:</p>
+<ol type="1">
+<li><strong>Event Interception:</strong> The synthesizer receives a
+standard MIDI <code>Note-On</code> event carrying an integer note number
+from 0 to 127.</li>
+<li><strong>Table Lookup:</strong> Instead of applying the standard
+12-TET mathematical formula (<span class="math inline">\(f = 440 \times
+2^{(m - 69)/12}\)</span>), the synth’s tuning engine queries the
+internal lookup table generated from the loaded Scala file.</li>
+<li><strong>Period and Degree Calculation:</strong> The engine
+calculates which scale step the MIDI note corresponds to and how many
+scale periods (octaves or non-octave cycle lengths) away from the base
+reference key it lies.</li>
+<li><strong>Frequency Synthesis:</strong> The synth computes the exact
+target frequency using the accumulated ratio or cent offsets. If an
+interval is specified in cents, the frequency conversion uses <span
+class="math inline">\(f = f_{\text{ref}} \times 2^{(\text{cents} /
+1200)}\)</span>. If specified as a rational fraction (<span
+class="math inline">\(a/b\)</span>), the synthesizer directly multiplies
+the base frequency by <span class="math inline">\((a/b)\)</span>.</li>
+<li><strong>Oscillator Frequency Assignment:</strong> The resulting
+frequency value is delivered directly to the digital oscillator’s phase
+accumulator for that voice.</li>
+</ol>
+<p>Unlike legacy hardware workarounds that relied on sending global MIDI
+Pitch Bend messages—which constrained polyphonic performance by bending
+all notes simultaneously—modern software instruments perform this pitch
+remapping at the internal per-voice DSP level, allowing fully polyphonic
+microtonal playback.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Poly Mode 3 in Multi-Voice Analog Synths - midi</title>
+    <meta name="description" content="This article explains the purpose, architecture, and practical application of MIDI Poly Mode 3 (Omni Off / Poly) in multi-voice analog synthesizers. It details how this standard MIDI configuration manages voice allocation across discrete analog voice cir">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-poly-mode-3-in-multi-voice-analog-synths">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Poly Mode 3 in Multi-Voice Analog Synths - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-poly-mode-3-in-multi-voice-analog-synths" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains the purpose, architecture, and practical application of MIDI Poly Mode 3 (Omni Off / Poly) in multi-voice analog synthesizers. It details how this standard MIDI configuration manages voice allocation across discrete analog voice cir" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-poly-mode-3-in-multi-voice-analog-synths">MIDI Poly Mode 3
+in Multi-Voice Analog Synths</h1>
+<p>This article explains the purpose, architecture, and practical
+application of MIDI Poly Mode 3 (Omni Off / Poly) in multi-voice analog
+synthesizers. It details how this standard MIDI configuration manages
+voice allocation across discrete analog voice circuits, isolates
+incoming control data in multi-instrument studios, and ensures
+predictable polyphonic performance during sequencing and live
+playback.</p>
+<h3 id="defining-midi-mode-3-omni-off--poly">Defining MIDI Mode 3: Omni
+Off / Poly</h3>
+<p>MIDI Mode 3, formally designated as "Omni Off / Poly," is one of four
+operational modes defined in the original MIDI 1.0 specification. It
+pairs two distinct operational rules:</p>
+<ol type="1">
+<li><strong>Omni Off:</strong> The synthesizer ignores all MIDI channels
+except for the single, specific channel to which it has been assigned
+(Channels 1 through 16).</li>
+<li><strong>Poly (Polyphonic):</strong> The synthesizer processes
+incoming Note On and Note Off messages polyphonically, allowing multiple
+notes to be sustained and sounded simultaneously up to the physical
+limits of the synthesizer's voice count.</li>
+</ol>
+<h3 id="managing-discrete-analog-voice-architecture">Managing Discrete
+Analog Voice Architecture</h3>
+<p>Unlike modern digital synthesizers that simulate voices in software,
+a multi-voice analog synthesizer contains distinct, physical voice
+circuits (typically comprised of separate VCOs, VCFs, and VCAs for each
+voice). To play a chord, an internal microprocessor—often called a voice
+assigner—must monitor incoming MIDI data and decide which physical voice
+card plays which note.</p>
+<p>In MIDI Mode 3, the synthesizer receives a polyphonic stream of note
+events arriving simultaneously on its dedicated channel. The internal
+voice assignment logic dynamically distributes these incoming notes
+across the available analog hardware voices using algorithms such as
+lowest-note priority, highest-note priority, cyclic (round-robin)
+assignment, or re-assignment of released voices.</p>
+<h3 id="multi-instrument-studio-integration">Multi-Instrument Studio
+Integration</h3>
+<p>The primary reason Mode 3 is the default standard for hardware
+synthesizers is multi-timbral communication. When multiple MIDI devices
+share a single data stream—such as through traditional 5-pin DIN
+daisy-chaining (MIDI Thru) or shared USB-MIDI interfaces—Mode 3 ensures
+that:</p>
+<ul>
+<li><strong>Channel Isolation:</strong> The multi-voice analog synth
+filters out data meant for other instruments (such as drum machines on
+Channel 10 or bass synthesizers on Channel 2).</li>
+<li><strong>Prevention of Unwanted Voice Stealing:</strong> Because the
+device ignores other channels, its finite number of analog voices are
+strictly reserved for the notes written or played explicitly for that
+instrument.</li>
+</ul>
+<h3 id="musical-application">Musical Application</h3>
+<p>MIDI Mode 3 enables multi-voice analog synthesizers to function as
+traditional polyphonic instruments, such as pianos or organs. It allows
+players and sequencers to perform chords, lush pads, and complex
+contrapuntal arrangements on a single MIDI track without accidental
+triggering from external gear.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

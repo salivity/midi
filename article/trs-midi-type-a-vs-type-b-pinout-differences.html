@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRS MIDI Type A vs Type B: Pinout Differences - midi</title>
+    <meta name="description" content="This article provides a clear overview of the differences between Type A and Type B TRS MIDI adapters, explaining how traditional 5-pin DIN connections translate to a 3.5mm stereo jack. You will learn the exact pinout configurations of each type, why two">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/trs-midi-type-a-vs-type-b-pinout-differences">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TRS MIDI Type A vs Type B: Pinout Differences - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/trs-midi-type-a-vs-type-b-pinout-differences" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a clear overview of the differences between Type A and Type B TRS MIDI adapters, explaining how traditional 5-pin DIN connections translate to a 3.5mm stereo jack. You will learn the exact pinout configurations of each type, why two" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="trs-midi-type-a-vs-type-b-pinout-differences">TRS MIDI Type A vs
+Type B: Pinout Differences</h1>
+<p>This article provides a clear overview of the differences between
+Type A and Type B TRS MIDI adapters, explaining how traditional 5-pin
+DIN connections translate to a 3.5mm stereo jack. You will learn the
+exact pinout configurations of each type, why two competing standards
+emerged in modern music gear, which brands use which format, and how to
+connect devices that use different standards together.</p>
+<h3 id="the-origin-of-the-trs-midi-split">The Origin of the TRS MIDI
+Split</h3>
+<p>Traditional MIDI hardware relies on bulky 5-pin DIN connectors. As
+audio gear, synthesizers, and controllers became more compact,
+manufacturers shifted to using smaller 3.5mm (1/8-inch) or 2.5mm TRS
+(Tip-Ring-Sleeve) jacks to transmit MIDI data. Because the MIDI
+specification only requires three conductors (Source, Sink, and Shield),
+standard stereo audio jacks offered an ideal footprint.</p>
+<p>However, before the MIDI Manufacturers Association (MMA) established
+an official specification in 2018, different hardware companies
+independently wired their jacks in conflicting ways. This resulted in
+two primary wiring schemes: Type A and Type B.</p>
+<h3 id="the-pinout-differences">The Pinout Differences</h3>
+<p>Standard 5-pin DIN MIDI uses three active pins:</p>
+<ul>
+<li><strong>Pin 4:</strong> Current source (often referred to as MIDI +
+or pull-up voltage)</li>
+<li><strong>Pin 5:</strong> Current sink (the data line carrying the
+MIDI signal)</li>
+<li><strong>Pin 2:</strong> Shield/Ground</li>
+</ul>
+<p>Both Type A and Type B assign the Shield (Pin 2) to the Sleeve of the
+TRS connector. The difference lies strictly in reversing the connections
+of the Tip and Ring.</p>
+<h4 id="type-a-official-midi-standard">Type A (Official MIDI
+Standard)</h4>
+<p>Type A was adopted by the MIDI Association as the universal
+specification (RP-054). Its wiring layout is:</p>
+<ul>
+<li><strong>Tip:</strong> 5-pin DIN Pin 5 (Data / Current Sink)</li>
+<li><strong>Ring:</strong> 5-pin DIN Pin 4 (Power / Current Source)</li>
+<li><strong>Sleeve:</strong> 5-pin DIN Pin 2 (Shield / Ground)</li>
+</ul>
+<h4 id="type-b">Type B</h4>
+<p>Type B was developed independently by several prominent synthesizer
+and controller manufacturers before the official specification was
+finalized. Its wiring layout is:</p>
+<ul>
+<li><strong>Tip:</strong> 5-pin DIN Pin 4 (Power / Current Source)</li>
+<li><strong>Ring:</strong> 5-pin DIN Pin 5 (Data / Current Sink)</li>
+<li><strong>Sleeve:</strong> 5-pin DIN Pin 2 (Shield / Ground)</li>
+</ul>
+<h3 id="hardware-compatibility">Hardware Compatibility</h3>
+<p>Because the polarities of the Tip and Ring are inverted between the
+two types, a Type A adapter will not work with a Type B device, and vice
+versa.</p>
+<ul>
+<li><strong>Common Type A Brands:</strong> Korg, Roland, Akai (newer
+models such as the MPC Live and Force), Make Noise, Dreadbox, and
+Boss.</li>
+<li><strong>Common Type B Brands:</strong> Arturia (e.g., BeatStep,
+Keystep original), Novation (e.g., Circuit, Launchkey series),
+1010music, and older pre-standard hardware.</li>
+</ul>
+<h3 id="connecting-type-a-to-type-b">Connecting Type A to Type B</h3>
+<p>Plugging a standard 3.5mm stereo cable directly between a Type A
+device and a Type B device will not transmit data because the data and
+power pins will not align correctly. However, you will not damage the
+hardware by doing so; the signal simply fails to pass.</p>
+<p>To bridge a connection between a Type A device and a Type B device,
+you have three options:</p>
+<ol type="1">
+<li><strong>Cross-over Cable:</strong> Use a specialized TRS cable that
+swaps the Tip and Ring connections from one end to the other while
+keeping the Sleeve connected straight through.</li>
+<li><strong>DIN Intermediary:</strong> Connect each device to its
+respective matching adapter (one Type A to DIN, one Type B to DIN) and
+join them using a standard 5-pin DIN MIDI cable.</li>
+<li><strong>Switchable Adapters:</strong> Use universal TRS MIDI
+adapters that include a toggle switch to invert Tip and Ring connections
+on demand.</li>
+</ol></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

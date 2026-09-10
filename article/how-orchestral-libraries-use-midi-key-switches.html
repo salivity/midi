@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Orchestral Libraries Use MIDI Key Switches - midi</title>
+    <meta name="description" content="Orchestral sample libraries utilize MIDI key switches—assigned trigger notes placed outside an instrument’s natural acoustic register—to let composers alternate between different playing techniques within a single track. By sending MIDI note comman">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-orchestral-libraries-use-midi-key-switches">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Orchestral Libraries Use MIDI Key Switches - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-orchestral-libraries-use-midi-key-switches" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Orchestral sample libraries utilize MIDI key switches—assigned trigger notes placed outside an instrument’s natural acoustic register—to let composers alternate between different playing techniques within a single track. By sending MIDI note comman" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-orchestral-libraries-use-midi-key-switches">How Orchestral
+Libraries Use MIDI Key Switches</h1>
+<p>Orchestral sample libraries utilize MIDI key switches—assigned
+trigger notes placed outside an instrument’s natural acoustic
+register—to let composers alternate between different playing techniques
+within a single track. By sending MIDI note commands to otherwise silent
+keys, users can instantaneously swap articulations like legato,
+staccato, tremolo, and pizzicato without cluttering a digital audio
+workstation (DAW) with separate tracks for every playing style.</p>
+<h3 id="the-mechanism-of-unused-midi-ranges">The Mechanism of Unused
+MIDI Ranges</h3>
+<p>A standard MIDI track supports 128 note values (C-2 to G8), while
+most acoustic orchestral instruments occupy only a fraction of that
+spectrum. For example, a standard violin cannot play lower than G3, and
+a solo flute rarely dips below C4.</p>
+<p>Sample library developers take advantage of this unused register—most
+commonly the lowest octaves (C-2 to B0)—by mapping these dormant keys to
+internal software commands rather than audio samples. When a composer
+inputs a note in this designated zone, the sampler produces no sound.
+Instead, it directs the audio engine to route subsequent playable notes
+to a different bank of recorded samples.</p>
+<h3 id="latching-vs-non-latching-switches">Latching vs. Non-Latching
+Switches</h3>
+<p>Key switches operate primarily in two functional modes:</p>
+<ul>
+<li><strong>Latching (Toggle):</strong> In latching mode, striking a key
+switch once permanently alters the active articulation until another key
+switch is triggered. For instance, sending a C0 message will cause all
+following notes to play <em>sustained</em>, while a subsequent D0
+message switches all future notes to <em>staccato</em>. This is the most
+common implementation in modern libraries.</li>
+<li><strong>Non-Latching (Momentary):</strong> In momentary mode, the
+alternative articulation remains active only as long as the key switch
+note is held down. Releasing the key switch instantly reverts the
+instrument to its default state. This is often used for temporary
+performance effects, such as a brief trill or an accented rip.</li>
+</ul>
+<h3 id="advanced-key-switch-behaviors">Advanced Key Switch
+Behaviors</h3>
+<p>Modern sampling engines have expanded beyond basic on/off note
+triggers to provide deeper performance control using the same
+out-of-range keys:</p>
+<ul>
+<li><strong>Velocity-Sensitive Switching:</strong> Developers frequently
+assign multiple articulations or variations to a single key switch based
+on how hard it is pressed. A soft strike on C0 might trigger a lyrical,
+slow legato, while a hard strike triggers an aggressive, fast-run
+legato.</li>
+<li><strong>Duplex and Chordal Switching:</strong> Some libraries allow
+combinations of key switches to be held down simultaneously to combine
+parameters, such as activating a mute (con sordino) via one switch while
+selecting the underlying articulation via another.</li>
+<li><strong>Dynamic Relocation:</strong> Because an instrument like a
+double bass naturally extends into the low octave registers where key
+switches are usually kept, developers allow users to shift the key
+switch octave higher (above the instrument's highest playable note) or
+to freely assign the trigger notes anywhere on the keyboard to match
+custom hardware layouts.</li>
+</ul>
+<h3 id="workflow-advantages-in-music-production">Workflow Advantages in
+Music Production</h3>
+<p>Routing performance techniques through out-of-range MIDI notes
+streamlines orchestral mockups by maintaining a single, consolidated
+MIDI track per instrument. This approach preserves the visual continuity
+of the musical score, simplifies mixing and routing inside the DAW, and
+ensures that dynamic controls (like CC1 Modulation and CC11 Expression)
+apply continuously across varying playing styles.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

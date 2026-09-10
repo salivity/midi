@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Division Resolution: Ticks Per Quarter Note - midi</title>
+    <meta name="description" content="In a Standard MIDI File (SMF), the division parameter specifies how time intervals are measured, determining the precision and timing of every recorded event. This article explains how the SMF header establishes timing resolution using ticks per quarter">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-division-resolution-ticks-per-quarter-note">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Division Resolution: Ticks Per Quarter Note - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-division-resolution-ticks-per-quarter-note" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In a Standard MIDI File (SMF), the division parameter specifies how time intervals are measured, determining the precision and timing of every recorded event. This article explains how the SMF header establishes timing resolution using ticks per quarter" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-division-resolution-ticks-per-quarter-note">MIDI Division
+Resolution: Ticks Per Quarter Note</h1>
+<p>In a Standard MIDI File (SMF), the division parameter specifies how
+time intervals are measured, determining the precision and timing of
+every recorded event. This article explains how the SMF header
+establishes timing resolution using ticks per quarter note (TPQN)—also
+known as pulses per quarter note (PPQN)—by breaking down the 16-bit
+division field, the binary structure that enables it, and the
+mathematical relationship between ticks, tempo, and real-world time.</p>
+<h3 id="the-header-chunk-location">The Header Chunk Location</h3>
+<p>Every Standard MIDI File begins with a header chunk designated by the
+four-byte ASCII identifier <code>MThd</code>. This header has a fixed
+6-byte data payload containing three 16-bit big-endian unsigned
+integers:</p>
+<ol type="1">
+<li><strong>Format</strong> (bytes 8–9): MIDI file type (0, 1, or
+2)</li>
+<li><strong>Ntrks</strong> (bytes 10–11): Number of tracks in the
+file</li>
+<li><strong>Division</strong> (bytes 12–13): Timing resolution
+specification</li>
+</ol>
+<p>The division word directly defines the units used for the delta-time
+values that precede every MIDI event in a track chunk.</p>
+<h3 id="metrical-time-representation-in-the-division-field">Metrical
+Time Representation in the Division Field</h3>
+<p>The division field uses a 16-bit signed or unsigned format depending
+on its most significant bit (bit 15).</p>
+<p>To define resolution using ticks per quarter note, <strong>bit 15
+must be set to <code>0</code></strong>.</p>
+<p>When bit 15 is <code>0</code>, bits 14 through 0 are interpreted as
+an unsigned 15-bit integer representing the number of ticks (clock
+pulses) that constitute a single quarter note.</p>
+<ul>
+<li><strong>Bit 15:</strong> <code>0</code> (Metrical timing: ticks per
+quarter note)</li>
+<li><strong>Bits 14–0:</strong> Positive integer value ranging from 1 to
+32,767</li>
+</ul>
+<p>For example, if the 16-bit division field contains the hexadecimal
+value <code>0x01E0</code>:</p>
+<ul>
+<li>Binary: <code>0000 0001 1110 0000</code></li>
+<li>Bit 15 is <code>0</code>, indicating metric resolution.</li>
+<li>Bits 14–0 equal <code>480</code> in decimal.</li>
+<li>Result: The file resolution is 480 ticks per quarter note.</li>
+</ul>
+<p>Common values used by digital audio workstations and sequencers
+include 96, 120, 192, 240, 480, and 960 TPQN. Higher values allow for
+finer micro-timing and more expressive, humanized playback.</p>
+<h3 id="converting-division-ticks-to-real-time">Converting Division
+Ticks to Real Time</h3>
+<p>Delta times in MIDI track chunks do not store absolute time values
+like milliseconds; they store elapsed ticks since the previous event. To
+determine the absolute duration of a single tick in seconds, a MIDI
+parser must correlate the division value with the current tempo.</p>
+<p>Tempo in SMF is defined by the <strong>Set Tempo</strong> meta-event
+(<code>FF 51 03</code>), which specifies the duration of a quarter note
+in microseconds (µs). The default tempo in MIDI is 120 beats per minute
+(BPM), which equals 500,000 microseconds per quarter note.</p>
+<p>The formula to calculate the duration of one tick is:</p>
+<p><span class="math display">\[\text{Tick Duration (seconds)} =
+\frac{\text{Microseconds per Quarter Note}}{\text{Division (TPQN)}
+\times 1,000,000}\]</span></p>
+<p>Using a standard resolution of 480 TPQN at the default tempo (500,000
+µs):</p>
+<p><span class="math display">\[\text{Tick Duration} =
+\frac{500,000}{480 \times 1,000,000} \approx 0.00104167 \text{ seconds
+(approx. } 1.042 \text{ ms)}\]</span></p>
+<p>If an event has a delta time of 240 ticks under these conditions, the
+sequencer waits approximately 250 milliseconds before executing it.
+Whenever a tempo change meta-event occurs, the length of subsequent
+ticks changes dynamically, while the underlying division value defined
+in the <code>MThd</code> header remains constant throughout the entire
+file.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

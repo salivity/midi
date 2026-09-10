@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Run Polyrhythms on Hardware MIDI Sequencers - midi</title>
+    <meta name="description" content="Hardware sequencers achieve polyrhythmic patterns across independent MIDI channels by decoupling track lengths, applying independent clock multipliers and dividers per track, and routing each sequence to dedicated MIDI channels and outputs. This article">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-run-polyrhythms-on-hardware-midi-sequencers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Run Polyrhythms on Hardware MIDI Sequencers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-run-polyrhythms-on-hardware-midi-sequencers" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Hardware sequencers achieve polyrhythmic patterns across independent MIDI channels by decoupling track lengths, applying independent clock multipliers and dividers per track, and routing each sequence to dedicated MIDI channels and outputs. This article" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-run-polyrhythms-on-hardware-midi-sequencers">How to Run
+Polyrhythms on Hardware MIDI Sequencers</h1>
+<p>Hardware sequencers achieve polyrhythmic patterns across independent
+MIDI channels by decoupling track lengths, applying independent clock
+multipliers and dividers per track, and routing each sequence to
+dedicated MIDI channels and outputs. This article explains the technical
+mechanics of hardware-based polyrhythms and polymeters, how clock
+engines calculate independent time bases, and how to configure hardware
+tracks to drive multiple external synthesizers simultaneously without
+drift or cross-talk.</p>
+<h2 id="polyrhythm-vs-polymeter-in-hardware-architecture">Polyrhythm vs.
+Polymeter in Hardware Architecture</h2>
+<p>Sequencers handle non-standard time relationships through two
+distinct methods:</p>
+<ul>
+<li><strong>Polymeter (Variable Pattern Lengths):</strong> Tracks share
+the same underlying pulse (clock division) but loop across different
+step counts. For example, Track 1 plays a 16-step pattern while Track 2
+plays a 15-step pattern. Because both tracks share the same 16th-note
+clock pulse, their phase relationship shifts over time.</li>
+<li><strong>Polyrhythm (Variable Clock Rates):</strong> Tracks share the
+same overall bar length or measure duration but divide that time into
+different numbers of equal pulses. For example, playing three notes
+against four notes (3:4) in the same time window requires separate clock
+calculations per track.</li>
+</ul>
+<p>Advanced hardware units (such as the Squarp Hapax, Elektron
+Octatrack, OXI One, and Sequentix Cirklon) support both methods
+natively.</p>
+<h2 id="decoupled-track-lengths-and-step-resolutions">Decoupled Track
+Lengths and Step Resolutions</h2>
+<p>To generate polyrhythmic or polymetric sequences across multiple MIDI
+channels, modern hardware avoids a single global sequence length:</p>
+<ol type="1">
+<li><strong>Independent Track Lengths:</strong> The sequencer allows
+users to set independent step limits per track (e.g., Track 1 = 16
+steps, Track 2 = 7 steps, Track 3 = 11 steps).</li>
+<li><strong>Independent Time Signatures:</strong> Each track can be
+assigned its own meter (such as 4/4, 5/4, 7/8, or 3/4), governing how
+step grids and bar markers are counted.</li>
+<li><strong>Individual Playback Speeds:</strong> Each track can run at a
+different playback scale relative to the master clock (e.g., 1/2x, 1x,
+2x, or 3/2x).</li>
+</ol>
+<h2 id="clock-multipliers-dividers-and-micro-timing">Clock Multipliers,
+Dividers, and Micro-Timing</h2>
+<p>True polyrhythms require the sequencer's internal processor to
+generate separate internal clock pulses for each track, derived from a
+high-resolution master clock (typically 96 to 960 Pulses Per Quarter
+Note, or PPQN).</p>
+<ul>
+<li><strong>Clock Multipliers and Dividers:</strong> By applying
+mathematical multipliers and dividers to the PPQN engine, a sequencer
+can fire 5 evenly spaced triggers on Track 1 while firing 4 evenly
+spaced triggers on Track 2 within the exact same measure.</li>
+<li><strong>Micro-Timing Offsets:</strong> Hardware sequencers with
+micro-timing allow steps to be nudged off the standard grid in minute
+increments. This allows users to program complex tuplets (such as
+quintuplets, septuplets, or nonuplets) manually, even if the primary
+grid only shows standard subdivisions.</li>
+<li><strong>Euclidean Generators:</strong> Many contemporary hardware
+sequencers include algorithmic Euclidean generators. These distribute an
+arbitrary number of hits evenly across a designated number of steps
+(e.g., 5 hits over 16 steps), instantly creating interlocking
+polyrhythmic structures.</li>
+</ul>
+<h2 id="routing-to-independent-midi-channels">Routing to Independent
+MIDI Channels</h2>
+<p>Once independent timing engines are configured, the data must be
+isolated to control separate hardware or software instruments:</p>
+<ol type="1">
+<li><strong>MIDI Channel Assignment:</strong> Assign each sequencer
+track to a distinct MIDI channel (Channels 1 through 16). Track 1 sends
+note and CC data exclusively to Channel 1, Track 2 sends to Channel 2,
+and so on.</li>
+<li><strong>Port Addressing:</strong> If the sequencer features multiple
+physical MIDI Out ports (e.g., MIDI Out A, B, and C) or USB-MIDI hosts,
+assign tracks to specific physical ports to eliminate MIDI bandwidth
+bottlenecks and avoid serial latency (MIDI jitter).</li>
+<li><strong>Voice and Polyphony Allocation:</strong> Set the track type
+to monophonic or polyphonic depending on the target synthesizer's
+capabilities to prevent note-stealing during rapid, overlapping
+polyrhythmic events.</li>
+</ol>
+<h2 id="loop-cycling-and-phase-alignment-strategies">Loop Cycling and
+Phase Alignment Strategies</h2>
+<p>Hardware sequencers provide settings to govern how and when
+polyrhythmic tracks reset relative to one another:</p>
+<ul>
+<li><strong>Free-Running (Infinite Drift):</strong> Tracks cycle
+endlessly based on their individual lengths and clock rates. The
+patterns will take dozens or hundreds of bars to naturally return to
+their original starting phase.</li>
+<li><strong>Master Loop Length / Reset Period:</strong> A global master
+reset can be configured (e.g., every 64 or 128 steps) that forces all
+tracks to restart simultaneously at Step 1, regardless of where they are
+in their individual polyrhythmic cycles.</li>
+<li><strong>Pattern Resync Triggers:</strong> Dedicated CV, MIDI CC, or
+manual transport buttons can be assigned to force-align track heads on
+demand during live performance.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

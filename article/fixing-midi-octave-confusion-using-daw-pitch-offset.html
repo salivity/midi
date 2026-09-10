@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixing MIDI Octave Confusion Using DAW Pitch Offset - midi</title>
+    <meta name="description" content="MIDI octave confusion is a common issue in digital music production where hardware controllers, virtual instruments, and digital audio workstations (DAWs) disagree on which octave corresponds to Middle C. This article explains why this discrepancy occurs">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/fixing-midi-octave-confusion-using-daw-pitch-offset">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Fixing MIDI Octave Confusion Using DAW Pitch Offset - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/fixing-midi-octave-confusion-using-daw-pitch-offset" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI octave confusion is a common issue in digital music production where hardware controllers, virtual instruments, and digital audio workstations (DAWs) disagree on which octave corresponds to Middle C. This article explains why this discrepancy occurs" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="fixing-midi-octave-confusion-using-daw-pitch-offset">Fixing MIDI
+Octave Confusion Using DAW Pitch Offset</h1>
+<p>MIDI octave confusion is a common issue in digital music production
+where hardware controllers, virtual instruments, and digital audio
+workstations (DAWs) disagree on which octave corresponds to Middle C.
+This article explains why this discrepancy occurs between different
+manufacturers and demonstrates how configuring pitch offset settings
+within your DAW aligns incoming MIDI notes to ensure consistent,
+predictable performance across your entire workflow.</p>
+<h3 id="the-source-of-midi-octave-confusion">The Source of MIDI Octave
+Confusion</h3>
+<p>Under the standard MIDI specification, musical pitches are
+represented by note numbers ranging from 0 to 127, with note number 60
+designated as Middle C. However, the original specification did not
+dictate a uniform octave numbering standard.</p>
+<p>As a result, major manufacturers adopted different reference
+points:</p>
+<ul>
+<li><strong>Yamaha Standard:</strong> Sets note 60 as
+<strong>C3</strong>.</li>
+<li><strong>Roland and General MIDI Standard:</strong> Sets note 60 as
+<strong>C4</strong>.</li>
+<li><strong>Korg and Other Systems:</strong> Frequently set note 60 as
+<strong>C5</strong>.</li>
+</ul>
+<p>Because of these conflicting naming conventions, playing a physical
+key labeled "C3" on a keyboard controller might register as "C4" or "C2"
+in your DAW’s piano roll or inside a specific virtual instrument.</p>
+<h3 id="display-offset-vs-transposition-offset">Display Offset vs.
+Transposition Offset</h3>
+<p>To solve this issue, DAWs typically provide two methods of pitch
+offset: display-level offsets and MIDI input transposition.</p>
+<h4 id="1-display-pitch-offset-visual-alignment">1. Display Pitch Offset
+(Visual Alignment)</h4>
+<p>A display offset changes only the octave numbering label shown in the
+DAW’s piano roll, event list, and editors, leaving the actual MIDI note
+numbers intact.</p>
+<ul>
+<li><strong>How it works:</strong> If your hardware controller labels
+Middle C as C3, but your DAW defaults to C4, adjusting the display base
+octave by -1 octave (-12 semitones) changes the labels in the piano roll
+so that note 60 reads as C3.</li>
+<li><strong>When to use it:</strong> Use this when your instruments are
+sounding in the correct pitch, but the visual note labels on your
+controller and DAW interface do not match.</li>
+</ul>
+<h4 id="2-input-pitch-offset-pitch-transposition">2. Input Pitch Offset
+(Pitch Transposition)</h4>
+<p>An input pitch offset shifts the incoming MIDI note data before it
+reaches the virtual instrument or recording track.</p>
+<ul>
+<li><strong>How it works:</strong> If you strike a key sending MIDI note
+48 (C3 on your hardware), an input pitch offset of +12 semitones
+automatically converts the incoming data to MIDI note 60 (C4) in real
+time.</li>
+<li><strong>When to use it:</strong> Use this when an external
+controller physically sends note numbers that cause software
+instruments, sample libraries, or drum maps to trigger in the wrong
+register.</li>
+</ul>
+<h3 id="how-to-implement-pitch-offset-in-your-daw">How to Implement
+Pitch Offset in Your DAW</h3>
+<p>Most DAWs allow you to correct octave mismatches either globally or
+on a per-track basis:</p>
+<ul>
+<li><strong>Global Settings:</strong> Look in your DAW's preferences
+under MIDI, Audio, or Display settings. Options are commonly labeled as
+"Middle C Reference," "Octave Offset," or "Base Octave." Changing this
+setting shifts the global baseline (e.g., toggling between C3, C4, or
+C5).</li>
+<li><strong>Track-Level Inspector:</strong> Most DAW track inspectors
+(such as in Ableton Live, Logic Pro, Cubase, and Studio One) feature a
+dedicated transpose or pitch shift parameter on MIDI tracks. Setting
+this parameter to <code>+12</code> or <code>-12</code> immediately
+shifts incoming data up or down by one full octave.</li>
+<li><strong>MIDI FX Plugins:</strong> If a track inspector is
+unavailable, insert a basic MIDI Pitch or Transpose effect on the input
+channel to alter the note numbers before they hit the instrument
+plugin.</li>
+</ul>
+<h3 id="practical-benefits-in-the-production-workflow">Practical
+Benefits in the Production Workflow</h3>
+<p>Applying pitch offset settings eliminates several technical
+obstacles:</p>
+<ol type="1">
+<li><strong>Keyswitch Reliability:</strong> Many complex orchestral
+sample libraries place keyswitches in the C-2 to C0 range. Octave
+discrepancies can shift your controller out of reach of these controls;
+a quick pitch offset brings articulation switches back to your
+controller's playable range.</li>
+<li><strong>Drum Mapping Consistency:</strong> Standard drum plugins map
+the kick drum to C1 (note 36). If your pad controller transmits on an
+offset octave, notes will trigger the wrong drum elements or output
+silence until offset by the correct number of semitones.</li>
+<li><strong>Hardware-to-Software Parity:</strong> Ensuring that your
+physical keyboard display matches the DAW piano roll reduces arrangement
+errors, prevents accidental out-of-range notes, and keeps documentation
+consistent across multi-producer sessions.</li>
+</ol></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.5mm TRS MIDI Type A Wiring and Transmission - midi</title>
+    <meta name="description" content="This article explains how standard MIDI data is transmitted over a 3.5mm TRS (Tip, Ring, Sleeve) connector using the Type A specification. It details the physical pinout mapping between legacy 5-pin DIN connectors and the 3.5mm jack, the mechanics of the">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/3-5mm-trs-midi-type-a-wiring-and-transmission">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="3.5mm TRS MIDI Type A Wiring and Transmission - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/3-5mm-trs-midi-type-a-wiring-and-transmission" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how standard MIDI data is transmitted over a 3.5mm TRS (Tip, Ring, Sleeve) connector using the Type A specification. It details the physical pinout mapping between legacy 5-pin DIN connectors and the 3.5mm jack, the mechanics of the" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="35mm-trs-midi-type-a-wiring-and-transmission">3.5mm TRS MIDI
+Type A Wiring and Transmission</h1>
+<p>This article explains how standard MIDI data is transmitted over a
+3.5mm TRS (Tip, Ring, Sleeve) connector using the Type A specification.
+It details the physical pinout mapping between legacy 5-pin DIN
+connectors and the 3.5mm jack, the mechanics of the electrical current
+loop, and how signals are isolated and received by compatible
+synthesizers, sequencers, and audio interfaces.</p>
+<h3 id="the-shift-to-35mm-trs-for-midi">The Shift to 3.5mm TRS for
+MIDI</h3>
+<p>Traditional MIDI hardware relies on bulky 5-pin DIN connectors.
+Although these connectors have five physical pins, the original MIDI 1.0
+specification only requires three conductors to transmit a signal: a
+positive current source, a current sink (data line), and a ground
+shield. As music hardware became more compact, manufacturers adapted the
+ubiquitous 3.5mm TRS stereo mini-jack to carry these three signals.</p>
+<p>To eliminate industry confusion caused by conflicting proprietary
+pinouts, the MIDI Association officially adopted the "Type A"
+configuration as the standard specification for TRS MIDI
+connections.</p>
+<h3 id="type-a-pinout-mapping">Type A Pinout Mapping</h3>
+<p>A standard 3.5mm TRS cable consists of three conductive sections: the
+Tip, the Ring, and the Sleeve. In the Type A standard, these three
+conductors correspond directly to the active pins of a standard 5-pin
+DIN connector:</p>
+<ul>
+<li><strong>Tip:</strong> Maps to <strong>DIN Pin 5</strong> (MIDI Data
+/ Current Sink).</li>
+<li><strong>Ring:</strong> Maps to <strong>DIN Pin 4</strong> (Power /
+Current Source, typically +5V or +3.3V through a resistor).</li>
+<li><strong>Sleeve:</strong> Maps to <strong>DIN Pin 2</strong> (Ground
+/ Cable Shield).</li>
+</ul>
+<p>In this configuration, Pins 1 and 3 of the legacy DIN jack remain
+unconnected, just as they are in standard 5-pin MIDI
+implementations.</p>
+<h3 id="how-the-current-loop-transmits-data">How the Current Loop
+Transmits Data</h3>
+<p>MIDI does not transmit data as raw voltage levels; instead, it
+utilizes an asynchronous serial current loop operating at a baud rate of
+31,250 bits per second. The physical transmission relies on the opening
+and closing of this circuit:</p>
+<ol type="1">
+<li><strong>Current Flow:</strong> The transmitter's Ring line supplies
+current (typically limited to 5 mA via a pull-up resistor) into the
+circuit.</li>
+<li><strong>Serial Modulation:</strong> The transmitter’s UART
+(Universal Asynchronous Receiver-Transmitter) modulates the Tip line.
+When the transmitting UART pulls the Tip low, current flows from the
+Ring, through the receiver’s circuit, and down to the Tip.</li>
+<li><strong>Binary Representation:</strong> An active current flow
+represents a binary 0 (logic low), while the absence of current flow
+represents a binary 1 (logic high). In its idle state, the line sits at
+logic 1, meaning no current flows through the circuit.</li>
+</ol>
+<h3 id="galvanic-isolation-and-reception">Galvanic Isolation and
+Reception</h3>
+<p>At the receiving device, the incoming signal from the 3.5mm jack is
+routed directly through an optocoupler before reaching the receiver's
+microcontroller.</p>
+<p>When current flows from the Ring through the Tip, it powers an
+internal LED inside the receiver's optocoupler. The light from this LED
+activates a phototransistor on the opposite side of the component,
+converting the optical pulse back into an electrical digital signal for
+the receiving device's UART.</p>
+<p>This optical barrier ensures complete galvanic isolation between the
+two connected devices. Because there is no common electrical ground path
+shared between the audio processors—the Sleeve acts purely as a
+radio-frequency shield and is grounded only at the output port—the TRS
+Type A implementation avoids ground loops, hum, and digital noise
+interference while preserving serial data integrity.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

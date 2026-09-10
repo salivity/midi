@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI RPN and NRPN: Expanding MIDI Parameter Control - midi</title>
+    <meta name="description" content="This article provides a comprehensive overview of MIDI Registered Parameter Numbers (RPN) and Non-Registered Parameter Numbers (NRPN). It examines how these protocols overcome the technical limitations of traditional 7-bit MIDI Continuous Controller (CC)">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-rpn-and-nrpn-expanding-midi-parameter-control">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI RPN and NRPN: Expanding MIDI Parameter Control - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-rpn-and-nrpn-expanding-midi-parameter-control" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a comprehensive overview of MIDI Registered Parameter Numbers (RPN) and Non-Registered Parameter Numbers (NRPN). It examines how these protocols overcome the technical limitations of traditional 7-bit MIDI Continuous Controller (CC)" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-rpn-and-nrpn-expanding-midi-parameter-control">MIDI RPN and
+NRPN: Expanding MIDI Parameter Control</h1>
+<p>This article provides a comprehensive overview of MIDI Registered
+Parameter Numbers (RPN) and Non-Registered Parameter Numbers (NRPN). It
+examines how these protocols overcome the technical limitations of
+traditional 7-bit MIDI Continuous Controller (CC) messages, explains how
+they send and receive data, and details how they grant hardware
+synthesizers and digital audio workstations access to thousands of
+high-resolution controls without stepping or data bottlenecks.</p>
+<h3 id="the-limits-of-standard-midi-cc">The Limits of Standard MIDI
+CC</h3>
+<p>Standard MIDI Continuous Controller (CC) messages are inherently
+limited by the original MIDI 1.0 specification. Standard CC messages
+offer only 128 distinct controller IDs (CC 0 through CC 127), with each
+controller limited to a 7-bit data resolution (values from 0 to 127).
+For modern electronic music production and sound design, this creates
+two major obstacles:</p>
+<ol type="1">
+<li><strong>Parameter Starvation:</strong> Complex modern synthesizers
+often feature hundreds of distinct parameters, far exceeding the 128
+available standard CC slots.</li>
+<li><strong>Audible Stepping ("Zipper Noise"):</strong> A range of only
+128 values is too coarse for sensitive acoustic parameters like filter
+cutoffs or pitch modulation, resulting in unnatural, stepped
+transitions.</li>
+</ol>
+<h3 id="what-are-rpn-and-nrpn">What Are RPN and NRPN?</h3>
+<p>RPN and NRPN were designed to resolve these limitations by expanding
+both the addressable parameter space and the control resolution.</p>
+<ul>
+<li><strong>RPN (Registered Parameter Numbers):</strong> These are
+globally standardized parameters managed by the MIDI Manufacturers
+Association (MMA) and AMEI. Because they are standardized, any
+MIDI-compliant device recognizes them identically. Common RPN functions
+include Pitch Bend Sensitivity (RPN 0), Master Fine Tuning (RPN 1), and
+Master Coarse Tuning (RPN 2).</li>
+<li><strong>NRPN (Non-Registered Parameter Numbers):</strong> These are
+open, manufacturer-specific parameters. Hardware and software makers use
+NRPN to assign custom controls to their own synthesizers and effects
+units without adhering to a universal standard. A synth manufacturer can
+use NRPN to assign dedicated, high-resolution control to an individual
+oscillator's pulse-width, an envelope generator's stage, or a specific
+filter resonance.</li>
+</ul>
+<h3 id="how-rpn-and-nrpn-transmit-data">How RPN and NRPN Transmit
+Data</h3>
+<p>Neither RPN nor NRPN introduces new physical MIDI cables or low-level
+protocols. Instead, they use a sequence of standard CC messages combined
+to act as a single compound command.</p>
+<p>Setting a parameter requires selecting the target parameter first,
+then sending the desired value:</p>
+<ol type="1">
+<li><strong>Parameter Selection:</strong>
+<ul>
+<li><strong>For RPN:</strong> CC 101 (Most Significant Byte / MSB) and
+CC 100 (Least Significant Byte / LSB) specify the RPN address.</li>
+<li><strong>For NRPN:</strong> CC 99 (MSB) and CC 98 (LSB) specify the
+NRPN address.</li>
+</ul></li>
+<li><strong>Data Entry:</strong>
+<ul>
+<li>Once addressed, the controlling device sends the actual value using
+<strong>Data Entry MSB (CC 6)</strong> and, optionally, <strong>Data
+Entry LSB (CC 38)</strong>.</li>
+</ul></li>
+<li><strong>Data Increment/Decrement (Optional):</strong>
+<ul>
+<li>Instead of absolute values, CC 96 (Data Increment) or CC 97 (Data
+Decrement) can step the chosen parameter up or down.</li>
+</ul></li>
+<li><strong>Null Termination:</strong>
+<ul>
+<li>It is best practice to send an RPN or NRPN "Null" message (setting
+MSB and LSB to 127) immediately after data transmission to prevent
+subsequent, accidental Data Entry modifications.</li>
+</ul></li>
+</ol>
+<h3 id="how-they-expand-control-addressing-and-resolution">How They
+Expand Control: Addressing and Resolution</h3>
+<p>RPN and NRPN dramatically scale MIDI capabilities through two
+distinct advantages:</p>
+<ul>
+<li><strong>Massive Parameter Capacity:</strong> By pairing two 7-bit CC
+messages (MSB and LSB) to define the parameter address, both RPN and
+NRPN provide <span class="math inline">\(128 \times 128 =
+16,384\)</span> possible parameter IDs. This gives manufacturers
+virtually unlimited addressing space on a single MIDI channel,
+preventing CC conflicts across complex devices.</li>
+<li><strong>14-Bit High-Resolution Control:</strong> When modifying the
+chosen parameter, combining Data Entry MSB (CC 6) and Data Entry LSB (CC
+38) produces a 14-bit data value (<span class="math inline">\(128 \times
+128\)</span>). This expands the resolution from the standard 128 steps
+up to 16,384 discrete steps. This high resolution eliminates zipper
+noise, allowing for smooth filter sweeps, precise microtuning, and
+expressive, fluid modulation.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

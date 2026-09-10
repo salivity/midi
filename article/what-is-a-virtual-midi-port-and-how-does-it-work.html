@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a Virtual MIDI Port and How Does It Work? - midi</title>
+    <meta name="description" content="A virtual MIDI port is a software-based bridge that enables digital audio workstations (DAWs), standalone instruments, and MIDI utilities to send and receive MIDI messages directly on the same computer without physical cables or external hardware interfa">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-virtual-midi-port-and-how-does-it-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a Virtual MIDI Port and How Does It Work? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-virtual-midi-port-and-how-does-it-work" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A virtual MIDI port is a software-based bridge that enables digital audio workstations (DAWs), standalone instruments, and MIDI utilities to send and receive MIDI messages directly on the same computer without physical cables or external hardware interfa" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-is-a-virtual-midi-port-and-how-does-it-work">What Is a
+Virtual MIDI Port and How Does It Work?</h1>
+<p>A virtual MIDI port is a software-based bridge that enables digital
+audio workstations (DAWs), standalone instruments, and MIDI utilities to
+send and receive MIDI messages directly on the same computer without
+physical cables or external hardware interfaces. This article explains
+what virtual MIDI ports are, the internal system mechanisms used to
+route data between programs, and how different operating systems handle
+internal MIDI routing.</p>
+<h2 id="understanding-the-virtual-midi-port">Understanding the Virtual
+MIDI Port</h2>
+<p>In a traditional setup, transmitting MIDI data from one device to
+another requires physical connections, such as 5-pin DIN cables or USB
+connections running through a hardware MIDI interface. A virtual MIDI
+port functions identically to these physical ports from the perspective
+of music software, but it exists entirely in the operating system's
+memory.</p>
+<p>When a developer or system utility creates a virtual port, it
+registers as a standard MIDI input and output device within the audio
+subsystem. Software applications see the virtual port in their device
+menus just as they would see a plugged-in USB keyboard or hardware
+synthesizer.</p>
+<h2 id="how-software-passes-data-internally">How Software Passes Data
+Internally</h2>
+<p>Instead of converting digital instructions into electrical pulses
+sent across copper wire, virtual MIDI routing relies on native operating
+system Inter-Process Communication (IPC) techniques.</p>
+<ol type="1">
+<li><strong>Event Generation:</strong> When an application generates a
+MIDI event (such as a Note On, Control Change, or Pitch Bend), it
+encodes the command into standard MIDI bytes accompanied by a
+high-resolution timestamp.</li>
+<li><strong>Buffer Writing:</strong> The sending application writes this
+byte sequence into a shared memory buffer or a dedicated ring buffer
+managed by the virtual MIDI driver.</li>
+<li><strong>Event Notification:</strong> The driver triggers an
+operating system event or interrupt notification to alert subscribed
+applications that new data is available in the queue.</li>
+<li><strong>Buffer Reading:</strong> The receiving application reads the
+data directly from the shared memory space, decodes the MIDI messages,
+and triggers the corresponding virtual instrument, automator, or
+recording track.</li>
+</ol>
+<p>Because this transfer occurs within the system's RAM and CPU cycles,
+transmission speed is virtually instantaneous. Latency is typically
+sub-millisecond, avoiding the physical transmission delays and jitter
+inherent to hardware MIDI cables.</p>
+<h2 id="platform-implementations">Platform Implementations</h2>
+<p>Different operating systems handle internal MIDI routing through
+distinct architectures:</p>
+<ul>
+<li><strong>macOS:</strong> Apple includes native virtual routing out of
+the box via the Inter-Application Communication (IAC) Driver. Found
+within the macOS Audio MIDI Setup utility, users can enable the IAC bus
+to route MIDI between standalone software, such as sending sequences
+from an external algorithmic tool into a DAW.</li>
+<li><strong>Windows:</strong> Windows natively lacks a built-in virtual
+loopback MIDI driver. To route data between applications internally,
+users install lightweight third-party loopback drivers such as loopMIDI.
+These drivers create virtual endpoint devices recognized by the Windows
+Multimedia (MME) or Windows DirectMusic APIs.</li>
+<li><strong>Linux:</strong> Linux manages virtual MIDI through the
+Advanced Linux Sound Architecture (ALSA) via the
+<code>snd-virmidi</code> kernel module, or through real-time audio
+servers like JACK and PipeWire. These frameworks allow users to connect
+audio and MIDI outputs to inputs dynamically using graphical
+patchbays.</li>
+</ul>
+<h2 id="primary-advantages-of-virtual-routing">Primary Advantages of
+Virtual Routing</h2>
+<ul>
+<li><strong>Zero Hardware Dependency:</strong> Eliminates the need for
+multiple audio/MIDI interfaces and physical loopback cables.</li>
+<li><strong>Low Latency and High Precision:</strong> Avoids standard
+serial transmission limits, ensuring sample-accurate or
+near-sample-accurate timing.</li>
+<li><strong>Flexible Workflows:</strong> Allows modular music setups,
+such as routing MIDI from code-based sequencing environments (like
+Max/MSP or Pure Data) directly into commercial recording software.</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

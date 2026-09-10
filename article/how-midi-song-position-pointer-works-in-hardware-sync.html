@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Song Position Pointer Works in Hardware Sync - midi</title>
+    <meta name="description" content="MIDI Song Position Pointer (SPP) enables hardware synchronizers and slave sequencers to lock perfectly with track playback by transmitting absolute timeline position data alongside relative tempo pulses. Rather than forcing external hardware to start pla">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-song-position-pointer-works-in-hardware-sync">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Song Position Pointer Works in Hardware Sync - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-song-position-pointer-works-in-hardware-sync" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Song Position Pointer (SPP) enables hardware synchronizers and slave sequencers to lock perfectly with track playback by transmitting absolute timeline position data alongside relative tempo pulses. Rather than forcing external hardware to start pla" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-midi-song-position-pointer-works-in-hardware-sync">How MIDI
+Song Position Pointer Works in Hardware Sync</h1>
+<p>MIDI Song Position Pointer (SPP) enables hardware synchronizers and
+slave sequencers to lock perfectly with track playback by transmitting
+absolute timeline position data alongside relative tempo pulses. Rather
+than forcing external hardware to start playback only from the absolute
+beginning of a song, SPP allows modern and vintage gear to cue instantly
+to specific points along an arrangement. This article details the
+message structure of SPP, how it interacts with standard MIDI Clock
+commands, and how hardware devices interpret this data to maintain
+continuous lock during playback.</p>
+<h3 id="the-role-and-structure-of-song-position-pointer">The Role and
+Structure of Song Position Pointer</h3>
+<p>Song Position Pointer is a MIDI System Common message that specifies
+an absolute location within a song. Standard MIDI Clock pulses only
+convey tempo by sending 24 ticks per quarter note (PPQN), which tells a
+receiving unit how fast to play, but not where in the song playback is
+taking place. SPP bridges this gap by acting as an absolute counter.</p>
+<p>The message represents playback location measured in "MIDI beats." In
+the MIDI standard:</p>
+<ul>
+<li>1 MIDI beat = 6 MIDI Clocks (equivalent to a standard 16th
+note).</li>
+<li>4 MIDI beats = 24 MIDI Clocks (equivalent to a quarter note).</li>
+</ul>
+<p>SPP utilizes two 7-bit data bytes (Least Significant Byte and Most
+Significant Byte) combined to form a 14-bit integer. This 14-bit value
+ranges from 0 to 16,383, allowing a sequencer to define a specific
+16th-note position up to 1,024 measures of 4/4 time from the start of
+the song.</p>
+<h3 id="how-hardware-devices-process-spp-during-playback">How Hardware
+Devices Process SPP During Playback</h3>
+<p>When a master sequencer, Digital Audio Workstation (DAW), or tape
+synchronizer moves to a new location in the timeline, it uses SPP in a
+specific four-step handshake:</p>
+<ol type="1">
+<li><strong>Relocation:</strong> When the user skips forward, rewinds,
+or scrubs along the timeline, the master device stops transmitting
+regular MIDI Clock pulses and calculates the elapsed number of 16th
+notes from measure 1, beat 1.</li>
+<li><strong>Message Transmission:</strong> The master sends the SPP
+message containing the calculated 14-bit beat value over the MIDI Out
+connection.</li>
+<li><strong>Internal Queuing:</strong> The receiving hardware—such as a
+drum machine, hardware sequencer, or tape sync box—reads the value and
+automatically jumps its internal playhead to that exact bar and beat
+without triggering sound output.</li>
+<li><strong>Playback Execution:</strong> Once cued, the master sends a
+MIDI Continue message (status byte <code>0xFB</code>), followed
+immediately by the standard stream of MIDI Clock pulses
+(<code>0xF8</code>).</li>
+</ol>
+<p>By using the MIDI Continue command instead of MIDI Start (which
+resets internal pointers to zero), the receiving hardware begins playing
+smoothly from the exact measure set by the SPP.</p>
+<h3 id="importance-for-hardware-synchronizers">Importance for Hardware
+Synchronizers</h3>
+<p>Hardware synchronizers—especially those converting between SMPTE
+longitudinal timecode on analog tape and MIDI—rely on SPP to preserve
+tight synchronization without human intervention. When analog tape is
+shuttled or fast-forwarded, the synchronizer reads the SMPTE timecode
+address, converts that timeframe into the corresponding MIDI beat value,
+transmits the SPP message to connected MIDI hardware, and starts clock
+generation as soon as tape playback stabilizes.</p>
+<p>Without SPP, hardware users would have to manually roll back to the
+start of every song each time an edit or overdub was required, making
+non-linear recording and synchronized rehearsal impractical in
+multi-device studios.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Synths Evaluate MIDI Bank Select MSB and LSB - midi</title>
+    <meta name="description" content="Standard MIDI Program Change messages are limited to accessing only 128 sounds, a restriction modern synthesizers overcome using MIDI Bank Select. By combining two standard Control Change (CC) messages—Most Significant Byte (MSB, CC 0) and Least Signif">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-synths-evaluate-midi-bank-select-msb-and-lsb">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Synths Evaluate MIDI Bank Select MSB and LSB - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-synths-evaluate-midi-bank-select-msb-and-lsb" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard MIDI Program Change messages are limited to accessing only 128 sounds, a restriction modern synthesizers overcome using MIDI Bank Select. By combining two standard Control Change (CC) messages—Most Significant Byte (MSB, CC 0) and Least Signif" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-synths-evaluate-midi-bank-select-msb-and-lsb">How Synths
+Evaluate MIDI Bank Select MSB and LSB</h1>
+<p>Standard MIDI Program Change messages are limited to accessing only
+128 sounds, a restriction modern synthesizers overcome using MIDI Bank
+Select. By combining two standard Control Change (CC) messages—Most
+Significant Byte (MSB, CC 0) and Least Significant Byte (LSB, CC 32)—a
+synthesizer can address up to 16,384 banks, each containing 128 patches.
+This article explains how a synthesizer receives, calculates, and
+applies these two 7-bit values to execute a seamless sound bank
+switch.</p>
+<h3 id="the-7-bit-constraint-and-the-14-bit-solution">The 7-Bit
+Constraint and the 14-Bit Solution</h3>
+<p>MIDI 1.0 transmits data bytes using 7-bit integers, restricting any
+single parameter to a range between 0 and 127. Consequently, a
+standalone Program Change (PC) command can only call up 128 presets
+(0–127).</p>
+<p>To expand sound capacity, the MIDI specification allocates two
+continuous controllers to act as a coarse/fine tuning pair for preset
+banks:</p>
+<ul>
+<li><strong>CC 0 (Bank Select MSB):</strong> Acts as the coarse or
+higher-order value.</li>
+<li><strong>CC 32 (Bank Select LSB):</strong> Acts as the fine or
+lower-order value.</li>
+</ul>
+<p>When combined, these two 7-bit values form a single 14-bit integer,
+expanding the addressing space to <span class="math inline">\(128 \times
+128 = 16,384\)</span> potential banks.</p>
+<h3 id="the-mathematical-evaluation">The Mathematical Evaluation</h3>
+<p>When a synthesizer receives CC 0 and CC 32, its internal
+microprocessor evaluates the combined bank index using bitwise
+operations or simple arithmetic:</p>
+<p><span class="math display">\[\text{Bank Number} = (\text{MSB} \times
+128) + \text{LSB}\]</span></p>
+<p>In binary and microcode execution, this is handled via a 7-bit left
+shift on the MSB, followed by a bitwise OR operation with the LSB:</p>
+<p><span class="math display">\[\text{Bank Number} = (\text{MSB} \ll 7)
+\mid \text{LSB}\]</span></p>
+<h4 id="example-calculation">Example Calculation:</h4>
+<p>If a sequencer transmits:</p>
+<ul>
+<li><strong>CC 0 (MSB):</strong> 2</li>
+<li><strong>CC 32 (LSB):</strong> 5</li>
+</ul>
+<p>The synthesizer evaluates the target bank as: <span
+class="math display">\[(2 \times 128) + 5 = 261\]</span></p>
+<p>The instrument now targets Bank 261.</p>
+<h3 id="staging-and-execution-via-program-change">Staging and Execution
+via Program Change</h3>
+<p>A critical architectural rule of MIDI Bank Select is that receiving
+CC 0 or CC 32 does not immediately switch the active sound. Immediate
+switching could cause audio dropouts, voice stealing, or abrupt tone
+cutoffs while a sequence is running.</p>
+<p>Instead, the evaluation follows a staged three-step process:</p>
+<ol type="1">
+<li><strong>Buffering:</strong> When the synthesizer receives CC 0 and
+CC 32, it stores these numbers in temporary internal memory registers
+(often labeled <code>Pending_MSB</code> and <code>Pending_LSB</code>).
+The currently playing sound remains unchanged.</li>
+<li><strong>Arming:</strong> Once both bytes are read, the internal
+engine registers the pending target bank.</li>
+<li><strong>Execution:</strong> The sound engine executes the bank
+switch only when it receives a standard <strong>Program Change</strong>
+message. At that moment, the synthesizer loads the patch designated by
+the Program Change number directly from the pre-calculated bank
+address.</li>
+</ol>
+<pre><code>[CC 0 (MSB)]  ---&gt; Stores in MSB register
+[CC 32 (LSB)] ---&gt; Stores in LSB register (Bank calculated)
+[Program Change] ---&gt; Synthesizer loads Patch X from Bank Y into voice architecture</code></pre>
+<h3 id="hardware-implementation-and-variations">Hardware Implementation
+and Variations</h3>
+<p>Synthesizer manufacturers implement the MSB/LSB evaluation according
+to the architecture and memory layout of their instruments:</p>
+<ul>
+<li><strong>MSB-Only Instruments:</strong> Synths containing 128 or
+fewer banks often only evaluate CC 0 (MSB) and ignore CC 32 (LSB), or
+default the LSB to 0.</li>
+<li><strong>LSB-Only Instruments:</strong> Some hardware prioritizes CC
+32 for sub-bank variations and ignores CC 0.</li>
+<li><strong>Manufacturer Standards:</strong> Protocols like General MIDI
+2 (GM2), Roland GS, and Yamaha XG use specific conventions. For example,
+Yamaha XG traditionally uses CC 0 to designate voice architecture
+(Normal Voices vs. Drum Kits) and CC 32 to select specific variation
+banks.</li>
+</ul>
+<p>Regardless of whether a device utilizes all 16,384 banks, the
+evaluation mechanism remains identical: the synthesizer pairs the coarse
+7-bit MSB and fine 7-bit LSB into a unified 14-bit index, held in a
+buffer until the next Program Change message triggers the sound
+load.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

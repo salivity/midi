@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is MIDI Strumming Mode? - midi</title>
+    <meta name="description" content="MIDI strumming mode is a performance feature in digital audio workstations (DAWs), virtual instruments, and MIDI controllers that emulates the organic sound of a played string instrument. This article explains what MIDI strumming mode is, how it offsets">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-midi-strumming-mode">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is MIDI Strumming Mode? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-midi-strumming-mode" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI strumming mode is a performance feature in digital audio workstations (DAWs), virtual instruments, and MIDI controllers that emulates the organic sound of a played string instrument. This article explains what MIDI strumming mode is, how it offsets" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-is-midi-strumming-mode">What Is MIDI Strumming Mode?</h1>
+<p>MIDI strumming mode is a performance feature in digital audio
+workstations (DAWs), virtual instruments, and MIDI controllers that
+emulates the organic sound of a played string instrument. This article
+explains what MIDI strumming mode is, how it offsets and staggers chord
+note triggers, and the ways it manipulates timing, direction, and
+velocity to transform rigid, synthetic chords into realistic guitar
+strums.</p>
+<h3 id="the-problem-with-standard-midi-chords">The Problem with Standard
+MIDI Chords</h3>
+<p>When you press a chord on a standard MIDI keyboard or draw it onto a
+piano roll, all the notes trigger simultaneously at the exact same
+millisecond. On a keyboard instrument like a piano, striking multiple
+keys at once sounds completely natural.</p>
+<p>On a guitar, however, producing sound this way is physically
+impossible. A guitarist plays chords by sweeping a pick or fingers
+across physical strings sequentially. Because each string is struck a
+fraction of a second after the previous one, playing a guitar chord
+always involves a slight micro-delay between notes. Without this delay,
+MIDI guitar instruments sound stiff, robotic, and artificial.</p>
+<h3 id="how-strumming-mode-staggers-note-triggers">How Strumming Mode
+Staggers Note Triggers</h3>
+<p>MIDI strumming mode fixes this unnatural playback by taking the notes
+of a chord and staggering their start times (Note-On messages) across a
+short time window.</p>
+<p>Instead of playing notes C, E, G, and B at the exact same instant,
+strumming mode processes the input and introduces controlled millisecond
+offsets between each note:</p>
+<ul>
+<li><strong>Note 1 (Root):</strong> 0 ms delay</li>
+<li><strong>Note 2:</strong> +15 ms delay</li>
+<li><strong>Note 3:</strong> +30 ms delay</li>
+<li><strong>Note 4:</strong> +45 ms delay</li>
+</ul>
+<p>By spreading the note triggers over a span typically ranging from 10
+to 80 milliseconds, the software recreates the physical motion of a pick
+traveling across the strings.</p>
+<h3 id="emulating-downstrums-and-upstrums">Emulating Downstrums and
+Upstrums</h3>
+<p>Strumming mode alters the order of staggered notes to mimic the
+direction of a strum:</p>
+<ul>
+<li><strong>Downstrums:</strong> The pick moves from the lowest-pitched
+strings to the highest-pitched strings. The strum engine triggers the
+lowest note first, followed sequentially by higher notes.</li>
+<li><strong>Upstrums:</strong> The pick moves upward from the thinnest,
+highest-pitched strings to the lowest. The engine reverses the order,
+triggering the highest note first and finishing on the lowest bass note.
+Upstrums also frequently skip the lowest string entirely, a nuance many
+advanced strumming engines replicate automatically.</li>
+</ul>
+<h3 id="velocity-and-timing-dynamics">Velocity and Timing Dynamics</h3>
+<p>Real strumming involves more than just delaying note starts; it also
+requires nuanced velocity curves. A pick loses momentum and energy as it
+passes through each string.</p>
+<p>Advanced MIDI strum engines replicate this physical behavior
+through:</p>
+<ul>
+<li><strong>Velocity Decoupling:</strong> The first string struck
+typically receives the hardest impact (higher MIDI velocity), while
+subsequent strings are triggered with slightly varying or decaying
+velocities.</li>
+<li><strong>Strum Speed Control:</strong> The millisecond gap between
+notes can be automated or mapped to MIDI CC (Continuous Controller)
+parameters. A fast, aggressive chord chop might have a 10 ms spread,
+whereas a slow, gentle strum might stretch to 100 ms or more.</li>
+<li><strong>Humanization:</strong> Strumming modes often introduce
+slight, randomized variations to both note timing and velocity to avoid
+the repetitive "machine-gun" effect, ensuring no two strums sound
+identical.</li>
+</ul>
+<p>By calculating note order, micro-delays, and dynamic velocity curves,
+MIDI strumming mode bridges the physical gap between keyboard layouts
+and fretted instruments, making sequenced guitar tracks sound
+authentic.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

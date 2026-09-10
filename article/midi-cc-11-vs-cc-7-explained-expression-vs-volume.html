@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI CC 11 vs CC 7 Explained: Expression vs Volume - midi</title>
+    <meta name="description" content="Understanding the difference between MIDI CC 7 (Volume) and MIDI CC 11 (Expression) is essential for creating realistic, dynamic virtual instrument performances. While both control loudness, CC 7 sets the overall master volume ceiling for a track, functi">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cc-11-vs-cc-7-explained-expression-vs-volume">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI CC 11 vs CC 7 Explained: Expression vs Volume - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cc-11-vs-cc-7-explained-expression-vs-volume" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Understanding the difference between MIDI CC 7 (Volume) and MIDI CC 11 (Expression) is essential for creating realistic, dynamic virtual instrument performances. While both control loudness, CC 7 sets the overall master volume ceiling for a track, functi" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="midi-cc-11-vs-cc-7-explained-expression-vs-volume">MIDI CC 11 vs
+CC 7 Explained: Expression vs Volume</h1>
+<p>Understanding the difference between MIDI CC 7 (Volume) and MIDI CC
+11 (Expression) is essential for creating realistic, dynamic virtual
+instrument performances. While both control loudness, CC 7 sets the
+overall master volume ceiling for a track, functioning much like a
+mixing console fader, whereas CC 11 acts as a dynamic sub-controller
+within that limit to shape musical phrasing, swells, and emotional
+nuance. By using CC 7 for static mix balancing and CC 11 for continuous
+performance dynamics, composers can automate realistic instrument
+movement without destroying their track's overall level in the mix.</p>
+<h2 id="what-is-midi-cc-7-main-volume">What is MIDI CC 7 (Main
+Volume)?</h2>
+<p>MIDI CC 7 is the standardized continuous controller for track volume.
+In a Digital Audio Workstation (DAW) or multitimbral synthesizer, CC 7
+directly dictates the maximum output level of a given MIDI channel.</p>
+<ul>
+<li><strong>Primary Purpose:</strong> Static mix balancing and setting
+overall instrument levels.</li>
+<li><strong>Hardware Equivalent:</strong> The fader on an analog or
+digital mixing console.</li>
+<li><strong>Usage:</strong> CC 7 is typically set once during the mixing
+phase to position the track relative to other instruments. Constantly
+automating CC 7 throughout a song can make it difficult to adjust the
+overall volume of the track later, as any global adjustments will fight
+against the written automation.</li>
+</ul>
+<h2 id="what-is-midi-cc-11-expression">What is MIDI CC 11
+(Expression)?</h2>
+<p>MIDI CC 11 is a secondary volume controller designed specifically for
+musical performance. It provides dynamic variation within the boundaries
+established by CC 7.</p>
+<ul>
+<li><strong>Primary Purpose:</strong> Musical phrasing, crescendos,
+decrescendos, and accents.</li>
+<li><strong>Hardware Equivalent:</strong> A swell pedal on an organ or
+the breath control of a wind player.</li>
+<li><strong>Usage:</strong> CC 11 is drawn or recorded continuously
+during a performance using mod wheels, faders, or expression pedals.
+Modern orchestral sample libraries often link CC 11 to both volume and
+dynamic filter layers, allowing an instrument to change in brightness
+and harmonic saturation as it gets louder, mimicking real acoustic
+behavior.</li>
+</ul>
+<h2 id="how-cc-7-and-cc-11-work-together">How CC 7 and CC 11 Work
+Together</h2>
+<p>CC 11 does not operate independently of CC 7; instead, it acts as a
+percentage or scale factor of CC 7's current value.</p>
+<ul>
+<li><strong>CC 7 defines the ceiling:</strong> If CC 7 is set to its
+maximum value of 127, CC 11 has access to the full volume range from
+total silence (0) to maximum output (127).</li>
+<li><strong>CC 11 scales within that ceiling:</strong> If CC 7 is
+reduced to 64 (approximately 50% volume), the absolute loudest output CC
+11 can produce—even when pushed to 127—is restricted to that 50%
+threshold.</li>
+</ul>
+<p>This hierarchy ensures that expressive dynamics never exceed the
+maximum level chosen for the mix.</p>
+<h2 id="recommended-workflow">Recommended Workflow</h2>
+<ol type="1">
+<li><strong>Use CC 11 to perform:</strong> Record or draw CC 11 to
+humanize the performance, adding natural rises and falls to strings,
+brass, woodwinds, and vocals.</li>
+<li><strong>Use CC 7 (or DAW Track Volume) to mix:</strong> Leave the
+performance automation on CC 11 untouched and adjust CC 7 or your DAW
+track faders to balance the instrument against the rest of the
+arrangement.</li>
+<li><strong>Combine with CC 1 (Modulation):</strong> In many modern
+orchestral libraries, CC 1 controls dynamic layers (timbre and
+intensity), while CC 11 controls volume dynamics. Using CC 1 and CC 11
+simultaneously delivers the most authentic acoustic simulation
+possible.</li>
+</ol></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

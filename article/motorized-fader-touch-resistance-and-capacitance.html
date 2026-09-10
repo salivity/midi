@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorized Fader Touch Resistance and Capacitance - midi</title>
+    <meta name="description" content="Motorized MIDI faders rely on touch resistance and capacitive sensing to distinguish between automated movement and manual user intervention. This article examines how touch resistance functions in motorized fader systems, how capacitive sensing detects">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/motorized-fader-touch-resistance-and-capacitance">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Motorized Fader Touch Resistance and Capacitance - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/motorized-fader-touch-resistance-and-capacitance" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Motorized MIDI faders rely on touch resistance and capacitive sensing to distinguish between automated movement and manual user intervention. This article examines how touch resistance functions in motorized fader systems, how capacitive sensing detects" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="motorized-fader-touch-resistance-and-capacitance">Motorized
+Fader Touch Resistance and Capacitance</h1>
+<p>Motorized MIDI faders rely on touch resistance and capacitive sensing
+to distinguish between automated movement and manual user intervention.
+This article examines how touch resistance functions in motorized fader
+systems, how capacitive sensing detects human contact, and how
+capacitance directly governs the feedback loops that prevent motorized
+fighting, motor burnout, and automation errors in digital audio
+workstations (DAWs).</p>
+<h3 id="what-is-midi-motorized-fader-touch-resistance">What Is MIDI
+Motorized Fader Touch Resistance?</h3>
+<p>Motorized faders use internal DC motors or servo systems attached to
+a belt or track to move a slider according to automation data received
+from a DAW. Touch resistance refers to two distinct but related concepts
+in these systems:</p>
+<ol type="1">
+<li><strong>Mechanical Resistance:</strong> The physical drag, friction,
+and tension created by the motor, belt, and rail assembly when a user
+manually overrides or adjusts the fader. High-quality faders are
+engineered to minimize this drag so manual movement feels smooth and
+linear.</li>
+<li><strong>Dynamic Resistance and Automation Override:</strong> When a
+fader is actively receiving automation data, the motor drives the fader
+position. If a user touches the fader without the system realizing it,
+the motor will actively fight the user's hand, creating heavy mechanical
+resistance. Touch resistance systems are designed to detect manual
+contact instantly and disengage or mute the motor drive to prevent this
+conflict.</li>
+</ol>
+<h3 id="how-capacitance-enables-touch-detection">How Capacitance Enables
+Touch Detection</h3>
+<p>Most modern motorized faders use capacitive touch sensing rather than
+mechanical pressure switches to detect contact. The fader cap is made of
+conductive plastic or metal and is electrically coupled to the fader's
+internal wiper or a dedicated sensor track.</p>
+<p>When a user touches the conductive fader cap, the human body
+introduces a measurable change in electrical capacitance to the circuit.
+The controller’s microprocessor continuously monitors this capacitive
+charge. As soon as the capacitance crosses a calibrated threshold, the
+controller registers a "Touch" event.</p>
+<h3 id="how-capacitance-affects-feedback-loops">How Capacitance Affects
+Feedback Loops</h3>
+<p>Capacitive sensing directly controls the bidirectional feedback loop
+between the DAW and the physical hardware:</p>
+<ul>
+<li><strong>Motor Disengagement:</strong> When the capacitive sensor
+detects contact, the hardware controller immediately disables the motor
+drive circuit. This stops the motor from pushing against the user's
+fingers, eliminating physical chatter, jitter, and motor strain.</li>
+<li><strong>Automation Mode Switching:</strong> The capacitive trigger
+signals the DAW to switch from "Read" mode to "Touch" or "Latch" write
+mode. While capacitance is detected, the physical fader overrides the
+recorded automation and writes new values. Once the finger is lifted,
+the capacitance drops, the touch flag clears, and the fader transitions
+back to following DAW automation (often after a set release time).</li>
+<li><strong>Elimination of Data Fighting:</strong> Without capacitive
+detection, a motorized fader would receive position updates from the DAW
+while simultaneously sending new position updates from the user's hand.
+This creates an unstable feedback loop where the motor and user
+continuously fight for control, resulting in erratic MIDI CC data
+streams and mechanical wear.</li>
+</ul>
+<h3 id="capacitance-issues-and-troubleshooting">Capacitance Issues and
+Troubleshooting</h3>
+<p>If capacitance detection fails, the balance between motor feedback
+and user input breaks down:</p>
+<ul>
+<li><strong>Poor Grounding:</strong> Capacitive sensing requires a
+common ground reference. If an audio interface or MIDI controller is
+connected to an ungrounded power source or floating ground, the
+capacitive threshold may not trigger, causing the motor to fight manual
+movement.</li>
+<li><strong>Non-Conductive Caps:</strong> Replacing stock conductive
+fader caps with standard plastic or painted third-party caps insulates
+the sensor from the user's finger, completely disabling capacitive
+detection.</li>
+<li><strong>Environmental Factors:</strong> Extreme humidity or
+electromagnetic interference can alter the baseline capacitance, leading
+to false touch triggers (fader motors constantly disengaging) or
+non-responsive touch detection (motors refusing to yield to touch).</li>
+</ul></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

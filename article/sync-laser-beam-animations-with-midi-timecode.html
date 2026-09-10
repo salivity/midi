@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync Laser Beam Animations with MIDI Timecode - midi</title>
+    <meta name="description" content="Synchronizing laser beam animations with MIDI timecode (MTC) enables laser show operators to align complex optical effects with audio tracks down to the individual frame. This article explains the technical workflow used by production professionals, deta">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/sync-laser-beam-animations-with-midi-timecode">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sync Laser Beam Animations with MIDI Timecode - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/sync-laser-beam-animations-with-midi-timecode" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Synchronizing laser beam animations with MIDI timecode (MTC) enables laser show operators to align complex optical effects with audio tracks down to the individual frame. This article explains the technical workflow used by production professionals, deta" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="sync-laser-beam-animations-with-midi-timecode">Sync Laser Beam
+Animations with MIDI Timecode</h1>
+<p>Synchronizing laser beam animations with MIDI timecode (MTC) enables
+laser show operators to align complex optical effects with audio tracks
+down to the individual frame. This article explains the technical
+workflow used by production professionals, detailing how timecode
+signals travel from digital audio workstations to laser control
+software, how timeline cues are mapped, and how system latency is
+managed to achieve flawless audiovisual timing.</p>
+<h2 id="the-role-of-midi-timecode">The Role of MIDI Timecode</h2>
+<p>MIDI Timecode (MTC) translates standard SMPTE timecode
+(hours:minutes:seconds:frames) into digital MIDI quarter-frame and
+full-frame messages. In live production and pre-programmed concerts, an
+audio playback source—such as a Digital Audio Workstation (DAW) like
+Ableton Live or Pro Tools—acts as the master clock. As the track plays,
+the DAW outputs a continuous stream of MTC, establishing a unified
+reference point that dictates precisely when specific visual events must
+occur.</p>
+<h2 id="hardware-and-signal-routing">Hardware and Signal Routing</h2>
+<p>To receive MTC, the laser control computer connects to the master
+audio source via dedicated hardware. Common connection methods
+include:</p>
+<ul>
+<li><strong>Traditional 5-pin DIN MIDI:</strong> Handled through
+external USB-MIDI interfaces.</li>
+<li><strong>USB-MIDI:</strong> Direct USB host-to-device connections
+between controllers and the host PC.</li>
+<li><strong>Network-based MIDI (RTP-MIDI):</strong> MIDI data
+transmitted over standard Ethernet networks, ideal for long distances
+between front-of-house (FOH) positions and stage-side laser
+projectors.</li>
+</ul>
+<p>Once the physical or network connection is established, the laser
+computer routes the incoming MIDI signal to specialized laser control
+software such as Pangolin BEYOND, Pangolin QuickShow, or
+TouchDesigner.</p>
+<h2 id="software-configuration-and-timeline-mapping">Software
+Configuration and Timeline Mapping</h2>
+<p>In the laser control software, the operator selects the active MIDI
+input port and configures the system to act as a "timecode slave." The
+software must match the incoming frame rate (typically 24, 25, 29.97, or
+30 frames per second) to prevent drift.</p>
+<p>Once linked, the operator builds the show on a non-linear timeline.
+Laser animations, geometric beam chases, color shifts, and grating
+effects are placed at exact timecode coordinates. When the master audio
+system hits a specific timestamp—such as 01:02:15:12—the laser software
+instantly triggers the corresponding visual cue, keeping scanner
+movements locked to the music's transients.</p>
+<h2 id="latency-compensation-and-calibration">Latency Compensation and
+Calibration</h2>
+<p>Physical laser projectors rely on mechanical galvanometers (galvos)
+with moving mirrors to trace vector paths. While galvos move at
+thousands of points per second, slight latencies exist across the signal
+chain, including digital-to-analog conversion and network transport.</p>
+<p>Operators calibrate their systems using timecode offset settings
+within the software. By advancing or delaying the timeline by a few
+milliseconds, the operator compensates for internal audio latency and
+mirror response times. This ensures that fast beam hits and blackouts
+match the audio transients with zero perceptible delay.</p>
+<h2 id="live-safety-controls">Live Safety Controls</h2>
+<p>Even when running automated on a timecode track, laser shows require
+continuous supervision. Operators maintain manual override capabilities,
+including physical E-stops (emergency stops) and live attenuations. If
+an unexpected condition occurs—such as a performer moving into an
+unmasked audience zone—the operator can bypass the timecode stream
+instantly to terminate beam output while the rest of the show's timeline
+continues to roll.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

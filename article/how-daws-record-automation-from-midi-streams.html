@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DAWs Record Automation from MIDI Streams - midi</title>
+    <meta name="description" content="This article explains how digital audio workstations (DAWs) capture continuous incoming MIDI streams and translate them into editable, smooth vector automation curves. It covers the end-to-end technical process, including MIDI message reception, paramete">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-daws-record-automation-from-midi-streams">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DAWs Record Automation from MIDI Streams - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-daws-record-automation-from-midi-streams" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how digital audio workstations (DAWs) capture continuous incoming MIDI streams and translate them into editable, smooth vector automation curves. It covers the end-to-end technical process, including MIDI message reception, paramete" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-daws-record-automation-from-midi-streams">How DAWs Record
+Automation from MIDI Streams</h1>
+<p>This article explains how digital audio workstations (DAWs) capture
+continuous incoming MIDI streams and translate them into editable,
+smooth vector automation curves. It covers the end-to-end technical
+process, including MIDI message reception, parameter scaling, data
+thinning algorithms, and Bézier curve interpolation, breaking down how
+discrete digital events become continuous visual and musical automation
+lines.</p>
+<h3 id="1-ingestion-of-discrete-midi-messages">1. Ingestion of Discrete
+MIDI Messages</h3>
+<p>Hardware MIDI controllers do not output continuous analog voltage
+curves; they output discrete digital serial packets. When a user turns a
+knob, fader, or modulation wheel, the controller transmits standard MIDI
+Continuous Controller (CC), Pitch Bend, or Channel Pressure (Aftertouch)
+messages.</p>
+<ul>
+<li><strong>Resolution:</strong> Standard MIDI CC values are 7-bit,
+providing 128 discrete steps (values 0 to 127). High-resolution MIDI
+uses paired CC messages or MIDI 2.0 to deliver 14-bit (16,384 steps) or
+32-bit resolution.</li>
+<li><strong>Timestamping:</strong> The operating system's audio/MIDI
+framework (such as CoreMIDI on macOS, WASAPI/WinMM on Windows, or ALSA
+on Linux) receives these packets and attaches an accurate
+sample-accurate timestamp relative to the audio buffer.</li>
+<li><strong>Buffering:</strong> The DAW reads these timestamped packets
+into an input buffer during each audio processing cycle, aligning the
+incoming MIDI events precisely with the timeline position of the
+playhead.</li>
+</ul>
+<h3 id="2-parameter-mapping-and-value-normalization">2. Parameter
+Mapping and Value Normalization</h3>
+<p>Once ingested, the DAW must match the raw MIDI message to an internal
+software parameter, such as a synthesizer's filter cutoff or a mixer
+channel's volume fader.</p>
+<ul>
+<li><strong>Target Assignment:</strong> The DAW checks its internal
+mapping table (via MIDI Learn or hardcoded mappings) to link the
+incoming channel and CC number to a target parameter ID.</li>
+<li><strong>Normalization:</strong> Raw values (e.g., 0–127) are
+normalized into a floating-point range, typically between
+<code>0.0</code> and <code>1.0</code>.</li>
+<li><strong>Taper and Scaling:</strong> Most audio parameters are
+non-linear (such as logarithmic volume faders or exponential frequency
+ranges). The DAW applies a transfer function to convert the normalized
+<code>0.0</code>–<code>1.0</code> input into the target parameter's
+actual unit scale (e.g., decibels or Hertz).</li>
+</ul>
+<h3 id="3-data-thinning-and-noise-reduction">3. Data Thinning and Noise
+Reduction</h3>
+<p>Recording a fast-moving physical controller can generate hundreds of
+MIDI messages per second. Writing a separate automation node for every
+single MIDI message creates cluttered lanes, increases project file
+size, and strains CPU processing. To solve this, the DAW applies
+real-time or post-capture thinning algorithms:</p>
+<ul>
+<li><strong>Threshold Filtering:</strong> The DAW ignores successive
+incoming values that fall below a minimum change threshold unless a
+specified time interval has elapsed.</li>
+<li><strong>Decimation Algorithms:</strong> Algorithms such as the
+Ramer-Douglas-Peucker (RDP) algorithm analyze the recorded sequence of
+points. The algorithm identifies points that lie along a near-straight
+line and removes them, keeping only the essential inflection points that
+define the trajectory and velocity of the movement.</li>
+</ul>
+<h3 id="4-vectorization-and-curve-generation">4. Vectorization and Curve
+Generation</h3>
+<p>To transform discrete, stepped data points into a smooth automation
+envelope, the DAW generates mathematical curves between the surviving
+points:</p>
+<ul>
+<li><strong>Node Creation:</strong> The thinned data points are
+converted into discrete automation nodes containing timeline coordinates
+(time and value).</li>
+<li><strong>Bézier and Spline Interpolation:</strong> Instead of
+connecting points with rigid, linear segments (which can cause audible
+"zipper noise" or stepping artifacts), the DAW calculates tangent
+vectors between nodes. This creates cubic Bézier or Hermite curves that
+generate a continuous, analog-style transition across the audio
+timeline.</li>
+</ul>
+<h3 id="5-automation-modes-and-state-committing">5. Automation Modes and
+State Committing</h3>
+<p>The DAW incorporates incoming automation according to the selected
+track automation mode:</p>
+<ul>
+<li><strong>Write:</strong> Overwrites all existing automation across
+the timeline while the playhead moves, regardless of whether a control
+is actively sending new data.</li>
+<li><strong>Touch:</strong> Begins recording and overwriting existing
+automation only when incoming MIDI data is actively detected (or when a
+capacitive touch sensor on the hardware is engaged). When the stream
+stops, the curve smoothly returns to the pre-existing automation line
+via a user-defined ramp time.</li>
+<li><strong>Latch:</strong> Starts overwriting existing automation upon
+receiving the first MIDI message, but stays at the last received value
+even after the input stops, until playback is halted.</li>
+</ul>
+<p>Finally, the generated vector nodes and curve coefficients are
+written into the DAW project’s automation lane data structure in memory
+and committed to the session file upon saving. During playback, the DAW
+reads this curve and continuously interpolates floating-point values at
+audio-rate or control-rate to drive the target plugin parameter.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

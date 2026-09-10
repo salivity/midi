@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How FluidSynth Renders MIDI with SoundFonts - midi</title>
+    <meta name="description" content="FluidSynth is a real-time, software-based synthesizer that converts Standard MIDI Files (SMF) or live MIDI streams into audible digital audio using sample-based SoundFont specifications. This article explains the underlying architecture and synthesis pip">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-fluidsynth-renders-midi-with-soundfonts">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How FluidSynth Renders MIDI with SoundFonts - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-fluidsynth-renders-midi-with-soundfonts" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="FluidSynth is a real-time, software-based synthesizer that converts Standard MIDI Files (SMF) or live MIDI streams into audible digital audio using sample-based SoundFont specifications. This article explains the underlying architecture and synthesis pip" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-fluidsynth-renders-midi-with-soundfonts">How FluidSynth
+Renders MIDI with SoundFonts</h1>
+<p>FluidSynth is a real-time, software-based synthesizer that converts
+Standard MIDI Files (SMF) or live MIDI streams into audible digital
+audio using sample-based SoundFont specifications. This article explains
+the underlying architecture and synthesis pipeline of FluidSynth,
+covering how it parses SoundFont files, processes MIDI commands,
+allocates synthesis voices, applies digital signal processing (DSP)
+parameters, and mixes the final audio output.</p>
+<h3 id="soundfont-loading-and-data-structuring">SoundFont Loading and
+Data Structuring</h3>
+<p>Before any audio is rendered, FluidSynth loads a SoundFont file
+(typically in SF2 or compressed SF3 format) into system memory. A
+SoundFont acts as a hierarchical container:</p>
+<ol type="1">
+<li><strong>Samples:</strong> Raw, uncompressed PCM audio waveforms
+recorded from real instruments or synthesized sources.</li>
+<li><strong>Instruments:</strong> Collections of samples mapped across
+specific key ranges and velocity layers.</li>
+<li><strong>Presets:</strong> The user-facing patches (banks and program
+numbers) that group instruments together and define synthesis parameters
+known as "generators" (e.g., initial attenuation, filter cutoff,
+envelope timings) and "modulators" (e.g., routing velocity to filter
+frequency or LFO to pitch).</li>
+</ol>
+<p>FluidSynth indexes these parameters according to the SoundFont 2.04
+specification, preparing a lookup table that maps MIDI channels, bank
+numbers, and program changes directly to the correct sample data and
+articulation parameters.</p>
+<h3 id="midi-event-ingestion-and-dispatching">MIDI Event Ingestion and
+Dispatching</h3>
+<p>When playing a MIDI file, FluidSynth reads timestamped MIDI events in
+sequence. The engine handles these messages through an internal event
+queue:</p>
+<ul>
+<li><strong>Note-On:</strong> Triggers sound generation. FluidSynth
+looks at the current channel’s assigned bank and program, identifies the
+corresponding preset, and matches the note number and velocity to the
+correct sample zones.</li>
+<li><strong>Control Change (CC):</strong> Adjusts real-time parameters
+such as volume (CC 7), pan (CC 10), expression (CC 11), sustain pedal
+(CC 64), and effect sends.</li>
+<li><strong>Pitch Bend:</strong> Calculates microtonal pitch variations
+applied instantly to active notes.</li>
+<li><strong>Program Change:</strong> Switches the active instrument
+preset for a specific MIDI channel.</li>
+</ul>
+<h3 id="voice-allocation">Voice Allocation</h3>
+<p>For every Note-On event, FluidSynth creates one or more synthesis
+"voices." A single MIDI note can spawn multiple voices if the instrument
+zone is layered (for example, a stereo sample split across two
+independent channels, or multiple dynamic layers mapped to sound
+simultaneously).</p>
+<p>FluidSynth manages these voices dynamically using an internal voice
+pool. If the number of concurrent voices exceeds the user-configured
+polyphony limit, the engine executes a voice-stealing algorithm, quietly
+terminating the quietest, oldest, or release-phase voices to free up DSP
+cycles.</p>
+<h3 id="the-dsp-synthesis-pipeline">The DSP Synthesis Pipeline</h3>
+<p>Once a voice is active, FluidSynth computes audio in discrete frames
+(buffers) through a multi-stage DSP process:</p>
+<ol type="1">
+<li><strong>Wavetable Resampling:</strong> The raw sample rarely matches
+the exact pitch of the requested MIDI note. FluidSynth resamples the
+audio data on the fly to shift its pitch. To prevent aliasing and audio
+distortion, it uses selectable interpolation algorithms, ranging from
+basic linear interpolation to higher-order sinc interpolation.</li>
+<li><strong>Envelopes (DAHDSR):</strong> FluidSynth calculates two
+distinct envelopes per voice based on SoundFont parameters:
+<ul>
+<li><em>Volume Envelope:</em> Shapes the amplitude over time (Delay,
+Attack, Hold, Decay, Sustain, Release).</li>
+<li><em>Modulation Envelope:</em> Dynamically modulates parameters such
+as pitch or filter cutoff over time.</li>
+</ul></li>
+<li><strong>Low-Pass Filtering:</strong> Each voice passes through an
+emulated resonant low-pass biquad filter. FluidSynth adjusts the cutoff
+frequency in real time based on envelope states, LFOs, and MIDI
+controller inputs.</li>
+<li><strong>Low-Frequency Oscillators (LFOs):</strong> The engine
+evaluates internal LFOs to generate effects like vibrato (pitch
+modulation) and tremolo (amplitude modulation).</li>
+</ol>
+<h3 id="mixing-and-effects-processing">Mixing and Effects
+Processing</h3>
+<p>After processing the individual synthesis voices, FluidSynth mixes
+the dry audio streams into internal audio buses. During this stage,
+channel panning and volume settings are applied.</p>
+<p>The mixed signal is then routed into FluidSynth's integrated DSP
+effects units:</p>
+<ul>
+<li><strong>Chorus:</strong> Modulates delayed copies of the signal to
+create a wider, richer stereo image.</li>
+<li><strong>Reverb:</strong> Simulates acoustic space using an
+implementation of the Freeverb algorithm.</li>
+</ul>
+<h3 id="output-generation">Output Generation</h3>
+<p>Finally, FluidSynth outputs the mixed 32-bit floating-point audio
+data. Depending on how the library is utilized, this audio is either
+sent directly to hardware audio drivers (such as ALSA, PulseAudio, JACK,
+CoreAudio, or WASAPI) for real-time playback, or written directly to
+disk as uncompressed PCM audio (such as a WAV or raw audio file) in fast
+offline rendering mode.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

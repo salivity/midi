@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Hardware Monitors Display MIDI Data - midi</title>
+    <meta name="description" content="A MIDI hardware monitor intercepts the serial data stream flowing through a MIDI cable and translates raw electrical pulses into readable visual feedback on an LCD, OLED, or LED matrix display. These diagnostic devices analyze incoming digital messages,">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-hardware-monitors-display-midi-data">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Hardware Monitors Display MIDI Data - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-hardware-monitors-display-midi-data" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI hardware monitor intercepts the serial data stream flowing through a MIDI cable and translates raw electrical pulses into readable visual feedback on an LCD, OLED, or LED matrix display. These diagnostic devices analyze incoming digital messages," />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-midi-hardware-monitors-display-midi-data">How MIDI Hardware
+Monitors Display MIDI Data</h1>
+<p>A MIDI hardware monitor intercepts the serial data stream flowing
+through a MIDI cable and translates raw electrical pulses into readable
+visual feedback on an LCD, OLED, or LED matrix display. These diagnostic
+devices analyze incoming digital messages, breaking them down into
+status bytes, data bytes, and channel numbers so technicians, musicians,
+and engineers can verify routing, troubleshoot gear, and inspect message
+structures in real time. Depending on the operating mode, a monitor will
+present this information either as raw hexadecimal code or as parsed,
+plain-text musical events.</p>
+<h3 id="reading-status-bytes-and-channel-numbers">Reading Status Bytes
+and Channel Numbers</h3>
+<p>MIDI communicates via 8-bit bytes transmitted serially at 31.25
+kbaud. A status byte is distinguished by its most significant bit (MSB)
+being set to <code>1</code>, giving it a hexadecimal range of
+<code>0x80</code> to <code>0xFF</code>.</p>
+<p>When an incoming byte falls within this range, the monitor
+immediately recognizes it as a new command. For standard Channel Voice
+Messages (values <code>0x80</code> through <code>0xEF</code>), the
+monitor splits the byte into two 4-bit nibbles:</p>
+<ul>
+<li><strong>The Command Nibble (Upper 4 Bits):</strong> Identifies the
+message type. The monitor reads values <code>8</code> through
+<code>E</code> to identify commands such as Note Off (<code>8</code>),
+Note On (<code>9</code>), Polyphonic Aftertouch (<code>A</code>),
+Control Change (<code>B</code>), Program Change (<code>C</code>),
+Channel Pressure (<code>D</code>), and Pitch Bend (<code>E</code>).</li>
+<li><strong>The Channel Nibble (Lower 4 Bits):</strong> Identifies the
+target MIDI channel. The monitor reads the binary values from
+<code>0000</code> to <code>1111</code> (hex <code>0</code> to
+<code>F</code>), which correspond to values 0 to 15. The device adds 1
+to this value and outputs the standard user-facing MIDI channels:
+<code>CH 01</code> through <code>CH 16</code>.</li>
+</ul>
+<p>System messages (ranging from <code>0xF0</code> to
+<code>0xFF</code>), such as System Exclusive (SysEx), MIDI Clock, Start,
+and Stop, do not contain channel information. When these are detected,
+the monitor omits the channel indicator and displays the global system
+event name instead.</p>
+<h3 id="interpreting-data-bytes">Interpreting Data Bytes</h3>
+<p>Following a status byte, the monitor captures incoming data bytes.
+Data bytes are identified by an MSB of <code>0</code>, giving them a
+numerical range from <code>0x00</code> to <code>0x7F</code> (0 to 127 in
+decimal).</p>
+<p>The monitor checks the preceding status byte to determine how many
+data bytes to expect and how to format them:</p>
+<ul>
+<li><strong>Two Data Bytes (e.g., Note On, Note Off, Control
+Change):</strong> The first byte represents the parameter (such as note
+number or controller number), and the second byte represents the
+magnitude (such as velocity or controller value). The monitor pairs them
+sequentially.</li>
+<li><strong>One Data Byte (e.g., Program Change, Channel
+Pressure):</strong> The monitor waits for only a single value (such as
+patch number 0–127) before expecting the next message.</li>
+<li><strong>Variable Length (SysEx):</strong> The monitor lists a stream
+of data bytes until it intercepts an End of Exclusive
+(<code>0xF7</code>) status byte.</li>
+</ul>
+<h3 id="formats-of-the-visual-display">Formats of the Visual
+Display</h3>
+<p>Hardware monitors generally provide two ways to view the incoming
+data:</p>
+<ol type="1">
+<li><p><strong>Decoded/Text Mode:</strong> The monitor runs internal
+firmware lookup tables to translate the bytes into common musical
+terminology. For example, if the monitor receives the byte sequence
+<code>90 3C 64</code>, it parses the status byte <code>90</code> as a
+Note On command on Channel 1, the first data byte <code>3C</code>
+(decimal 60) as note C4, and the second data byte <code>64</code>
+(decimal 100) as the velocity. The display output appears cleanly
+structured: <code>CH: 01 | NOTE ON | C4 | VEL: 100</code></p></li>
+<li><p><strong>Raw/Hexadecimal Mode:</strong> For low-level debugging,
+the monitor bypasses translation and prints the exact byte stream as it
+arrives across the optocoupler. Using the previous example, the screen
+directly outputs: <code>90 3C 64</code></p></li>
+</ol>
+<h3 id="handling-running-status">Handling Running Status</h3>
+<p>To conserve bandwidth, the MIDI protocol allows the transmission of
+data bytes without repeating the status byte if the subsequent command
+is identical to the previous one. A MIDI hardware monitor maintains an
+internal memory register of the last active status byte. If it receives
+a byte starting with an MSB of <code>0</code> when a status byte was
+expected, it automatically associates the incoming data with the stored
+status and channel, displaying the correct command without interrupting
+the log.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

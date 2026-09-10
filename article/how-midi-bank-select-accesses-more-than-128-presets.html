@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Bank Select Accesses More Than 128 Presets - midi</title>
+    <meta name="description" content="The original MIDI specification limits sound selection to 128 patches due to the 7-bit architecture of standard Program Change messages. To overcome this limitation, the MIDI Manufacturers Association introduced the Bank Select protocol, which uses stand">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-bank-select-accesses-more-than-128-presets">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Bank Select Accesses More Than 128 Presets - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-bank-select-accesses-more-than-128-presets" />
+    <meta property="og:image:url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The original MIDI specification limits sound selection to 128 patches due to the 7-bit architecture of standard Program Change messages. To overcome this limitation, the MIDI Manufacturers Association introduced the Bank Select protocol, which uses stand" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-midi-bank-select-accesses-more-than-128-presets">How MIDI
+Bank Select Accesses More Than 128 Presets</h1>
+<p>The original MIDI specification limits sound selection to 128 patches
+due to the 7-bit architecture of standard Program Change messages. To
+overcome this limitation, the MIDI Manufacturers Association introduced
+the Bank Select protocol, which uses standard Continuous Controller (CC)
+messages to organize patches into hierarchical folders or "banks." By
+transmitting Bank Select messages immediately before a Program Change
+message, modern synthesizers, virtual instruments, and sound modules can
+access over two million distinct sound presets across a single MIDI
+channel.</p>
+<h3 id="the-original-7-bit-limitation">The Original 7-Bit
+Limitation</h3>
+<p>When the MIDI standard was established in 1983, sound modules rarely
+contained more than a few dozen sounds. Data bytes in standard MIDI
+channel messages were defined using 7 bits, providing a numerical range
+of 0 to 127. Consequently, the standard Program Change (PC) command can
+only address a maximum of 128 unique values (<span
+class="math inline">\(2^7 = 128\)</span>). As sample libraries and
+digital synthesis advanced, hardware modules quickly exceeded this
+capacity, requiring an addressing system that retained backward
+compatibility with legacy MIDI hardware.</p>
+<h3 id="the-role-of-cc-0-and-cc-32">The Role of CC 0 and CC 32</h3>
+<p>Bank Select solves the addressing bottleneck by combining standard
+Control Change (CC) messages with the standard Program Change message.
+Rather than replacing the 7-bit Program Change command, Bank Select
+repurposes two existing MIDI CC controllers to act as bank pointers:</p>
+<ul>
+<li><strong>CC 0 (Bank Select MSB):</strong> Represents the Most
+Significant Byte, providing coarse bank selection across 128 values
+(0–127).</li>
+<li><strong>CC 32 (Bank Select LSB):</strong> Represents the Least
+Significant Byte, providing fine bank selection across 128 values
+(0–127).</li>
+</ul>
+<p>Combining both 7-bit controllers creates a 14-bit addressing space
+(<span class="math inline">\(128 \times 128\)</span>), yielding 16,384
+possible sound banks. Because each individual bank retains the ability
+to hold 128 Program Change patches, the theoretical capacity expands
+significantly:</p>
+<p><span class="math display">\[\text{16,384 Banks} \times \text{128
+Patches} = \text{2,097,152 Total Presets}\]</span></p>
+<h3 id="execution-order-in-midi-transmission">Execution Order in MIDI
+Transmission</h3>
+<p>Bank Select commands do not load a sound on their own. Instead, they
+tell the receiving device which directory or bank to cue up. The module
+will not switch its active patch until it receives the final Program
+Change instruction.</p>
+<p>For a sound module to properly load a patch located outside the base
+128 presets, the transmitting device (such as a DAW or MIDI controller)
+must send data in this exact sequential order:</p>
+<ol type="1">
+<li><strong>CC 0 (MSB):</strong> Identifies the primary bank group.</li>
+<li><strong>CC 32 (LSB):</strong> Identifies the sub-bank within that
+group.</li>
+<li><strong>Program Change:</strong> Triggers the specific patch (0–127)
+within that selected bank.</li>
+</ol>
+<p>If a module receives a Program Change without prior Bank Select
+messages, it simply swaps patches within the currently active bank.</p>
+<h3 id="manufacturer-variations">Manufacturer Variations</h3>
+<p>While the protocol is standard, hardware manufacturers implement Bank
+Select according to their specific preset structures:</p>
+<ul>
+<li><strong>MSB Only:</strong> Devices with 128 banks or fewer often
+only listen to CC 0 (MSB) and ignore CC 32 (LSB), allowing access to up
+to 16,384 sounds (<span class="math inline">\(128 \times
+128\)</span>).</li>
+<li><strong>LSB Only:</strong> Some manufacturers, particularly in older
+legacy devices, map banks primarily through CC 32 while holding CC 0 at
+a constant value of 0.</li>
+<li><strong>General MIDI Level 2 (GM2):</strong> The GM2 standard
+strictly specifies that CC 0 must be set to 121 (for melodic
+instruments) or 120 (for drum kits), while CC 32 dictates the specific
+bank variation, ensuring uniform patch recall across different
+brands.</li>
+</ul>
+<p>By layering CC 0 and CC 32 ahead of the standard Program Change
+command, MIDI provides a flexible, modular addressing system that
+accommodates modern multi-gigabyte preset libraries while maintaining
+full compatibility with the core MIDI standard.</p></article>
+        <div id="comments-container"></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
