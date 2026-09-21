@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MTC Quarter-Frame Messages Distribute Timecode - midi</title>
+    <meta name="description" content="MIDI Time Code (MTC) provides a way to transmit SMPTE timecode data across standard MIDI connections without overwhelming the protocol's 31.25 kbaud bandwidth. Instead of sending an entire timecode address in a single data-heavy transmission, MTC divides">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-mtc-quarter-frame-messages-distribute-timecode">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MTC Quarter-Frame Messages Distribute Timecode - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-mtc-quarter-frame-messages-distribute-timecode" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Time Code (MTC) provides a way to transmit SMPTE timecode data across standard MIDI connections without overwhelming the protocol's 31.25 kbaud bandwidth. Instead of sending an entire timecode address in a single data-heavy transmission, MTC divides" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-mtc-quarter-frame-messages-distribute-timecode">How MTC
+Quarter-Frame Messages Distribute Timecode</h1>
+<p>MIDI Time Code (MTC) provides a way to transmit SMPTE timecode data
+across standard MIDI connections without overwhelming the protocol's
+31.25 kbaud bandwidth. Instead of sending an entire timecode address in
+a single data-heavy transmission, MTC divides a complete SMPTE timecode
+value—representing hours, minutes, seconds, and frames—into eight
+individual pieces. These pieces are delivered as short, two-byte
+"quarter-frame" MIDI messages spaced evenly across two full frames of
+video or audio playback, allowing continuous synchronization with
+minimal data overhead.</p>
+<h3 id="the-quarter-frame-message-structure">The Quarter-Frame Message
+Structure</h3>
+<p>Each quarter-frame message is a MIDI System Common message consisting
+of exactly two bytes:</p>
+<ol type="1">
+<li><strong>Status Byte (<code>0xF1</code>):</strong> Identifies the
+message as an MTC Quarter Frame transmission.</li>
+<li><strong>Data Byte (<code>0nnndddd</code>):</strong> Carries both a
+routing identifier and the actual timecode payload:
+<ul>
+<li>The most significant bit is always <code>0</code> (as required for
+standard MIDI data bytes).</li>
+<li>The next three bits (<code>nnn</code>) specify the sequence position
+or message type, running from <code>0</code> to <code>7</code>.</li>
+<li>The remaining four bits (<code>dddd</code>) carry a nibble (a 4-bit
+segment) of the SMPTE timecode data.</li>
+</ul></li>
+</ol>
+<h3 id="the-8-burst-distribution-breakdown">The 8-Burst Distribution
+Breakdown</h3>
+<p>A complete SMPTE timecode requires 32 bits to fully specify the frame
+rate, hours (0–23), minutes (0–59), seconds (0–59), and frames (0–29).
+The quarter-frame scheme delivers these 32 bits across eight sequential
+bursts:</p>
+<ul>
+<li><strong>Message 0:</strong> Frame Count (Bits 0–3, low nibble)</li>
+<li><strong>Message 1:</strong> Frame Count (Bit 4, high nibble; upper
+bits are padded with zeros)</li>
+<li><strong>Message 2:</strong> Seconds (Bits 0–3, low nibble)</li>
+<li><strong>Message 3:</strong> Seconds (Bits 4–5, high nibble)</li>
+<li><strong>Message 4:</strong> Minutes (Bits 0–3, low nibble)</li>
+<li><strong>Message 5:</strong> Minutes (Bits 4–5, high nibble)</li>
+<li><strong>Message 6:</strong> Hours (Bits 0–3, low nibble)</li>
+<li><strong>Message 7:</strong> Hours (Bit 4, high nibble) combined with
+the Time Code Type (Bits 5–6, representing 24 fps, 25 fps, 30 fps
+drop-frame, or 30 fps non-drop)</li>
+</ul>
+<h3 id="transmission-timing-and-reassembly">Transmission Timing and
+Reassembly</h3>
+<p>As the name implies, quarter-frame messages are sent four times per
+timecode frame (at the start of each quarter of a frame). For example,
+at a standard rate of 30 frames per second, a frame lasts approximately
+33.3 milliseconds; therefore, a quarter-frame message is sent roughly
+every 8.33 milliseconds.</p>
+<p>Because it takes eight sequential messages to transmit the entire set
+of nibbles, two full timecode frames must elapse before the receiving
+device receives a complete, updated SMPTE location.</p>
+<p>During playback, the receiving equipment does not wait for a full
+eight-message cycle to track time. Instead, it uses the arrival of each
+individual quarter-frame message as a high-resolution clock pulse,
+incrementing its internal counter and interpolating between full-frame
+readouts. Once Message 7 arrives, the receiver verifies the
+reconstructed hours, minutes, seconds, and frame number, adjusting for
+the two-frame offset that occurred during the transmission cycle.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

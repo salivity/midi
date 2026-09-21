@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Thru Boxes Split Signals Without Latency - midi</title>
+    <meta name="description" content="A MIDI Thru box duplicates a single incoming MIDI data stream across multiple outputs simultaneously without introducing perceptible delay by operating entirely at the hardware level. Instead of decoding, storing, and resending data using a microprocesso">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-thru-boxes-split-signals-without-latency">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Thru Boxes Split Signals Without Latency - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-thru-boxes-split-signals-without-latency" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI Thru box duplicates a single incoming MIDI data stream across multiple outputs simultaneously without introducing perceptible delay by operating entirely at the hardware level. Instead of decoding, storing, and resending data using a microprocesso" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-thru-boxes-split-signals-without-latency">How MIDI Thru
+Boxes Split Signals Without Latency</h1>
+<p>A MIDI Thru box duplicates a single incoming MIDI data stream across
+multiple outputs simultaneously without introducing perceptible delay by
+operating entirely at the hardware level. Instead of decoding, storing,
+and resending data using a microprocessor, the device utilizes dedicated
+analog and digital electronic components—specifically optocouplers and
+logic gate buffers—to mirror the raw electrical pulses directly. This
+approach ensures that the propagation delay is measured in mere
+nanoseconds, effectively delivering zero digital processing latency.</p>
+<h3 id="the-problem-with-software-based-routing">The Problem with
+Software-Based Routing</h3>
+<p>In digital processing devices, such as computers, USB MIDI
+interfaces, or microcontroller-driven routers, incoming serial data must
+be received by a Universal Asynchronous Receiver-Transmitter (UART). The
+system reads each byte into a memory buffer, triggers an interrupt,
+processes the data through firmware or an operating system, and queues
+it for retransmission.</p>
+<p>Because standard MIDI operates at a modest transmission rate of 31.25
+kilobits per second, transmitting a single 3-byte MIDI message takes
+nearly a millisecond. When software queuing, buffer cycles, and
+operating system scheduling are added to the chain, latency accumulates
+rapidly, resulting in audible timing jitter and sluggish performance
+across chained instruments.</p>
+<h3 id="the-physical-signal-path-of-an-active-midi-thru-box">The
+Physical Signal Path of an Active MIDI Thru Box</h3>
+<p>An active hardware MIDI Thru box bypasses the digital processing
+layer altogether. Its internal architecture relies on a purely discrete
+signal path:</p>
+<ol type="1">
+<li><strong>Optical Isolation (Input Stage):</strong> Standard MIDI
+specifications require inputs to be optically isolated to prevent ground
+loops between audio gear. The incoming 5-volt current loop signal powers
+an internal LED inside a high-speed optocoupler (such as a 6N138 or
+PC900). A phototransistor on the other side of the barrier detects the
+light pulses and converts them into a standard TTL/CMOS digital voltage
+signal. High-speed optocouplers complete this state change in less than
+a microsecond.</li>
+<li><strong>Logic-Gate Splitting (The Distribution Stage):</strong> Once
+the optocoupler converts the current loop into a digital voltage
+waveform, the signal does not route to a central processing unit (CPU).
+Instead, it feeds directly into the inputs of hardware logic chips,
+commonly Schmitt-trigger hex inverters or non-inverting buffers (such as
+the 74HC14 or 74HC04 integrated circuits).</li>
+<li><strong>Parallel Signal Replication:</strong> By tying multiple
+logic gates to the single output of the optocoupler, the high and low
+voltage states are instantly mirrored across multiple independent output
+lines. The Schmitt triggers also serve to "square off" and clean up any
+signal degradation or edge rounding caused by long input cables.</li>
+<li><strong>Current-Loop Output Drivers:</strong> Each buffered output
+path runs through a pair of current-limiting resistors directly to pins
+4 and 5 of the individual MIDI Thru output jacks, transforming the
+voltage states back into compliant 5-volt current loops ready to drive
+downstream synthesizers and drum machines.</li>
+</ol>
+<h3 id="propagation-delay-vs-processing-latency">Propagation Delay vs.
+Processing Latency</h3>
+<p>Because the entire process is handled by physical silicon switches
+rather than algorithmic execution, the time required for an electrical
+pulse to travel from the input pin to all output pins is determined
+strictly by the component propagation delays:</p>
+<ul>
+<li><strong>Optocoupler switching time:</strong> Approximately 100 to
+500 nanoseconds.</li>
+<li><strong>Logic gate propagation time:</strong> Approximately 8 to 15
+nanoseconds per gate.</li>
+</ul>
+<p>In total, the end-to-end transit time through an active MIDI Thru box
+is well under one microsecond (0.001 milliseconds). In comparison, a
+single bit of MIDI data at 31.25 kbaud lasts 32 microseconds. Because
+the signal replicates in a tiny fraction of the time it takes for even a
+single data bit to finish transmitting, the device introduces zero
+measurable or perceptible latency to the digital musical
+performance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

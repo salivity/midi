@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonjour and Apple Network MIDI Discovery - midi</title>
+    <meta name="description" content="Bonjour serves as the zero-configuration networking backbone for Apple Network MIDI, enabling devices on a local area network to locate and connect with one another automatically. By leveraging Multicast DNS (mDNS) and DNS-Based Service Discovery (DNS-SD">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/bonjour-and-apple-network-midi-discovery">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Bonjour and Apple Network MIDI Discovery - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/bonjour-and-apple-network-midi-discovery" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Bonjour serves as the zero-configuration networking backbone for Apple Network MIDI, enabling devices on a local area network to locate and connect with one another automatically. By leveraging Multicast DNS (mDNS) and DNS-Based Service Discovery (DNS-SD" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="bonjour-and-apple-network-midi-discovery">Bonjour and Apple
+Network MIDI Discovery</h1>
+<p>Bonjour serves as the zero-configuration networking backbone for
+Apple Network MIDI, enabling devices on a local area network to locate
+and connect with one another automatically. By leveraging Multicast DNS
+(mDNS) and DNS-Based Service Discovery (DNS-SD), Bonjour eliminates the
+need for musicians and audio engineers to manually enter IP addresses,
+subnet masks, or port numbers. Instead, available MIDI sessions are
+automatically advertised and populated directly inside macOS, iOS, and
+compatible third-party MIDI tools for seamless real-time
+interaction.</p>
+<h3
+id="zero-configuration-discovery-via-mdns-and-dns-sd">Zero-Configuration
+Discovery via mDNS and DNS-SD</h3>
+<p>Network MIDI on Apple platforms is built on top of RTP-MIDI
+(Real-time Transport Protocol for MIDI), which transmits timing and
+performance data across standard Ethernet or Wi-Fi networks. Underneath
+this transport layer, Bonjour performs two fundamental functions:</p>
+<ul>
+<li><strong>Multicast DNS (mDNS):</strong> Translates human-readable
+names (such as <code>Studio-Mac.local</code>) into local IP addresses
+without requiring a dedicated, central DNS server.</li>
+<li><strong>DNS Service Discovery (DNS-SD):</strong> Broadcasts specific
+service records across the local subnet, announcing that an application
+or device is prepared to send or receive MIDI network traffic.</li>
+</ul>
+<h3 id="the-_apple-midi_udp-service-type">The
+<code>_apple-midi._udp</code> Service Type</h3>
+<p>When a Network MIDI session is created in the macOS Audio MIDI Setup
+utility or via an iOS core MIDI app, Bonjour advertises the endpoint
+under the dedicated service registration type:
+<code>_apple-midi._udp</code>.</p>
+<p>This registration broadcasts the following parameters:</p>
+<ul>
+<li><strong>Session Name:</strong> The friendly display name visible to
+other users.</li>
+<li><strong>Port Number:</strong> The dynamic or designated UDP port
+assigned to handle MIDI clock, control change, and note data.</li>
+<li><strong>Host Address:</strong> The local network location of the
+broadcasting device.</li>
+</ul>
+<h3 id="real-time-session-browsing-in-macos-and-ios">Real-Time Session
+Browsing in macOS and iOS</h3>
+<p>Because Bonjour continuously listens for service announcements and
+revocations, the "Directory" list in macOS Network MIDI Setup updates
+dynamically. When a new device on the network enables an Apple MIDI
+session, Bonjour detects the <code>_apple-midi._udp</code> broadcast and
+immediately lists the session as available. Conversely, if a device
+disconnects or leaves the network, Bonjour detects the absence of the
+service and removes it from the directory list, preventing failed
+connection attempts.</p>
+<h3 id="handoff-to-rtp-midi">Handoff to RTP-MIDI</h3>
+<p>Bonjour's responsibility is strictly limited to discovery,
+resolution, and name mapping. Once a user initiates a connection to a
+discovered session, Bonjour supplies the target IP address and port to
+the underlying operating system. At that stage, standard RTP-MIDI
+protocol mechanisms take over to negotiate session initiation, manage
+synchronization, establish latency compensation, and transmit musical
+data.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

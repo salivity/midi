@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Note 60 Is Middle C - midi</title>
+    <meta name="description" content="In electronic music production, MIDI note 60 universally corresponds to Middle C because of how the MIDI 1.0 specification mapped standard acoustic instruments onto binary architecture. When standardizing the protocol in the early 1980s, engineers chose">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-note-60-is-middle-c">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Note 60 Is Middle C - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-note-60-is-middle-c" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In electronic music production, MIDI note 60 universally corresponds to Middle C because of how the MIDI 1.0 specification mapped standard acoustic instruments onto binary architecture. When standardizing the protocol in the early 1980s, engineers chose" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-note-60-is-middle-c">Why MIDI Note 60 Is Middle C</h1>
+<p>In electronic music production, MIDI note 60 universally corresponds
+to Middle C because of how the MIDI 1.0 specification mapped standard
+acoustic instruments onto binary architecture. When standardizing the
+protocol in the early 1980s, engineers chose an 7-bit data structure
+that offers 128 discrete note values (0 to 127). Assigning Middle C to
+number 60 allowed the standard 88-key piano keyboard to sit near the
+exact center of this digital range, leaving equal headroom for sub-bass
+notes below and ultra-high frequencies above.</p>
+<h3 id="the-7-bit-data-limit">The 7-Bit Data Limit</h3>
+<p>Digital communication protocols rely on binary bytes. The creators of
+MIDI designated 7 bits of each data byte to represent pitch values,
+yielding <span class="math inline">\(2^7\)</span> or 128 unique note
+numbers ranging from 0 to 127. Because Western musical tuning relies on
+12-tone equal temperament, each increment of 1 represents a single
+semitone, allowing the MIDI system to span 10 complete octaves plus
+eight extra semitones.</p>
+<h3 id="centering-the-88-key-acoustic-piano">Centering the 88-Key
+Acoustic Piano</h3>
+<p>The primary goal of MIDI was to allow keyboards and synthesizers from
+competing manufacturers to communicate seamlessly. Designing the scale
+around the standard 88-key acoustic piano was essential:</p>
+<ul>
+<li>The lowest note on an 88-key piano is <strong>A0</strong>,
+designated as <strong>MIDI note 21</strong>.</li>
+<li>The highest note on an 88-key piano is <strong>C8</strong>,
+designated as <strong>MIDI note 108</strong>.</li>
+</ul>
+<p>By placing the standard piano layout between 21 and 108, the system
+leaves 21 notes below the piano's lowest key (notes 0 through 20) for
+sub-bass sounds and controller triggers, and 19 notes above the highest
+key (notes 109 through 127) for extended high frequencies.</p>
+<h3 id="the-semitone-math-leading-to-note-60">The Semitone Math Leading
+to Note 60</h3>
+<p>Middle C is musically identified as C4 in standard scientific pitch
+notation (roughly 261.63 Hz). Moving upward by 12 semitones per octave
+from the lowest theoretical MIDI note creates a precise mathematical
+progression:</p>
+<ul>
+<li><strong>Note 0:</strong> C-1 (lowest possible MIDI note)</li>
+<li><strong>Note 12:</strong> C0</li>
+<li><strong>Note 24:</strong> C1</li>
+<li><strong>Note 36:</strong> C2</li>
+<li><strong>Note 48:</strong> C3</li>
+<li><strong>Note 60:</strong> C4 (Middle C)</li>
+<li><strong>Note 72:</strong> C5</li>
+<li><strong>Note 84:</strong> C6</li>
+<li><strong>Note 96:</strong> C7</li>
+<li><strong>Note 108:</strong> C8 (highest standard piano key)</li>
+<li><strong>Note 120:</strong> C9</li>
+</ul>
+<p>Because note 0 was assigned to C, every subsequent C lands on an
+exact multiple of 12. Note 60 is the fifth octave marker, placing it
+directly in the center of human vocal ranges and the middle of the
+keyboard.</p>
+<h3 id="the-c3-vs-c4-labeling-discrepancy">The C3 vs. C4 Labeling
+Discrepancy</h3>
+<p>While MIDI note 60 always triggers the exact same frequency across
+every electronic keyboard, digital audio workstations (DAWs) and
+manufacturers sometimes label it differently. Roland and modern software
+standards label note 60 as <strong>C4</strong>, treating note 0 as C-1.
+Yamaha historically designated note 60 as <strong>C3</strong>, treating
+note 0 as C-2. Despite these cosmetic labeling differences on screen,
+the underlying binary data transmitted over the cable or USB connection
+is always integer 60.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Modern MIDI Over Wi-Fi Maintains Timing Integrity - midi</title>
+    <meta name="description" content="Modern MIDI over Wi-Fi enables wireless music production and performance without physical cables, but wireless networks naturally introduce packet jitter, latency, and dropouts that can degrade musical timing. This article examines the technical mechanis">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-modern-midi-over-wi-fi-maintains-timing-integrity">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Modern MIDI Over Wi-Fi Maintains Timing Integrity - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-modern-midi-over-wi-fi-maintains-timing-integrity" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern MIDI over Wi-Fi enables wireless music production and performance without physical cables, but wireless networks naturally introduce packet jitter, latency, and dropouts that can degrade musical timing. This article examines the technical mechanis" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-modern-midi-over-wi-fi-maintains-timing-integrity">How
+Modern MIDI Over Wi-Fi Maintains Timing Integrity</h1>
+<p>Modern MIDI over Wi-Fi enables wireless music production and
+performance without physical cables, but wireless networks naturally
+introduce packet jitter, latency, and dropouts that can degrade musical
+timing. This article examines the technical mechanisms—including the
+RTP-MIDI protocol, high-precision clock synchronization, jitter buffers,
+and Wi-Fi Quality of Service (QoS)—that modern setups use to ensure
+wireless MIDI transmissions remain tightly synchronized and musically
+responsive.</p>
+<h3 id="the-challenge-of-wireless-transmission">The Challenge of
+Wireless Transmission</h3>
+<p>Traditional 5-pin DIN or USB MIDI relies on immediate, direct serial
+transmission where messages are executed as soon as they are received.
+Wi-Fi networks, however, operate on shared radio spectrums using
+packet-based communication. This environment introduces latency (the
+delay between sending and receiving data) and jitter (variance in
+arrival times between consecutive packets). For musicians, even a few
+milliseconds of jitter disrupts human perception of rhythm and groove,
+while dropped packets can result in stuck notes or missed triggers.</p>
+<h3 id="rtp-midi-and-udp-architecture">RTP-MIDI and UDP
+Architecture</h3>
+<p>Modern wireless MIDI implementations overwhelmingly rely on the
+RTP-MIDI specification (RFC 6295), commonly recognized in consumer
+hardware and operating systems as AppleMIDI.</p>
+<p>Unlike standard networking protocols such as TCP, which prioritize
+guaranteed delivery by retransmitting dropped packets and causing
+unpredictable latency spikes, RTP-MIDI utilizes User Datagram Protocol
+(UDP). UDP transmits lightweight packets with minimal network overhead.
+Because real-time performance favors speed over retroactive data
+delivery, UDP allows MIDI messages to flow with the lowest possible
+baseline latency.</p>
+<h3 id="clock-synchronization-and-microsecond-timestamping">Clock
+Synchronization and Microsecond Timestamping</h3>
+<p>The primary method for maintaining timing integrity across Wi-Fi is
+timestamping combined with continuous clock synchronization.</p>
+<ol type="1">
+<li><strong>Clock Synchronization:</strong> Before sending musical data,
+the transmitting device and the receiving device establish a shared
+sense of time through an exchange of synchronization packets. By
+measuring the round-trip time between devices, the protocol calculates
+the network offset and aligns the receiver's local clock to the sender's
+clock down to sub-millisecond or microsecond accuracy.</li>
+<li><strong>Event Timestamping:</strong> When a note is played, the
+sender does not instruct the receiver to play it "now." Instead, the
+sender embeds a precise timestamp indicating the exact moment the event
+occurred relative to the synchronized clock.</li>
+</ol>
+<h3 id="jitter-buffers-and-scheduled-playback">Jitter Buffers and
+Scheduled Playback</h3>
+<p>Because packets arrive intermittently across a Wi-Fi link, receiving
+devices implement a dynamic jitter buffer.</p>
+<p>When timestamped packets arrive out of rhythm, the receiving system
+temporarily holds them in this buffer for a predetermined, minimal
+window (often between 1 and 5 milliseconds). Instead of triggering notes
+upon packet arrival, the receiver schedules playback according to the
+embedded timestamps. This reconstructs the original performance timing
+perfectly, effectively converting variable network jitter into a fixed,
+imperceptible latency.</p>
+<h3 id="packet-loss-handling-via-recovery-journals">Packet Loss Handling
+via Recovery Journals</h3>
+<p>In standard MIDI, a dropped "Note Off" packet results in an
+indefinitely sustained note. RTP-MIDI solves this through a built-in
+recovery journal mechanism.</p>
+<p>Each RTP-MIDI packet carries not only new note events but also a
+compressed historical snapshot of recent channel states, active notes,
+and controller values. If a single Wi-Fi packet drops, the subsequent
+packet contains enough context for the receiver to detect the missing
+data, immediately update its internal state, and cut off any notes that
+should have stopped. This prevents corrupted performances without
+waiting for network retransmissions.</p>
+<h3 id="network-layer-optimizations-and-hardware-standards">Network
+Layer Optimizations and Hardware Standards</h3>
+<p>Modern Wi-Fi standards complement protocol-level solutions:</p>
+<ul>
+<li><strong>Wi-Fi Multimedia (WMM):</strong> Modern routers and network
+adapters use WMM to classify MIDI packets with the highest Quality of
+Service (QoS) priority, ensuring MIDI data bypasses background file
+downloads and general network traffic.</li>
+<li><strong>5 GHz and 6 GHz Bands:</strong> Shifting wireless MIDI from
+congested 2.4 GHz frequencies to 5 GHz and 6 GHz (Wi-Fi 6/6E) bands
+drastically reduces channel contention, radio interference, and packet
+collisions, providing the stable transmission environment necessary for
+professional timing standards.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

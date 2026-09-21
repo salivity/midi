@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI CC for Stereo Pan Position - midi</title>
+    <meta name="description" content="In MIDI production, spatial placement of an audio signal across the stereo field is handled by standard Continuous Controller (CC) messages. This article explains the universal MIDI CC message assigned to stereo panning, detailing its standard controller">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cc-for-stereo-pan-position">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI CC for Stereo Pan Position - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cc-for-stereo-pan-position" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In MIDI production, spatial placement of an audio signal across the stereo field is handled by standard Continuous Controller (CC) messages. This article explains the universal MIDI CC message assigned to stereo panning, detailing its standard controller" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-cc-for-stereo-pan-position">MIDI CC for Stereo Pan
+Position</h1>
+<p>In MIDI production, spatial placement of an audio signal across the
+stereo field is handled by standard Continuous Controller (CC) messages.
+This article explains the universal MIDI CC message assigned to stereo
+panning, detailing its standard controller number, the range of values
+used to position sound between the left and right channels, and
+practical applications for mixing and automation in modern digital audio
+workstations.</p>
+<h2 id="the-standard-midi-cc-10">The Standard: MIDI CC 10</h2>
+<p>The universal MIDI Continuous Controller assigned to pan position
+across stereo fields is <strong>MIDI CC 10</strong>.</p>
+<p>Established by the MIDI Manufacturers Association (now The MIDI
+Association) in the original MIDI 1.0 specification, CC 10 is recognized
+natively by hardware synthesizers, virtual instruments (VSTs), and
+digital audio workstations (DAWs) worldwide.</p>
+<h2 id="understanding-the-value-range">Understanding the Value
+Range</h2>
+<p>Like most standard 7-bit MIDI CC messages, MIDI CC 10 operates on a
+numeric scale ranging from 0 to 127. These values map linearly across
+the stereo field:</p>
+<ul>
+<li><strong>Value 0:</strong> Hard Left</li>
+<li><strong>Value 64:</strong> Dead Center</li>
+<li><strong>Value 127:</strong> Hard Right</li>
+</ul>
+<p>A value of 64 represents the neutral center position, sending an
+equal signal balance to both left and right outputs. Values from 0 to 63
+incrementally shift the sound toward the left speaker, while values from
+65 to 127 shift it toward the right.</p>
+<h2 id="cc-10-vs-cc-8-pan-vs-balance">CC 10 vs. CC 8 (Pan vs.
+Balance)</h2>
+<p>While CC 10 is the universal standard for panning, the MIDI
+specification also includes <strong>CC 8 (Balance)</strong>:</p>
+<ul>
+<li><strong>CC 10 (Pan):</strong> Intended for positioning a monophonic
+source within a stereo field or adjusting the overall stereo placement
+of an instrument.</li>
+<li><strong>CC 8 (Balance):</strong> Intended to adjust the relative
+volume between the left and right channels of an already stereo source
+without changing the spatial positioning of the individual
+components.</li>
+</ul>
+<p>In modern music production, CC 10 is overwhelmingly the preferred
+message used by DAWs and software instruments for both panning
+duties.</p>
+<h2 id="practical-implementation-and-automation">Practical
+Implementation and Automation</h2>
+<p>When working with MIDI CC 10, automation curves can be drawn directly
+into the MIDI continuous controller lane of a DAW. This allows for
+dynamic spatial movement, such as:</p>
+<ul>
+<li><strong>Auto-panning effects:</strong> Modulating CC 10 with an LFO
+or drawn automation to create rhythmic movement between the left and
+right monitors.</li>
+<li><strong>Orchestral placement:</strong> Setting static CC 10 values
+on different orchestral instrument tracks (e.g., violins panned left,
+cellos panned right) to emulate the physical layout of an acoustic
+orchestra.</li>
+<li><strong>Mix separation:</strong> Spreading doubled tracks, such as
+rhythm guitars or backing vocals, to hard left (0) and hard right (127)
+positions to clear space in the center of the mix for lead
+elements.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

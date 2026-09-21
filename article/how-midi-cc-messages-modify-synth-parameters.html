@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI CC Messages Modify Synth Parameters - midi</title>
+    <meta name="description" content="MIDI Control Change (CC) messages modify synthesizer parameters in real time by transmitting standardized digital control data from a hardware controller or digital audio workstation (DAW) to a sound engine. These messages allow musicians to dynamically">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-cc-messages-modify-synth-parameters">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI CC Messages Modify Synth Parameters - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-cc-messages-modify-synth-parameters" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Control Change (CC) messages modify synthesizer parameters in real time by transmitting standardized digital control data from a hardware controller or digital audio workstation (DAW) to a sound engine. These messages allow musicians to dynamically" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-cc-messages-modify-synth-parameters">How MIDI CC
+Messages Modify Synth Parameters</h1>
+<p>MIDI Control Change (CC) messages modify synthesizer parameters in
+real time by transmitting standardized digital control data from a
+hardware controller or digital audio workstation (DAW) to a sound
+engine. These messages allow musicians to dynamically manipulate
+expressive elements such as filter cutoff, resonance, volume, and
+modulation during a performance. By translating physical movements like
+turning a knob or moving a fader into discrete numerical values, the
+synthesizer can update its internal sound-shaping components instantly
+and continuously.</p>
+<h3 id="the-structure-of-a-midi-cc-message">The Structure of a MIDI CC
+Message</h3>
+<p>A standard MIDI CC message is a three-byte digital command sent over
+a specific MIDI channel.</p>
+<ol type="1">
+<li><strong>Status Byte:</strong> Identifies the message as a Control
+Change event and specifies the target MIDI channel (1 through 16).</li>
+<li><strong>Controller Number (CC Number):</strong> Designates which
+specific parameter is being targeted. MIDI reserves numbers from 0 to
+127 for different controls. For example, CC 1 is universally assigned to
+the Modulation Wheel, CC 7 to Channel Volume, and CC 64 to the Sustain
+Pedal. Other numbers remain unassigned by default, allowing custom user
+mapping.</li>
+<li><strong>Control Value:</strong> Represents the magnitude of the
+change, typically ranging from 0 to 127 (a 7-bit resolution). A value of
+0 represents the minimum state (e.g., fully closed filter), while 127
+represents the maximum state.</li>
+</ol>
+<h3 id="the-real-time-transmission-process">The Real-Time Transmission
+Process</h3>
+<p>When a performer moves a physical control, such as a rotary
+potentiometer on a MIDI keyboard:</p>
+<ol type="1">
+<li><strong>Analog-to-Digital Conversion:</strong> The hardware samples
+the physical position of the knob and converts the continuous electrical
+voltage into a discrete value between 0 and 127.</li>
+<li><strong>Packet Transmission:</strong> The controller packages this
+data into the three-byte MIDI stream and transmits it via a standard
+5-pin DIN cable or USB MIDI.</li>
+<li><strong>Synthesizer Reception:</strong> The receiving synthesizer
+decodes the message, identifies the channel, and matches the CC number
+to the assigned parameter within its sound engine.</li>
+</ol>
+<h3 id="parameter-mapping-and-internal-processing">Parameter Mapping and
+Internal Processing</h3>
+<p>Modern synthesizers—both hardware and software (VSTs)—use a
+modulation matrix or MIDI Learn function to link incoming CC numbers to
+internal synthesis parameters.</p>
+<p>Once received, the synthesizer maps the 0–127 integer range to the
+specific parameter's internal range. For instance, if CC 74 (standard
+brightness/filter cutoff) is mapped to a low-pass filter with a
+frequency range of 20 Hz to 20,000 Hz, an incoming value of 64 scales
+proportionally to set the cutoff near the midpoint of that frequency
+curve.</p>
+<p>Because standard 7-bit values consist of only 128 discrete steps,
+rapid sweeps can occasionally produce audible stepping artifacts known
+as "zipper noise." To counteract this, modern synthesizers apply
+internal parameter smoothing (slew rate limiting or interpolation). This
+technique calculates intermediate values between incoming MIDI steps,
+ensuring a fluid, continuous sweep even though the incoming data is
+stepped.</p>
+<h3 id="high-resolution-control-via-14-bit-cc">High-Resolution Control
+via 14-Bit CC</h3>
+<p>For parameters requiring higher precision than standard 7-bit data
+provides, MIDI supports 14-bit CC messages. This is accomplished by
+pairing two CC numbers together: the Most Significant Byte (MSB,
+controllers 0–31) and the Least Significant Byte (LSB, controllers
+32–63). Combining these two 7-bit messages yields 16,384 distinct values
+(ranging from 0 to 16,383), enabling high-precision, real-time control
+over sensitive parameters like fine pitch tuning and analog-style filter
+sweeps without noticeable stepping.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Change MIDI Pitch Bend Range with RPN - midi</title>
+    <meta name="description" content="This guide explains the Registered Parameter Number (RPN) sequence required to change a MIDI instrument's pitch bend range from the default 2 semitones to 12 semitones (one full octave). Below, you will find the exact Control Change (CC) messages, parame">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-change-midi-pitch-bend-range-with-rpn">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Change MIDI Pitch Bend Range with RPN - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-change-midi-pitch-bend-range-with-rpn" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide explains the Registered Parameter Number (RPN) sequence required to change a MIDI instrument's pitch bend range from the default 2 semitones to 12 semitones (one full octave). Below, you will find the exact Control Change (CC) messages, parame" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-change-midi-pitch-bend-range-with-rpn">How to Change MIDI
+Pitch Bend Range with RPN</h1>
+<p>This guide explains the Registered Parameter Number (RPN) sequence
+required to change a MIDI instrument's pitch bend range from the default
+2 semitones to 12 semitones (one full octave). Below, you will find the
+exact Control Change (CC) messages, parameter definitions, and byte
+values in both decimal and hexadecimal formats to execute this
+configuration properly.</p>
+<h3
+id="understanding-the-pitch-bend-sensitivity-parameter">Understanding
+the Pitch Bend Sensitivity Parameter</h3>
+<p>In standard MIDI specification, pitch bend range is governed by the
+<strong>Pitch Bend Sensitivity</strong> parameter, which is registered
+as RPN 0 (MSB: 0, LSB: 0).</p>
+<p>Adjusting this parameter involves sending four consecutive Control
+Change (CC) messages to select the parameter, apply the new value, and
+reset the active parameter to prevent unintended modifications:</p>
+<ol type="1">
+<li><strong>CC 101 (RPN MSB):</strong> Selects the parameter category (0
+for Pitch Bend Sensitivity).</li>
+<li><strong>CC 100 (RPN LSB):</strong> Selects the specific parameter (0
+for Pitch Bend Sensitivity).</li>
+<li><strong>CC 6 (Data Entry MSB):</strong> Sets the coarse value in
+semitones (set to 12 for one octave).</li>
+<li><strong>CC 38 (Data Entry LSB):</strong> Sets the fine value in
+cents (typically set to 0).</li>
+</ol>
+<h3 id="the-exact-rpn-message-sequence">The Exact RPN Message
+Sequence</h3>
+<p>Send the following sequence of messages on the target MIDI channel
+(example uses MIDI Channel 1):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Order</th>
+<th style="text-align: left;">Message Type / Function</th>
+<th style="text-align: left;">Controller (CC)</th>
+<th style="text-align: left;">Value (Decimal)</th>
+<th style="text-align: left;">Raw MIDI Bytes (Hex)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Select RPN MSB</td>
+<td style="text-align: left;">CC 101</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;"><code>B0 65 00</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Select RPN LSB</td>
+<td style="text-align: left;">CC 100</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;"><code>B0 64 00</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Set Semitones (Data Entry MSB)</td>
+<td style="text-align: left;">CC 6</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;"><code>B0 06 0C</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Set Cents (Data Entry LSB)</td>
+<td style="text-align: left;">CC 38</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;"><code>B0 26 00</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Null RPN MSB (Reset)</td>
+<td style="text-align: left;">CC 101</td>
+<td style="text-align: left;">127</td>
+<td style="text-align: left;"><code>B0 65 7F</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Null RPN LSB (Reset)</td>
+<td style="text-align: left;">CC 100</td>
+<td style="text-align: left;">127</td>
+<td style="text-align: left;"><code>B0 64 7F</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: For channels other than Channel 1, replace the first nibble
+<code>B0</code> with <code>Bn</code>, where <code>n</code> is the
+zero-indexed channel number (e.g., <code>B1</code> for Channel 2,
+<code>BF</code> for Channel 16).</em></p>
+<h3 id="why-the-reset-step-matters">Why the Reset Step Matters</h3>
+<p>Steps 5 and 6 send the "Null" or "End of RPN" command
+(<code>127, 127</code>). Closing the RPN session deselects the pitch
+bend sensitivity parameter. This prevents any subsequent, accidental
+Data Entry commands (CC 6 or CC 38) from altering the pitch bend range
+during a performance or playback.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

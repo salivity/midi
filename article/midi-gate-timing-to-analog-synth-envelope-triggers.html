@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Gate Timing to Analog Synth Envelope Triggers - midi</title>
+    <meta name="description" content="Translating digital MIDI gate timing into analog synthesizer envelope triggers requires converting discrete digital data packets into continuous, physical electrical voltages. When a digital performance transmits MIDI Note On and Note Off commands, a MID">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-gate-timing-to-analog-synth-envelope-triggers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Gate Timing to Analog Synth Envelope Triggers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-gate-timing-to-analog-synth-envelope-triggers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Translating digital MIDI gate timing into analog synthesizer envelope triggers requires converting discrete digital data packets into continuous, physical electrical voltages. When a digital performance transmits MIDI Note On and Note Off commands, a MID" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-gate-timing-to-analog-synth-envelope-triggers">MIDI Gate
+Timing to Analog Synth Envelope Triggers</h1>
+<p>Translating digital MIDI gate timing into analog synthesizer envelope
+triggers requires converting discrete digital data packets into
+continuous, physical electrical voltages. When a digital performance
+transmits MIDI Note On and Note Off commands, a MIDI-to-CV (Control
+Voltage) converter interprets the timestamps and byte streams, instantly
+translating them into sustained Gate voltages and brief Trigger pulses.
+This conversion directly dictates how and when an analog synthesizer’s
+Envelope Generator (such as an ADSR) moves through its Attack, Decay,
+Sustain, and Release stages, bridging the gap between digital precision
+and analog circuit behavior.</p>
+<h2 id="the-difference-between-midi-messages-and-analog-signals">The
+Difference Between MIDI Messages and Analog Signals</h2>
+<p>MIDI is a serial digital communication protocol. It does not carry
+electrical audio or control currents; instead, it transmits asynchronous
+binary data at a standard rate of 31.25 kbaud. A standard MIDI key-press
+event consists of a three-byte <code>Note On</code> message (status
+byte, note number, velocity), followed later by a <code>Note Off</code>
+message.</p>
+<p>In contrast, analog synthesizers control envelope generators using DC
+electrical potentials:</p>
+<ul>
+<li><strong>Gate:</strong> A sustained DC voltage (typically +5V, +10V,
+or S-Trig grounding) that remains active for the entire duration a note
+is held.</li>
+<li><strong>Trigger:</strong> A brief, transient voltage pulse
+(typically lasting 1 to 10 milliseconds) that signals the exact
+millisecond an envelope should reset and begin its cycle.</li>
+</ul>
+<h2 id="how-the-midi-to-cv-converter-translates-timing">How the
+MIDI-to-CV Converter Translates Timing</h2>
+<p>The hardware responsible for this translation is the MIDI-to-CV
+converter. The conversion follows a precise operational sequence:</p>
+<ol type="1">
+<li><strong>Packet Reception:</strong> The converter’s microprocessor
+receives the serial <code>Note On</code> message.</li>
+<li><strong>Gate Assertion:</strong> Upon validating the message, the
+converter immediately pulls a digital logic pin high, activating the
+analog Gate line (rising from 0V to the target high voltage).</li>
+<li><strong>Trigger Generation:</strong> Concurrently, many converters
+generate a momentary Trigger pulse. This tells the envelope's timing
+capacitors to discharge instantly, forcing the envelope to restart its
+Attack phase from zero.</li>
+<li><strong>Gate Deassertion:</strong> When the corresponding
+<code>Note Off</code> (or <code>Note On</code> with a velocity of 0)
+packet is received, the converter drops the Gate voltage back to
+0V.</li>
+</ol>
+<h2 id="legato-overlap-and-retrigger-modes">Legato, Overlap, and
+Retrigger Modes</h2>
+<p>The translation of overlapping notes depends heavily on the
+converter’s priority and triggering configuration:</p>
+<ul>
+<li><strong>Legato (Single Trigger):</strong> If a new
+<code>Note On</code> arrives before the preceding <code>Note Off</code>,
+the converter updates the Pitch CV but keeps the Gate line high. Because
+the Gate never falls to zero, the envelope does not re-enter the Attack
+phase; it remains at the Sustain level.</li>
+<li><strong>Retrigger (Multi-Trigger):</strong> When configured to
+retrigger, the arrival of a new overlapping <code>Note On</code> causes
+the converter to momentarily pull the Gate low (typically for 1 to 5
+milliseconds) or fire a dedicated Trigger pulse. This interruption
+forces the analog envelope generator to restart the Attack phase, even
+though the keys overlap.</li>
+</ul>
+<h2 id="latency-and-jitter-in-the-conversion-process">Latency and Jitter
+in the Conversion Process</h2>
+<p>Because MIDI DIN is serial, transmitting a single 3-byte
+<code>Note On</code> message takes approximately 0.96 milliseconds. If
+multiple notes are played simultaneously (a chord), the messages must
+queue sequentially. The third note in a chord will naturally experience
+an inherent electrical delay of roughly 2 to 3 milliseconds compared to
+the first.</p>
+<p>Furthermore, the internal microcontroller of the converter introduces
+a small amount of processing latency and jitter as it parses serial
+buffers and sets output registers. Once the output pin shifts state,
+analog slew rates determine how rapidly the gate edge rises from 0V to
+operating voltage. High-performance converters use dedicated hardware
+interrupts and high-speed DACs to ensure gate rise times remain under a
+few microseconds, preserving tight rhythmic transients.</p>
+<h2 id="electrical-standards-v-trig-vs-s-trig">Electrical Standards:
+V-Trig vs. S-Trig</h2>
+<p>Converters must also translate timing to match specific analog
+circuit designs:</p>
+<ul>
+<li><strong>Voltage Trigger (V-Trig):</strong> Standardized by Roland,
+ARP, and Eurorack, where timing is represented by a positive active
+state (e.g., Gate = +5V to +12V; Off = 0V).</li>
+<li><strong>Switch Trigger (S-Trig):</strong> Used in vintage Moog and
+Korg systems, where timing is inverted. The active state pulls the
+circuit to ground (0V via an open-collector transistor), while the
+inactive state sits high via a pull-up resistor.</li>
+</ul>
+<p>Regardless of the electrical format used, the duration between the
+leading edge of the Gate and its trailing falling edge is the direct
+physical translation of the MIDI note's digital duration, governing the
+hold and release phases of the analog synthesizer’s sound.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

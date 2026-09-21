@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Rotary Encoder LED Rings Track MIDI Values - midi</title>
+    <meta name="description" content="LED indicator rings around rotary encoders provide immediate visual feedback of software parameters by relying on bidirectional MIDI communication, continuous relative encoding, and microcontroller-driven LED scaling. Rather than relying on physical stop">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-rotary-encoder-led-rings-track-midi-values">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Rotary Encoder LED Rings Track MIDI Values - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-rotary-encoder-led-rings-track-midi-values" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="LED indicator rings around rotary encoders provide immediate visual feedback of software parameters by relying on bidirectional MIDI communication, continuous relative encoding, and microcontroller-driven LED scaling. Rather than relying on physical stop" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-rotary-encoder-led-rings-track-midi-values">How Rotary
+Encoder LED Rings Track MIDI Values</h1>
+<p>LED indicator rings around rotary encoders provide immediate visual
+feedback of software parameters by relying on bidirectional MIDI
+communication, continuous relative encoding, and microcontroller-driven
+LED scaling. Rather than relying on physical stops like traditional
+potentiometers, these systems continuously receive current parameter
+data from Digital Audio Workstations (DAWs) and virtual instruments.
+This article explains the underlying mechanism that keeps hardware LED
+rings in sync with software MIDI states, preventing parameter jumps and
+ensuring accurate display across preset changes.</p>
+<h3 id="endless-encoders-and-relative-data">Endless Encoders and
+Relative Data</h3>
+<p>Unlike standard potentiometers that output absolute resistance values
+based on physical wiper positions, rotary encoders are "endless"—they
+rotate 360 degrees infinitely without hard stops. When turned, they do
+not output an absolute number (such as 0 to 127). Instead, they output
+relative change data, commonly known as increment or decrement commands.
+Because the hardware knob itself has no fixed physical position, it
+relies entirely on the LED ring to represent where the parameter
+currently sits within the software.</p>
+<h3 id="bidirectional-midi-communication">Bidirectional MIDI
+Communication</h3>
+<p>Accurate reflection of software values requires two-way communication
+between the MIDI controller and the host computer. When an encoder is
+turned, it transmits relative movement data to the DAW over USB or
+standard 5-pin MIDI. The DAW adjusts the parameter internally, then
+immediately sends an absolute MIDI Continuous Controller (CC) message
+back through the MIDI output port to the hardware controller.</p>
+<p>By relying on the software to report back the confirmed parameter
+state, the hardware avoids discrepancies caused by latency, internal
+software parameter scaling, or automated changes occurring within the
+DAW.</p>
+<h3 id="microcontroller-scaling-and-display-modes">Microcontroller
+Scaling and Display Modes</h3>
+<p>Once the controller's internal microcontroller receives the absolute
+MIDI value (ranging from 0 to 127 in standard resolution, or higher in
+14-bit MIDI), it translates that value into a format suitable for the
+LED hardware.</p>
+<p>Because most LED rings contain fewer steps than the 128 discrete
+values of standard MIDI (commonly between 11 and 16 LEDs), the
+microcontroller maps the incoming range mathematically across the
+available LEDs. The firmware then drives the display in one of several
+visual modes:</p>
+<ul>
+<li><strong>Single Dot:</strong> A single LED illuminates to indicate an
+absolute value, mimicking a physical pointer.</li>
+<li><strong>Bar/Fill:</strong> LEDs illuminate consecutively from the
+minimum position up to the current value, useful for volume faders or
+dry/wet controls.</li>
+<li><strong>Bipolar/Spread:</strong> LEDs illuminate outward to the left
+or right from a center point, ideal for panning or equalization
+cut/boost controls.</li>
+</ul>
+<h3 id="preset-and-bank-switching-synchronization">Preset and Bank
+Switching Synchronization</h3>
+<p>The primary advantage of this architecture appears during preset
+changes or track switching. When a user navigates between different
+tracks or software instruments, the host DAW transmits a burst of MIDI
+CC messages containing the current values of all mapped parameters on
+the newly selected track.</p>
+<p>The hardware microcontroller reads these messages and instantly
+updates the LED rings to mirror the new track's settings. When the user
+touches the encoder, changes occur smoothly from the current software
+value without the sudden parameter snapping or "catch-up" behavior
+typical of analog knobs.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

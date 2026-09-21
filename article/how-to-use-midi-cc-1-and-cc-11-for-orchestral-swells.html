@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Use MIDI CC1 and CC11 for Orchestral Swells - midi</title>
+    <meta name="description" content="This article provides an overview of how film composers combine MIDI CC 1 (Modulation) and CC 11 (Expression) to craft realistic orchestral swells. You will learn the distinct technical functions of both controllers, why relying on only one produces unna">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-use-midi-cc-1-and-cc-11-for-orchestral-swells">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Use MIDI CC1 and CC11 for Orchestral Swells - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-use-midi-cc-1-and-cc-11-for-orchestral-swells" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how film composers combine MIDI CC 1 (Modulation) and CC 11 (Expression) to craft realistic orchestral swells. You will learn the distinct technical functions of both controllers, why relying on only one produces unna" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-use-midi-cc1-and-cc11-for-orchestral-swells">How to Use
+MIDI CC1 and CC11 for Orchestral Swells</h1>
+<p>This article provides an overview of how film composers combine MIDI
+CC 1 (Modulation) and CC 11 (Expression) to craft realistic orchestral
+swells. You will learn the distinct technical functions of both
+controllers, why relying on only one produces unnatural results, and the
+exact techniques needed to coordinate their curves to create dynamic,
+emotionally resonant cinematic crescendos and decrescendos.</p>
+<h2
+id="understanding-the-difference-between-cc-1-and-cc-11">Understanding
+the Difference Between CC 1 and CC 11</h2>
+<p>Virtual orchestral libraries assign specific acoustic behaviors to
+different MIDI Continuous Controllers. To execute a realistic swell, you
+must treat CC 1 and CC 11 as complementary rather than redundant
+tools.</p>
+<ul>
+<li><strong>MIDI CC 1 (Dynamics / Modulation):</strong> Controls the
+crossfading between recorded dynamic sample layers (<em>pianissimo</em>,
+<em>mezzo-forte</em>, <em>fortissimo</em>). Raising CC 1 alters the
+<strong>timbre, harmonic richness, and physical intensity</strong> of an
+instrument. For brass, a higher CC 1 value introduces edge and
+brassiness; for strings, it introduces bow bite, upper harmonics, and
+vibrato depth.</li>
+<li><strong>MIDI CC 11 (Expression):</strong> Acts as a
+<strong>sub-volume fader</strong> relative to the master channel volume
+(CC 7). CC 11 scales the output gain without altering the underlying
+dynamic sample layer. It changes the volume, not the timbre.</li>
+</ul>
+<h2 id="why-relying-on-a-single-controller-fails">Why Relying on a
+Single Controller Fails</h2>
+<p>Attempting an orchestral swell with only CC 1 or only CC 11 results
+in an unnatural mock-up:</p>
+<ul>
+<li><strong>CC 1 alone:</strong> Most orchestral sample libraries do not
+fade to complete silence (<em>al niente</em>) at a CC 1 value of zero
+because the lowest recorded dynamic layer still retains ambient sound.
+Additionally, dynamic layer crossfading alone can produce noticeable
+phase artifacts or sudden volume jumps near the peak of a
+crescendo.</li>
+<li><strong>CC 11 alone:</strong> Automating only expression sounds like
+turning a stereo volume knob up and down. A soft trumpet played loudly
+via CC 11 still lacks the frequency spectrum, edge, and air pressure of
+a genuine <em>fortissimo</em> performance.</li>
+</ul>
+<h2 id="step-by-step-technique-shaping-the-swell">Step-by-Step
+Technique: Shaping the Swell</h2>
+<p>Composers layer CC 1 and CC 11 curves together to mimic how physical
+instruments generate volume and acoustic energy.</p>
+<h3 id="1-the-onset-emerging-from-silence">1. The Onset (Emerging from
+Silence)</h3>
+<p>Real instruments can enter seamlessly from silence (<em>dal
+niente</em>). To achieve this:</p>
+<ul>
+<li>Set both CC 1 and CC 11 to zero at note start.</li>
+<li>Bring CC 11 up slightly ahead of CC 1 to open the audio gate.</li>
+<li>Gradually raise CC 1 to trigger the softest dynamic layer
+(<em>pianissimo</em>), allowing the tone to materialize without an
+abrupt transient.</li>
+</ul>
+<h3 id="2-the-crescendo-building-energy">2. The Crescendo (Building
+Energy)</h3>
+<p>As the swell builds, CC 1 and CC 11 should rise in tandem, but not in
+identical lines:</p>
+<ul>
+<li><strong>Drive CC 1 primarily:</strong> Let CC 1 lead the charge
+across the first two-thirds of the swell to shift the instrument's tonal
+color from dark and warm to bright and cutting.</li>
+<li><strong>Use CC 11 for amplification:</strong> Keep CC 11 slightly
+behind CC 1 during the early phase, then ramp it up rapidly toward the
+climax. This simulates the exponential acoustic power real players
+produce when pushing an instrument to its absolute limit.</li>
+</ul>
+<h3 id="3-the-apex-the-peak">3. The Apex (The Peak)</h3>
+<p>At the top of the swell:</p>
+<ul>
+<li>Push CC 1 to its highest intended value (often 110–127) to fully
+trigger the most aggressive dynamic layer.</li>
+<li>Ensure CC 11 hits 120–127 to provide the maximum headroom and sonic
+impact.</li>
+<li>Hold the peak briefly to allow the simulated room acoustics to fill
+with sound before initiating the release.</li>
+</ul>
+<h3 id="4-the-decrescendo-fading-to-niente">4. The Decrescendo (Fading
+to Niente)</h3>
+<p>Reversing the swell requires distinct management of the release:</p>
+<ul>
+<li>Pull CC 1 down first to remove the harsh, bright overtones, dropping
+the timbre back into a gentle state.</li>
+<li>Follow closely with CC 11, pulling it all the way to zero right as
+the note terminates. This cuts off the tail of the lowest sample layer
+completely, giving you a smooth fade into absolute silence
+(<em>diminuendo al niente</em>).</li>
+</ul>
+<h2 id="practical-production-tips">Practical Production Tips</h2>
+<ul>
+<li><strong>Two-Pass Recording:</strong> If you do not have a dual-fader
+MIDI hardware controller to ride both values simultaneously, perform CC
+1 first to lock in the emotional phrasing and timbre. Then, perform a
+second pass with CC 11 to smooth out volume anomalies and sharpen the
+dynamic envelope.</li>
+<li><strong>Avoid Parallel Curves:</strong> Never simply copy and paste
+your CC 1 automation data into the CC 11 lane. Identical curves sound
+mechanical. The human element comes from the micro-variations between
+the timbral effort (CC 1) and the perceived acoustic projection (CC
+11).</li>
+<li><strong>Use CC 11 for Phrase Balancing:</strong> Use CC 1 to
+establish the general dynamic arc of a melodic line, and use small
+micro-adjustments in CC 11 to emphasize individual notes, accents, or
+chord resolutions without shifting the timbre.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

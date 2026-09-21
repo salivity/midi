@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Ribbon Controller? - midi</title>
+    <meta name="description" content="A MIDI ribbon controller is a tactile, touch-sensitive linear strip used to control synthesizers and digital audio workstations by translating finger movements into electronic signals. Unlike traditional keys or buttons, a ribbon controller allows perfor">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-ribbon-controller">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Ribbon Controller? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-ribbon-controller" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI ribbon controller is a tactile, touch-sensitive linear strip used to control synthesizers and digital audio workstations by translating finger movements into electronic signals. Unlike traditional keys or buttons, a ribbon controller allows perfor" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-ribbon-controller">What Is a MIDI Ribbon
+Controller?</h1>
+<p>A MIDI ribbon controller is a tactile, touch-sensitive linear strip
+used to control synthesizers and digital audio workstations by
+translating finger movements into electronic signals. Unlike traditional
+keys or buttons, a ribbon controller allows performers to slide across a
+smooth surface to manipulate continuous musical parameters in real time.
+This article explains the design and functionality of ribbon
+controllers, detailing how they measure physical contact and transmit
+high-resolution MIDI data to achieve seamless, continuous pitch
+modulation.</p>
+<h2 id="understanding-the-ribbon-controller">Understanding the Ribbon
+Controller</h2>
+<p>A ribbon controller is essentially a continuous linear potentiometer
+or capacitive touch strip. Historically popularized by early analog
+synthesizers like the Moog modular systems and the Yamaha CS-80, modern
+ribbon controllers output digital MIDI messages rather than raw control
+voltages (CV).</p>
+<p>Physically, the device consists of a long, narrow strip that can
+detect touch along an X-axis (position) and often along a Z-axis
+(pressure). When a performer touches or drags a finger along the ribbon,
+the internal circuitry measures changes in electrical resistance or
+capacitance. This measurement is then instantly digitized into MIDI
+commands sent to hardware synthesizers, virtual instruments, or effects
+processors.</p>
+<h2 id="how-it-sends-continuous-pitch-modulation">How It Sends
+Continuous Pitch Modulation</h2>
+<p>Pitch modulation via standard MIDI controls often faces the
+limitation of 7-bit resolution, which only offers 128 discrete steps
+(values 0–127). If pitch bends were stepped at this resolution, the
+transition between notes would produce an audible, distracting stepping
+effect known as "zipper noise."</p>
+<p>To overcome this, ribbon controllers primarily transmit dedicated
+<strong>MIDI Pitch Bend</strong> messages rather than standard Control
+Change (CC) messages to achieve smooth modulation.</p>
+<h3 id="14-bit-high-resolution-data">14-Bit High-Resolution Data</h3>
+<p>The MIDI specification designates Pitch Bend as a 14-bit message. It
+combines two 7-bit data bytes—the Least Significant Byte (LSB) and the
+Most Significant Byte (MSB)—to produce 16,384 discrete values. The
+ribbon controller's internal processor reads the exact finger position
+along the sensor strip and outputs a high-density stream of these 14-bit
+messages. Because there are over 16,000 values distributed across the
+strip, the human ear perceives the transition as a perfectly seamless,
+continuous pitch change, identical to sliding a finger along a fretless
+string instrument.</p>
+<h3 id="absolute-vs-relative-tracking-modes">Absolute vs. Relative
+Tracking Modes</h3>
+<p>Ribbon controllers typically handle continuous pitch tracking in one
+of two modes:</p>
+<ul>
+<li><strong>Relative Mode:</strong> The synthesizer's pitch remains
+unchanged until the ribbon is touched. Wherever your finger first makes
+contact becomes the "center" or zero point. Sliding left drops the
+pitch, while sliding right raises it. This mode is particularly useful
+for performing natural, expressive vibrato or consistent pitch bends
+regardless of where your hand lands on the controller.</li>
+<li><strong>Absolute Mode:</strong> Every point along the length of the
+ribbon corresponds to a specific pitch or pitch-bend offset. Touching a
+specific spot instantly jumps the pitch to that defined value, allowing
+players to perform continuous theremin-style glissandos across wide
+intervals or jump directly between microtonal pitches.</li>
+</ul>
+<h3 id="high-frequency-data-streaming">High-Frequency Data
+Streaming</h3>
+<p>For pitch modulation to sound organic, latency and update rates are
+critical. Modern ribbon controllers scan the physical strip hundreds of
+times per second. As the player's finger glides across the surface, the
+onboard microprocessor continuously calculates velocity and
+micro-positional changes, flooding the MIDI output with rapid updates.
+This eliminates latency, enabling fluid sweeps, dynamic micro-bends, and
+rapid trills that emulate acoustic pitch variance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

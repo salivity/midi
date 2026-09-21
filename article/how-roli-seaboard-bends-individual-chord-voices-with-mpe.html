@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Roli Seaboard Bends Individual Chord Voices with MPE - midi</title>
+    <meta name="description" content="The Roli Seaboard achieves independent pitch bending within chords by utilizing MIDI Polyphonic Expression (MPE), an advanced extension of the standard MIDI specification. Unlike conventional MIDI controllers that apply pitch bend messages globally to al">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-roli-seaboard-bends-individual-chord-voices-with-mpe">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Roli Seaboard Bends Individual Chord Voices with MPE - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-roli-seaboard-bends-individual-chord-voices-with-mpe" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Roli Seaboard achieves independent pitch bending within chords by utilizing MIDI Polyphonic Expression (MPE), an advanced extension of the standard MIDI specification. Unlike conventional MIDI controllers that apply pitch bend messages globally to al" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-roli-seaboard-bends-individual-chord-voices-with-mpe">How
+Roli Seaboard Bends Individual Chord Voices with MPE</h1>
+<p>The Roli Seaboard achieves independent pitch bending within chords by
+utilizing MIDI Polyphonic Expression (MPE), an advanced extension of the
+standard MIDI specification. Unlike conventional MIDI controllers that
+apply pitch bend messages globally to all active notes on a single
+channel, the Seaboard automatically assigns each individual note in a
+chord to its own dedicated MIDI channel. This per-note routing enables
+the instrument's continuous silicone keywave surface to send distinct,
+real-time pitch bend data for one voice without altering the pitch of
+the remaining voices in the chord.</p>
+<h3 id="the-problem-with-standard-midi">The Problem with Standard
+MIDI</h3>
+<p>In legacy MIDI architecture, channel-wide control data dictates the
+behavior of all currently held notes. Pitch Bend is a channel-level
+message rather than a note-level message. If you play a three-note triad
+on MIDI Channel 1 and move a traditional pitch wheel, standard MIDI
+sends pitch bend data across Channel 1, forcing all three notes to shift
+pitch in unison. True polyphonic pitch shifting is fundamentally
+impossible under this standard configuration.</p>
+<h3 id="how-mpe-reallocates-channels">How MPE Reallocates Channels</h3>
+<p>MPE circumvents this limitation through dynamic channel allocation.
+In an MPE configuration:</p>
+<ul>
+<li><strong>Channel 1 (or 16)</strong> serves as the "Global" or
+"Manager" channel, handling global controls such as program changes,
+master volume, and master sustain pedal messages.</li>
+<li><strong>Channels 2 through 15 (or 16)</strong> function as dedicated
+"Member" channels, reserved dynamically for individual musical
+voices.</li>
+</ul>
+<p>When you strike the first note of a chord on the Seaboard, the
+hardware assigns that note to Channel 2. When you strike the second note
+simultaneously, the Seaboard assigns it to Channel 3, and a third note
+is assigned to Channel 4.</p>
+<h3 id="translating-surface-touch-into-pitch-data">Translating Surface
+Touch into Pitch Data</h3>
+<p>The Seaboard's keywave surface continuously monitors physical
+gestures across five dimensions of touch: Strike, Press, Glide, Slide,
+and Lift. Pitch bending relies primarily on <strong>Glide</strong>—the
+horizontal, side-to-side finger motion along the keywave or along the
+continuous ribbons at the top and bottom of the playing surface.</p>
+<p>When your finger slides horizontally:</p>
+<ol type="1">
+<li><strong>Continuous Position Sensing:</strong> The sensor array
+beneath the silicone measures the lateral displacement of that specific
+point of contact.</li>
+<li><strong>Dedicated Channel Messaging:</strong> The Seaboard converts
+this displacement into standard 14-bit high-resolution Pitch Bend
+messages, but routes them strictly through the specific MIDI channel
+assigned to that individual finger.</li>
+<li><strong>Independent Polyphony:</strong> If the finger holding the
+middle note of a chord wiggles laterally, Pitch Bend messages are
+transmitted solely across its designated channel (e.g., Channel 3). The
+fingers held stationary on Channel 2 and Channel 4 transmit no pitch
+modification, keeping those fundamental chord tones stable.</li>
+</ol>
+<h3 id="integration-with-compatible-synthesizers">Integration with
+Compatible Synthesizers</h3>
+<p>For the voice bending to function properly, the Seaboard must be
+paired with an MPE-compatible software or hardware synthesizer (such as
+Equator, Serum, or native MPE synths in modern DAWs). The receiving
+synth must be configured to match the Seaboard’s pitch bend
+range—typically set to +/- 48 semitones for smooth, ribbon-like slides,
+or +/- 2 semitones for subtle, acoustic-style vibrato. When the synth
+receives incoming data, its internal sound engine manages polyphony by
+routing each MIDI channel to an independent voice architecture,
+rendering seamless, polyphonic pitch articulation in real time.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Transport Controls Work Across Devices - midi</title>
+    <meta name="description" content="MIDI transport control allows a single master hardware controller or Digital Audio Workstation (DAW) to synchronize basic playback and tape-style navigation commands across multiple connected instruments, synthesizers, and recording interfaces. By utiliz">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-transport-controls-work-across-devices">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Transport Controls Work Across Devices - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-transport-controls-work-across-devices" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI transport control allows a single master hardware controller or Digital Audio Workstation (DAW) to synchronize basic playback and tape-style navigation commands across multiple connected instruments, synthesizers, and recording interfaces. By utiliz" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-transport-controls-work-across-devices">How MIDI
+Transport Controls Work Across Devices</h1>
+<p>MIDI transport control allows a single master hardware controller or
+Digital Audio Workstation (DAW) to synchronize basic playback and
+tape-style navigation commands across multiple connected instruments,
+synthesizers, and recording interfaces. By utilizing two primary
+communication methods—standard MIDI Real-Time messages and MIDI Machine
+Control (MMC)—connected devices instantly replicate commands such as
+play, stop, rewind, and fast forward. This ensures that timelines,
+sequencers, and drum machines remain locked in step without requiring
+manual operation on every individual piece of gear.</p>
+<h3 id="master-and-slave-architecture">Master and Slave
+Architecture</h3>
+<p>MIDI transport operates on a master-slave (or leader-follower)
+hierarchy. One device is designated as the master transmitter (often a
+DAW or a master hardware sequencer), while all downstream gear is
+configured as slaves. When you press a transport button on the master
+unit, it translates that action into a digital MIDI message and
+broadcasts it through 5-pin DIN cables, USB MIDI, or a network MIDI
+connection to all receiving units.</p>
+<h3 id="how-play-and-stop-function">How Play and Stop Function</h3>
+<p>Playback commands are primarily handled using <strong>MIDI System
+Real-Time messages</strong>. These are single-byte commands prioritized
+at the highest level of the MIDI data stream to ensure near-zero
+latency:</p>
+<ul>
+<li><strong>Start (<code>0xFA</code>):</strong> Instructs all connected
+devices to reset their playback position to the very beginning of the
+project (Beat 1, Bar 1) and begin playing immediately.</li>
+<li><strong>Stop (<code>0xFC</code>):</strong> Directs all listening
+devices to halt playback instantly and hold their current timeline
+position.</li>
+<li><strong>Continue (<code>0xFB</code>):</strong> Directs devices to
+resume playback from the exact point where they were stopped, rather
+than resetting to the beginning.</li>
+</ul>
+<p>When paired with MIDI Clock (which sends 24 pulses per quarter note),
+these commands ensure every connected sequencer starts and stops at
+precisely the same millisecond.</p>
+<h3 id="how-rewind-and-fast-forward-function">How Rewind and Fast
+Forward Function</h3>
+<p>Standard MIDI Real-Time commands do not include native "rewind" or
+"fast forward" buttons. Instead, modern setups handle continuous
+timeline scrubbing and shuttle operations using two alternative
+mechanisms:</p>
+<h4 id="1-midi-machine-control-mmc">1. MIDI Machine Control (MMC)</h4>
+<p>MIDI Machine Control is a specialized subset of MIDI System Exclusive
+(SysEx) messages originally designed for tape machines and multitrack
+recorders. MMC provides explicit, standardized commands for tape-style
+navigation:</p>
+<ul>
+<li><strong>Fast Forward (<code>0x04</code>):</strong> Tells slave units
+to advance their internal transport at high speed until a stop or play
+command is received.</li>
+<li><strong>Rewind (<code>0x05</code>):</strong> Commands the receiving
+devices to scan backward rapidly.</li>
+<li><strong>Shuttle and Locate:</strong> Advanced MMC controllers can
+transmit continuous jog-wheel data or direct location coordinates to
+jump immediately to specific bars, beats, or timecodes.</li>
+</ul>
+<h4 id="2-song-position-pointer-spp">2. Song Position Pointer (SPP)</h4>
+<p>If a system relies on MIDI Clock rather than MMC, fast-forwarding or
+rewinding alters the <strong>Song Position Pointer (SPP)</strong>. SPP
+is a system common message (<code>0xF2</code>) that indicates the number
+of MIDI beats (six MIDI clocks, or a 16th note) that have elapsed since
+the start of the song.</p>
+<p>When you press rewind or fast forward on a master unit, the DAW
+pauses playback, recalculates the timeline, and transmits updated SPP
+values to reposition the playhead on the slave units. Once the new
+position is registered, the master sends a <code>Continue</code> message
+to resume playback in sync.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

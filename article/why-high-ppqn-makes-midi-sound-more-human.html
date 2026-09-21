@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why High PPQN Makes MIDI Sound More Human - midi</title>
+    <meta name="description" content="High PPQN (Pulses Per Quarter Note) resolution is essential for capturing natural, expressive musical performances in digital audio workstations (DAWs). By subdividing musical beats into significantly smaller timing increments, higher PPQN values allow r">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-high-ppqn-makes-midi-sound-more-human">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why High PPQN Makes MIDI Sound More Human - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-high-ppqn-makes-midi-sound-more-human" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High PPQN (Pulses Per Quarter Note) resolution is essential for capturing natural, expressive musical performances in digital audio workstations (DAWs). By subdividing musical beats into significantly smaller timing increments, higher PPQN values allow r" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-high-ppqn-makes-midi-sound-more-human">Why High PPQN Makes
+MIDI Sound More Human</h1>
+<p>High PPQN (Pulses Per Quarter Note) resolution is essential for
+capturing natural, expressive musical performances in digital audio
+workstations (DAWs). By subdividing musical beats into significantly
+smaller timing increments, higher PPQN values allow recording software
+to capture the subtle micro-timing nuances, dynamic fluctuations, and
+continuous controller changes of a real musician. This article explains
+what PPQN is, how it affects temporal precision, and why higher
+resolutions eliminate the stiff, robotic characteristics often
+associated with computer-based music production.</p>
+<h3 id="understanding-ppqn">Understanding PPQN</h3>
+<p>PPQN, also referred to as "ticks per quarter note," determines the
+internal timing resolution of a MIDI sequencer or DAW. It dictates how
+many slices or "ticks" a quarter note is divided into. For example, an
+older standard MIDI resolution of 96 PPQN divides a quarter note into 96
+points in time, whereas modern professional DAWs often operate at 960
+PPQN, and some reach up to 9600 PPQN or higher.</p>
+<p>When a musician plays a MIDI controller, the DAW must assign every
+note-on, note-off, and velocity event to the nearest available tick. The
+density of these ticks determines how accurately the computer reproduces
+the physical timing of the musician's performance.</p>
+<h3 id="capturing-micro-timing-and-human-imperfection">Capturing
+Micro-Timing and Human Imperfection</h3>
+<p>Human musicians naturally play with micro-timing variations. They
+play slightly ahead of the beat (pushing) to create urgency or slightly
+behind the beat (dragging) to create a relaxed, laid-back groove. These
+deliberate deviations from mathematical perfection often occur within
+windows of a few milliseconds.</p>
+<p>At low PPQN settings, the time intervals between available ticks are
+relatively large. If a musician plays a note between two distant ticks,
+the DAW snaps that event to the nearest point on the grid. This forced
+quantization strips away the subtle push-and-pull of the rhythm,
+flattening the performance and making it sound mechanical. A high PPQN
+provides an ultra-fine grid where ticks are spaced less than a
+millisecond apart at standard tempos, ensuring that the software
+captures the musician's exact placement without rounding errors.</p>
+<h3 id="smoothing-continuous-controller-cc-data">Smoothing Continuous
+Controller (CC) Data</h3>
+<p>Expressive MIDI performances rely heavily on continuous controller
+(CC) messages, such as mod wheel movements, expression pedals,
+aftertouch, and pitch bends.</p>
+<p>In a low-resolution environment, these dynamic data streams are
+recorded at lower sampling rates, resulting in stair-stepped values.
+This step effect can cause audible artifacts, commonly referred to as
+"zipper noise," and prevents smooth transitions in virtual instrument
+parameters like filter cutoffs, vibrato depth, or volume swells. High
+PPQN enables continuous controllers to record high-density data streams,
+producing smooth, continuous curves that mimic the acoustic behavior of
+traditional instruments.</p>
+<h3 id="nuanced-quantization-and-editing">Nuanced Quantization and
+Editing</h3>
+<p>Even when pitch and timing corrections are necessary, high PPQN
+improves the quality of the result. Modern DAWs feature advanced
+quantization tools, including percentage-based (groove) quantization,
+swing settings, and humanize functions.</p>
+<p>A high-resolution grid allows these tools to make microscopic timing
+adjustments rather than aggressive, coarse jumps. You can apply 50%
+quantization or introduce algorithmic humanization with surgical
+precision, keeping the track rhythmically cohesive without destroying
+the organic feel of the original take.</p>
+<h3 id="summary">Summary</h3>
+<p>Ultimately, high PPQN bridges the gap between mechanical digital
+reproduction and organic acoustic performance. By providing the temporal
+resolution needed to record notes precisely where they were played and
+rendering continuous controller data without stepping, high PPQN
+preserves the subtle imperfections and continuous movements that define
+human musicianship.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

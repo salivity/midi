@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Faulty MIDI Cables Cause Stuck Synthesizer Notes - midi</title>
+    <meta name="description" content="A stuck synthesizer note during a live performance is a musician's nightmare, often caused by a faulty MIDI cable. MIDI relies on precise paired messages—specifically "Note On" to trigger a sound and "Note Off" to stop it. When a cable degrades physica">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-faulty-midi-cables-cause-stuck-synthesizer-notes">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Faulty MIDI Cables Cause Stuck Synthesizer Notes - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-faulty-midi-cables-cause-stuck-synthesizer-notes" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A stuck synthesizer note during a live performance is a musician's nightmare, often caused by a faulty MIDI cable. MIDI relies on precise paired messages—specifically "Note On" to trigger a sound and "Note Off" to stop it. When a cable degrades physica" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-faulty-midi-cables-cause-stuck-synthesizer-notes">Why Faulty
+MIDI Cables Cause Stuck Synthesizer Notes</h1>
+<p>A stuck synthesizer note during a live performance is a musician's
+nightmare, often caused by a faulty MIDI cable. MIDI relies on precise
+paired messages—specifically "Note On" to trigger a sound and "Note Off"
+to stop it. When a cable degrades physically, it introduces intermittent
+signal dropouts, data corruption, and packet loss. If the cable cuts out
+precisely when a "Note Off" command is sent, the receiving synthesizer
+never learns that the key was released, causing the sound to sustain
+indefinitely.</p>
+<h2 id="the-mechanism-of-midi-data-transmission">The Mechanism of MIDI
+Data Transmission</h2>
+<p>Standard 5-pin DIN MIDI transmits digital data serially at a fixed
+baud rate of 31.25 kbps. When a musician plays a key on a
+controller:</p>
+<ol type="1">
+<li><strong>Note On:</strong> The controller sends a 3-byte status and
+data packet indicating the channel, the specific pitch, and the
+velocity.</li>
+<li><strong>Note Off:</strong> Releasing the key sends a corresponding
+3-byte packet (or a "Note On" packet with a velocity of zero) telling
+the synthesizer's sound engine to enter the release stage of its
+envelope.</li>
+</ol>
+<p>Because standard MIDI is unidirectional and has no built-in error
+correction, acknowledgment (ACK) packets, or handshake verification, the
+transmitting keyboard has no way of knowing whether the receiving
+synthesizer successfully parsed the message.</p>
+<h2 id="how-cable-defects-cause-stuck-notes">How Cable Defects Cause
+Stuck Notes</h2>
+<p>Physical wear on stage frequently leads to several cable failure
+modes:</p>
+<ul>
+<li><strong>Intermittent Wire Breaks:</strong> Copper conductors inside
+the cable can fray near the strain relief. During performance, movement
+or stage vibration causes micro-disconnections. If a break breaks
+contact during the exact millisecond a "Note Off" command travels down
+the line, the command is lost forever.</li>
+<li><strong>Bent or Dirty Pins:</strong> Pins 4 and 5 carry the balanced
+current-loop data, while Pin 2 serves as the ground shield. Oxidation or
+loose receptacle tolerances cause intermittent voltage drops, corrupting
+the serial byte structure.</li>
+<li><strong>Impedance and Capacitance Issues:</strong> Low-quality or
+damaged cables suffer from high stray capacitance. This rounds off the
+edges of the square-wave digital pulses, leading to jitter and framing
+errors where the synthesizer's UART (Universal Asynchronous
+Receiver-Transmitter) fails to decode the byte.</li>
+</ul>
+<h2 id="the-role-of-running-status">The Role of "Running Status"</h2>
+<p>The problem is exacerbated by a MIDI bandwidth-saving protocol known
+as <strong>Running Status</strong>. Under this rule, if multiple
+consecutive messages share the same status byte (e.g., several Note Offs
+in a row), the sender omits the status byte and transmits only the data
+bytes (pitch and velocity).</p>
+<p>If a faulty cable introduces noise or drops a single byte during a
+running status sequence, the receiving synthesizer's parser loses
+synchronization. The synthesizer misinterprets incoming pitch values as
+status commands, rendering subsequent Note Off messages meaningless. The
+synth's voice allocation continues to hold the note open until the patch
+is changed or a global reset is received.</p>
+<h2 id="mitigating-the-problem-in-live-environments">Mitigating the
+Problem in Live Environments</h2>
+<ol type="1">
+<li><strong>Use the MIDI Panic Command:</strong> Most modern
+synthesizers have an "All Notes Off" or "Panic" button that immediately
+kills active voice channels and resets running status.</li>
+<li><strong>Employ Active Sensing:</strong> Ensure both controller and
+synth support MIDI Active Sensing, which monitors connection health
+every 300ms and cuts stuck voices if the connection drops.</li>
+<li><strong>Inspect and Replace Cables:</strong> Routinely test cables
+with a dedicated cable tester, avoid tight cable ties, and choose robust
+cables with metal connectors and solid strain relief.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

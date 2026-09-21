@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Articulation Maps and Key Switches Explained - midi</title>
+    <meta name="description" content="A MIDI articulation map is a digital audio workstation (DAW) feature that organizes, labels, and automates different playing techniques for virtual instruments. Instead of manually drawing low-octave trigger notes into a piano roll, articulation maps all">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-articulation-maps-and-key-switches-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Articulation Maps and Key Switches Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-articulation-maps-and-key-switches-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI articulation map is a digital audio workstation (DAW) feature that organizes, labels, and automates different playing techniques for virtual instruments. Instead of manually drawing low-octave trigger notes into a piano roll, articulation maps all" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-articulation-maps-and-key-switches-explained">MIDI
+Articulation Maps and Key Switches Explained</h1>
+<p>A MIDI articulation map is a digital audio workstation (DAW) feature
+that organizes, labels, and automates different playing techniques for
+virtual instruments. Instead of manually drawing low-octave trigger
+notes into a piano roll, articulation maps allow composers to assign
+techniques—such as legato, staccato, or pizzicato—directly to musical
+notes via dedicated interfaces. This article covers what articulation
+maps are, the limitations of traditional key switching, and the
+technical process by which DAWs translate these maps into instrument
+commands.</p>
+<h3 id="the-problem-with-traditional-key-switching">The Problem with
+Traditional Key Switching</h3>
+<p>Sample libraries, particularly complex orchestral collections like
+Kontakt or Spitfire Player, use key switches to alternate between
+different playing styles of a single instrument. Traditionally, these
+key switches are assigned to unplayable MIDI notes outside the
+instrument's natural range (for example, C-1 to B-1).</p>
+<p>While functional, traditional key switching introduces several
+workflow problems:</p>
+<ul>
+<li><strong>Note Chasing Issues:</strong> If playback begins halfway
+through a measure, the DAW will not play the correct articulation unless
+the playhead passes the exact moment the key switch note was
+triggered.</li>
+<li><strong>Cluttered Piano Rolls:</strong> Non-musical trigger notes
+clutter MIDI editors, making notation, transposition, and quantizing
+cumbersome.</li>
+<li><strong>Accidental Transposition:</strong> Selecting all notes to
+transpose a melody will also shift the key switches, breaking the
+instrument’s playback behavior entirely.</li>
+</ul>
+<h3 id="what-is-a-midi-articulation-map">What is a MIDI Articulation
+Map?</h3>
+<p>A MIDI articulation map decouples the performance instructions from
+raw MIDI note data. Depending on your DAW, these are known by various
+names:</p>
+<ul>
+<li><strong>Expression Maps</strong> (Steinberg Cubase and Nuendo)</li>
+<li><strong>Articulation IDs</strong> (Apple Logic Pro)</li>
+<li><strong>Sound Variations</strong> (PreSonus Studio One)</li>
+<li><strong>Note Expressions / Articulation Maps</strong> (Cakewalk by
+BandLab)</li>
+</ul>
+<p>An articulation map acts as a translation layer between the user
+interface and the virtual instrument plugin. It gives the user a clean,
+human-readable menu or dedicated lane inside the MIDI editor, displaying
+names like "Sustain," "Tremolo," or "Spiccato."</p>
+<h3 id="how-articulation-maps-trigger-key-switches">How Articulation
+Maps Trigger Key Switches</h3>
+<p>Behind the scenes, articulation maps work by converting high-level
+metadata into specific MIDI messages that the receiving plugin
+understands. The process operates in three primary stages:</p>
+<h4 id="1-parameter-assignment">1. Parameter Assignment</h4>
+<p>In the DAW's articulation editor, the user (or a library
+manufacturer) maps an articulation label to a specific MIDI output
+trigger. This output trigger can be configured as:</p>
+<ul>
+<li><strong>MIDI Note-On:</strong> A traditional key switch note (e.g.,
+C-1 at velocity 127).</li>
+<li><strong>Control Change (CC):</strong> A specific CC value (e.g.,
+CC32 set to value 1 for Legato, value 2 for Staccato).</li>
+<li><strong>Program Change:</strong> Standard MIDI patch change
+commands.</li>
+<li><strong>UACC (Universal Articulation Controller Channel):</strong> A
+standardized CC32 system widely adopted by sample library
+developers.</li>
+</ul>
+<h4 id="2-note-tagging">2. Note Tagging</h4>
+<p>Instead of placing extra notes on the piano roll, the user assigns an
+articulation to individual MIDI notes. In Logic Pro, this is saved as an
+Articulation ID embedded within the MIDI event itself. In Cubase or
+Studio One, it appears either as an attribute tied to the note or as an
+event drawn on an articulation automation lane beneath the piano
+roll.</p>
+<h4 id="3-real-time-translation-and-dispatch">3. Real-Time Translation
+and Dispatch</h4>
+<p>When the DAW's playback engine hits an articulation event or a tagged
+note, the map executes the pre-defined rule instantly:</p>
+<ol type="1">
+<li>The DAW intercepts the note event.</li>
+<li>It sends the designated trigger message (such as a silent C-1
+Note-On event) to the virtual instrument just ahead of or simultaneously
+with the audible note.</li>
+<li>The virtual instrument receives the message, switches its internal
+sample layer to the requested technique, and sounds the musical note
+correctly.</li>
+</ol>
+<h3 id="key-advantages-of-using-articulation-maps">Key Advantages of
+Using Articulation Maps</h3>
+<p>By utilizing an articulation map, DAWs implement automatic note
+chasing. If you start playback anywhere in a project, the DAW looks
+backward, identifies the active articulation state, and silently fires
+the necessary trigger before playing the note. Additionally, because the
+switches are handled as metadata rather than physical notes in the
+arrangement, you can transpose, quantize, and edit your compositions
+without corrupting instrument behaviors.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

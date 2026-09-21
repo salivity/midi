@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Configure Pitch Bend Range Using MIDI RPN - midi</title>
+    <meta name="description" content="Configuring pitch bend extremes via MIDI Registered Parameter Numbers (RPNs) allows you to define the exact musical range a sound module traverses when the pitch wheel is pushed to its absolute limits. By transmitting standard RPN controllers, you establ">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-configure-pitch-bend-range-using-midi-rpn">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Configure Pitch Bend Range Using MIDI RPN - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-configure-pitch-bend-range-using-midi-rpn" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring pitch bend extremes via MIDI Registered Parameter Numbers (RPNs) allows you to define the exact musical range a sound module traverses when the pitch wheel is pushed to its absolute limits. By transmitting standard RPN controllers, you establ" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-configure-pitch-bend-range-using-midi-rpn">How to
+Configure Pitch Bend Range Using MIDI RPN</h1>
+<p>Configuring pitch bend extremes via MIDI Registered Parameter Numbers
+(RPNs) allows you to define the exact musical range a sound module
+traverses when the pitch wheel is pushed to its absolute limits. By
+transmitting standard RPN controllers, you establish both the coarse
+(semitone) and fine (cent) boundaries that dictate how far the pitch
+shifts away from its center rest position. This guide explains the MIDI
+message structure required to target RPN 00 00, adjust the sensitivity
+values, and lock in the upper and lower extremes.</p>
+<h3 id="understanding-pitch-bend-extremes-and-rpn">Understanding Pitch
+Bend Extremes and RPN</h3>
+<p>The physical pitch wheel transmits standard 14-bit pitch bend
+messages ranging from 0 (minimum extreme) to 16,383 (maximum extreme),
+with 8,192 acting as the neutral center. The sound generator must be
+told what musical interval these extremes represent.</p>
+<p>The standard MIDI specification designates <strong>RPN 00 00</strong>
+as Pitch Bend Sensitivity:</p>
+<ul>
+<li><strong>RPN MSB (CC 101):</strong> 0</li>
+<li><strong>RPN LSB (CC 100):</strong> 0</li>
+</ul>
+<p>Under standard MIDI 1.0, this parameter dictates a symmetrical limit:
+the value assigned determines both the positive extreme (wheel all the
+way up) and the negative extreme (wheel all the way down) relative to
+the unbent pitch.</p>
+<hr />
+<h3 id="step-by-step-midi-message-sequence">Step-by-Step MIDI Message
+Sequence</h3>
+<p>Setting the pitch extremes requires a sequential transmission of
+Control Change (CC) messages across the target MIDI channel.</p>
+<h4 id="1-select-the-pitch-bend-sensitivity-rpn">1. Select the Pitch
+Bend Sensitivity RPN</h4>
+<p>First, alert the receiving synthesizer that you are modifying the
+pitch bend sensitivity parameter by sending:</p>
+<ul>
+<li><strong>CC 101 (RPN MSB):</strong> Value <code>0</code></li>
+<li><strong>CC 100 (RPN LSB):</strong> Value <code>0</code></li>
+</ul>
+<h4 id="2-define-the-coarse-range-semitones">2. Define the Coarse Range
+(Semitones)</h4>
+<p>Use the Data Entry MSB controller to designate the primary semitone
+interval reached at full wheel deflection:</p>
+<ul>
+<li><strong>CC 6 (Data Entry MSB):</strong> Value <code>0</code> to
+<code>127</code></li>
+</ul>
+<p><em>Example:</em> A value of <code>2</code> configures the wheel
+extremes to ±2 semitones (a whole step up and down). A value of
+<code>12</code> configures the extremes to ±1 octave.</p>
+<h4 id="3-define-the-fine-range-cents">3. Define the Fine Range
+(Cents)</h4>
+<p>To set exact microtonal extremes, adjust the Data Entry LSB
+controller to add fine cent adjustments (1 cent = 1/100th of a
+semitone):</p>
+<ul>
+<li><strong>CC 38 (Data Entry LSB):</strong> Value <code>0</code> to
+<code>127</code></li>
+</ul>
+<p><em>Example:</em> Sending a value of <code>0</code> ensures clean,
+chromatic semitones. A value of <code>50</code> adds a quarter-tone
+offset to the extremes configured in step 2.</p>
+<h4 id="4-reset-the-rpn-controller-null-selection">4. Reset the RPN
+Controller (Null Selection)</h4>
+<p>To prevent unintended edits from subsequent Data Entry messages,
+close the parameter selection by sending the standard RPN Null
+command:</p>
+<ul>
+<li><strong>CC 101 (RPN MSB):</strong> Value <code>127</code></li>
+<li><strong>CC 100 (RPN LSB):</strong> Value <code>127</code></li>
+</ul>
+<hr />
+<h3 id="summary-table-of-midi-events">Summary Table of MIDI Events</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Action</th>
+<th style="text-align: left;">Controller</th>
+<th style="text-align: left;">Value Range</th>
+<th style="text-align: left;">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Set Parameter MSB</td>
+<td style="text-align: left;">CC 101</td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">Selects standard pitch bend RPN</td>
+</tr>
+<tr>
+<td style="text-align: left;">Set Parameter LSB</td>
+<td style="text-align: left;">CC 100</td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">Completes RPN 00 00 selection</td>
+</tr>
+<tr>
+<td style="text-align: left;">Coarse Extreme</td>
+<td style="text-align: left;">CC 6</td>
+<td style="text-align: left;"><code>0–127</code></td>
+<td style="text-align: left;">Sets interval in semitones (e.g., 2, 12,
+24)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Fine Extreme</td>
+<td style="text-align: left;">CC 38</td>
+<td style="text-align: left;"><code>0–127</code></td>
+<td style="text-align: left;">Sets interval fine-tuning in cents</td>
+</tr>
+<tr>
+<td style="text-align: left;">Deselect (Null)</td>
+<td style="text-align: left;">CC 101</td>
+<td style="text-align: left;"><code>127</code></td>
+<td style="text-align: left;">Clears active RPN MSB</td>
+</tr>
+<tr>
+<td style="text-align: left;">Deselect (Null)</td>
+<td style="text-align: left;">CC 100</td>
+<td style="text-align: left;"><code>127</code></td>
+<td style="text-align: left;">Clears active RPN LSB</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="managing-asymmetrical-pitch-bend-extremes">Managing Asymmetrical
+Pitch Bend Extremes</h3>
+<p>Standard MIDI RPN 00 00 applies uniformly to both the positive and
+negative directions. If a patch requires asymmetrical extremes (such as
+bending +2 semitones up, but -12 semitones down):</p>
+<ol type="1">
+<li><strong>Synthesizer Modulation Matrix:</strong> Configure the pitch
+bend wheel as an unlinked bipolar source directly within the synth
+engine, routing positive and negative wheel movements to separate pitch
+modulation amounts.</li>
+<li><strong>Device-Specific NRPNs:</strong> Consult the implementation
+chart of your hardware. Some instruments offer Non-Registered Parameter
+Numbers (NRPNs) that separate "Pitch Bend Up Range" from "Pitch Bend
+Down Range."</li>
+<li><strong>MIDI 2.0 Per-Note / Articulation Profiles:</strong> In MIDI
+2.0 implementations, advanced attribute profiles allow independent
+directional tuning limits per channel or per note.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

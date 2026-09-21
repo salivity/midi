@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DAWs Chase MIDI CC Automation States - midi</title>
+    <meta name="description" content="MIDI CC chasing is the process by which a Digital Audio Workstation (DAW) scans backward from the current playhead position to locate the most recent Control Change (CC) events and instantly applies them before playback resumes. Without chasing, jumping">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-da-ws-chase-midi-cc-automation-states">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DAWs Chase MIDI CC Automation States - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-da-ws-chase-midi-cc-automation-states" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI CC chasing is the process by which a Digital Audio Workstation (DAW) scans backward from the current playhead position to locate the most recent Control Change (CC) events and instantly applies them before playback resumes. Without chasing, jumping" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-daws-chase-midi-cc-automation-states">How DAWs Chase MIDI CC
+Automation States</h1>
+<p>MIDI CC chasing is the process by which a Digital Audio Workstation
+(DAW) scans backward from the current playhead position to locate the
+most recent Control Change (CC) events and instantly applies them before
+playback resumes. Without chasing, jumping to an arbitrary point in an
+un-looped timeline would cause virtual instruments and hardware
+synthesizers to retain obsolete parameter values from earlier playback,
+resulting in incorrect dynamics, cutoffs, or panning. This article
+breaks down the mechanics of the reverse-lookup algorithm, curve
+interpolation, state transmission, and performance optimization
+techniques DAWs use to keep continuous automation accurate.</p>
+<h2 id="the-discrete-nature-of-midi-cc-data">The Discrete Nature of MIDI
+CC Data</h2>
+<p>Standard MIDI Continuous Controller (CC) messages are discrete,
+point-in-time instructions rather than continuous control signals. A CC
+event consists of a controller number (such as CC1 for Modulation or
+CC11 for Expression) and a value ranging from 0 to 127 (or higher in
+14-bit high-resolution configurations).</p>
+<p>Synthesizers and samplers do not naturally query a timeline to ask
+what their parameters <em>should</em> be; they only react when a new
+event arrives at their MIDI input. In an un-looped timeline, if a CC11
+expression ramp raises the volume from 20 to 110 between measure 1 and
+measure 4, and the user jumps the playhead directly to measure 5, the
+instrument remains at its previous state unless the DAW intervenes.</p>
+<h2 id="the-reverse-lookup-algorithm">The Reverse-Lookup Algorithm</h2>
+<p>When the transport playhead relocates (scrubbing, clicking, or
+jumping via locator marks), the DAW's playback engine executes a
+reverse-lookup routine:</p>
+<ol type="1">
+<li><strong>Position Query:</strong> The engine records the precise
+sample-accurate timestamp of the new playhead location (<span
+class="math inline">\(t_{\text{target}}\)</span>).</li>
+<li><strong>Track and Channel Filtering:</strong> The DAW isolates
+active MIDI tracks, output channels, and mapped CC lanes within the
+project structure.</li>
+<li><strong>Backward Search:</strong> For each tracked controller
+number, the search algorithm traverses backward along the timeline from
+<span class="math inline">\(t_{\text{target}}\)</span> toward <span
+class="math inline">\(t_0\)</span>.</li>
+<li><strong>Target Selection:</strong> The search halts for a given CC
+number the moment it encounters the first preceding event (<span
+class="math inline">\(t \le t_{\text{target}}\)</span>). Any older
+redundant events further back in the project are disregarded.</li>
+<li><strong>Boundary Handling:</strong> In un-looped arrangements, the
+search can traverse across multiple distinct, non-overlapping MIDI clips
+or track regions, looking at the underlying track timeline rather than
+clip boundaries.</li>
+</ol>
+<p>If no preceding event exists between <span
+class="math inline">\(t_{\text{target}}\)</span> and <span
+class="math inline">\(t_0\)</span>, the DAW leaves the parameter
+unchanged or resets it to the default project state (typically CC7
+Volume at 100 or 127, and CC1 Modulation at 0), depending on user
+preferences.</p>
+<h2 id="interpolation-and-continuous-curve-chasing">Interpolation and
+Continuous Curve Chasing</h2>
+<p>Modern DAWs often allow users to draw automation as continuous Bezier
+curves or linear ramps rather than individual stepped events. How the
+DAW chases these values depends on its internal data architecture:</p>
+<ul>
+<li><strong>Pre-Bounced Discrete Events:</strong> If automation is
+converted to high-density MIDI CC events under the hood, the standard
+backward search locates the latest discrete point immediately prior to
+the playhead.</li>
+<li><strong>Vector-Based Calculations:</strong> If the DAW stores
+automation mathematically as vectors between nodes, it identifies the
+two nodes flanking <span
+class="math inline">\(t_{\text{target}}\)</span> (one before and one
+after). It then solves the curve formula at the exact timestamp to
+calculate the interpolated CC value, instantly generating and
+dispatching a single discrete MIDI message reflecting that value.</li>
+</ul>
+<h2 id="transmission-and-state-restoration">Transmission and State
+Restoration</h2>
+<p>Once all relevant CC states are resolved, the DAW transmits this
+state information through the signal chain prior to opening the audio
+buffer for playback:</p>
+<ul>
+<li><strong>Burst Transmission:</strong> The DAW transmits a burst of CC
+events across the assigned virtual ports or hardware MIDI outputs. This
+occurs during the pre-roll or buffer-fill phase (often a fraction of a
+millisecond) so that the sound engine is primed before the first audio
+sample is rendered.</li>
+<li><strong>Controller Independence:</strong> Chasing occurs per
+controller type independently. For example, the DAW might chase a CC1
+message from bar 4, a CC64 (Sustain) message from bar 3, and a CC11
+message from bar 2 simultaneously, building a complete composite
+state.</li>
+<li><strong>Priority Handling:</strong> To avoid glitches, DAWs often
+order chase messages deliberately. Non-destructive operational
+controllers (like CC7 volume or CC10 pan) are typically dispatched
+alongside articulation controllers (CC1 modulation, CC2 breath) prior to
+any Note-On messages triggering at the same timestamp.</li>
+</ul>
+<h2 id="performance-and-bandwidth-optimization">Performance and
+Bandwidth Optimization</h2>
+<p>Sending dozens of chased CC messages across numerous tracks can
+strain serial MIDI interfaces and consume processor cycles. DAWs use
+several optimizations to prevent issues:</p>
+<ul>
+<li><strong>State Caching:</strong> Advanced DAWs maintain a running
+state cache. If the playhead jumps to a new location where the
+calculated CC values match the instrument’s current internal state,
+redundant messages are skipped.</li>
+<li><strong>Message Thinning:</strong> When rapid playhead scrubbing
+occurs, the DAW suppresses chase emissions until the playhead settles,
+preventing buffer overruns in third-party virtual instruments.</li>
+<li><strong>Selective Chasing Filters:</strong> Most DAWs allow users to
+toggle chasing on a per-controller basis within global project settings,
+letting producers chase critical parameters like CC1, CC7, and CC11
+while disabling chasing for volatile controllers like CC64 (Sustain) or
+Pitch Bend to prevent unintended hanging notes or artifacts.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

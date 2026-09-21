@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Parameter Smoothing Stops MIDI CC Stepping - midi</title>
+    <meta name="description" content="Parameter smoothing is a digital signal processing technique designed to eliminate audible "zipper noise" and harsh transitions caused by standard MIDI resolution. Because traditional MIDI Continuous Controller (CC) messages transmit data in discrete 7-b">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-parameter-smoothing-stops-midi-cc-stepping">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Parameter Smoothing Stops MIDI CC Stepping - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-parameter-smoothing-stops-midi-cc-stepping" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Parameter smoothing is a digital signal processing technique designed to eliminate audible "zipper noise" and harsh transitions caused by standard MIDI resolution. Because traditional MIDI Continuous Controller (CC) messages transmit data in discrete 7-b" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-parameter-smoothing-stops-midi-cc-stepping">How Parameter
+Smoothing Stops MIDI CC Stepping</h1>
+<p>Parameter smoothing is a digital signal processing technique designed
+to eliminate audible "zipper noise" and harsh transitions caused by
+standard MIDI resolution. Because traditional MIDI Continuous Controller
+(CC) messages transmit data in discrete 7-bit steps (values ranging from
+0 to 127), rapid parameter sweeps create abrupt stair-stepped jumps
+rather than fluid curves. Parameter smoothing intercepts these coarse
+values and calculates intermediate points at the audio-rate,
+transforming abrupt jumps into clean, continuous modulations.</p>
+<h3 id="the-origin-of-stepped-artifacts-zipper-noise">The Origin of
+Stepped Artifacts (Zipper Noise)</h3>
+<p>Standard MIDI CC values are quantized to only 128 discrete integer
+states. When a musician or an automation lane rapidly moves a
+controller—such as turning a filter cutoff knob from 0 to 127 within a
+fraction of a second—the receiving audio engine does not receive a
+smooth curve. Instead, it receives a sequence of sparse, instantaneous
+jumps.</p>
+<p>When a sensitive parameter like filter cutoff, delay time, or gain
+shifts instantaneously, it creates a discontinuity in the audio
+waveform. In the frequency domain, these sharp discontinuities generate
+high-frequency harmonic bursts. To human ears, this translates to a
+persistent, abrasive chattering or clicking known as "zipper noise."</p>
+<h3 id="how-parameter-smoothing-operates">How Parameter Smoothing
+Operates</h3>
+<p>Parameter smoothing acts as an intermediary buffer between the MIDI
+input and the audio rendering engine. Rather than allowing an incoming
+MIDI CC event to instantly rewrite an internal parameter value, the
+smoothing algorithm gradually transitions the parameter to the target
+value.</p>
+<p>This is primarily accomplished through two common methods:</p>
+<ul>
+<li><strong>Linear Ramping (Interpolation):</strong> When a new MIDI CC
+value arrives, the engine calculates a slope between the current
+parameter value and the incoming target value over a defined duration
+(typically between 5 and 20 milliseconds). The value changes by a
+microscopic amount every sample, creating a straight-line transition
+between the steps.</li>
+<li><strong>Low-Pass Filtering (Exponential Smoothing):</strong> Many
+audio plugins feed raw CC data through a simple digital one-pole
+low-pass filter (also known as an exponential decay or leaky
+integrator). High-frequency transitions (the instant jumps) are rolled
+off, leaving behind a smooth, natural curve that gently glides toward
+the target value without overshoot.</li>
+</ul>
+<h3 id="audio-rate-decoupling">Audio-Rate Decoupling</h3>
+<p>Crucially, parameter smoothing shifts the update frequency of the
+parameter from the control rate to the audio sample rate.</p>
+<p>MIDI CC messages arrive intermittently, often at intervals of tens of
+milliseconds. Audio processing, however, occurs thousands of times per
+second (e.g., 44,100 or 48,000 times per second). Parameter smoothing
+computes the parameter value per-sample—or across tiny sub-blocks of
+samples—rather than per-MIDI-message. By the time the parameter
+modulates the audio stream, the discrete 128-step staircase is converted
+into a mathematically continuous curve, entirely preventing stepped
+artifacts while preserving responsive real-time control.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

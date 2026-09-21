@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuous MIDI Time Code Bandwidth Overhead - midi</title>
+    <meta name="description" content="Continuous MIDI Time Code (MTC) transmission requires a predictable slice of serial throughput that directly impacts the available data capacity of a traditional MIDI connection. When transmitted over a standard 5-pin DIN MIDI link operating at 31,250 ba">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/continuous-midi-time-code-bandwidth-overhead">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Continuous MIDI Time Code Bandwidth Overhead - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/continuous-midi-time-code-bandwidth-overhead" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Continuous MIDI Time Code (MTC) transmission requires a predictable slice of serial throughput that directly impacts the available data capacity of a traditional MIDI connection. When transmitted over a standard 5-pin DIN MIDI link operating at 31,250 ba" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="continuous-midi-time-code-bandwidth-overhead">Continuous MIDI
+Time Code Bandwidth Overhead</h1>
+<p>Continuous MIDI Time Code (MTC) transmission requires a predictable
+slice of serial throughput that directly impacts the available data
+capacity of a traditional MIDI connection. When transmitted over a
+standard 5-pin DIN MIDI link operating at 31,250 baud, continuous MTC
+consumes between 6.14% and 7.68% of the total bandwidth, depending on
+the SMPTE frame rate. This article breaks down the physical serial
+constraints of MIDI 1.0, calculates the exact byte and bit rate of MTC
+quarter-frame messages, and explains the real-world performance
+implications of sharing this bandwidth with musical performance
+data.</p>
+<h3 id="the-midi-10-physical-layer">The MIDI 1.0 Physical Layer</h3>
+<p>To calculate bandwidth overhead, start with the standard MIDI 1.0
+transmission specifications:</p>
+<ul>
+<li><strong>Baud Rate:</strong> 31,250 bits per second (bps).</li>
+<li><strong>Byte Encoding:</strong> Asynchronous serial transmission
+with 1 start bit, 8 data bits, and 1 stop bit, totaling 10 bits per
+transmitted byte.</li>
+<li><strong>Maximum Theoretical Throughput:</strong> 31,250 bits/sec ÷
+10 bits/byte = <strong>3,125 bytes per second</strong>.</li>
+</ul>
+<h3 id="mtc-quarter-frame-structure">MTC Quarter-Frame Structure</h3>
+<p>During continuous playback, MTC does not send full timecode addresses
+continuously. Instead, it breaks timecode into Quarter-Frame
+messages:</p>
+<ul>
+<li><strong>Message Size:</strong> 2 bytes (one Status byte
+<code>0xF1</code>, followed by one Data byte containing a nibble of
+timecode data and a 3-bit message identifier).</li>
+<li><strong>Transmission Frequency:</strong> Exactly 4 quarter-frame
+messages per SMPTE frame. A full timecode address requires 8 individual
+quarter-frame messages, meaning a complete address update resolves every
+2 SMPTE frames.</li>
+</ul>
+<h3 id="bandwidth-consumption-by-frame-rate">Bandwidth Consumption by
+Frame Rate</h3>
+<p>The continuous transmission overhead scales with the frame rate of
+the project:</p>
+<ul>
+<li><p><strong>24 fps (Film):</strong></p>
+<ul>
+<li>24 frames/sec × 4 messages = 96 messages/second</li>
+<li>96 messages × 2 bytes = 192 bytes/second</li>
+<li>192 bytes/sec × 10 bits/byte = 1,920 bps</li>
+<li>Overhead: 1,920 ÷ 31,250 = <strong>6.14%</strong></li>
+</ul></li>
+<li><p><strong>25 fps (PAL):</strong></p>
+<ul>
+<li>25 frames/sec × 4 messages = 100 messages/second</li>
+<li>100 messages × 2 bytes = 200 bytes/second</li>
+<li>200 bytes/sec × 10 bits/byte = 2,000 bps</li>
+<li>Overhead: 2,000 ÷ 31,250 = <strong>6.40%</strong></li>
+</ul></li>
+<li><p><strong>30 fps / 29.97 fps (NTSC / Standard):</strong></p>
+<ul>
+<li>30 frames/sec × 4 messages = 120 messages/second</li>
+<li>120 messages × 2 bytes = 240 bytes/second</li>
+<li>240 bytes/sec × 10 bits/byte = 2,400 bps</li>
+<li>Overhead: 2,400 ÷ 31,250 = <strong>7.68%</strong></li>
+</ul></li>
+</ul>
+<h3 id="implications-on-a-shared-cable">Implications on a Shared
+Cable</h3>
+<p>While a constant 7.7% overhead leaves roughly 92% of the cable's
+theoretical bandwidth available, the operational impact on a single
+shared 5-pin DIN connection is often greater than the percentage
+suggests:</p>
+<ol type="1">
+<li><strong>Jitter and Timing Latency:</strong> MIDI 1.0 uses serial
+FIFO queues without packet prioritization. An MTC message takes
+approximately 0.64 milliseconds to transmit. If notes, control change
+messages, or pitch bends arrive while an MTC byte is being transmitted,
+musical events are delayed, causing audible timing jitter.</li>
+<li><strong>Disruption of Running Status:</strong> Standard performance
+data often relies on MIDI Running Status to save bandwidth by omitting
+redundant status bytes. While MTC Quarter-Frame messages
+(<code>0xF1</code>) are System Common messages and technically do not
+clear Running Status under the MIDI 1.0 specification, some legacy
+receivers incorrectly reset their Running Status buffers upon receiving
+them, forcing controllers to resend full 3-byte messages and
+exacerbating bandwidth congestion.</li>
+<li><strong>High-Density Controller Choking:</strong> Dense continuous
+controller (CC) sweeps, polyphonic aftertouch, or pitch bend
+manipulation can easily saturate a 31,250 bps connection. Reserving 240
+bytes every second for continuous MTC on the same wire significantly
+reduces the buffer ceiling, leading to dropped messages or audible
+delays during peak data bursts.</li>
+</ol>
+<p>For reliable operation in complex setups, continuous MTC should be
+routed through a dedicated physical MIDI DIN port or transferred over
+modern multi-port USB-MIDI or network interfaces (RTP-MIDI), where
+bandwidth limitations are effectively eliminated.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

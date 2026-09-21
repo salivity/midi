@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Zero Velocity Note Off Explained - midi</title>
+    <meta name="description" content="In the original MIDI 1.0 specification published in 1983, a Note On message sent with a velocity value of zero is officially interpreted as a Note Off command. This architectural design choice served primarily as a bandwidth-saving technique for hardware">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-zero-velocity-note-off-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Zero Velocity Note Off Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-zero-velocity-note-off-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the original MIDI 1.0 specification published in 1983, a Note On message sent with a velocity value of zero is officially interpreted as a Note Off command. This architectural design choice served primarily as a bandwidth-saving technique for hardware" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-zero-velocity-note-off-explained">MIDI Zero Velocity Note
+Off Explained</h1>
+<p>In the original MIDI 1.0 specification published in 1983, a Note On
+message sent with a velocity value of zero is officially interpreted as
+a Note Off command. This architectural design choice served primarily as
+a bandwidth-saving technique for hardware communicating over slow serial
+connections. By allowing instruments to turn off sounding notes without
+switching status bytes, the specification enabled the use of "Running
+Status," significantly reducing data overhead during dense musical
+performances.</p>
+<h3 id="standard-note-on-vs-note-off">Standard Note On vs. Note Off</h3>
+<p>In the MIDI protocol, musical events are transmitted as sequences of
+8-bit bytes. Playing and releasing a key traditionally requires two
+distinct channel voice messages:</p>
+<ul>
+<li><strong>Note On (<code>0x9n</code>):</strong> Followed by two data
+bytes representing Note Number (0–127) and Velocity (1–127), indicating
+how hard the key was struck.</li>
+<li><strong>Note Off (<code>0x8n</code>):</strong> Followed by two data
+bytes representing Note Number (0–127) and Release Velocity (0–127),
+indicating how quickly the key was released.</li>
+</ul>
+<p>Under this standard approach, alternating between playing notes and
+releasing notes requires the transmitter to send a three-byte message
+for the strike (<code>0x9n</code>, note, velocity) and another
+three-byte message for the release (<code>0x8n</code>, note, release
+velocity), totaling six bytes per played note.</p>
+<h3 id="the-running-status-optimization">The Running Status
+Optimization</h3>
+<p>MIDI 1.0 operates over a 31.25 kbaud serial connection, which allows
+roughly 1,000 to 1,500 messages per second. In complex, polyphonic
+sequences, bandwidth saturation could cause audible timing jitter and
+latency.</p>
+<p>To mitigate this, the MIDI standard introduced "Running Status." When
+consecutive messages share the exact same status byte, the sender can
+omit the status byte entirely, transmitting only the subsequent data
+bytes.</p>
+<p>If a performance alternated strictly between traditional Note On
+(<code>0x9n</code>) and Note Off (<code>0x8n</code>), Running Status
+could rarely be used because the status byte changed continuously. By
+defining a Note On command with a velocity of zero (<code>0x00</code>)
+as an explicit release command, both the attack and release of notes
+could remain entirely under the <code>0x9n</code> status byte.</p>
+<h3 id="bandwidth-savings-in-practice">Bandwidth Savings in
+Practice</h3>
+<p>When leveraging zero-velocity Note Off with Running Status, the
+communication flow operates as follows:</p>
+<ol type="1">
+<li><strong>First Note Strike:</strong>
+<code>[0x90] [Note Number] [Velocity &gt; 0]</code> (3 bytes sent;
+establishes Running Status)</li>
+<li><strong>First Note Release:</strong>
+<code>[Note Number] [0x00]</code> (Only 2 bytes sent)</li>
+<li><strong>Second Note Strike:</strong>
+<code>[Note Number] [Velocity &gt; 0]</code> (Only 2 bytes sent)</li>
+<li><strong>Second Note Release:</strong>
+<code>[Note Number] [0x00]</code> (Only 2 bytes sent)</li>
+</ol>
+<p>After the initial status byte is declared, every subsequent note-on
+and note-off event requires only two bytes instead of three. This yields
+an approximate 33% reduction in data transmission for note events,
+keeping the MIDI pipeline responsive.</p>
+<h3 id="the-trade-off-release-velocity">The Trade-Off: Release
+Velocity</h3>
+<p>The primary drawback of this implementation is the loss of release
+velocity. While standard Note Off (<code>0x8n</code>) includes a
+dedicated velocity byte allowing sound engines to modulate release
+parameters—such as the decay rate of a physical string model or envelope
+release time—a Note On message with zero velocity fixes that parameter
+to zero.</p>
+<p>Because very few synthesizers and keyboard controllers in the 1980s
+supported mechanical release velocity sensors, the MIDI Manufacturers
+Association prioritized data efficiency over release sensitivity. As a
+result, almost all modern DAWs, sequencers, and MIDI controllers treat
+<code>0x8n</code> messages and <code>0x9n</code> messages with a
+velocity of zero interchangeably.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

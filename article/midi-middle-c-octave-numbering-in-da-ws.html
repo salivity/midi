@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Middle C Octave Numbering in DAWs - midi</title>
+    <meta name="description" content="While all Digital Audio Workstations (DAWs) agree that MIDI note number 60 represents the pitch of Middle C (approximately 261.63 Hz), they do not agree on how to label that note's octave. Depending on the software, MIDI note 60 is designated as C3, C4,">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-middle-c-octave-numbering-in-da-ws">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Middle C Octave Numbering in DAWs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-middle-c-octave-numbering-in-da-ws" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="While all Digital Audio Workstations (DAWs) agree that MIDI note number 60 represents the pitch of Middle C (approximately 261.63 Hz), they do not agree on how to label that note's octave. Depending on the software, MIDI note 60 is designated as C3, C4," />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-middle-c-octave-numbering-in-daws">MIDI Middle C Octave
+Numbering in DAWs</h1>
+<p>While all Digital Audio Workstations (DAWs) agree that MIDI note
+number 60 represents the pitch of Middle C (approximately 261.63 Hz),
+they do not agree on how to label that note's octave. Depending on the
+software, MIDI note 60 is designated as C3, C4, or C5. This discrepancy
+stems from conflicting historical hardware standards rather than
+software bugs, yet it frequently causes confusion during cross-platform
+collaboration, hardware sequencing, and virtual instrument
+keyswitching.</p>
+<h3 id="the-origin-of-the-discrepancy">The Origin of the
+Discrepancy</h3>
+<p>The MIDI Manufacturers Association (MMA) established the MIDI
+specification to assign note numbers from 0 to 127, defining note 60 as
+Middle C. However, the MMA never formalized an octave labeling
+scheme.</p>
+<p>This omission led competing synthesizer manufacturers to establish
+their own conventions:</p>
+<ul>
+<li><strong>Yamaha Standard (C3):</strong> Yamaha chose to designate
+MIDI note 0 as C-2. Counting upward, MIDI note 60 becomes C3.</li>
+<li><strong>Roland Standard (C4):</strong> Roland followed Scientific
+Pitch Notation (SPN), designating MIDI note 0 as C-1. This makes MIDI
+note 60 C4.</li>
+<li><strong>Alternate Systems (C5):</strong> Other developers chose to
+avoid negative octave numbers entirely, designating MIDI note 0 as C0.
+Consequently, MIDI note 60 becomes C5.</li>
+</ul>
+<p>Because modern DAWs inherited different lineage from these hardware
+eras, these conventions persist today.</p>
+<h3 id="middle-c-across-major-daws">Middle C Across Major DAWs</h3>
+<p>DAWs typically adopt one of the three established conventions by
+default:</p>
+<ul>
+<li><strong>Ableton Live (C3):</strong> Ableton adheres strictly to the
+Yamaha standard, displaying MIDI note 60 as C3.</li>
+<li><strong>Steinberg Cubase and Nuendo (C3):</strong> Cubase defaults
+to C3, reflecting Steinberg's historical ties with Yamaha, though newer
+versions offer display options to alter this view.</li>
+<li><strong>Apple Logic Pro (C3 or C4):</strong> Logic Pro historically
+defaulted to C3, but allows users to toggle the display between C3 and
+C4 in its display preferences to match Scientific Pitch Notation.</li>
+<li><strong>Avid Pro Tools (C4):</strong> Pro Tools adheres to
+Scientific Pitch Notation and the Roland standard, consistently labeling
+note 60 as C4.</li>
+<li><strong>Cockos REAPER (C4):</strong> REAPER defaults to C4, but
+provides a user-definable MIDI octave offset setting in its
+preferences.</li>
+<li><strong>PreSonus Studio One (C3 or C4):</strong> Studio One provides
+a setting to switch between octave naming conventions, often defaulting
+to C3 or C4 depending on the version.</li>
+<li><strong>Image-Line FL Studio (C5):</strong> FL Studio designates
+MIDI note 0 as C0, making Middle C (note 60) appear as C5 in the Piano
+Roll.</li>
+</ul>
+<h3 id="practical-impact-on-production-workflows">Practical Impact on
+Production Workflows</h3>
+<p>Because standard MIDI files (<code>.mid</code>) encode musical data
+as raw pitch integers (0–127) rather than text strings like "C3,"
+transferring a MIDI file between two different DAWs will play the
+correct audio frequencies. However, the visual representation changes,
+causing specific operational challenges:</p>
+<h4 id="virtual-instrument-keyswitches">Virtual Instrument
+Keyswitches</h4>
+<p>Sample libraries (such as those hosted in Native Instruments Kontakt,
+Spitfire Audio, or Vienna Symphonic Library) rely on keyswitches—notes
+outside the playable range of an instrument used to trigger
+articulations like legato, staccato, or pizzicato. If a library manual
+states that a keyswitch is located at C0, an Ableton user (Yamaha
+standard) and a Pro Tools user (Roland standard) will play different
+physical MIDI notes if they rely solely on the named pitch, causing the
+articulation to fail.</p>
+<h4 id="hardware-synthesizer-patch-management">Hardware Synthesizer
+Patch Management</h4>
+<p>External synthesizers often follow their manufacturer's specific
+naming standard. Triggering a patch change or drum map mapped to "C1" on
+an external Roland drum machine from a DAW set to C3 will result in a
+one-octave offset unless adjusted.</p>
+<h3 id="resolving-naming-conflicts">Resolving Naming Conflicts</h3>
+<p>To avoid octave-related issues across different environments:</p>
+<ol type="1">
+<li><strong>Rely on MIDI Note Numbers:</strong> When documenting
+articulation maps, sample triggers, or keyswitches for other producers,
+specify the absolute MIDI note number (e.g., Note 60) rather than the
+octave name.</li>
+<li><strong>Configure Display Preferences:</strong> If your DAW supports
+it (such as Logic Pro, Cubase, or REAPER), adjust the MIDI display
+offset in the preferences menu to match the primary standard used by
+your collaborators or most frequently used sample libraries.</li>
+<li><strong>Calibrate by Ear:</strong> When mapping keyswitches
+manually, verify triggering via incoming MIDI monitor plugins to ensure
+the correct internal integer is transmitted regardless of the interface
+label.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

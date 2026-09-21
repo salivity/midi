@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI CC 2 for Wind Synth Players Explained - midi</title>
+    <meta name="description" content="MIDI Continuous Controller 2 (CC 2), designated in the standard MIDI specification as the Breath Controller, is the foundational expressive tool for wind synthesizer players. Unlike traditional keyboard controllers that rely heavily on initial strike vel">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cc-2-for-wind-synth-players-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI CC 2 for Wind Synth Players Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cc-2-for-wind-synth-players-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Continuous Controller 2 (CC 2), designated in the standard MIDI specification as the Breath Controller, is the foundational expressive tool for wind synthesizer players. Unlike traditional keyboard controllers that rely heavily on initial strike vel" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-cc-2-for-wind-synth-players-explained">MIDI CC 2 for Wind
+Synth Players Explained</h1>
+<p>MIDI Continuous Controller 2 (CC 2), designated in the standard MIDI
+specification as the Breath Controller, is the foundational expressive
+tool for wind synthesizer players. Unlike traditional keyboard
+controllers that rely heavily on initial strike velocity, wind
+controllers use CC 2 to translate a player’s real-time air pressure into
+dynamic sonic variations. This article explores how CC 2 functions, why
+it is essential for authentic wind instrument performance, how it shapes
+sound beyond simple volume, and how to effectively map it in modern
+synthesizers.</p>
+<h2 id="the-core-function-of-midi-cc-2">The Core Function of MIDI CC
+2</h2>
+<p>In the MIDI protocol, continuous controllers transmit a stream of
+values ranging from 0 to 127. While CC 7 controls master volume and CC
+11 handles general musical expression, MIDI CC 2 is specifically
+tailored to respond to continuous breath input.</p>
+<p>When playing instruments like the Akai EWI, Roland Aerophone, or
+Yamaha WX series, internal breath sensors measure the exact pressure of
+the player’s air stream. These fluctuations are instantly converted into
+CC 2 data. Because the data stream is continuous, it allows players to
+shape the attack, sustain, swell, and decay of every note entirely with
+their lungs, mimicking the natural physics of acoustic woodwinds and
+brass.</p>
+<h2 id="dynamic-expression-vs-velocity">Dynamic Expression vs.
+Velocity</h2>
+<p>Keyboards generally determine the loudness and brightness of a note
+via note-on velocity—the speed at which a key is struck. Once pressed,
+acoustic pianos and basic synth patches cannot alter that note's volume
+without a secondary control like an expression pedal or channel pressure
+(aftertouch).</p>
+<p>For wind synth players, velocity is often deprioritized or disabled
+entirely. Instead, CC 2 controls note onset and dynamics:</p>
+<ul>
+<li><strong>Attacks:</strong> Soft breath generates low CC 2 values,
+creating gentle, slow attacks; sharp bursts of air create crisp,
+immediate accents.</li>
+<li><strong>Sustain:</strong> Players can crescendo, decrescendo, and
+add organic diaphragm vibrato mid-note.</li>
+<li><strong>Release:</strong> Tapering off breath pressure naturally
+silences the note, rather than relying on a static envelope release
+time.</li>
+</ul>
+<h2 id="multi-parameter-sound-shaping">Multi-Parameter Sound
+Shaping</h2>
+<p>Acoustic instruments do not merely get louder when blown harder;
+their harmonic profile changes. Blowing harder into a saxophone or
+trumpet introduces upper harmonics, making the tone brighter and more
+aggressive.</p>
+<p>Wind synth players utilize CC 2 to replicate this acoustic behavior
+by mapping it to multiple synthesis parameters simultaneously:</p>
+<ul>
+<li><strong>Filter Cutoff:</strong> Assigning CC 2 to a low-pass filter
+cutoff ensures that blowing harder opens the filter, brightening the
+sound as it amplifies.</li>
+<li><strong>Oscillator Wave Folding / Drive:</strong> Adding saturation
+or waveshaping at high CC 2 values introduces grit and overtones on
+dynamic peaks.</li>
+<li><strong>LFO Depth:</strong> Subtle CC 2 increases can introduce
+pitch or amplitude modulation to emulate breath-driven vibrato.</li>
+</ul>
+<h2 id="synthesizer-mapping-and-compatibility">Synthesizer Mapping and
+Compatibility</h2>
+<p>While hardware wind synthesizers often handle breath routing
+internally, software instruments (VSTs) do not always respond to CC 2 by
+default. Many sample libraries and virtual synths are pre-configured to
+expect CC 1 (Modulation) or CC 11 (Expression) for dynamic swells.</p>
+<p>Wind synth players navigate this in two ways:</p>
+<ol type="1">
+<li><strong>Controller Remapping:</strong> Most wind controllers allow
+the internal breath sensor to transmit CC 11 or CC 1 instead of, or in
+addition to, CC 2.</li>
+<li><strong>Synth Matrix Routing:</strong> Advanced synthesizers allow
+users to set CC 2 as a master modulation source inside the synth's mod
+matrix, routing it directly to amplitude, filter cutoff, and timbre
+controls.</li>
+</ol>
+<p>Properly calibrating CC 2 response curves—adjusting the sensor's
+sensitivity and threshold—ensures the synthesizer reacts naturally to
+the player's lung capacity, making CC 2 the defining link between
+physical human expression and electronic sound synthesis.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

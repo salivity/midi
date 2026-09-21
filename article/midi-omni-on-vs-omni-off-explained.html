@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Omni On vs Omni Off Explained - midi</title>
+    <meta name="description" content="MIDI Omni On and Omni Off are receiver settings that dictate how a MIDI instrument filters incoming channel data. In short, Omni On instructs an instrument to respond to incoming MIDI messages sent across all 16 channels simultaneously, while Omni Off in">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-omni-on-vs-omni-off-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Omni On vs Omni Off Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-omni-on-vs-omni-off-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Omni On and Omni Off are receiver settings that dictate how a MIDI instrument filters incoming channel data. In short, Omni On instructs an instrument to respond to incoming MIDI messages sent across all 16 channels simultaneously, while Omni Off in" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-omni-on-vs-omni-off-explained">MIDI Omni On vs Omni Off
+Explained</h1>
+<p>MIDI Omni On and Omni Off are receiver settings that dictate how a
+MIDI instrument filters incoming channel data. In short, Omni On
+instructs an instrument to respond to incoming MIDI messages sent across
+all 16 channels simultaneously, while Omni Off instructs the instrument
+to ignore traffic on other channels and only respond to messages
+addressed to its specific, assigned channel.</p>
+<h3 id="midi-channels-and-message-filtering">MIDI Channels and Message
+Filtering</h3>
+<p>The MIDI protocol transmits performance data—such as note-on, pitch
+bend, and velocity—tagged with a specific channel number ranging from 1
+to 16. When multiple devices or sound modules share a single MIDI
+connection, channel numbers allow the sender to direct specific parts to
+specific instruments. How an instrument responds to these channel tags
+depends entirely on whether its Omni setting is set to On or Off.</p>
+<h3 id="how-omni-on-works">How Omni On Works</h3>
+<p>When an instrument is set to Omni On, it disables its
+channel-filtering mechanism. Regardless of which channel the incoming
+message was intended for, the instrument will process and play it.</p>
+<ul>
+<li><strong>Behavior:</strong> If a controller transmits a note on
+Channel 1, Channel 5, or Channel 16, the Omni On receiver treats them
+identically and plays the note.</li>
+<li><strong>Primary Use Case:</strong> Omni On is typically used for
+basic, standalone setups. If you have a single keyboard connected
+directly to a single sound module, Omni On ensures the hardware works
+immediately without requiring the user to match transmit and receive
+channels.</li>
+</ul>
+<h3 id="how-omni-off-works">How Omni Off Works</h3>
+<p>When an instrument is set to Omni Off, it activates its channel
+filter. The device will only process MIDI messages that match its
+designated basic channel (or channels assigned in multi-timbral setups)
+and will discard all other incoming data.</p>
+<ul>
+<li><strong>Behavior:</strong> If an instrument's basic channel is set
+to Channel 3 and it receives messages on Channel 1 and Channel 2, those
+messages are ignored. It will only play notes and respond to commands
+sent specifically on Channel 3.</li>
+<li><strong>Primary Use Case:</strong> Omni Off is the standard
+operating mode for modern studios, DAWs, and multi-instrument daisy
+chains. It allows multiple synths to be connected via the same MIDI
+chain while each plays an independent musical part without
+interference.</li>
+</ul>
+<h3 id="the-four-midi-modes">The Four MIDI Modes</h3>
+<p>Omni On and Omni Off work in tandem with Poly (polyphonic) and Mono
+(monophonic) settings to form the four standard MIDI reception
+modes:</p>
+<ol type="1">
+<li><strong>Mode 1: Omni On / Poly:</strong> The instrument responds
+polyphonically to messages coming from all 16 channels.</li>
+<li><strong>Mode 2: Omni On / Mono:</strong> The instrument responds
+monophonically (one note at a time) to messages coming from all 16
+channels.</li>
+<li><strong>Mode 3: Omni Off / Poly:</strong> The instrument responds
+polyphonically, but only to its assigned channel. This is the default
+setting for almost all modern synthesizers and virtual instruments.</li>
+<li><strong>Mode 4: Omni Off / Mono:</strong> Each voice of a polyphonic
+synthesizer is assigned to an individual channel, allowing independent
+control over pitch bends and controllers per voice (the foundation of
+modern MPE setups).</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

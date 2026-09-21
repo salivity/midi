@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General MIDI: Standardizing Sound Card Instruments - midi</title>
+    <meta name="description" content="General MIDI (GM) established a universal standard that mapped specific instrument sounds to designated program numbers across digital synthesizers and computer sound cards. Before its introduction, a MIDI file composed on one hardware device would sound">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/general-midi-standardizing-sound-card-instruments">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="General MIDI: Standardizing Sound Card Instruments - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/general-midi-standardizing-sound-card-instruments" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="General MIDI (GM) established a universal standard that mapped specific instrument sounds to designated program numbers across digital synthesizers and computer sound cards. Before its introduction, a MIDI file composed on one hardware device would sound" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="general-midi-standardizing-sound-card-instruments">General MIDI:
+Standardizing Sound Card Instruments</h1>
+<p>General MIDI (GM) established a universal standard that mapped
+specific instrument sounds to designated program numbers across digital
+synthesizers and computer sound cards. Before its introduction, a MIDI
+file composed on one hardware device would sound completely
+different—often chaotic—when played on another. This article explores
+the origins of General MIDI, how its standardized patch list resolved
+hardware incompatibility, and its impact on multimedia audio
+consistency.</p>
+<h3 id="the-incompatibility-problem-in-early-computer-audio">The
+Incompatibility Problem in Early Computer Audio</h3>
+<p>During the late 1980s and early 1990s, the adoption of computer sound
+cards like the AdLib, Sound Blaster, and Roland MT-32 revolutionized
+multimedia and PC gaming. However, MIDI (Musical Instrument Digital
+Interface) only transmitted performance data—such as pitch, velocity,
+and duration—rather than the actual audio waveforms.</p>
+<p>Hardware manufacturers assigned sound presets (patches) arbitrarily.
+For example, Program Change #1 might trigger an acoustic grand piano on
+a Roland module, a flute on an AdLib card, or a synthesized sound effect
+on a Sound Blaster. Because composers had no way to know which sound
+card an end user possessed, background music and soundtracks frequently
+played back with completely incorrect instruments.</p>
+<h3 id="the-128-patch-instrument-map">The 128-Patch Instrument Map</h3>
+<p>To eliminate this fragmentation, the MIDI Manufacturers Association
+(MMA) and the Japan MIDI Standards Committee (JMSC) established the
+General MIDI Level 1 specification in 1991. The cornerstone of this
+standard was a fixed 128-instrument patch map, categorized into 16
+logical families:</p>
+<ol type="1">
+<li><strong>Piano</strong> (Programs 1–8)</li>
+<li><strong>Chromatic Percussion</strong> (Programs 9–16)</li>
+<li><strong>Organ</strong> (Programs 17–24)</li>
+<li><strong>Guitar</strong> (Programs 25–32)</li>
+<li><strong>Bass</strong> (Programs 33–40)</li>
+<li><strong>Strings</strong> (Programs 41–48)</li>
+<li><strong>Ensemble</strong> (Programs 49–56)</li>
+<li><strong>Brass</strong> (Programs 57–64)</li>
+<li><strong>Reed</strong> (Programs 65–72)</li>
+<li><strong>Pipe</strong> (Programs 73–80)</li>
+<li><strong>Synth Lead</strong> (Programs 81–88)</li>
+<li><strong>Synth Pad</strong> (Programs 89–96)</li>
+<li><strong>Synth Effects</strong> (Programs 97–104)</li>
+<li><strong>Ethnic</strong> (Programs 105–112)</li>
+<li><strong>Percussive</strong> (Programs 113–120)</li>
+<li><strong>Sound Effects</strong> (Programs 121–128)</li>
+</ol>
+<p>Under this system, Program 1 is universally defined as an Acoustic
+Grand Piano, Program 41 is a Violin, and Program 57 is a Trumpet. Any
+sound card bearing the General MIDI logo guaranteed that selecting a
+specific program number would load the intended instrument family.</p>
+<h3 id="standardized-percussion-on-channel-10">Standardized Percussion
+on Channel 10</h3>
+<p>In addition to melodic instruments, General MIDI standardized
+non-melodic percussion. The specification reserved MIDI Channel 10
+exclusively for drum kits and mapped specific percussion sounds to exact
+key numbers across the keyboard.</p>
+<p>For instance, Note 35 is always an Acoustic Bass Drum, Note 38 is an
+Acoustic Snare, and Note 42 is a Closed Hi-Hat. This eliminated the
+previous issue where drum tracks on non-standardized hardware would
+accidentally trigger melodic notes or entirely wrong percussion
+elements.</p>
+<h3 id="minimum-hardware-performance-requirements">Minimum Hardware
+Performance Requirements</h3>
+<p>General MIDI went beyond patch naming by establishing baseline
+performance requirements for hardware manufacturers:</p>
+<ul>
+<li><strong>Polyphony:</strong> Sound cards had to support at least 24
+voices of dynamic polyphony (or 16 melodic voices and 8 percussion
+voices).</li>
+<li><strong>Multi-timbrality:</strong> Devices were required to respond
+to all 16 MIDI channels simultaneously, with each channel capable of
+playing a different instrument patch.</li>
+<li><strong>Control Change Messages:</strong> Support was mandated for
+essential performance controllers, including Modulation (CC 1), Volume
+(CC 7), Pan (CC 10), Expression (CC 11), and Sustain (CC 64).</li>
+<li><strong>Pitch Bend Range:</strong> The standard fixed the default
+pitch bend range to ±2 semitones.</li>
+</ul>
+<h3 id="the-industry-impact">The Industry Impact</h3>
+<p>While General MIDI did not standardize the <em>quality</em> or
+synthesis method of sound cards—meaning a low-cost FM-synthesis card
+sounded different from an expensive wavetable-synthesis card—it
+guaranteed <em>semantic consistency</em>. An orchestra sounded like an
+orchestra, and a rock arrangement preserved its intended instrumentation
+across every compatible system. This unified standard paved the way for
+predictable soundtrack playback in 1990s video games, web-based MIDI
+files, and consumer multimedia software.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Voice to MIDI Pitch Tracking for Singers - midi</title>
+    <meta name="description" content="Microphone pitch-tracking plugins allow vocalists to convert their live singing directly into MIDI data in real time. By routing microphone input through a dedicated pitch-to-MIDI plugin inside a Digital Audio Workstation (DAW), singers can perform melod">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/real-time-voice-to-midi-pitch-tracking-for-singers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Real-Time Voice to MIDI Pitch Tracking for Singers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/real-time-voice-to-midi-pitch-tracking-for-singers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Microphone pitch-tracking plugins allow vocalists to convert their live singing directly into MIDI data in real time. By routing microphone input through a dedicated pitch-to-MIDI plugin inside a Digital Audio Workstation (DAW), singers can perform melod" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="real-time-voice-to-midi-pitch-tracking-for-singers">Real-Time
+Voice to MIDI Pitch Tracking for Singers</h1>
+<p>Microphone pitch-tracking plugins allow vocalists to convert their
+live singing directly into MIDI data in real time. By routing microphone
+input through a dedicated pitch-to-MIDI plugin inside a Digital Audio
+Workstation (DAW), singers can perform melodies that instantly trigger
+virtual instruments, synthesizers, and samplers. This guide covers how
+to set up the signal chain, configure plugin settings, and optimize
+vocal delivery for low-latency, accurate pitch tracking.</p>
+<h3 id="essential-hardware-and-software-requirements">Essential Hardware
+and Software Requirements</h3>
+<p>To achieve functional real-time tracking, you need a setup that
+minimizes latency and audio artifacts:</p>
+<ul>
+<li><strong>Low-Latency Audio Interface:</strong> An interface running
+ASIO drivers (Windows) or Core Audio (macOS) capable of running at
+buffer sizes of 128 samples or lower (preferably 64 samples) to
+eliminate audible delay.</li>
+<li><strong>Microphone:</strong> A dynamic microphone (such as a Shure
+SM58) is often preferable to a sensitive condenser because it rejects
+room bleed, computer fan noise, and background sounds that can trigger
+false MIDI notes.</li>
+<li><strong>DAW:</strong> Any modern DAW that supports internal MIDI
+routing, such as Ableton Live, Reaper, Logic Pro, or Studio One.</li>
+<li><strong>Pitch-to-MIDI Plugin:</strong> Dedicated real-time
+conversion software such as Vochlea Dubler 2, Jam Origin MIDI Guitar 2
+(which includes vocal tracking), or native tools like Cockos ReaTune in
+Reaper.</li>
+</ul>
+<h3 id="step-by-step-daw-routing">Step-by-Step DAW Routing</h3>
+<p>Converting audio to MIDI requires routing the pitch plugin's MIDI
+output to a target virtual instrument.</p>
+<ol type="1">
+<li><strong>Set Up the Audio Track:</strong> Create an audio track in
+your DAW and set the input to your vocal microphone.</li>
+<li><strong>Insert the Pitch Tracker:</strong> Add your pitch-tracking
+plugin onto the insert chain of this audio track.</li>
+<li><strong>Set Up the Instrument Track:</strong> Create a separate MIDI
+or software instrument track loaded with the synthesizer, piano, or
+virtual sound you want to control.</li>
+<li><strong>Route the MIDI Signal:</strong> Set the MIDI input of the
+instrument track to receive data from the audio track running the pitch
+plugin. Select the appropriate MIDI channel (usually Omnichannel or
+Channel 1).</li>
+<li><strong>Arm and Monitor:</strong> Arm both tracks for recording or
+set monitoring to "Input/In" on both channels so the software generates
+sound as you sing.</li>
+</ol>
+<h3 id="optimizing-plugin-detection-parameters">Optimizing Plugin
+Detection Parameters</h3>
+<p>Raw vocal audio contains room noise, sibilance, and natural frequency
+overtones that can confuse detection algorithms. Calibrate these
+parameters in your plugin:</p>
+<ul>
+<li><strong>Noise Gate / Threshold:</strong> Raise the input threshold
+so that breathing, lip smacks, and ambient room noise are ignored. The
+plugin should only detect intentional vocal phonation.</li>
+<li><strong>Tracking Mode (Monophonic vs. Polyphonic):</strong> Set the
+tracker to monophonic. The human voice produces one fundamental pitch at
+a time; running monophonic algorithms decreases CPU load and
+significantly reduces misdetected notes.</li>
+<li><strong>Pitch-Bend Sensitivity:</strong> If you want smooth glides
+between notes, enable pitch bending. If you want strict, separate notes,
+turn pitch bend off or increase the threshold to lock directly to the
+nearest semitone.</li>
+<li><strong>Scale and Root Quantization:</strong> Many pitch-to-MIDI
+tools allow you to lock output notes to a specific key (e.g., C Major or
+A Minor). Enabling this ensures that pitch drift or minor vocal
+inaccuracies are automatically corrected to the correct scale
+degree.</li>
+</ul>
+<h3 id="performance-adjustments-for-singers">Performance Adjustments for
+Singers</h3>
+<p>Singing into a pitch-to-MIDI converter requires a slightly different
+approach than singing for a vocal recording:</p>
+<ul>
+<li><strong>Pronounce Clear Consonants:</strong> Soft syllables like
+"la" or "da" produce clean transients that help the plugin detect note
+start points clearly without producing harsh spikes.</li>
+<li><strong>Control Vibrato:</strong> Heavy vibrato oscillates the
+fundamental frequency, which can cause the plugin to flutter rapidly
+between adjacent semitones. Sing with straight tones when targeting
+precise MIDI note triggers.</li>
+<li><strong>Maintain Stable Dynamics:</strong> Keep an even distance
+from the microphone to ensure steady input gain, preventing notes from
+cutting off prematurely.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

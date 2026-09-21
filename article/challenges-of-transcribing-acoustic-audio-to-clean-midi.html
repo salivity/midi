@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenges of Transcribing Acoustic Audio to Clean MIDI - midi</title>
+    <meta name="description" content="Transcribing an expressive acoustic performance into clean MIDI notation involves bridging the gap between fluid human artistry and rigid digital data. While human performers rely on subtle timing variations, dynamic swells, and continuous pitch modulati">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/challenges-of-transcribing-acoustic-audio-to-clean-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Challenges of Transcribing Acoustic Audio to Clean MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/challenges-of-transcribing-acoustic-audio-to-clean-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Transcribing an expressive acoustic performance into clean MIDI notation involves bridging the gap between fluid human artistry and rigid digital data. While human performers rely on subtle timing variations, dynamic swells, and continuous pitch modulati" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="challenges-of-transcribing-acoustic-audio-to-clean-midi">Challenges
+of Transcribing Acoustic Audio to Clean MIDI</h1>
+<p>Transcribing an expressive acoustic performance into clean MIDI
+notation involves bridging the gap between fluid human artistry and
+rigid digital data. While human performers rely on subtle timing
+variations, dynamic swells, and continuous pitch modulation, MIDI relies
+on discrete events, numerical velocities, and grid-based timing. This
+article examines the core technical and musical hurdles of this
+transcription process, focusing on polyphonic separation, timing
+quantization, pitch tracking, continuous dynamics, and the contrast
+between playable MIDI and readable notation.</p>
+<h3 id="polyphony-and-harmonic-complexity">Polyphony and Harmonic
+Complexity</h3>
+<p>Extracting discrete note events from acoustic instruments like the
+guitar, piano, or orchestral ensembles is fundamentally difficult due to
+overlapping frequencies. Acoustic instruments produce rich harmonic
+overtones that often overlap with the fundamental frequencies of higher
+notes played simultaneously. Automated transcription algorithms
+frequently misinterpret these upper partials as separate, phantom notes.
+Furthermore, sympathetic resonance—such as unplayed open strings
+vibrating on an acoustic guitar or piano—generates low-level acoustic
+artifacts that manifest in raw MIDI transcriptions as unwanted,
+short-duration notes that require extensive manual cleanup.</p>
+<h3 id="micro-timing-and-the-quantization-dilemma">Micro-Timing and the
+Quantization Dilemma</h3>
+<p>Expressive acoustic performances rarely adhere strictly to a
+metronomic grid. Musicians naturally employ rubato, micro-timing pushes
+and pulls, and natural rhythmic drift to convey emotion. When converting
+this performance into MIDI, transcribers face a trade-off:</p>
+<ul>
+<li><strong>Raw Timing (High Performance Fidelity):</strong> Preserves
+the human feel and micro-timing of the original performance, making
+digital playback sound natural. However, when loaded into score-writing
+software, unquantized audio generates unreadable notation filled with
+bizarre tuplets, tied 128th notes, and erratic rests.</li>
+<li><strong>Strict Quantization (High Notation Readability):</strong>
+Snaps every note event to the nearest subdivision (such as 16th or 8th
+notes), producing a clean, legible score. However, this process strips
+away the nuance of the performance, leaving playback feeling mechanical,
+sterile, and musically detached.</li>
+</ul>
+<h3 id="continuous-pitch-versus-discrete-notation">Continuous Pitch
+versus Discrete Notation</h3>
+<p>Standard MIDI structures pitch into 128 semitone-based integer
+values. Acoustic instruments, however, operate in a continuous pitch
+space. Vocalists, string players, and brass instrumentalists constantly
+utilize techniques like vibrato, microtonal bends, glissandos, and
+slides. Representing continuous pitch transitions in MIDI requires
+converting frequency changes into high-density pitch bend data or
+automated control change (CC) messages. While this allows virtual
+instruments to emulate the original acoustic performance, it clutters
+notation software, which does not naturally translate pitch bend curves
+into standard sheet music markings like finger slides, fall-offs, or
+vibrato indications.</p>
+<h3 id="dynamic-envelopes-beyond-note-on-velocity">Dynamic Envelopes
+Beyond Note-On Velocity</h3>
+<p>Standard MIDI typically records dynamics through a single "Note-On"
+velocity value between 0 and 127, fixed at the instant a note is struck.
+This system accommodates percussion or acoustic pianos reasonably well,
+but fails on sustained acoustic instruments like woodwinds, brass, and
+bowed strings. These instruments rely on continuous dynamic
+variations—such as crescendos, decrescendos, and accents during the
+sustain phase of a note. Capturing these sustained expressive elements
+requires mapping acoustic energy to secondary controllers like CC11
+(Expression) or CC1 (Modulation), a step that often requires significant
+manual intervention after the initial note-trigger transcription.</p>
+<h3 id="separating-musical-intent-from-acoustic-reality">Separating
+Musical Intent from Acoustic Reality</h3>
+<p>Acoustic performances are full of non-pitched physical noise: finger
+squeaks on guitar strings, fret buzz, breath noise from wind players,
+and the thud of piano dampers returning to the strings. Automated
+transcription tools cannot discern musical intent from incidental noise,
+resulting in false triggers, incorrect note cutoffs, and truncated
+sustain durations. Achieving a clean MIDI transcription ultimately
+requires a human editor to interpret the musician’s artistic intent,
+stripping away acoustic anomalies while preserving the core expressive
+language of the performance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

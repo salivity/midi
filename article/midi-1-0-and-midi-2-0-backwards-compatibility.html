@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 1.0 and MIDI 2.0 Backwards Compatibility - midi</title>
+    <meta name="description" content="MIDI 2.0 was developed with seamless interoperability in mind, ensuring that existing MIDI 1.0 gear remains functional alongside modern equipment. Rather than rendering legacy hardware obsolete, the MIDI 2.0 specification incorporates explicit architectu">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-1-0-and-midi-2-0-backwards-compatibility">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 1.0 and MIDI 2.0 Backwards Compatibility - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-1-0-and-midi-2-0-backwards-compatibility" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI 2.0 was developed with seamless interoperability in mind, ensuring that existing MIDI 1.0 gear remains functional alongside modern equipment. Rather than rendering legacy hardware obsolete, the MIDI 2.0 specification incorporates explicit architectu" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-10-and-midi-20-backwards-compatibility">MIDI 1.0 and MIDI
+2.0 Backwards Compatibility</h1>
+<p>MIDI 2.0 was developed with seamless interoperability in mind,
+ensuring that existing MIDI 1.0 gear remains functional alongside modern
+equipment. Rather than rendering legacy hardware obsolete, the MIDI 2.0
+specification incorporates explicit architectural features—primarily
+MIDI Capability Inquiry (MIDI-CI), the Universal MIDI Packet (UMP)
+format, and automatic message translation—to guarantee robust backwards
+compatibility across diverse production environments.</p>
+<h3 id="midi-capability-inquiry-midi-ci">MIDI Capability Inquiry
+(MIDI-CI)</h3>
+<p>The cornerstone of MIDI 2.0 backwards compatibility is MIDI
+Capability Inquiry (MIDI-CI). MIDI-CI operates as a digital handshake
+between connected devices to determine whether both ends support MIDI
+2.0. By default, all MIDI 2.0 devices power on and communicate strictly
+using the MIDI 1.0 protocol. Only when two connected devices query each
+other and confirm reciprocal MIDI 2.0 support will they switch to the
+expanded MIDI 2.0 feature set. If a MIDI 2.0 device is connected to a
+legacy MIDI 1.0 device that does not respond to MIDI-CI queries, the
+system continues to operate in MIDI 1.0 mode automatically, requiring no
+manual configuration by the user.</p>
+<h3 id="universal-midi-packet-ump-and-message-translation">Universal
+MIDI Packet (UMP) and Message Translation</h3>
+<p>MIDI 2.0 introduces the Universal MIDI Packet (UMP), a flexible
+32-bit packet format designed to run over modern digital transports like
+USB, Ethernet, and PCIe. The UMP structure natively encapsulates legacy
+MIDI 1.0 protocol messages directly alongside high-resolution MIDI 2.0
+messages.</p>
+<p>Because both protocols coexist within the UMP architecture, software
+and operating systems can translate data between the two standards in
+real time:</p>
+<ul>
+<li><strong>Resolution Scaling:</strong> MIDI 2.0 expands velocity and
+controller resolution up to 32 bits, compared to the 7-bit or 14-bit
+limits of MIDI 1.0. When sending MIDI 2.0 data to a MIDI 1.0 device,
+operating system drivers or hardware bridges automatically truncate or
+rescale the high-resolution values to standard 7-bit or 14-bit
+data.</li>
+<li><strong>Controller Mapping:</strong> Upward translation also applies
+when MIDI 1.0 devices send messages to MIDI 2.0 systems. Standard 7-bit
+velocity and CC values are proportionally expanded to the 16-bit or
+32-bit domain, allowing legacy controllers to control modern sound
+engines without jitter or step artifacts.</li>
+</ul>
+<h3 id="hardware-transports-and-legacy-5-pin-din">Hardware Transports
+and Legacy 5-Pin DIN</h3>
+<p>Legacy 5-pin DIN connections run at a fixed baud rate of 31.25
+kbit/s, which lacks the bandwidth required to transmit full MIDI 2.0
+data streams with per-note controllers and high-resolution messaging. To
+handle physical connectivity:</p>
+<ul>
+<li>Devices connected via traditional 5-pin DIN continue to send and
+receive standard MIDI 1.0 byte streams.</li>
+<li>Hardware bridges and modern audio interfaces convert incoming 5-pin
+DIN MIDI 1.0 data into UMP format for delivery to a host computer.</li>
+<li>USB-MIDI 2.0 specifications retain backward compatibility with the
+USB-MIDI 1.0 class standard, allowing modern controllers to function as
+standard USB-MIDI 1.0 devices when plugged into older operating systems
+or USB hosts.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

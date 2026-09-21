@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Motorized Fader Banks Switch MIDI Layers - midi</title>
+    <meta name="description" content="Motorized fader banks physically reposition themselves during a bank swap through bidirectional data communication between the hardware controller and a host application, such as a Digital Audio Workstation (DAW). When switching MIDI layers or banks, the">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-motorized-fader-banks-switch-midi-layers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Motorized Fader Banks Switch MIDI Layers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-motorized-fader-banks-switch-midi-layers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Motorized fader banks physically reposition themselves during a bank swap through bidirectional data communication between the hardware controller and a host application, such as a Digital Audio Workstation (DAW). When switching MIDI layers or banks, the" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-motorized-fader-banks-switch-midi-layers">How Motorized
+Fader Banks Switch MIDI Layers</h1>
+<p>Motorized fader banks physically reposition themselves during a bank
+swap through bidirectional data communication between the hardware
+controller and a host application, such as a Digital Audio Workstation
+(DAW). When switching MIDI layers or banks, the hardware triggers a
+protocol-level refresh that prompts the host to transmit the exact
+parameter states of the newly selected channels. The controller’s
+onboard microprocessor interprets this data, calculates the difference
+between current and target fader coordinates, and engages internal DC
+servo motors to drive the fader knobs mechanically to their new,
+accurate positions within milliseconds.</p>
+<h3 id="1-bank-change-trigger-and-bidirectional-communication">1. Bank
+Change Trigger and Bidirectional Communication</h3>
+<p>The repositioning sequence begins the moment an operator presses a
+bank switch button (e.g., Bank Up/Down, Channel +/-). When pressed, the
+controller updates its internal index and sends a message to the host
+software over protocols such as Mackie Control Universal (MCU), HUI,
+MIDI CC, or OSC (Open Sound Control).</p>
+<p>Because standard MIDI is often unidirectional, motorized hardware
+relies on bidirectional communication. The host software immediately
+acknowledges the bank change and responds by transmitting a burst of
+volume, pan, or automation data corresponding to the newly mapped
+channels (such as moving from channels 1–8 to channels 9–16).</p>
+<h3 id="2-resolution-and-target-position-decoding">2. Resolution and
+Target Position Decoding</h3>
+<p>The incoming data stream contains specific coordinate values for each
+fader:</p>
+<ul>
+<li><strong>Standard MIDI:</strong> Delivers 7-bit values ranging from 0
+to 127.</li>
+<li><strong>MCU/HUI and High-Resolution MIDI:</strong> Delivers
+pitch-bend messages or 14-bit dual-byte arrays (0 to 16,383) to provide
+smooth, sub-millimeter positioning accuracy.</li>
+</ul>
+<p>The hardware controller's internal microprocessor receives these
+values and translates them into physical target coordinates mapped
+across the fader's mechanical travel distance (typically 60mm or
+100mm).</p>
+<h3 id="3-closed-loop-servo-feedback-and-motor-actuation">3. Closed-Loop
+Servo Feedback and Motor Actuation</h3>
+<p>To move the faders without manual intervention, motorized units
+employ a closed-loop feedback system consisting of:</p>
+<ul>
+<li>A high-efficiency coreless DC motor or miniature stepper motor.</li>
+<li>A toothed belt and pulley assembly connected to the fader
+carriage.</li>
+<li>A resistive wiper track (potentiometer) or optical encoder that
+constantly reports the fader's actual physical position to the
+microprocessor.</li>
+</ul>
+<p>The onboard microcontroller compares the fader’s <em>current
+position</em> read from the wiper track with the <em>target
+position</em> received from the DAW. If a discrepancy exists, an
+H-bridge motor driver delivers direct current to the motor, rotating the
+pulley and gliding the belt-driven fader carriage toward the target
+value. The controller applies dynamic braking (damping) as the fader
+approaches the destination to prevent mechanical overshoot and bounce.
+Once the reported physical position matches the target data, the motor
+driver cuts power.</p>
+<h3 id="4-capacitive-touch-sense-disengagement">4. Capacitive
+Touch-Sense Disengagement</h3>
+<p>During layer swaps, safety routines ensure seamless mechanical
+operation. Motorized faders feature conductive, capacitive plastic or
+metal caps that detect human skin contact. If an engineer is physically
+resting a finger on a fader while initiating a bank swap, the capacitive
+circuit detects the touch and temporarily overrides the motor circuit
+for that specific channel. This prevents motor burnout, gear stripping,
+and jarring physical resistance against the user's hand.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

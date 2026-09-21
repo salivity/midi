@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Happens When a MIDI Optocoupler Degrades - midi</title>
+    <meta name="description" content="When the optocoupler in a standard 5-pin DIN MIDI input port begins to degrade, it causes signal distortion, data corruption, and communication failures. The optocoupler provides electrical isolation by converting incoming current pulses into light via a">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-happens-when-a-midi-optocoupler-degrades">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Happens When a MIDI Optocoupler Degrades - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-happens-when-a-midi-optocoupler-degrades" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When the optocoupler in a standard 5-pin DIN MIDI input port begins to degrade, it causes signal distortion, data corruption, and communication failures. The optocoupler provides electrical isolation by converting incoming current pulses into light via a" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-happens-when-a-midi-optocoupler-degrades">What Happens When
+a MIDI Optocoupler Degrades</h1>
+<p>When the optocoupler in a standard 5-pin DIN MIDI input port begins
+to degrade, it causes signal distortion, data corruption, and
+communication failures. The optocoupler provides electrical isolation by
+converting incoming current pulses into light via an internal LED, which
+is then detected by a phototransistor to recreate the digital electrical
+signal. As these optical and semiconductor elements wear out, the sharp
+square waves required by the MIDI protocol deform into sluggish, rounded
+waves, leading to timing errors, stuck notes, and eventually a total
+loss of connection.</p>
+<h3 id="loss-of-current-transfer-ratio-ctr">Loss of Current Transfer
+Ratio (CTR)</h3>
+<p>The primary mechanism of optocoupler degradation is the reduction of
+its Current Transfer Ratio (CTR). Over thousands of operating hours, the
+efficiency of the internal infrared LED drops due to thermal stress and
+crystal lattice defects, requiring more current to produce the same
+amount of light. Simultaneously, the sensitivity of the phototransistor
+can decline. When the CTR drops below the operational threshold designed
+into the MIDI receiver circuit, the phototransistor struggles to fully
+switch between logic states, causing the voltage of the output signal to
+drop or fail to register clear binary highs and lows.</p>
+<h3 id="slew-rate-reduction-and-pulse-width-distortion">Slew Rate
+Reduction and Pulse-Width Distortion</h3>
+<p>Standard MIDI transmits serial data at a fixed rate of 31.25 kbaud,
+where each bit lasts precisely 32 microseconds. A healthy optocoupler
+(such as the standard 6N138 or PC900) has fast rise and fall times to
+preserve the square shape of these bits. As the component degrades,
+switching speeds slow down significantly. The rising and falling edges
+of the digital pulses become sloped rather than vertical. This slew-rate
+limitation causes pulse-width distortion, where binary "0" and "1"
+pulses no longer match their intended duration, blurring the distinction
+between adjacent bits.</p>
+<h3 id="timing-jitter-and-uart-framing-errors">Timing Jitter and UART
+Framing Errors</h3>
+<p>The receiving device's Universal Asynchronous Receiver-Transmitter
+(UART) relies on precise voltage transitions to sample the middle of
+each incoming bit. When pulse widths distort and edges drift due to a
+worn optocoupler, the UART samples bits at the wrong moments. This
+introduces timing jitter and leads to framing errors—situations where
+the UART cannot locate the start and stop bits of a MIDI byte. As a
+result, the receiving hardware fails to recognize incoming bytes and
+discards corrupted data packets.</p>
+<h3 id="audible-and-functional-symptoms">Audible and Functional
+Symptoms</h3>
+<p>The degradation manifests progressively in hardware performance:</p>
+<ul>
+<li><strong>Hanging or Stuck Notes:</strong> If a "Note Off" command is
+corrupted or lost due to framing errors, a synthesizer will continue
+sounding a note indefinitely until a manual panic/reset command is
+sent.</li>
+<li><strong>Failed System Exclusive (SysEx) Transfers:</strong> SysEx
+messages consist of long continuous streams of bytes. Even minor timing
+drift will accumulate across a large data block, causing bulk dumps,
+patch transfers, or firmware updates to fail consistently.</li>
+<li><strong>Increased Sensitivity to Cable Length:</strong> A weak
+optocoupler lacks the margin to read weaker signals, meaning long or
+higher-capacitance MIDI cables that previously worked will suddenly
+produce errors or cease functioning.</li>
+<li><strong>Temperature-Dependent Failures:</strong> Degraded
+semiconductors are highly sensitive to thermal changes. A failing
+optocoupler might work when a synthesizer is first turned on, but fail
+after the instrument warms up to operating temperature.</li>
+</ul>
+<h3 id="complete-signal-loss">Complete Signal Loss</h3>
+<p>In the final stages of failure, the internal LED can no longer emit
+enough photons to switch the phototransistor across its threshold, or
+the phototransistor fails open entirely. At this point, the MIDI IN port
+goes completely dead, failing to pass any data to the microprocessor
+regardless of cable length, message type, or input signal strength.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

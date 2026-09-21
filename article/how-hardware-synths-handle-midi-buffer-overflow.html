@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Hardware Synths Handle MIDI Buffer Overflow - midi</title>
+    <meta name="description" content="Hardware synthesizers process incoming musical performance data through dedicated communication buffers, but heavy streams of continuous controller (CC) messages, polyphonic aftertouch, or System Exclusive (SysEx) dumps can quickly overwhelm their proces">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-hardware-synths-handle-midi-buffer-overflow">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Hardware Synths Handle MIDI Buffer Overflow - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-hardware-synths-handle-midi-buffer-overflow" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Hardware synthesizers process incoming musical performance data through dedicated communication buffers, but heavy streams of continuous controller (CC) messages, polyphonic aftertouch, or System Exclusive (SysEx) dumps can quickly overwhelm their proces" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-hardware-synths-handle-midi-buffer-overflow">How Hardware
+Synths Handle MIDI Buffer Overflow</h1>
+<p>Hardware synthesizers process incoming musical performance data
+through dedicated communication buffers, but heavy streams of continuous
+controller (CC) messages, polyphonic aftertouch, or System Exclusive
+(SysEx) dumps can quickly overwhelm their processing capacity. This
+article examines the internal mechanisms hardware synthesizers use to
+handle MIDI buffer overflows, detailing hardware UART limitations,
+packet dropping, message thinning, real-time message prioritization, and
+the operational failures that occur when mitigation strategies fall
+short.</p>
+<h3 id="the-input-pipeline-uart-and-ring-buffers">The Input Pipeline:
+UART and Ring Buffers</h3>
+<p>Standard 5-pin DIN MIDI operates asynchronously at a fixed baud rate
+of 31.25 kbps, which limits throughput to roughly 3,125 bytes per second
+(approximately 1,000 standard three-byte MIDI messages). When data
+enters the synth through the optocoupler, a Universal Asynchronous
+Receiver-Transmitter (UART) receives the physical serial bits and
+triggers an interrupt to transfer the incoming bytes into an internal
+First-In, First-Out (FIFO) ring buffer managed by the synth's central
+processor or microcontroller.</p>
+<p>USB MIDI interfaces allow data to travel significantly faster, moving
+data in 32-bit USB packets at full USB speeds (12 Mbps or higher). While
+this prevents transmission bottlenecks on the cable, it dramatically
+increases the risk of flooding the synthesizer’s internal software
+receive buffer if the synth's internal CPU cannot parse the incoming
+stream as fast as the USB endpoint supplies it.</p>
+<h3 id="message-prioritization-and-interrupt-routines">Message
+Prioritization and Interrupt Routines</h3>
+<p>Synthesizer firmware generally separates MIDI processing into
+real-time interrupts and secondary event queues. To prevent audible
+timing errors, the internal parser monitors the buffer and applies
+prioritization algorithms:</p>
+<ul>
+<li><strong>System Real-Time Messages:</strong> Single-byte messages
+such as MIDI Clock, Start, Stop, and Active Sensing are processed
+immediately upon arrival, often bypassing the general message queue
+entirely to maintain tight synchronization.</li>
+<li><strong>Voice Allocation Messages:</strong> Note On and Note Off
+events are prioritized over modulation data. If the parser detects that
+the buffer is filling toward capacity, it allocates CPU cycles to note
+triggering to minimize perceived latency.</li>
+<li><strong>Continuous Controllers and Channel Pressure:</strong>
+High-density continuous streams (pitch bend, mod wheel, expression,
+filter cutoffs) receive the lowest priority, making them the first
+candidates for data reduction when bandwidth constraints arise.</li>
+</ul>
+<h3 id="packet-dropping-and-data-thinning">Packet Dropping and Data
+Thinning</h3>
+<p>When the FIFO buffer reaches a predefined safety threshold (typically
+between 75% and 90% capacity), the synthesizer uses thinning or
+decimation routines to manage the backlog:</p>
+<ol type="1">
+<li><strong>Decimation of Continuous Data:</strong> Instead of parsing
+every incremental change generated by an external DAW or MIDI
+controller, the synthesizer drops intermediate values. For example, if
+the buffer contains consecutive CC1 (Modulation) values of 60, 61, 62,
+63, and 64, the synth may drop values 61 through 63, jumping directly
+from 60 to 64 to save processing cycles.</li>
+<li><strong>Tail Dropping:</strong> If the buffer fills completely, the
+hardware UART or USB controller drops incoming bytes at the tail end of
+the queue until free memory becomes available. Any message fragment
+truncated during a tail drop becomes invalid data.</li>
+<li><strong>Running Status Handling:</strong> Synthesizers supporting
+MIDI Running Status (where the status byte is omitted for consecutive
+messages of the same type) must carefully process dropped data. If a
+running status stream loses a single data byte due to a buffer drop, the
+synthesizer treats the entire subsequent stream as corrupted until a new
+status byte appears.</li>
+</ol>
+<h3 id="failure-modes-and-symptoms-of-buffer-overrun">Failure Modes and
+Symptoms of Buffer Overrun</h3>
+<p>If data arrives faster than thinning routines can process it,
+hardware synthesizers exhibit noticeable operational failures:</p>
+<ul>
+<li><strong>Stuck Notes (Hung Notes):</strong> The most common symptom
+occurs when a Note Off message is dropped because the buffer was
+completely full. The synth keeps the voice gate open indefinitely until
+an "All Notes Off" (CC 123) command is received or the user triggers a
+manual panic button.</li>
+<li><strong>MIDI Jitter and Latency:</strong> As the buffer approaches
+maximum capacity, the latency between an event being generated and its
+audio rendering increases. Processing a deep backlog causes audible
+timing fluctuations (jitter), destroying rhythmic precision.</li>
+<li><strong>UART Overrun Errors:</strong> At the physical chip level, if
+the processor fails to read a received byte from the UART data register
+before the next byte arrives, a hardware "Overrun Error" (OER) flag is
+set. The overwritten byte is lost permanently, causing data corruption
+that often leads to momentary audio glitches or skipped parameters.</li>
+<li><strong>CPU Freezes and Hard Crashes:</strong> Older legacy hardware
+or poorly programmed microcontrollers can enter infinite loops or stack
+overflows if overwhelmed by high-speed SysEx streams or dense continuous
+automation, requiring a physical power cycle to restore
+functionality.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

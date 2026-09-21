@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocal Artifacts Causing Audio-to-MIDI Tracking Errors - midi</title>
+    <meta name="description" content="Audio-to-MIDI converters rely on monophonic pitch-detection algorithms to translate acoustic vibrations into discrete digital notes, but the human voice presents unique acoustical challenges to these systems. This article outlines the primary vocal artif">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/vocal-artifacts-causing-audio-to-midi-tracking-errors">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Vocal Artifacts Causing Audio-to-MIDI Tracking Errors - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/vocal-artifacts-causing-audio-to-midi-tracking-errors" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Audio-to-MIDI converters rely on monophonic pitch-detection algorithms to translate acoustic vibrations into discrete digital notes, but the human voice presents unique acoustical challenges to these systems. This article outlines the primary vocal artif" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="vocal-artifacts-causing-audio-to-midi-tracking-errors">Vocal
+Artifacts Causing Audio-to-MIDI Tracking Errors</h1>
+<p>Audio-to-MIDI converters rely on monophonic pitch-detection
+algorithms to translate acoustic vibrations into discrete digital notes,
+but the human voice presents unique acoustical challenges to these
+systems. This article outlines the primary vocal artifacts that disrupt
+pitch detection—including sibilance, plosives, vocal fry, wide vibrato,
+and dominant formants—and explains how these acoustic anomalies produce
+false triggers, octave jumps, and erratic note generation in digital
+audio workstations.</p>
+<h3 id="sibilance-and-unvoiced-consonants">Sibilance and Unvoiced
+Consonants</h3>
+<p>Consonants like "s," "sh," "f," and "t" are unvoiced fricatives
+produced by turbulent airflow rather than periodic vocal cord vibration.
+Because these sounds lack a fundamental frequency (<span
+class="math inline">\(F_0\)</span>) and instead register as broadband
+white noise across high frequencies, pitch-tracking algorithms struggle
+to calculate a pitch. This confusion typically results in a flurry of
+random, high-velocity, short-duration MIDI notes scattered across the
+upper octaves.</p>
+<h3 id="plosives-and-low-end-transients">Plosives and Low-End
+Transients</h3>
+<p>Burst consonants such as "p," "b," and "t" generate bursts of air
+that hit the microphone diaphragm, producing high-energy, low-frequency
+pressure waves known as plosives. Algorithms often misinterpret this
+sub-bass burst as an extremely low musical pitch. As a result,
+converters frequently insert sudden, erroneous bass notes at the onset
+of words, disrupting the intended rhythmic timing and register of the
+performance.</p>
+<h3 id="vocal-fry-and-subharmonics">Vocal Fry and Subharmonics</h3>
+<p>Vocal fry (or creak) occurs when the vocal folds close loosely and
+vibrate irregularly at very low frequencies. This aperiodic vibration
+generates chaotic subharmonics and inconsistent cycle lengths. Pitch
+trackers, which depend on recognizable wave cycles to identify pitch,
+often fail to latch onto an underlying frequency during vocal fry
+passages. This leads to dropped notes, severe pitch jitter, or erroneous
+octave-down transpositions.</p>
+<h3 id="wide-vibrato-and-pitch-scooping">Wide Vibrato and Pitch
+Scooping</h3>
+<p>While expressive, heavy vibrato and fluid pitch scoops challenge the
+quantization thresholds of audio-to-MIDI software. If a singer’s vibrato
+exceeds a semi-tone in width, the software may interpret the single
+modulated note as a rapid trill between two adjacent chromatic steps.
+Similarly, slow pitch glides or scoops can trigger a staircase of
+unwanted intermediate MIDI notes instead of a smooth, pitch-bent
+performance.</p>
+<h3 id="strong-formants-and-pitch-doubling">Strong Formants and Pitch
+Doubling</h3>
+<p>The human vocal tract shapes tone through resonant frequency bands
+called formants. In certain vowels (such as nasal vowels or an open
+"ah"), a formant harmonic can carry significantly more acoustic energy
+than the actual fundamental frequency. When the second or third harmonic
+overpowers the fundamental, the detection algorithm may lock onto the
+harmonic instead. This causes octave-up jumping errors, where the MIDI
+output suddenly doubles or triples the frequency of the sung note.</p>
+<h3 id="breath-inhalations-and-ambient-bleed">Breath Inhalations and
+Ambient Bleed</h3>
+<p>Audible breaths between sung phrases contain low-to-mid frequency air
+noise that an audio-to-MIDI engine can easily mistake for intentional
+vocalization. If the noise gate or sensitivity threshold on the
+converter is set too low, loud inhalations frequently register as
+low-velocity, microtonal MIDI notes during structural pauses in the
+track.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

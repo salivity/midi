@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is Local Control on a Digital Piano? - midi</title>
+    <meta name="description" content="Local control is a setting found on most digital pianos and MIDI keyboards that dictates whether the physical keys are directly connected to the instrument's internal sound engine. This article explains how local control functions, why leaving it enabled">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-local-control-on-a-digital-piano">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is Local Control on a Digital Piano? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-local-control-on-a-digital-piano" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Local control is a setting found on most digital pianos and MIDI keyboards that dictates whether the physical keys are directly connected to the instrument's internal sound engine. This article explains how local control functions, why leaving it enabled" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-local-control-on-a-digital-piano">What Is Local Control
+on a Digital Piano?</h1>
+<p>Local control is a setting found on most digital pianos and MIDI
+keyboards that dictates whether the physical keys are directly connected
+to the instrument's internal sound engine. This article explains how
+local control functions, why leaving it enabled can disrupt your
+workflow when recording with a Digital Audio Workstation (DAW), and why
+switching it off is essential for eliminating latency artifacts, doubled
+notes, and MIDI feedback loops.</p>
+<h3 id="understanding-local-control">Understanding Local Control</h3>
+<p>A standard digital piano consists of two separate components housed
+in the same chassis:</p>
+<ol type="1">
+<li><strong>The Controller:</strong> The physical keyboard mechanism,
+pitch wheels, and pedals that detect your performance and generate
+digital MIDI data.</li>
+<li><strong>The Sound Engine:</strong> The internal sound module that
+translates MIDI data into audible acoustic or synthesized audio.</li>
+</ol>
+<p>By default, the <strong>Local Control</strong> setting is turned
+<strong>ON</strong>. In this state, the keyboard mechanism is wired
+directly to the internal sound engine. When you strike a key, the
+internal sound generator plays the corresponding note instantly through
+the piano’s speakers or headphone jack, while simultaneously sending
+MIDI data out through the USB or 5-pin MIDI port.</p>
+<p>When <strong>Local Control</strong> is turned <strong>OFF</strong>,
+the internal connection between the keyboard and the sound generator is
+broken. Pressing a key still transmits MIDI data out to external
+devices, but the internal sound engine remains completely silent until
+it receives incoming MIDI data from an external source.</p>
+<h3 id="why-you-must-turn-local-control-off-in-a-daw">Why You Must Turn
+Local Control Off in a DAW</h3>
+<p>When you connect a digital piano to a computer running a DAW (such as
+Ableton Live, Logic Pro, Cubase, or Pro Tools), the DAW is typically set
+up to record MIDI and echo it back to your instrument or to a virtual
+instrument plugin. This standard DAW behavior is called "MIDI Thru" or
+"Software Monitoring."</p>
+<p>Leaving Local Control <strong>ON</strong> while connected to a DAW
+creates several critical problems:</p>
+<h4 id="1-doubled-notes-and-phasing">1. Doubled Notes and Phasing</h4>
+<p>When you press a single key, the internal sound engine triggers that
+note instantly. A fraction of a millisecond later, the DAW receives the
+MIDI signal, processes it, and sends the exact same note back to the
+piano via MIDI Thru. Because the sound engine plays the identical note
+twice in rapid succession, you will hear a hollow, chorused, or
+"phasing" sound, also known as MIDI doubling.</p>
+<h4 id="2-midi-feedback-loops-and-stuck-notes">2. MIDI Feedback Loops
+and Stuck Notes</h4>
+<p>In some DAW routing configurations, the continuous return of MIDI
+data can create a feedback loop. This occurs when the computer and the
+piano repeatedly bounce MIDI messages back and forth, resulting in stuck
+notes, truncated polyphony, or complete audio engine freezes.</p>
+<h4 id="3-layering-clashes-with-virtual-instruments-vsts">3. Layering
+Clashes with Virtual Instruments (VSTs)</h4>
+<p>If your goal is to use the digital piano as a MIDI controller to play
+software instruments (such as virtual synthesizers or specialized sample
+libraries), leaving Local Control on will cause your digital piano's
+built-in sound to play simultaneously over the VST sound. Turning Local
+Control off ensures that the keys trigger only the software instrument
+inside the computer.</p>
+<h3 id="how-to-work-with-local-control-off">How to Work with Local
+Control Off</h3>
+<p>To achieve proper communication between your digital piano and your
+DAW:</p>
+<ol type="1">
+<li>Open your digital piano's settings menu (often labeled <strong>MIDI
+Settings</strong>, <strong>Function</strong>, or
+<strong>System</strong>).</li>
+<li>Locate the <strong>Local Control</strong> setting and toggle it to
+<strong>OFF</strong>.</li>
+<li>In your DAW, create an external MIDI track routed back to the piano
+(if using the piano's internal sounds) or assign the track to a software
+instrument.</li>
+</ol>
+<p>With this setup, the DAW acts as the master control center for all
+data. Your keyboard sends MIDI to the DAW, and the DAW decides precisely
+where, when, and how that MIDI data should be played.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

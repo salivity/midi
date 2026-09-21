@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Velocity Curve? - midi</title>
+    <meta name="description" content="A MIDI velocity curve is a mathematical mapping setting that determines how a MIDI controller translates the physical force and speed of a keystroke into digital MIDI data. By reshaping this curve, you fundamentally alter how sensitive your keys feel, al">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-velocity-curve">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Velocity Curve? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-velocity-curve" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI velocity curve is a mathematical mapping setting that determines how a MIDI controller translates the physical force and speed of a keystroke into digital MIDI data. By reshaping this curve, you fundamentally alter how sensitive your keys feel, al" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-velocity-curve">What Is a MIDI Velocity
+Curve?</h1>
+<p>A MIDI velocity curve is a mathematical mapping setting that
+determines how a MIDI controller translates the physical force and speed
+of a keystroke into digital MIDI data. By reshaping this curve, you
+fundamentally alter how sensitive your keys feel, allowing you to
+control dynamic range, volume, and timbre without changing your natural
+playing technique. This article explains how velocity curves work, the
+most common curve types, and how adjusting them modifies key strike
+sensitivity.</p>
+<h2 id="understanding-midi-velocity">Understanding MIDI Velocity</h2>
+<p>When you strike a key on a modern MIDI keyboard, sensors measure how
+quickly the key travels downward. This measurement is converted into a
+standard MIDI velocity value ranging from 0 (note off) to 127 (maximum
+force).</p>
+<p>In most software instruments, velocity dictates more than just
+volume. Samplers and synthesizers use velocity to trigger different
+sample layers, adjust filter cutoffs, and alter attack times. A higher
+velocity often produces a brighter, louder, and more aggressive sound,
+while a lower velocity yields a softer, darker tone.</p>
+<h2 id="how-a-velocity-curve-works">How a Velocity Curve Works</h2>
+<p>A velocity curve acts as an intermediary between your physical input
+and the final MIDI output. Without a curve setting, keyboards rely on a
+default standard that may not suit every player's hand strength or
+keybed type.</p>
+<p>The curve mathematically scales the input force:</p>
+<ul>
+<li><strong>Input (X-Axis):</strong> The physical speed and pressure
+applied to the key.</li>
+<li><strong>Output (Y-Axis):</strong> The resulting MIDI value (0–127)
+sent to your digital audio workstation (DAW) or virtual instrument.</li>
+</ul>
+<p>By adjusting the shape of this line on a graph from straight to
+curved, you change how much effort is required to reach quiet, medium,
+or maximum dynamic levels.</p>
+<h2 id="common-types-of-velocity-curves">Common Types of Velocity
+Curves</h2>
+<p>Most MIDI controllers and DAWs offer several preset curves to match
+different playing preferences:</p>
+<ul>
+<li><strong>Linear:</strong> The default 1:1 ratio. Striking the key
+twice as hard results in twice the output value. This provides a
+predictable, direct response.</li>
+<li><strong>Soft (Light):</strong> The curve arches upward. Low to
+medium physical force generates higher MIDI velocity values. This makes
+the keys feel lighter and more sensitive, ideal for players with a
+gentle touch or for fast synth leads where high velocity is needed with
+minimal effort.</li>
+<li><strong>Hard (Heavy):</strong> The curve dips downward. You must
+strike the keys with significant force to generate high MIDI values.
+This reduces overall sensitivity, giving heavy-handed players greater
+control over lower dynamic ranges and preventing accidental spikes to
+velocity 127.</li>
+<li><strong>S-Curve (Sigmoid):</strong> Compresses the extreme low and
+high ends while expanding the middle range. This offers fine control
+over standard playing dynamics while keeping quiet notes soft and loud
+notes reserved for deliberate, hard strikes.</li>
+<li><strong>Fixed:</strong> Removes sensitivity entirely. Every key
+strike transmits a single predetermined velocity value (such as 100 or
+127), regardless of how hard you press. This is commonly used for organ
+emulation, vintage synthesizers, and drum sequencing.</li>
+</ul>
+<h2 id="how-curves-alter-key-strike-sensitivity">How Curves Alter Key
+Strike Sensitivity</h2>
+<p>Altering the velocity curve directly impacts three main aspects of
+performance:</p>
+<h3 id="1-dynamic-control">1. Dynamic Control</h3>
+<p>If a keyboard feels too stiff or requires excessive force to trigger
+forte sounds, switching to a softer curve restores access to the upper
+dynamic range. Conversely, if you frequently hit maximum volume during
+casual playing, a harder curve restores your ability to play
+delicately.</p>
+<h3 id="2-expressive-consistency">2. Expressive Consistency</h3>
+<p>Different virtual instruments are programmed with different dynamic
+responses. An orchestral piano library might require a wide, expressive
+curve, while an electric piano or synthesizer patch might benefit from a
+flatter response. Adjusting the curve ensures consistent dynamic
+expression across diverse sound libraries.</p>
+<h3 id="3-hardware-compensation">3. Hardware Compensation</h3>
+<p>Unweighted synth-action keys, semi-weighted keys, and fully weighted
+hammer-action keys respond differently to hand pressure. Tailoring the
+velocity curve compensates for hardware limitations, allowing a
+lightweight plastic keyboard to simulate the expressive dynamic control
+of a weighted acoustic action.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

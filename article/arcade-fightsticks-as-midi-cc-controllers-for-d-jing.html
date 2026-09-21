@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Fightsticks as MIDI CC Controllers for DJing - midi</title>
+    <meta name="description" content="Arcade fightsticks and modular button pads can serve as expressive, ultra-durable controllers for DJ software like Traktor, Serato, and Rekordbox. Because these devices typically output standard gamepad or Human Interface Device (HID) data rather than mu">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/arcade-fightsticks-as-midi-cc-controllers-for-d-jing">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Arcade Fightsticks as MIDI CC Controllers for DJing - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/arcade-fightsticks-as-midi-cc-controllers-for-d-jing" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Arcade fightsticks and modular button pads can serve as expressive, ultra-durable controllers for DJ software like Traktor, Serato, and Rekordbox. Because these devices typically output standard gamepad or Human Interface Device (HID) data rather than mu" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="arcade-fightsticks-as-midi-cc-controllers-for-djing">Arcade
+Fightsticks as MIDI CC Controllers for DJing</h1>
+<p>Arcade fightsticks and modular button pads can serve as expressive,
+ultra-durable controllers for DJ software like Traktor, Serato, and
+Rekordbox. Because these devices typically output standard gamepad or
+Human Interface Device (HID) data rather than musical protocols,
+translating their inputs into MIDI Continuous Controller (CC) messages
+requires either software-based mapping utilities or hardware-level
+firmware reprogramming. This guide explains the technical pathways used
+to convert digital arcade switches and analog joystick axes into MIDI CC
+values that DJ platforms can instantly recognize.</p>
+<h3 id="the-signal-conversion-process">The Signal Conversion
+Process</h3>
+<p>Standard fightsticks use microswitches for their buttons and
+directional stick. When pressed, these switches complete a circuit and
+send digital high/low (on/off) signals to an internal encoder board. In
+modern fightsticks, this encoder outputs standard XInput or DirectInput
+(HID) signals intended for gaming consoles and PCs.</p>
+<p>To use these inputs for DJ software parameters, the signal must be
+bridged into standard MIDI messages:</p>
+<ul>
+<li><strong>Software Bridging (Virtual MIDI):</strong> The most
+accessible method involves utility software such as Bome MIDI
+Translator, Joy2MIDI, or Fergo JoystickMIDI. The application intercepts
+gamepad inputs and assigns them to user-defined MIDI channels and CC
+numbers. These messages are then routed through an internal virtual MIDI
+bus (such as loopMIDI on Windows or IAC Driver on macOS), which DJ
+software detects as a standard hardware MIDI controller.</li>
+<li><strong>Hardware and Firmware Emulation:</strong> Advanced users
+often swap out stock fightstick control boards with microcontrollers
+capable of native USB-MIDI communication, such as the Raspberry Pi Pico,
+Teensy, or Arduino Pro Micro (ATmega32U4). Utilizing standard USB-MIDI
+libraries, these boards bypass gaming protocols entirely, communicating
+with the computer as class-compliant MIDI devices without requiring
+external translation software.</li>
+</ul>
+<h3
+id="translating-digital-switches-to-continuous-controllers-cc">Translating
+Digital Switches to Continuous Controllers (CC)</h3>
+<p>While DJ software typically uses MIDI Note On/Off messages for basic
+triggers like Hot Cues, MIDI CC is essential for controlling variable
+parameters such as dry/wet effects, high-pass and low-pass filters, and
+volume levels. Fightsticks handle CC generation in two distinct
+ways:</p>
+<ol type="1">
+<li><strong>Binary State CC Messages:</strong> Because standard arcade
+pushbuttons are digital, they can be programmed to send instantaneous CC
+values. A button press can transmit a maximum value of <code>127</code>,
+and the release transmits <code>0</code>. This is frequently used for
+instantaneous audio effects, beat-repeats, or momentary "censor" cuts.
+Alternatively, software translators can toggle states with each press,
+stepping a CC value up or down incrementally.</li>
+<li><strong>Analog Axis to CC Translation:</strong> Fightsticks
+featuring analog thumbsticks, modular rotary knobs, or optical joysticks
+output a continuous range of resistance values. Microcontrollers or
+software bridges read this analog voltage and scale the input directly
+to the standard MIDI range of <code>0</code> to <code>127</code>. This
+provides smooth, continuous sweeps ideal for DJ faders, EQ sweeps, and
+master crossfades.</li>
+</ol>
+<h3 id="mapping-within-dj-software">Mapping Within DJ Software</h3>
+<p>Once the translation layer is active, mapping the fightstick operates
+identically to configuring an off-the-shelf DJ controller:</p>
+<ul>
+<li>Activate the device (or its virtual MIDI port) inside the DJ
+application's MIDI preferences.</li>
+<li>Enable the software's MIDI Learn or Mapping mode.</li>
+<li>Select the target function—such as an FX knob, stem mute, or pitch
+bend—and actuate the corresponding arcade button or joystick axis to
+bind the MIDI CC channel and number automatically.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

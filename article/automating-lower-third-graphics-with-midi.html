@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automating Lower-Third Graphics with MIDI - midi</title>
+    <meta name="description" content="Automating visual lower-third graphics using MIDI commands allows live broadcast directors to trigger accurately timed on-screen titles, speaker names, and lower-third overlays without manual switching. By mapping standard MIDI messages—such as Note On">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/automating-lower-third-graphics-with-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Automating Lower-Third Graphics with MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/automating-lower-third-graphics-with-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Automating visual lower-third graphics using MIDI commands allows live broadcast directors to trigger accurately timed on-screen titles, speaker names, and lower-third overlays without manual switching. By mapping standard MIDI messages—such as Note On" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="automating-lower-third-graphics-with-midi">Automating
+Lower-Third Graphics with MIDI</h1>
+<p>Automating visual lower-third graphics using MIDI commands allows
+live broadcast directors to trigger accurately timed on-screen titles,
+speaker names, and lower-third overlays without manual switching. By
+mapping standard MIDI messages—such as Note On, Note Off, and Control
+Change values—from hardware surfaces, digital audio workstations (DAWs),
+or show-control software to broadcast vision mixers, production teams
+achieve frame-accurate synchronization between audio, lighting, and
+visual overlays.</p>
+<h3 id="the-midi-automation-pipeline">The MIDI Automation Pipeline</h3>
+<p>The automation architecture relies on three primary layers: the MIDI
+transmitter, a routing bridge, and the broadcast graphics engine.</p>
+<ol type="1">
+<li><strong>MIDI Transmitter (Source):</strong> This can be a
+timeline-based DAW (such as Ableton Live or Reaper), specialized
+show-control systems (such as QLab), or physical MIDI controllers (such
+as a Novation Launchpad). The source outputs standard MIDI commands tied
+either to a fixed timeline or to specific operator cues.</li>
+<li><strong>MIDI Interface/Bridge:</strong> If the transmitter and the
+graphics engine are on different machines, standard 5-pin DIN or
+USB-MIDI hardware interfaces are used, or MIDI over Ethernet (RTP-MIDI)
+is employed across a local network. On a single computer, virtual MIDI
+loopback software (such as loopMIDI for Windows or the IAC Driver on
+macOS) routes the signals internally.</li>
+<li><strong>Graphics Engine (Receiver):</strong> Broadcast applications
+like vMix, OBS Studio (with MIDI plugins), NewTek TriCaster, or CasparCG
+interpret incoming MIDI messages and translate them into visual trigger
+events.</li>
+</ol>
+<h3 id="step-by-step-implementation">Step-by-Step Implementation</h3>
+<h4 id="1-signal-assignment-and-protocol-selection">1. Signal Assignment
+and Protocol Selection</h4>
+<p>Directors utilize distinct MIDI message types depending on the
+required graphic behavior:</p>
+<ul>
+<li><strong>Note On / Note Off:</strong> Ideal for binary actions.
+Sending a <code>Note On</code> event (e.g., Note 36 / C1) triggers the
+lower third to animate in (<code>TransitionIn</code>). A subsequent
+<code>Note Off</code> or a secondary note can trigger the exit animation
+(<code>TransitionOut</code>).</li>
+<li><strong>Control Change (CC):</strong> CC values range from 0 to 127.
+They can control continuous parameters, such as adjusting the opacity of
+a graphic or scrubbing a graphic's position dynamically across the
+screen.</li>
+</ul>
+<h4 id="2-software-mapping-and-shortcuts">2. Software Mapping and
+Shortcuts</h4>
+<p>Within the broadcast software, directors enter the "Shortcuts" or
+"Hotkeys" menu and select MIDI as the input type:</p>
+<ul>
+<li><strong>vMix:</strong> The software features native MIDI support.
+Directors use the "Find" feature, send the designated MIDI command from
+the controller or DAW timeline, and map it to
+<code>OverlayInput1In</code> or a specific Title preset.</li>
+<li><strong>OBS Studio:</strong> Utilizing plugins like
+<code>obs-midi-mg</code>, directors map incoming MIDI channels to toggle
+source visibility or fire specific Advanced Scene Switcher macros that
+manage transition timings.</li>
+<li><strong>TriCaster:</strong> Incoming MIDI notes are assigned
+directly to the internal Macro engine to fire automated sequence scripts
+that cue Lower Third presets.</li>
+</ul>
+<h4 id="3-managing-dynamic-text-and-data-sources">3. Managing Dynamic
+Text and Data Sources</h4>
+<p>To update names, titles, and topics automatically alongside the
+visual cue:</p>
+<ul>
+<li>Lower thirds are linked to data sources like Google Sheets, CSV
+files, or local JSON databases.</li>
+<li>Directors configure the broadcast software so that specific MIDI
+commands not only trigger the graphic entrance but also advance the data
+row (<code>NextRow</code> command), ensuring the correct speaker
+information displays on cue without manual typing during the live
+event.</li>
+</ul>
+<h3 id="why-broadcast-directors-use-midi-automation">Why Broadcast
+Directors Use MIDI Automation</h3>
+<ul>
+<li><strong>Frame-Accurate Synchronization:</strong> By embedding MIDI
+notes into the same master audio or video timeline driving a production,
+graphics appear at exact, repeatable moments.</li>
+<li><strong>Reduced Operator Workload:</strong> A single automation
+track can simultaneously manage audio levels, lighting scenes, and
+lower-third overlays, minimizing the risk of human error during complex
+live transitions.</li>
+<li><strong>Universal Compatibility:</strong> MIDI is an uncompressed,
+low-latency, and platform-agnostic protocol supported by thousands of
+hardware and software devices across the live event and broadcast
+industries.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Time Stamping and Sample-Accurate Playback - midi</title>
+    <meta name="description" content="MIDI time stamping is a synchronization technology used by digital audio workstations (DAWs) and hardware interfaces to eliminate timing jitter, ensuring that MIDI notes and controller data trigger at the exact digital audio sample intended. Traditional">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-time-stamping-and-sample-accurate-playback">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Time Stamping and Sample-Accurate Playback - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-time-stamping-and-sample-accurate-playback" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI time stamping is a synchronization technology used by digital audio workstations (DAWs) and hardware interfaces to eliminate timing jitter, ensuring that MIDI notes and controller data trigger at the exact digital audio sample intended. Traditional" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-time-stamping-and-sample-accurate-playback">MIDI Time
+Stamping and Sample-Accurate Playback</h1>
+<p>MIDI time stamping is a synchronization technology used by digital
+audio workstations (DAWs) and hardware interfaces to eliminate timing
+jitter, ensuring that MIDI notes and controller data trigger at the
+exact digital audio sample intended. Traditional MIDI transmission
+suffers from micro-delays caused by serial data bottlenecks and
+operating system processing cycles. By encoding each MIDI message with a
+high-resolution time reference linked directly to the system's audio
+sample clock, MIDI time stamping aligns performance data with recorded
+audio to achieve rock-solid, sample-accurate playback and recording.</p>
+<h3 id="the-problem-midi-jitter-and-latency">The Problem: MIDI Jitter
+and Latency</h3>
+<p>Standard MIDI data transmits sequentially. In hardware with
+traditional 5-pin DIN cables, dense musical passages (such as chords or
+heavy modulation data) can choke the bandwidth, forcing notes to trigger
+sequentially rather than simultaneously.</p>
+<p>When MIDI migrated to USB, a different problem emerged: operating
+system buffer jitter. USB communicates using data packets governed by
+system polling intervals and CPU scheduling. While total latency can be
+compensated for using static delays, jitter represents variable,
+unpredictable timing fluctuations typically ranging between 1 and 10
+milliseconds. In modern music production, a 2-millisecond shift is
+audible and can ruin the groove, transient punch, or phase coherence
+between layered synthetic and acoustic instruments.</p>
+<h3 id="how-midi-time-stamping-works">How MIDI Time Stamping Works</h3>
+<p>MIDI time stamping (MTS) bypasses the operating system's timing
+variability by dissociating the transmission of a message from the
+moment it is executed. Instead of treating MIDI as an immediate "play
+now" command, the system tags the message with a precise timestamp
+generated by the master audio clock.</p>
+<ol type="1">
+<li><strong>Audio Clock Synchronization:</strong> Digital audio operates
+on a rigid grid defined by the sample rate (e.g., 44,100 or 96,000
+samples per second). MIDI time stamping anchors performance data to this
+sample counter rather than standard computer system time.</li>
+<li><strong>Lookahead and Pre-Buffering:</strong> For playback, the DAW
+reads upcoming MIDI events milliseconds before they are scheduled to
+sound. It attaches a timestamp indicating the target audio sample and
+transmits the data early to the MIDI interface or software instrument
+engine.</li>
+<li><strong>Queueing and Release:</strong> The receiving device or
+plugin holds the data in a local hardware or memory buffer. It monitors
+the master audio clock and releases the MIDI event precisely when the
+clock hits the stamped sample number.</li>
+</ol>
+<h3 id="achieving-sample-accuracy-in-recording-and-playback">Achieving
+Sample Accuracy in Recording and Playback</h3>
+<p>During recording, time stamping operates in reverse. When a musician
+plays a compatible controller, the hardware interface generates an
+arrival timestamp the instant the physical switch closes. Even if
+background system tasks delay the DAW from receiving or processing the
+incoming USB packet, the DAW reads the embedded timestamp upon delivery.
+It places the recorded note on the timeline at the exact sample moment
+it was played, completely independent of OS processing lag.</p>
+<p>During playback, this mechanism enables sample-accurate alignment
+between MIDI-driven tracks and pre-recorded audio stems. By eliminating
+the variable delays introduced by USB bus polling, driver latencies, and
+CPU spikes, virtual instruments, external hardware synthesizers, and
+drum machines trigger with the same microscopic precision as digital
+audio tracks.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

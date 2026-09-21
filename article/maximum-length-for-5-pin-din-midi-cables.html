@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maximum Length for 5-Pin DIN MIDI Cables - midi</title>
+    <meta name="description" content="The official specification for standard 5-pin DIN MIDI cables establishes a maximum recommended length of 50 feet (approximately 15 meters). This article covers the technical standards behind this distance limit, the electrical factors that cause signal">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/maximum-length-for-5-pin-din-midi-cables">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Maximum Length for 5-Pin DIN MIDI Cables - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/maximum-length-for-5-pin-din-midi-cables" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The official specification for standard 5-pin DIN MIDI cables establishes a maximum recommended length of 50 feet (approximately 15 meters). This article covers the technical standards behind this distance limit, the electrical factors that cause signal" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="maximum-length-for-5-pin-din-midi-cables">Maximum Length for
+5-Pin DIN MIDI Cables</h1>
+<p>The official specification for standard 5-pin DIN MIDI cables
+establishes a maximum recommended length of 50 feet (approximately 15
+meters). This article covers the technical standards behind this
+distance limit, the electrical factors that cause signal degradation
+beyond 50 feet, the operational risks of using longer cables, and the
+hardware solutions available for extending MIDI signals over greater
+distances.</p>
+<h2 id="the-official-midi-standard-limit">The Official MIDI Standard
+Limit</h2>
+<p>The MIDI Manufacturers Association (now the MIDI Association)
+established 50 feet (15 meters) as the standard maximum run for a
+traditional 5-pin DIN MIDI cable. Under ideal conditions with
+high-quality, low-capacitance shielded wiring, signals can travel
+reliably up to this distance without requiring signal boosting or active
+buffering.</p>
+<h2 id="why-the-50-foot-limit-exists">Why the 50-Foot Limit Exists</h2>
+<p>The limitation is determined by the electrical characteristics of the
+traditional MIDI hardware interface:</p>
+<ul>
+<li><strong>Current Loop Design:</strong> MIDI operates on a 5-volt,
+5-milliamp current loop system rather than standard digital voltage
+levels. While this design inherently isolates ground loops and reduces
+hum, it has limited driving power over long distances.</li>
+<li><strong>Cable Capacitance:</strong> All audio and data cables
+possess inherent capacitance between the conductors. As cable length
+increases, total capacitance rises. This capacitance acts as a low-pass
+filter, rounding off the sharp edges of the square-wave digital pulses
+required for accurate transmission.</li>
+<li><strong>Baud Rate:</strong> MIDI data transmits at a fixed speed of
+31.25 kbaud. When high capacitance softens the digital square waves at
+this speed, the receiving optoisolator cannot reliably differentiate
+between binary 1s and 0s.</li>
+</ul>
+<h2 id="consequences-of-exceeding-the-recommended-length">Consequences
+of Exceeding the Recommended Length</h2>
+<p>Running passive MIDI cables beyond 50 feet does not typically result
+in immediate, complete failure. Instead, it leads to intermittent and
+erratic data corruption, including:</p>
+<ul>
+<li><strong>Stuck Notes:</strong> A "Note On" command arrives, but the
+subsequent "Note Off" command is dropped or corrupted, causing the note
+to sound indefinitely.</li>
+<li><strong>Dropped Commands:</strong> Continuous controller (CC)
+changes, pitch bends, and clock timing bytes fail to register.</li>
+<li><strong>Timing Jitter:</strong> Softened signal edges introduce
+micro-delays in optoisolator triggering, creating audible timing
+fluctuations in sequenced performances.</li>
+</ul>
+<h2 id="solutions-for-long-distance-midi-runs">Solutions for
+Long-Distance MIDI Runs</h2>
+<p>When an installation requires sending MIDI data further than 50 feet,
+passive extensions should be avoided in favor of dedicated hardware
+solutions:</p>
+<ul>
+<li><strong>Active MIDI Thru Boxes:</strong> Placing a powered MIDI thru
+box or line booster inline regenerates and reshapes the square-wave
+signal, allowing for another 50-foot segment.</li>
+<li><strong>MIDI Over Balanced XLR:</strong> Converters that transform
+MIDI into balanced differential signals allow runs of hundreds of feet
+using standard microphone cables.</li>
+<li><strong>MIDI Over Ethernet (Cat5/Cat6):</strong> Extenders can send
+MIDI signals hundreds or thousands of feet using standard network
+infrastructure or dedicated twisted-pair lines.</li>
+<li><strong>Network MIDI (RTP-MIDI):</strong> For permanent multi-room
+or stage-to-front-of-house configurations, routing MIDI over a standard
+IP network bypasses physical cable limits entirely with minimal
+latency.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

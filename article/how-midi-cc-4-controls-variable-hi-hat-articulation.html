@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI CC 4 Controls Variable Hi-Hat Articulation - midi</title>
+    <meta name="description" content="In digital music production and electronic drumming, MIDI Continuous Controller 4 (CC 4) serves as the standard parameter for representing the continuous physical position of a hi-hat pedal. Rather than treating the hi-hat as a simple two-state switch be">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-cc-4-controls-variable-hi-hat-articulation">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI CC 4 Controls Variable Hi-Hat Articulation - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-cc-4-controls-variable-hi-hat-articulation" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In digital music production and electronic drumming, MIDI Continuous Controller 4 (CC 4) serves as the standard parameter for representing the continuous physical position of a hi-hat pedal. Rather than treating the hi-hat as a simple two-state switch be" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-cc-4-controls-variable-hi-hat-articulation">How MIDI CC
+4 Controls Variable Hi-Hat Articulation</h1>
+<p>In digital music production and electronic drumming, MIDI Continuous
+Controller 4 (CC 4) serves as the standard parameter for representing
+the continuous physical position of a hi-hat pedal. Rather than treating
+the hi-hat as a simple two-state switch between open and closed, CC 4
+streams a dynamic spectrum of values that allows virtual instruments and
+drum modules to recreate the nuanced acoustic transition across the
+cymbal's entire physical range. This article explains how CC 4 transmits
+pedal data, how drum samplers interpret these values across dynamic
+layers, and how real-time continuous control affects sound sustain and
+choke behavior.</p>
+<h3 id="the-role-of-cc-4-as-a-continuous-controller">The Role of CC 4 as
+a Continuous Controller</h3>
+<p>Standard MIDI protocols designate CC 4 as the "Foot Controller." In
+modern drum modules (e-kits) and virtual instruments (VSTs), this
+message is assigned to the optical or potentiometer-based sensor within
+the hi-hat stand.</p>
+<p>Unlike note-on messages—which simply state that a cymbal was hit and
+at what velocity—CC 4 operates independently as a stream of position
+data using the standard 7-bit MIDI range from 0 to 127.</p>
+<p>By default, the values correspond to the physical distance between
+the top and bottom hi-hat cymbals:</p>
+<ul>
+<li><strong>Value 0:</strong> Fully open (foot completely off the
+pedal).</li>
+<li><strong>Values 1–126:</strong> The variable transition zone,
+encompassing loose open, half-open, semi-closed, and closed states.</li>
+<li><strong>Value 127:</strong> Fully closed (maximum downward pedal
+pressure).</li>
+</ul>
+<h3 id="multi-zone-sample-selection-and-crossfading">Multi-Zone Sample
+Selection and Crossfading</h3>
+<p>Acoustic hi-hats do not produce discrete, stepping sounds as they
+open; the decay length, harmonic resonance, and contact friction shift
+smoothly. Sound engines replicate this reality using the CC 4 data in
+two primary ways:</p>
+<ol type="1">
+<li><strong>Velocity-to-Pedal Layer Matrix:</strong> When a drum pad
+sends a strike note (such as the hi-hat bow or edge note), the sound
+engine references the most recently received CC 4 value before selecting
+an audio file. The engine consults a matrix combining the hit's velocity
+and the pedal's current CC 4 value to choose among multiple distinct
+recorded states (e.g., Closed, Loose, 25% Open, 50% Open, 75% Open, Full
+Open).</li>
+<li><strong>Dynamic Crossfading:</strong> High-end drum libraries do not
+abruptly jump between these recorded zones. Instead, they use CC 4
+thresholds to smoothly blend adjacent sample layers. If a strike occurs
+at CC 4 value 64, the engine can trigger a mix of the 50% open and 75%
+open sample layers, creating a seamless gradient without audible phase
+cancellation or abrupt tonal shifts.</li>
+</ol>
+<h3 id="post-strike-modulation-and-dynamic-choking">Post-Strike
+Modulation and Dynamic Choking</h3>
+<p>The variable nature of CC 4 extends beyond the moment a cymbal is
+struck. Because CC 4 messages are transmitted continuously, changes in
+foot position alter already ringing samples in real time.</p>
+<ul>
+<li><strong>Hi-Hat Choking:</strong> If an open hi-hat strike occurs
+while CC 4 is at 0, the open sample rings out. If the player presses the
+pedal immediately after the hit, the CC 4 value climbs rapidly toward
+127. The sampler responds by applying an immediate volume envelope decay
+and blending in the contact sound of the two cymbals touching,
+dynamically shortening the sustain.</li>
+<li><strong>Sizzle and Slosh Modulation:</strong> Moving the foot
+slightly between values 90 and 120 while a cymbal is ringing modulates
+the internal filters and release envelopes of the sample, replicating
+the buzzing "sizzle" of cymbals lightly brushing against one
+another.</li>
+</ul>
+<h3 id="high-pressure-tight-articulations">High-Pressure "Tight"
+Articulations</h3>
+<p>Advanced electronic hi-hat controllers utilize the upper boundary of
+CC 4 (values 120 to 127) to measure pedal pressure. When a drummer
+presses firmly into the pedal, an acoustic hi-hat clamps tightly,
+resulting in an ultra-short, pitch-shifted, and dry "tight closed"
+sound. By dedicating the uppermost range of CC 4 to this extra pressure,
+virtual instruments can automatically alternate between standard closed
+hits and hyper-damped closed hits based purely on the force applied by
+the player's foot.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

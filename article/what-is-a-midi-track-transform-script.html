@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Track Transform Script? - midi</title>
+    <meta name="description" content="A MIDI track transform script is a programmable tool used within digital audio workstations (DAWs) to systematically process, filter, and alter MIDI event data in a musical sequence. This article explains the core purpose of MIDI track transform scripts">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-track-transform-script">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Track Transform Script? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-track-transform-script" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI track transform script is a programmable tool used within digital audio workstations (DAWs) to systematically process, filter, and alter MIDI event data in a musical sequence. This article explains the core purpose of MIDI track transform scripts" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-track-transform-script">What Is a MIDI Track
+Transform Script?</h1>
+<p>A MIDI track transform script is a programmable tool used within
+digital audio workstations (DAWs) to systematically process, filter, and
+alter MIDI event data in a musical sequence. This article explains the
+core purpose of MIDI track transform scripts and details how they
+inspect, parse, and manipulate polyphonic note data—such as chords and
+overlapping melodic lines—to automate complex musical behaviors, voice
+assignments, and expressive timing adjustments.</p>
+<h2 id="understanding-midi-track-transform-scripts">Understanding MIDI
+Track Transform Scripts</h2>
+<p>A MIDI track transform script is an algorithmic sequence of
+instructions that intercepts, analyzes, and rewrites MIDI messages
+either in real time or offline. Found in DAWs via tools like Apple Logic
+Pro’s Scripter, Cockos Reaper’s JSFX, or Steinberg Cubase’s Logical
+Editor, these scripts operate directly on raw event arrays.</p>
+<p>A standard MIDI data stream contains distinct status bytes and data
+bytes defining events such as <code>Note On</code>,
+<code>Note Off</code>, pitch number (0–127), velocity (0–127), and
+timestamp. A transform script listens for these incoming events, runs
+them through user-defined mathematical or logical operations, and
+outputs a modified MIDI stream to the instrument or track.</p>
+<h2 id="the-challenge-of-polyphonic-note-data">The Challenge of
+Polyphonic Note Data</h2>
+<p>Monophonic data consists of single notes played sequentially, making
+it straightforward to process. Polyphonic data, by contrast, consists of
+multiple distinct notes occurring simultaneously or with overlapping
+durations.</p>
+<p>In a raw MIDI stream, there is no native "chord" event. A three-note
+chord is simply transmitted as three independent <code>Note On</code>
+messages with identical or near-identical timestamps. Because the MIDI
+specification processes messages linearly, a transform script must
+establish structural context to treat simultaneous events as a unified
+polyphonic structure rather than unrelated notes.</p>
+<h2 id="how-transform-scripts-process-and-manipulate-polyphony">How
+Transform Scripts Process and Manipulate Polyphony</h2>
+<p>To manipulate polyphonic data, a transform script employs specific
+computational techniques to organize, evaluate, and alter concurrent
+notes.</p>
+<h3 id="1-temporal-windowing-and-chord-aggregation">1. Temporal
+Windowing and Chord Aggregation</h3>
+<p>To handle human performance variations where chord notes do not land
+on the exact same millisecond, scripts implement a time window (often 10
+to 30 milliseconds). When the first <code>Note On</code> event arrives,
+the script buffers incoming notes during this window. Once the window
+elapses, the script groups these notes into an array representing a
+single harmonic unit (a chord) before executing transformations.</p>
+<h3 id="2-pitch-sorting-and-voice-allocation">2. Pitch Sorting and Voice
+Allocation</h3>
+<p>Once a group of polyphonic notes is collected, the script sorts the
+array by pitch values from lowest to highest. This allows the script to
+identify specific chord roles:</p>
+<ul>
+<li><strong>Bass Isolation:</strong> The lowest note (index 0) can be
+duplicated or routed to an independent MIDI channel or lower
+octave.</li>
+<li><strong>Top-Note Voicing:</strong> The highest pitch in the array
+can be boosted in velocity, ensuring the lead melody cuts through the
+accompaniment.</li>
+<li><strong>Voice Splitting:</strong> Each element in the sorted array
+can be reassigned to separate MIDI channels, allowing a single
+polyphonic track to drive a multi-timbral orchestra (e.g., voice 1 to
+violin, voice 2 to viola, voice 3 to cello).</li>
+</ul>
+<h3 id="3-time-manipulation-strumming-and-arpeggiation">3. Time
+Manipulation (Strumming and Arpeggiation)</h3>
+<p>Polyphonic scripts frequently alter the playback timing of grouped
+notes to create humanization or performance effects:</p>
+<ul>
+<li><strong>Strum Simulation:</strong> By modifying the timestamp
+parameter of each note in a sorted chord array, the script introduces
+progressive micro-delays (e.g., adding 15ms per ascending or descending
+note) to simulate the physical sweeping of a guitar pick.</li>
+<li><strong>Algorithmic Arpeggiation:</strong> The script can break
+simultaneous notes apart completely, scheduling them to trigger
+sequentially on sub-beat divisions according to specific patterns (up,
+down, random, or chord-inversion orders).</li>
+</ul>
+<h3 id="4-harmonic-and-interval-transformations">4. Harmonic and
+Interval Transformations</h3>
+<p>Scripts can evaluate the interval relationships within a chord array
+and rewrite the pitch values:</p>
+<ul>
+<li><strong>Inversions:</strong> Transposing the lowest note up an
+octave (adding 12 to the pitch value) or transposing upper notes
+down.</li>
+<li><strong>Scale and Mode Snapping:</strong> Checking each note against
+a predefined musical scale array and quantizing out-of-key notes to the
+nearest valid interval.</li>
+<li><strong>Chord Density Modification:</strong> Dynamically dropping
+specific voices (such as removing the 5th or doubling the 3rd) based on
+incoming velocity or external automation parameters.</li>
+</ul>
+<h3 id="5-independent-expression-and-polyphonic-velocity">5. Independent
+Expression and Polyphonic Velocity</h3>
+<p>Before the widespread adoption of MIDI Polyphonic Expression (MPE),
+standard MIDI applied control change (CC) messages globally to all notes
+on a single channel. Polyphonic transform scripts overcome these
+limitations by dynamically mapping individual notes within a chord to
+separate virtual channels. This enables independent pitch bends, custom
+velocity curves, or filter envelopes to be applied to individual voices
+inside a single polyphonic performance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is MIDI Echo in Hardware Sequencers? - midi</title>
+    <meta name="description" content="MIDI echo, often referred to as software MIDI Thru or soft thru, is a critical routing feature found in modern and vintage hardware sequencers. This article explains how MIDI echo functions, why it is vital for controlling multiple synthesizers from a si">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-midi-echo-in-hardware-sequencers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is MIDI Echo in Hardware Sequencers? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-midi-echo-in-hardware-sequencers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI echo, often referred to as software MIDI Thru or soft thru, is a critical routing feature found in modern and vintage hardware sequencers. This article explains how MIDI echo functions, why it is vital for controlling multiple synthesizers from a si" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-midi-echo-in-hardware-sequencers">What Is MIDI Echo in
+Hardware Sequencers?</h1>
+<p>MIDI echo, often referred to as software MIDI Thru or soft thru, is a
+critical routing feature found in modern and vintage hardware
+sequencers. This article explains how MIDI echo functions, why it is
+vital for controlling multiple synthesizers from a single master
+controller, how it facilitates real-time performance and recording, and
+the best practices for preventing common issues like MIDI feedback
+loops.</p>
+<h3 id="defining-midi-echo">Defining MIDI Echo</h3>
+<p>In standard hardware configurations, a physical MIDI Out port
+transmits data generated internally by the device, while a physical MIDI
+Thru port simply duplicates the electrical signal coming into the MIDI
+In port without modification. MIDI echo bridges this gap inside the
+sequencer’s operating system.</p>
+<p>When enabled, MIDI echo takes incoming MIDI messages (such as note
+triggers, pitch bend, or mod wheel movements) arriving at the
+sequencer’s MIDI In port and immediately forwards them to the MIDI Out
+port. Unlike a passive hardware Thru connection, the sequencer can
+process, rechannel, and manipulate this data stream in real time before
+sending it back out.</p>
+<h3 id="the-central-role-in-studio-routing">The Central Role in Studio
+Routing</h3>
+<p>In a setup with multiple sound modules, managing physical cable
+connections for each device is impractical. Hardware sequencers serve as
+the central brain of a DAW-less environment, and MIDI echo makes this
+architecture workable.</p>
+<p>With MIDI echo active, a musician can connect a single master MIDI
+keyboard to the sequencer's input. When a specific track is selected on
+the sequencer, the sequencer intercepts the keyboard’s output and
+automatically echoes it to the sound module assigned to that track. This
+eliminates the need to manually switch cables or constantly change the
+master keyboard's transmission channel whenever a different synthesizer
+needs to be played.</p>
+<h3 id="channel-remapping-and-dynamic-assignment">Channel Remapping and
+Dynamic Assignment</h3>
+<p>One of the most practical functions of MIDI echo is channel
+remapping. Master keyboards often transmit on a fixed MIDI channel
+(typically Channel 1). When MIDI echo is utilized, the hardware
+sequencer receives the Channel 1 data and re-tags it to whatever MIDI
+channel is assigned to the active track—for example, Channel 8 for a
+drum machine or Channel 4 for a bass synth. This allows instantaneous
+switching between various instruments during live performances or
+production sessions.</p>
+<h3 id="real-time-monitoring-during-recording">Real-Time Monitoring
+During Recording</h3>
+<p>MIDI echo is essential for accurate monitoring during track
+recording. When recording a new part into a hardware sequencer, the
+performer needs to hear the target synthesizer respond to their playing
+without noticeable delay. MIDI echo ensures that while the sequencer is
+capturing incoming note data into its internal memory, it is
+simultaneously sending that same performance data to the sound engine
+producing the audio.</p>
+<h3 id="avoiding-midi-feedback-loops">Avoiding MIDI Feedback Loops</h3>
+<p>While MIDI echo is indispensable, it requires careful configuration
+to avoid MIDI loops. If an instrument is both sending data to the
+sequencer and receiving data back through MIDI echo, an infinite data
+loop can occur. This leads to doubled notes, reduced polyphony, stuck
+notes, and system freezes.</p>
+<p>To prevent this issue:</p>
+<ul>
+<li><strong>Disable Local Control:</strong> When using a synthesizer as
+both a master keyboard and a sound generator, "Local Control" must be
+turned off in the synthesizer's system settings. This breaks the
+internal connection between the synth's keys and its own sound engine,
+allowing the signal to travel safely through the sequencer via MIDI echo
+before triggering the sound.</li>
+<li><strong>Selective Echo:</strong> Most advanced sequencers allow
+users to disable MIDI echo globally or per-track, ensuring that only
+devices currently being monitored receive echoed data.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

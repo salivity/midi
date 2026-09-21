@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Velocity Scaling for Soft Sample Libraries - midi</title>
+    <meta name="description" content="MIDI velocity scaling is the process of altering the incoming velocity data from a MIDI controller before it triggers a virtual instrument, effectively reshaping how hard you must strike a key to produce a given volume or timbre. For keyboardists with a">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-velocity-scaling-for-soft-sample-libraries">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Velocity Scaling for Soft Sample Libraries - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-velocity-scaling-for-soft-sample-libraries" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI velocity scaling is the process of altering the incoming velocity data from a MIDI controller before it triggers a virtual instrument, effectively reshaping how hard you must strike a key to produce a given volume or timbre. For keyboardists with a" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-velocity-scaling-for-soft-sample-libraries">MIDI Velocity
+Scaling for Soft Sample Libraries</h1>
+<p>MIDI velocity scaling is the process of altering the incoming
+velocity data from a MIDI controller before it triggers a virtual
+instrument, effectively reshaping how hard you must strike a key to
+produce a given volume or timbre. For keyboardists with a naturally
+heavy touch, delicate virtual instruments—such as felt pianos, intimate
+strings, or subtle woodwinds—can be frustratingly difficult to control
+because normal playing easily triggers harsh, loud sample layers. By
+applying a custom velocity curve, players can remap high physical strike
+forces to lower output values, allowing them to perform with their
+natural physical weight while consistently accessing the sweetest,
+softest layers of their sample libraries.</p>
+<h2 id="understanding-midi-velocity-and-dynamic-layers">Understanding
+MIDI Velocity and Dynamic Layers</h2>
+<p>Every time you press a key on a MIDI keyboard, it transmits a
+velocity value ranging from 1 to 127. Virtual sample libraries rely on
+this data to determine not just how loud a note should be, but which
+recorded audio sample to trigger.</p>
+<p>Most modern sample libraries are multi-sampled across multiple
+dynamic layers:</p>
+<ul>
+<li><strong>Low Velocities (1–40):</strong> <em>Pianissimo</em> to
+<em>piano</em> recordings featuring soft attacks, warmer tones, and
+extended sustain.</li>
+<li><strong>Mid Velocities (41–85):</strong> <em>Mezzo piano</em> to
+<em>mezzo forte</em> recordings with balanced brightness and standard
+projection.</li>
+<li><strong>High Velocities (86–127):</strong> <em>Forte</em> to
+<em>fortissimo</em> recordings that sound bright, sharp, and
+aggressive.</li>
+</ul>
+<p>When an instrument is programmed specifically for soft, ambient, or
+cinematic playing, the most desirable tonal characteristics often reside
+strictly within the lowest velocity values.</p>
+<h2 id="the-challenge-of-a-heavy-touch">The Challenge of a Heavy
+Touch</h2>
+<p>Pianists trained on acoustic grand pianos or heavy hammer-action
+keyboards typically play with substantial finger weight and arm gravity.
+On a physical acoustic instrument, this technique produces a rich,
+resonant tone.</p>
+<p>However, on a standard MIDI controller with a default linear response
+(a 1:1 ratio where an input of 60 equals an output of 60), a heavy touch
+frequently registers values between 80 and 115, even during moderate
+passages. When playing a library designed for soft, expressive playing,
+this causes several issues:</p>
+<ul>
+<li><strong>Accidental Accents:</strong> Gentle phrases are interrupted
+by sudden, jarring dynamic spikes.</li>
+<li><strong>Loss of Expressive Range:</strong> The quietest 30% of the
+instrument's sound palette becomes physically unreachable without
+extreme, unnatural physical restraint.</li>
+<li><strong>Hand Fatigue:</strong> Forcing yourself to play unnaturally
+light leads to muscle tension and stifles expressive phrasing.</li>
+</ul>
+<h2 id="how-midi-velocity-scaling-works">How MIDI Velocity Scaling
+Works</h2>
+<p>Velocity scaling remaps the input-to-output relationship between your
+hardware controller and your software instrument. Rather than sending
+raw data directly to the sound engine, the data passes through a
+mathematical curve or offset.</p>
+<h3 id="1-scaling-curves-logarithmic--convex">1. Scaling Curves
+(Logarithmic / Convex)</h3>
+<p>In a linear setup, input directly mirrors output. By switching to an
+exponential or convex curve (often labeled as "soft" or "heavy"
+depending on the software manufacturer), you require higher physical
+force to achieve higher output numbers.</p>
+<ul>
+<li>A strike that naturally outputs an <strong>80</strong> can be scaled
+down to output a <strong>40</strong>.</li>
+<li>A strike of <strong>110</strong> might only reach
+<strong>70</strong>.</li>
+<li>This effectively widens the physical dynamic zone for quiet samples,
+giving you the entire travel of your natural playing style to explore
+the softer layers.</li>
+</ul>
+<h3 id="2-velocity-offsets-and-clamping">2. Velocity Offsets and
+Clamping</h3>
+<p>Scaling can also set fixed boundaries on incoming data:</p>
+<ul>
+<li><strong>Maximum Limit (Clamping):</strong> You can set a hard
+ceiling (e.g., clamping maximum output to 75). No matter how forcefully
+you strike the key, the library will never trigger the aggressive
+fortissimo layer.</li>
+<li><strong>Dynamic Range Compression:</strong> Narrowing the incoming
+range (e.g., mapping input range 20–100 to an output range of 15–55)
+ensures that soft instruments maintain consistent intimacy without
+sudden dynamic jumps.</li>
+</ul>
+<h2 id="where-to-configure-velocity-scaling">Where to Configure Velocity
+Scaling</h2>
+<p>Velocity scaling can be implemented at three different stages in your
+production chain:</p>
+<ul>
+<li><strong>Hardware Controller:</strong> Most professional MIDI
+keyboards feature onboard velocity curve presets (such as Soft, Medium,
+Hard). Setting the keyboard to "Hard" requires more force to generate
+high velocities, immediately taming the output.</li>
+<li><strong>DAW MIDI Effects:</strong> Digital Audio Workstations
+feature dedicated MIDI plugins (such as Logic Pro’s MIDI Velocity
+Processor, Ableton Live’s Velocity device, or Cubase’s MIDI Modifiers).
+These tools allow you to draw precise custom curves, compress ranges, or
+add offsets per track.</li>
+<li><strong>Sample Engine Settings:</strong> Dedicated samplers like
+Native Instruments Kontakt, Spitfire Audio App, or Vienna Symphonic
+Library include internal velocity response editors. Adjusting the curve
+inside the instrument ensures the scaling only affects that specific
+sound without altering other tracks in your project.</li>
+</ul>
+<p>By utilizing velocity scaling, you decouple your physical technique
+from the mechanical limitations of the software. You retain the freedom
+to play with natural weight and emotion while forcing the sample engine
+to deliver the delicate, whisper-quiet tones you intended.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

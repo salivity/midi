@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resetting MIDI Pitch and Modulation Controllers - midi</title>
+    <meta name="description" content="This article provides an overview of how MIDI protocols handle controller resets, specifically detailing the interaction between pitch bend restoration and modulation depth. In digital music production, a "stuck" pitch bend or lingering vibrato can disru">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/resetting-midi-pitch-and-modulation-controllers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Resetting MIDI Pitch and Modulation Controllers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/resetting-midi-pitch-and-modulation-controllers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how MIDI protocols handle controller resets, specifically detailing the interaction between pitch bend restoration and modulation depth. In digital music production, a "stuck" pitch bend or lingering vibrato can disru" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="resetting-midi-pitch-and-modulation-controllers">Resetting MIDI
+Pitch and Modulation Controllers</h1>
+<p>This article provides an overview of how MIDI protocols handle
+controller resets, specifically detailing the interaction between pitch
+bend restoration and modulation depth. In digital music production, a
+"stuck" pitch bend or lingering vibrato can disrupt a performance. To
+resolve this, digital audio workstations (DAWs) and hardware
+synthesizers use specific control messages, such as the Pitch Bend
+Center command and the Reset All Controllers (CC 121) message, to return
+pitch and modulation parameters to their default zero states.</p>
+<h3 id="understanding-pitch-bend-and-modulation-data">Understanding
+Pitch Bend and Modulation Data</h3>
+<p>In the MIDI specification, pitch bend and modulation are separate
+entities that operate on different communication channels within the
+data stream:</p>
+<ul>
+<li><strong>Pitch Bend:</strong> Unlike standard Continuous Controllers
+(CC), pitch bend utilizes a dedicated 14-bit message (<code>0xEn</code>)
+to achieve high-resolution frequency shifts without audible "stepping."
+Because pitch can bend both upward and downward, its neutral,
+zero-offset state is centered at the exact middle of the 14-bit range:
+value 8,192 (represented by LSB 0, MSB 64).</li>
+<li><strong>Modulation Wheel (CC 1):</strong> Modulation operates via
+standard 7-bit controller messages (<code>0xBn 0x01 [Value]</code>)
+ranging from 0 to 127. Its neutral, inactive state is absolute zero
+(value 0).</li>
+</ul>
+<p>Because these two controls use different data formats, a standalone
+Pitch Bend reset message (centering the wheel at 8,192) will not alter
+the modulation depth on its own. Synthesizers and DAWs resolve this
+distinction using structured reset sequences.</p>
+<h3 id="the-role-of-reset-all-controllers-cc-121">The Role of Reset All
+Controllers (CC 121)</h3>
+<p>To ensure that both pitch deflection and modulation levels return to
+their default values simultaneously, MIDI utilizes the <strong>Reset All
+Controllers</strong> message (Control Change 121).</p>
+<p>When a receiver encounters CC 121:</p>
+<ol type="1">
+<li><strong>Modulation Zeroing:</strong> The receiver automatically
+resets CC 1 (Modulation) to a value of 0, cutting off any active
+low-frequency oscillation (LFO) or vibrato routing.</li>
+<li><strong>Pitch Normalization:</strong> The receiver sets the internal
+pitch bend offset to 8,192, neutralizing any microtonal or semi-tonal
+deviation.</li>
+<li><strong>Secondary Restorations:</strong> Other expressive parameters
+are restored to default states, including Aftertouch (reset to 0),
+Expression (CC 11, usually reset to 127), and Sustain (CC 64, set to
+0).</li>
+</ol>
+<p>By transmitting CC 121 with a data byte of 0
+(<code>0xBn 0x79 0x00</code>), modern sequencers force receiving sound
+engines to clear their dynamic control buffers, ensuring that no
+lingering modulation values interfere with subsequent notes.</p>
+<h3 id="daw-transport-and-automated-panic-sequences">DAW Transport and
+Automated "Panic" Sequences</h3>
+<p>When stopping playback or issuing a transport reset, most DAWs do not
+rely exclusively on a single command. Instead, they transmit a composite
+"chase" or "choke" message sequence across all active MIDI channels.
+This standard sequence typically includes:</p>
+<ul>
+<li>A <strong>Pitch Bend</strong> reset message:
+<code>0xEn 0x00 0x40</code> (centering pitch bend).</li>
+<li>An explicit <strong>CC 1</strong> message:
+<code>0xBn 0x01 0x00</code> (forcing modulation to zero).</li>
+<li>A <strong>CC 121</strong> message: <code>0xBn 0x79 0x00</code>
+(triggering a global controller reset).</li>
+<li>A <strong>CC 123</strong> message (All Notes Off): to silence any
+lingering polyphonic voices.</li>
+</ul>
+<p>Synthesizers interpret this arriving data instantaneously. The sound
+engine's DSP algorithms update the parameter values of the current
+patch, collapsing the modulation matrix depth to zero and realigning the
+fundamental frequency of the oscillators with the standard chromatic
+scale. This multi-message redundancy ensures that both dedicated pitch
+mechanisms and general modulation controllers reliably return to their
+neutral states.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

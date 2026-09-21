@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Timecode vs SMPTE LTC Electrical Signals - midi</title>
+    <meta name="description" content="This article explores the fundamental differences between MIDI Timecode (MTC) and standard SMPTE Linear Timecode (LTC) electrical signals. While both formats exist to synchronize audio, video, and lighting systems using the standard hours, minutes, secon">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-timecode-vs-smpte-ltc-electrical-signals">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Timecode vs SMPTE LTC Electrical Signals - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-timecode-vs-smpte-ltc-electrical-signals" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the fundamental differences between MIDI Timecode (MTC) and standard SMPTE Linear Timecode (LTC) electrical signals. While both formats exist to synchronize audio, video, and lighting systems using the standard hours, minutes, secon" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-timecode-vs-smpte-ltc-electrical-signals">MIDI Timecode vs
+SMPTE LTC Electrical Signals</h1>
+<p>This article explores the fundamental differences between MIDI
+Timecode (MTC) and standard SMPTE Linear Timecode (LTC) electrical
+signals. While both formats exist to synchronize audio, video, and
+lighting systems using the standard hours, minutes, seconds, and frames
+format, they rely on entirely different electrical specifications, data
+transmission methods, and hardware interfaces to achieve this goal.</p>
+<h3 id="electrical-signal-types-and-transmission">Electrical Signal
+Types and Transmission</h3>
+<p>The primary difference between standard SMPTE LTC and MTC lies in the
+nature of the electrical signal itself. SMPTE LTC is an analog audio
+signal, whereas MTC is purely digital asynchronous serial data.</p>
+<p>SMPTE LTC is modulated using Manchester Bi-Phase encoding (also known
+as bi-phase mark), which turns binary data into a continuous alternating
+current (AC) waveform. This signal falls entirely within the audible
+frequency spectrum (roughly between 1 kHz and 2.5 kHz depending on the
+frame rate), allowing it to travel through standard balanced audio
+connections such as XLR, 1/4-inch TRS, or coaxial BNC cables. Because it
+behaves like an analog audio signal, LTC can be recorded directly onto
+an audio track of a multitrack recorder, patched through standard audio
+routing switchers, and attenuated or amplified using audio gear.</p>
+<p>Conversely, MTC travels over standard MIDI hardware links.
+Electrically, traditional MIDI operates as a 5-volt, 31.25-kilobaud
+current loop using opto-isolated 5-pin DIN connectors, though it can
+also be transported over USB or Ethernet (RTP-MIDI). Rather than a
+continuous audio wave, MTC transmits discrete digital binary pulses (0s
+and 1s) representing specific MIDI command bytes.</p>
+<h3 id="data-structure-and-encoding">Data Structure and Encoding</h3>
+<p>The structure of the data embedded within these signals also diverges
+significantly.</p>
+<p>An LTC signal continuously streams a complete 80-bit frame for every
+frame of video or audio. These 80 bits contain time data (hours,
+minutes, seconds, frames), user bits, and a designated 16-bit "sync
+word" at the end of each frame. The sync word enables the receiving
+system to determine the exact frame boundary and detect whether the
+timecode is playing forward or in reverse.</p>
+<p>MTC does not transmit the complete 80-bit SMPTE structure all at once
+during continuous playback. Instead, it breaks the SMPTE time value into
+pieces called Quarter-Frame messages. Each Quarter-Frame message is a
+2-byte MIDI message containing a partial snippet of the time data (such
+as frame low bits, frame high bits, seconds low bits, etc.). Because it
+takes eight Quarter-Frame messages to assemble a single complete time
+stamp, MTC requires two full frames of continuous playback to update the
+absolute timecode. For instant jumps, locating, or scrubbing, MTC
+instead transmits an explicit 10-byte Universal Real-Time System
+Exclusive (SysEx) "Full Frame" message.</p>
+<h3 id="bandwidth-noise-and-hardware-sensitivity">Bandwidth, Noise, and
+Hardware Sensitivity</h3>
+<p>Because LTC is an analog waveform, its integrity relies on proper
+audio gain staging. If the signal is too quiet, receiving devices cannot
+detect the zero-crossing transitions of the bi-phase mark; if it is
+driven into severe clipping distortion, the phase information can be
+corrupted. Furthermore, the high-frequency square edges of an LTC signal
+make it prone to inductive crosstalk, meaning it can easily bleed into
+adjacent analog audio lines in an audio snake.</p>
+<p>MTC is immune to audio crosstalk and level calibration issues because
+it uses digital data protocols. However, because standard 5-pin DIN MIDI
+has a relatively low bandwidth (31.25 kbps), heavy MTC traffic consumes
+roughly one-third of the total available bandwidth of a traditional MIDI
+cable. If musical MIDI data (such as notes, controller data, or pitch
+bend) is transmitted simultaneously on the same physical MIDI line as
+MTC, message latency and timing jitter can occur. LTC, running on its
+own dedicated audio line, remains entirely independent of computer data
+buses and MIDI traffic.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

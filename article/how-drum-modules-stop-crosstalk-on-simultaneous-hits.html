@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Drum Modules Stop Crosstalk on Simultaneous Hits - midi</title>
+    <meta name="description" content="Electronic drum modules distinguish between intentional simultaneous strikes and unwanted crosstalk by pairing digital signal processing (DSP) algorithms with microsecond-level timing windows. When a drummer intentionally plays two pads at the exact same">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-drum-modules-stop-crosstalk-on-simultaneous-hits">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Drum Modules Stop Crosstalk on Simultaneous Hits - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-drum-modules-stop-crosstalk-on-simultaneous-hits" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Electronic drum modules distinguish between intentional simultaneous strikes and unwanted crosstalk by pairing digital signal processing (DSP) algorithms with microsecond-level timing windows. When a drummer intentionally plays two pads at the exact same" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-drum-modules-stop-crosstalk-on-simultaneous-hits">How Drum
+Modules Stop Crosstalk on Simultaneous Hits</h1>
+<p>Electronic drum modules distinguish between intentional simultaneous
+strikes and unwanted crosstalk by pairing digital signal processing
+(DSP) algorithms with microsecond-level timing windows. When a drummer
+intentionally plays two pads at the exact same moment—such as a snare
+and a crash cymbal—mechanical vibrations travel through the rack and
+threaten to trigger adjacent pads falsely. By analyzing peak amplitude,
+transient arrival times, scan windows, and intelligent threshold
+suppression, modern drum modules ensure that intentional simultaneous
+MIDI hits trigger accurately while suppressing sympathetic mechanical
+vibrations.</p>
+<h3 id="the-physics-of-crosstalk-vs-intentional-hits">The Physics of
+Crosstalk vs. Intentional Hits</h3>
+<p>Crosstalk occurs when the physical impact on one pad travels through
+hardware tubes and mounts, causing the piezoelectric sensor of an
+adjacent pad to vibrate. An intentional strike produces a rapid,
+high-amplitude voltage spike with an instantaneous rise time. In
+contrast, sympathetic vibration from crosstalk produces a
+lower-amplitude, diffused waveform that arrives a few milliseconds later
+with a softer transient curve. The drum module’s processor constantly
+monitors these incoming analog electrical signals, converting them to
+digital data to evaluate their shape before generating a MIDI
+<code>Note On</code> message.</p>
+<h3 id="scan-time-and-micro-timing-windows">Scan Time and Micro-Timing
+Windows</h3>
+<p>To process simultaneous hits without mistaking them for crosstalk,
+modules utilize a parameter known as <strong>Scan Time</strong> (or Peak
+Time). When a piezo sensor exceeds its base trigger threshold, the
+module does not immediately send a MIDI message. Instead, it waits for a
+tiny duration—typically between 1.5 to 4 milliseconds—to allow the
+strike's analog wave to reach its absolute peak.</p>
+<p>This millisecond buffer allows the module to compare all active
+inputs across the entire kit at the same relative moment. If two pads
+are struck simultaneously by the drummer, both pads will cross their
+respective thresholds almost identically and generate sharp, immediate
+peak signals within that shared scan window.</p>
+<h3 id="relative-amplitude-and-ratio-analysis">Relative Amplitude and
+Ratio Analysis</h3>
+<p>Drum modules feature crosstalk cancellation algorithms (often labeled
+as <strong>X-Talk</strong>, <strong>Crosstalk Cancel</strong>, or
+<strong>Reject</strong> in settings menus). When multiple sensors
+register vibration within the scan window, the algorithm calculates the
+ratio of their peak velocities:</p>
+<ul>
+<li><strong>Simultaneous Hits:</strong> If Pad A (Snare) and Pad B
+(Hi-Hat) both produce high-velocity transients that correspond directly
+to intentional strikes, the module recognizes that neither signal is
+merely an artifact of the other. Because both signal energies exceed
+their independent trigger profiles and match intentional transient
+dynamics, the module allows both MIDI <code>Note On</code> messages to
+fire concurrently.</li>
+<li><strong>Sympathetic Bleed:</strong> If Pad A is struck with high
+force, and Pad B registers a small signal that sits below a dynamically
+calculated percentage of Pad A’s energy, the module suppresses Pad B.
+The system deduces that Pad B’s vibration is solely structural bleed
+from Pad A.</li>
+</ul>
+<h3 id="crosstalk-grouping-and-prioritization">Crosstalk Grouping and
+Prioritization</h3>
+<p>Advanced modules allow drummers to assign pads to specific crosstalk
+groups or utilize directional matrices. For example, tom pads mounted on
+the same physical rack bar share a high-risk group. If the rack
+vibrates, the module applies a stricter ratio filter specifically
+between those linked inputs.</p>
+<p>Because the module knows the acoustic transmission properties between
+related inputs, it applies targeted dynamic suppression. It permits
+equal or near-equal concurrent hits while muting minor sympathetic
+spikes on neighboring pads that fall within the dampening curve of the
+primary strike.</p>
+<h3 id="mask-time-and-retrigger-cancellation">Mask Time and Retrigger
+Cancellation</h3>
+<p>Immediately following a confirmed strike, modules enforce a parameter
+called <strong>Mask Time</strong> (or Retrigger Cancel). This prevents
+the residual mechanical resonance of the pad from sending repeated MIDI
+signals. By combining Scan Time (for peak evaluation), X-Talk ratios
+(for inter-pad bleed elimination), and Mask Time (for single-pad bounce
+rejection), electronic drum modules cleanly separate dual MIDI hits from
+structural hardware resonance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

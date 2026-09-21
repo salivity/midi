@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How a Hardware MIDI Splitter Routes 16 Modules - midi</title>
+    <meta name="description" content="A hardware MIDI splitter—commonly known as an active MIDI Thru box—distributes a single MIDI track to sixteen separate hardware modules by electrically duplicating a unified serial data stream across multiple physical output ports. Because standard M">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-a-hardware-midi-splitter-routes-16-modules">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How a Hardware MIDI Splitter Routes 16 Modules - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-a-hardware-midi-splitter-routes-16-modules" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A hardware MIDI splitter—commonly known as an active MIDI Thru box—distributes a single MIDI track to sixteen separate hardware modules by electrically duplicating a unified serial data stream across multiple physical output ports. Because standard M" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-a-hardware-midi-splitter-routes-16-modules">How a Hardware
+MIDI Splitter Routes 16 Modules</h1>
+<p>A hardware MIDI splitter—commonly known as an active MIDI Thru
+box—distributes a single MIDI track to sixteen separate hardware modules
+by electrically duplicating a unified serial data stream across multiple
+physical output ports. Because standard MIDI protocol transmits up to
+sixteen distinct logical channels simultaneously across a single cable,
+the splitter receives this multiplexed data, cleans and buffers the
+electrical pulses, and broadcasts an identical copy to each connected
+module in real time. Each receiving module is set to listen to a
+designated MIDI channel, allowing a single master sequencer track or
+multi-channel arrangement to trigger all sixteen devices independently
+without noticeable latency.</p>
+<h3 id="the-midi-data-stream-and-16-channels">The MIDI Data Stream and
+16 Channels</h3>
+<p>Standard MIDI 1.0 transmits data serially at a fixed rate of 31.25
+kbaud. A MIDI message consists of status bytes and data bytes. Status
+bytes specify both the command (such as Note On, Note Off, or Control
+Change) and the channel number (Channels 1 through 16). Consequently, a
+sequencer track containing multi-channel arrangements or polyphonic data
+packages all messages into a single, continuous stream of binary
+code.</p>
+<h3 id="electrical-isolation-and-active-buffering">Electrical Isolation
+and Active Buffering</h3>
+<p>When the master track's data enters the hardware splitter through the
+MIDI IN port, it encounters an optocoupler. This component uses light to
+transfer the electrical signal, breaking the electrical connection
+between the master device and the splitter to eliminate ground loops and
+hum.</p>
+<p>Passive splitting cannot reliably feed sixteen separate outputs due
+to signal degradation and voltage drops. Therefore, an active splitter
+routes the clean digital output of the optocoupler into active buffer
+integrated circuits (such as Schmitt triggers or digital line drivers).
+Powered internally or by an external adapter, these high-speed logic
+chips create identical, low-impedance electrical replicas of the
+original binary stream for each output port.</p>
+<h3 id="parallel-signal-distribution">Parallel Signal Distribution</h3>
+<p>The buffered signal is routed simultaneously to the physical MIDI
+OUT/THRU jacks. Rather than processing, modifying, or queuing the data,
+the hardware splitter acts as a transparent digital distribution
+amplifier. Every byte entering the input port appears at all sixteen
+output ports within a few nanoseconds, bypassing the progressive latency
+(timing jitter) caused by serial daisy-chaining through traditional
+hardware MIDI THRU ports.</p>
+<h3 id="module-filtering-at-the-destination">Module Filtering at the
+Destination</h3>
+<p>Because each output port broadcasts the complete, unedited MIDI data
+stream, channel discrimination occurs inside the receiving sound modules
+rather than inside the splitter itself:</p>
+<ol type="1">
+<li><strong>Channel Assignment:</strong> Each of the sixteen modules is
+assigned a unique MIDI receive channel (e.g., Module A listens to
+Channel 1, Module B listens to Channel 2, through to Module P on Channel
+16).</li>
+<li><strong>Channel Modes:</strong> The modules are configured to "Omni
+Off" mode. In this state, a module inspects the status byte of every
+incoming MIDI command, processes instructions matching its assigned
+channel, and ignores all data designated for the other fifteen
+channels.</li>
+<li><strong>Unison Operation:</strong> Alternatively, if all sixteen
+modules are set to the same channel, a single-track sequence triggers
+all sixteen units in unison, allowing massive layering across different
+hardware engines without software overhead.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

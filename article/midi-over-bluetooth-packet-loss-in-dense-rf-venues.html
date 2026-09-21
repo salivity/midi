@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Over Bluetooth Packet Loss in Dense RF Venues - midi</title>
+    <meta name="description" content="Operating MIDI over Bluetooth Low Energy (BLE) in crowded radio frequency (RF) environments presents significant challenges due to severe 2.4 GHz spectrum congestion. This article examines how the BLE MIDI specification and Bluetooth link-layer protocols">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-over-bluetooth-packet-loss-in-dense-rf-venues">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Over Bluetooth Packet Loss in Dense RF Venues - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-over-bluetooth-packet-loss-in-dense-rf-venues" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Operating MIDI over Bluetooth Low Energy (BLE) in crowded radio frequency (RF) environments presents significant challenges due to severe 2.4 GHz spectrum congestion. This article examines how the BLE MIDI specification and Bluetooth link-layer protocols" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-over-bluetooth-packet-loss-in-dense-rf-venues">MIDI Over
+Bluetooth Packet Loss in Dense RF Venues</h1>
+<p>Operating MIDI over Bluetooth Low Energy (BLE) in crowded radio
+frequency (RF) environments presents significant challenges due to
+severe 2.4 GHz spectrum congestion. This article examines how the BLE
+MIDI specification and Bluetooth link-layer protocols manage data
+integrity, mitigate dropped packets, and maintain timing accuracy when
+competing with hundreds of mobile devices, Wi-Fi networks, and wireless
+production gear.</p>
+<h3 id="link-layer-retransmission-and-acknowledgment">Link-Layer
+Retransmission and Acknowledgment</h3>
+<p>At the foundation of Bluetooth Low Energy is a link-layer protocol
+that handles raw packet transmission. When a MIDI message is transmitted
+via BLE, it is encapsulated within a standard Generic Attribute Profile
+(GATT) transaction.</p>
+<p>Under normal BLE operations, the link layer uses cyclic redundancy
+checks (CRC) to verify data integrity. If an RF collision or
+interference corrupts a packet, the receiving hardware fails the CRC
+check and does not acknowledge (ACK) the transmission. The transmitter
+then automatically retransmits the missing packet during the next
+available connection event. While this ensures that no bytes are
+silently dropped at the radio layer, repeated retransmissions in an
+RF-dense venue introduce latency and timing jitter into musical
+performances.</p>
+<h3 id="adaptive-frequency-hopping-afh">Adaptive Frequency Hopping
+(AFH)</h3>
+<p>Dense venues suffer from widespread interference across the
+unlicensed 2.4 GHz band, largely driven by audience smartphones and
+high-power production Wi-Fi. BLE counters this by employing Adaptive
+Frequency Hopping (AFH).</p>
+<p>BLE divides the 2.4 GHz band into 40 distinct channels spaced 2 MHz
+apart, reserving 37 for data transmission. During an active connection,
+the host and peripheral dynamically monitor the signal-to-noise ratio
+across all channels. When specific channels exhibit high packet error
+rates—frequently caused by overlapping 20 MHz or 40 MHz Wi-Fi
+channels—the AFH algorithm flags those frequencies as "bad" and excludes
+them from the hopping sequence. This allows the MIDI stream to rapidly
+cycle only across the cleanest available slivers of the radio
+spectrum.</p>
+<h3 id="timestamping-and-jitter-mitigation">Timestamping and Jitter
+Mitigation</h3>
+<p>The official MIDI over BLE specification does not rely entirely on
+the RF layer for timing accuracy; it introduces native timestamping
+inside the payload.</p>
+<p>Because latency fluctuates wildly under severe RF interference,
+sending individual real-time events without context would cause audible
+rhythm distortion. The specification resolves this by packing multiple
+MIDI events into a single BLE packet alongside 13-bit
+millisecond-resolution timestamps. When a burst of delayed packets
+finally reaches the receiver after multiple RF collisions, the receiving
+engine uses these timestamps to reconstruct the original performance
+cadence rather than playing back all queued notes simultaneously in an
+unnatural cluster.</p>
+<h3 id="handling-complete-packet-loss-and-stuck-notes">Handling Complete
+Packet Loss and Stuck Notes</h3>
+<p>If interference becomes absolute and connection events consistently
+fail, retransmissions eventually time out, leading to packet loss or
+connection drops (supervision timeouts). In musical performance, the
+most catastrophic outcome of dropped packets is the "stuck note"—a
+Note-On message received without its corresponding Note-Off.</p>
+<p>BLE MIDI implementations address catastrophic loss through several
+application-layer mechanisms:</p>
+<ul>
+<li><strong>Active Sensing and Heartbeats:</strong> Controllers and
+receivers continuously exchange timing packets. If communication ceases
+beyond a set supervision threshold, the receiver identifies the dropped
+connection and automatically sends an internal "All Notes Off" or "Reset
+All Controllers" command to silence running voices.</li>
+<li><strong>Running Status and Payload Batching:</strong> Modern BLE
+MIDI stacks minimize the number of packets sent over the air by bundling
+Note-Off data directly with subsequent Note-On events or across
+redundant packets, reducing the airtime footprint and shrinking the
+window for packet collisions.</li>
+</ul>
+<h3 id="performance-limitations-in-extreme-rf">Performance Limitations
+in Extreme RF</h3>
+<p>Despite retransmissions, AFH, and timestamping, MIDI over BLE
+operates under hard physical constraints. In venues with thousands of
+active consumer devices, BLE connection intervals must often be widened
+to maintain link stability, directly increasing base latency. While
+link-layer error correction prevents raw MIDI corruption, professional
+live staging in heavily congested RF environments ultimately requires
+physical proximity, directional BLE antenna placement, or wired
+fallbacks to ensure zero-latency execution.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

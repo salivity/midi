@@ -1,0 +1,1952 @@
+[
+  [
+    325,
+    "MIDI Zero Velocity Note Off Explained",
+    "In the original MIDI 1.0 specification published in 1983, a Note On message sent with a velocity value of zero is officially interpreted as a Note Off command. This architectural design choice served primarily as a bandwidth-saving technique for hardware",
+    false
+  ],
+  [
+    324,
+    "Why MIDI Note On Velocity 0 Means Note Off",
+    "In the MIDI 1.0 specification, transmitting a Note On command with a velocity value of zero is universally recognized as a Note Off event. This article provides a technical explanation of why byte sequence 0x90 0x3C 0x00 stops Middle C from sounding inst",
+    false
+  ],
+  [
+    323,
+    "MIDI Channel 16 Control Change Hex Number",
+    "This article explains the hexadecimal status byte used to identify a Control Change command on MIDI Channel 16. It details how MIDI status bytes are constructed and breaks down the specific nibbles representing message types and channel assignments. The",
+    false
+  ],
+  [
+    322,
+    "Hex for MIDI Channel 1 Note On Command",
+    "This article explains the hexadecimal value used to trigger a Note On message on MIDI Channel 1. It details the exact hex code required, breaks down the byte structure behind MIDI channel messaging, and illustrates how subsequent data bytes define the pi",
+    false
+  ],
+  [
+    321,
+    "How MIDI Hardware Monitors Display MIDI Data",
+    "A MIDI hardware monitor intercepts the serial data stream flowing through a MIDI cable and translates raw electrical pulses into readable visual feedback on an LCD, OLED, or LED matrix display. These diagnostic devices analyze incoming digital messages,",
+    false
+  ],
+  [
+    320,
+    "What Is a MIDI Active Sensing Timeout?",
+    "This article explores the concept of the MIDI Active Sensing timeout, examining how this safety mechanism functions within hardware setups and detailing the specific actions a synthesizer takes when periodic connection pings fail. Active Sensing is an op",
+    false
+  ],
+  [
+    319,
+    "Resetting MIDI Pitch and Modulation Controllers",
+    "This article provides an overview of how MIDI protocols handle controller resets, specifically detailing the interaction between pitch bend restoration and modulation depth. In digital music production, a \"stuck\" pitch bend or lingering vibrato can disru",
+    false
+  ],
+  [
+    318,
+    "How to Change MIDI Pitch Bend Range with RPN",
+    "This guide explains the Registered Parameter Number (RPN) sequence required to change a MIDI instrument's pitch bend range from the default 2 semitones to 12 semitones (one full octave). Below, you will find the exact Control Change (CC) messages, parame",
+    false
+  ],
+  [
+    317,
+    "How to Configure Pitch Bend Range Using MIDI RPN",
+    "Configuring pitch bend extremes via MIDI Registered Parameter Numbers (RPNs) allows you to define the exact musical range a sound module traverses when the pitch wheel is pushed to its absolute limits. By transmitting standard RPN controllers, you establ",
+    false
+  ],
+  [
+    316,
+    "MIDI Pitch Bend Depth: How Bend Limits Work",
+    "MIDI pitch bend depth defines the maximum musical interval an instrument shifts when its pitch bend controller is pushed to its extreme limits. While standard MIDI pitch bend messages only tell a synthesizer where the physical wheel or lever is positione",
+    false
+  ],
+  [
+    315,
+    "How MIDI Tuning Establishes Middle A at 440 Hz",
+    "The standard Musical Instrument Digital Interface (MIDI) protocol establishes musical pitch by pairing a discrete numbering system with mathematical formulas grounded in 12-tone equal temperament. Central to this framework is MIDI Note Number 69, which i",
+    false
+  ],
+  [
+    314,
+    "Keystrokes to Polyphonic MIDI in Modular Software",
+    "Modular software patching tools convert standard computer keyboard keystrokes into polyphonic MIDI data by capturing operating system key events, mapping alphanumeric characters to musical pitches, and distributing simultaneous inputs through a dynamic v",
+    false
+  ],
+  [
+    313,
+    "Monome Protocol: Bridging Button Presses to MIDI",
+    "This article explores how the Monome hardware platform communicates with modern music software, detailing the specific protocol used to bridge physical button presses into standard MIDI data. By examining the roles of serial communication, Open Sound Con",
+    false
+  ],
+  [
+    312,
+    "How Novation Launchpad Uses MIDI Notes and CC Messages",
+    "The Novation Launchpad controls software like Ableton Live by functioning as a specialized MIDI controller that translates tactile button presses into standard MIDI Note and Control Change (CC) messages. This article explains the underlying communication",
+    false
+  ],
+  [
+    311,
+    "What Is a MIDI Step Sequencer Matrix?",
+    "A MIDI step sequencer matrix is an electronic music interface that organizes musical patterns into discrete, chronological time intervals arranged in a grid format. This article explains how a step sequencer matrix operates and how illuminated silicone b",
+    false
+  ],
+  [
+    310,
+    "How Laser Harps Use Photodiodes to Trigger MIDI",
+    "A laser harp functions as an optical musical interface where projected beams of light replace traditional vibrating strings. When a performer blocks a beam, an integrated photodiode interruption sensor registers the sudden change in light levels, prompti",
+    false
+  ],
+  [
+    309,
+    "MIDI Triggers for Stadium Video Wall Media Servers",
+    "Musical Instrument Digital Interface (MIDI) serves as a critical communication bridge in live production environments, enabling precise synchronization between live performance elements and large-scale visual displays. In stadium settings, where video wa",
+    false
+  ],
+  [
+    308,
+    "Automating Lower-Third Graphics with MIDI",
+    "Automating visual lower-third graphics using MIDI commands allows live broadcast directors to trigger accurately timed on-screen titles, speaker names, and lower-third overlays without manual switching. By mapping standard MIDI messages—such as Note On",
+    false
+  ],
+  [
+    307,
+    "Why Use a Dedicated MIDI Cable for Timecode?",
+    "Dedicating a separate physical MIDI cable solely to heavy timecode streams prevents data bottlenecks, reduces timing jitter, and eliminates performance latency in production environments. Traditional 5-pin DIN MIDI runs on a fixed, low-bandwidth standard",
+    false
+  ],
+  [
+    306,
+    "Continuous MIDI Time Code Bandwidth Overhead",
+    "Continuous MIDI Time Code (MTC) transmission requires a predictable slice of serial throughput that directly impacts the available data capacity of a traditional MIDI connection. When transmitted over a standard 5-pin DIN MIDI link operating at 31,250 ba",
+    false
+  ],
+  [
+    305,
+    "How MTC Quarter-Frame Messages Distribute Timecode",
+    "MIDI Time Code (MTC) provides a way to transmit SMPTE timecode data across standard MIDI connections without overwhelming the protocol's 31.25 kbaud bandwidth. Instead of sending an entire timecode address in a single data-heavy transmission, MTC divides",
+    false
+  ],
+  [
+    304,
+    "MTC Frame Rate Flexibility for Film Audio Sync",
+    "MIDI Time Code (MTC) adapts SMPTE timecode into a digital format transmitted across MIDI lines to lock audio playback systems to film and video playback. While MTC natively supports standard 24 frames per second (fps) film projection, its overall frame r",
+    false
+  ],
+  [
+    303,
+    "MIDI Timecode vs SMPTE LTC Electrical Signals",
+    "This article explores the fundamental differences between MIDI Timecode (MTC) and standard SMPTE Linear Timecode (LTC) electrical signals. While both formats exist to synchronize audio, video, and lighting systems using the standard hours, minutes, secon",
+    false
+  ],
+  [
+    302,
+    "Automated MIDI Line Switchers in Touring Rack Rigs",
+    "An automated MIDI line switcher is a critical failover device designed to ensure seamless redundancy in professional touring rigs. In high-stakes live environments where backing tracks, virtual instruments, and hardware control rely on computers, these s",
+    false
+  ],
+  [
+    301,
+    "How Arena Bands Automate Stage Amps with MIDI",
+    "Modern arena rock and pop productions rely on precision timing to deliver album-quality sound, which requires switching guitar amplifier channels, toggling complex effects, and adjusting levels instantaneously. This article explores the infrastructure be",
+    false
+  ],
+  [
+    300,
+    "MIDI-Controlled Analog Distortion Pedals Explained",
+    "A MIDI-controlled analog guitar distortion pedal combines a traditional, non-digitized audio signal path with a digital control system, allowing players to achieve genuine analog saturation while enjoying modern preset management. This article explains t",
+    false
+  ],
+  [
+    299,
+    "How Envelope Followers Generate MIDI CC from Guitar",
+    "An envelope follower tracks the continuous amplitude dynamics of an incoming acoustic guitar signal and translates those physical volume fluctuations into digital MIDI Continuous Controller (CC) messages. By continuously analyzing the loudness of notes a",
+    false
+  ],
+  [
+    298,
+    "Role of MIDI Clock in Modular Analog Filters",
+    "This article explores how MIDI facilitates tempo synchronization within modular analog audio filters that feature digital clock inputs. While analog filter circuits process continuous electrical signals to shape tone, integrating digital clock inputs all",
+    false
+  ],
+  [
+    297,
+    "Managing Legacy Hardware Presets with MIDI Librarians",
+    "Audio engineers working with vintage synthesizers, rackmount processors, and drum machines face severe limitations when managing onboard storage. Internal memory constraints, obsolete floppy disks, and failing backup batteries threaten decades of sonic h",
+    false
+  ],
+  [
+    296,
+    "How to Use MIDI Bulk Dump to Archive Vintage Synths",
+    "This article explains what a MIDI bulk dump is, why it is critical for preserving classic instruments, and how sound designers transfer and archive vintage synthesizer patches to modern computers. You will learn the mechanics behind System Exclusive (Sys",
+    false
+  ],
+  [
+    295,
+    "How Large SysEx Buffers Prevent Synth Dump Corruption",
+    "System Exclusive (SysEx) transfers are critical for archiving synthesizer patch data, configurations, and entire sound banks. Unlike standard MIDI messages, which are only a few bytes long, SysEx bulk dumps transmit thousands of continuous bytes in dense",
+    false
+  ],
+  [
+    294,
+    "Why Cheap USB MIDI Cables Drop SysEx Data",
+    "Unbranded, low-cost USB-to-MIDI adapter cables frequently drop System Exclusive (SysEx) data packets due to severe hardware and firmware compromises made to keep production costs minimal. Unlike standard short MIDI events like Note On or Note Off, SysEx",
+    false
+  ],
+  [
+    293,
+    "Missing Optocoupler Noise in Budget USB-MIDI Cables",
+    "Budget USB-to-MIDI cables frequently cut manufacturing costs by omitting the standard input optocoupler, a design shortcut that compromises the electrical integrity of a studio setup. This article explains the technical problems caused by this omission,",
+    false
+  ],
+  [
+    292,
+    "How MIDI Current Loops Prevent Ground Loops",
+    "This article explains how the standard MIDI 5mA current loop and its mandatory optical isolation eliminate ground loop hum and guard against electric shocks. By relying on current-driven signaling rather than shared voltage references, MIDI physically br",
+    false
+  ],
+  [
+    291,
+    "Why MIDI 1.0 Uses a 5mA Current Loop",
+    "When the Musical Instrument Digital Interface (MIDI) 1.0 specification was standardized in 1983, its creators chose a 5-milliamp (mA) current loop circuit to ensure reliable data transmission between musical instruments. This design decision was driven b",
+    false
+  ],
+  [
+    290,
+    "MIDI 1.0 Serial Hardware Current Loop Standard",
+    "This article provides an overview of the serial hardware layer defined in the Musical Instrument Digital Interface (MIDI) 1.0 specification, focusing on its physical signaling method. Readers will learn about the precise electrical current loop standard",
+    false
+  ],
+  [
+    289,
+    "Why MIDI Inputs Require Optoisolators",
+    "Optoisolators are mandatory components on the hardware inputs of all official MIDI devices, primarily to prevent ground loops, eliminate digital noise, and protect sensitive gear from electrical damage. By converting electrical data into light pulses acr",
+    false
+  ],
+  [
+    288,
+    "MIDI Matrix Switchers for Rack Synthesizers",
+    "A MIDI matrix switcher is a dedicated routing hardware device that acts as a central hub for managing MIDI data between multiple controllers, computers, and sound modules. In extensive studio setups—particularly those featuring towering walls of rack-m",
+    false
+  ],
+  [
+    287,
+    "How MIDI Soft Takeover Prevents Parameter Jumps",
+    "Soft takeover—often referred to as \"pickup mode\" or \"latch mode\"—is a MIDI mapping protocol that eliminates sudden, jarring parameter changes in digital audio workstations (DAWs) and virtual instruments. When a physical MIDI fader or knob is in a dif",
+    false
+  ],
+  [
+    286,
+    "MIDI Controller Soft Takeover and Pick-Up Mode Explained",
+    "Pick-up mode, also widely known as soft takeover, is a MIDI control behavior designed to eliminate abrupt parameter jumps when adjusting software controls with physical, non-motorized faders or knobs. When you switch between tracks, plug-ins, or presets",
+    false
+  ],
+  [
+    285,
+    "How Rotary Encoder LED Rings Track MIDI Values",
+    "LED indicator rings around rotary encoders provide immediate visual feedback of software parameters by relying on bidirectional MIDI communication, continuous relative encoding, and microcontroller-driven LED scaling. Rather than relying on physical stop",
+    false
+  ],
+  [
+    284,
+    "Endless Encoders vs Potentiometers for MIDI CC",
+    "An endless rotary encoder offers a dynamic alternative to traditional potentiometers for digital audio workstations and hardware synthesizers. This article explores the mechanics of endless rotary encoders, contrasts them with standard fixed potentiomete",
+    false
+  ],
+  [
+    283,
+    "How Motorized Fader Banks Switch MIDI Layers",
+    "Motorized fader banks physically reposition themselves during a bank swap through bidirectional data communication between the hardware controller and a host application, such as a Digital Audio Workstation (DAW). When switching MIDI layers or banks, the",
+    false
+  ],
+  [
+    282,
+    "MIDI Controller Scripts and Bidirectional DAW Feedback",
+    "A MIDI controller surface script is a dedicated piece of software code that bridges a physical hardware controller and a Digital Audio Workstation (DAW), translating raw control data into dynamic software commands. Unlike basic MIDI mappings that only se",
+    false
+  ],
+  [
+    281,
+    "How Synths Use Scala Files to Remap MIDI Pitch",
+    "Modern software synthesizers utilize Scala files to break free from the traditional 12-tone equal temperament (12-TET) system, enabling microtonal and alternative tunings. By reading the mathematical pitch definitions stored within a .scl file—often pa",
+    false
+  ],
+  [
+    280,
+    "Turkish Makam in Microtonal MIDI Tuning Setups",
+    "The Turkish Makam system plays a transformative role in custom microtonal MIDI tuning setups by providing a sophisticated, mathematically rich framework that challenges the limitations of standard 12-tone equal temperament (12-TET). By integrating histor",
+    false
+  ],
+  [
+    279,
+    "How to Map 22 Shrutis on MIDI Instruments",
+    "Indian classical music relies on a 22-shruti microtonal system, presenting a fundamental challenge when translated to standard MIDI hardware, which is traditionally locked to 12-tone equal temperament (12-TET). To bridge this divide, modern musicians uti",
+    false
+  ],
+  [
+    278,
+    "MIDI Tuning Bank Dump in Microtonal Research",
+    "The MIDI tuning bank dump message is a specialized System Exclusive (SysEx) protocol within the MIDI Tuning Standard (MTS) that transmits an entire microtonal scale configuration to compatible hardware and software instruments in a single data stream. In",
+    false
+  ],
+  [
+    277,
+    "How MIDI CC 88 High-Resolution Velocity Works",
+    "The MIDI Control Change 88 (CC 88) High-Resolution Velocity Prefix is an extension to the MIDI 1.0 specification designed to expand note velocity from standard 7-bit resolution (128 values) to 14-bit resolution (16,384 values). By transmitting a dedicate",
+    false
+  ],
+  [
+    276,
+    "MIDI Articulation Switchers for Orchestral Templates",
+    "Virtual instrument articulation switchers are critical tools for modern media composers managing massive, multi-gigabyte MIDI orchestral templates. By consolidating multiple playing techniques onto single tracks, standardizing controls across disparate s",
+    false
+  ],
+  [
+    275,
+    "How Orchestrators Use MIDI Mockups for Film",
+    "Film orchestrators rely on MIDI mockups as the primary bridge between a composer’s digital demo and the final performance of a live studio orchestra. By dissecting the digital mockup—which consists of virtual instrument tracks, controller automation,",
+    false
+  ],
+  [
+    274,
+    "MIDI Note Length Modifier: Automate Articulations",
+    "A MIDI note length modifier is a digital audio workstation (DAW) utility or plugin that dynamically adjusts the duration of incoming or recorded MIDI notes. By overriding the original time interval between Note-On and Note-Off messages, this tool allows",
+    false
+  ],
+  [
+    273,
+    "How to Run Polyrhythms on Hardware MIDI Sequencers",
+    "Hardware sequencers achieve polyrhythmic patterns across independent MIDI channels by decoupling track lengths, applying independent clock multipliers and dividers per track, and routing each sequence to dedicated MIDI channels and outputs. This article",
+    false
+  ],
+  [
+    272,
+    "What Is Arpeggiator Latch and How Does It Work?",
+    "The arpeggiator latch function—often labeled as \"Hold\"—is a performance feature found on hardware synthesizers, MIDI controllers, and software instruments that allows an arpeggiated pattern to continue playing indefinitely after you release the keys.",
+    false
+  ],
+  [
+    271,
+    "How Groove Quantize Applies Audio Swing to MIDI",
+    "Groove quantization bridges the gap between the organic feel of vintage drum performances and the mechanical precision of digital sequencing. By analyzing the micro-timing and dynamic fluctuations of iconic sampled drum breaks—such as the \"Amen\" or \"Fu",
+    false
+  ],
+  [
+    270,
+    "What Is Iterative Quantization in MIDI?",
+    "Iterative quantization is a music production technique that adjusts the timing of MIDI notes gradually toward a rhythmic grid rather than snapping them to it completely. Instead of forcing notes into mathematically perfect alignment—which often results",
+    false
+  ],
+  [
+    269,
+    "Quantize MIDI Starts Without Changing Note Durations",
+    "Quantizing MIDI typically snaps both note-on and note-off events to the musical grid, which can strip away the natural phrasing and articulation of a human performance. This guide explains how to correct timing by locking only the start of MIDI notes to",
+    false
+  ],
+  [
+    268,
+    "Why High PPQN Makes MIDI Sound More Human",
+    "High PPQN (Pulses Per Quarter Note) resolution is essential for capturing natural, expressive musical performances in digital audio workstations (DAWs). By subdividing musical beats into significantly smaller timing increments, higher PPQN values allow r",
+    false
+  ],
+  [
+    267,
+    "What Is PPQN in MIDI? 960 PPQN vs 24 PPQN Explained",
+    "In digital music production, PPQN (Pulses Per Quarter Note) defines the timing resolution of a MIDI sequencer, determining how accurately note events, automation, and micro-timing can be captured and played back. While legacy hardware systems operated at",
+    false
+  ],
+  [
+    266,
+    "MIDI Division Resolution: Ticks Per Quarter Note",
+    "In a Standard MIDI File (SMF), the division parameter specifies how time intervals are measured, determining the precision and timing of every recorded event. This article explains how the SMF header establishes timing resolution using ticks per quarter",
+    false
+  ],
+  [
+    265,
+    "MIDI Meta Events for Tempo and Key Signatures",
+    "Standard MIDI Files (SMF) use non-routable control instructions called meta events to convey non-musical session information. Within this specification, tempo changes are designated by the Set Tempo meta event (0xFF 0x51), which specifies the speed of pl",
+    false
+  ],
+  [
+    264,
+    "How MIDI Karaoke Files Embed Synchronized Lyrics",
+    "MIDI karaoke files, typically bearing the .kar or standard .mid extension, synchronize text with music by storing lyric syllables as timestamped meta-events directly alongside musical sequence data. By leveraging the delta-time timing engine of the Stand",
+    false
+  ],
+  [
+    263,
+    "The Roland GS Standard and Early Commercial MIDI",
+    "The Roland GS (General Standard) was a proprietary set of hardware and software specifications introduced by the Roland Corporation in 1991 that revolutionized musical consistency across electronic instruments. By establishing standardized patch assignme",
+    false
+  ],
+  [
+    262,
+    "Yamaha XG MIDI: Expanding General MIDI Architecture",
+    "Yamaha XG (Extended General MIDI) is an advanced MIDI standard developed by Yamaha in 1994 that dramatically upgraded the capabilities of the original General MIDI (GM) specification. While the initial GM standard established a reliable baseline for cros",
+    false
+  ],
+  [
+    261,
+    "How Many Sounds Are in the General MIDI Map?",
+    "The General MIDI (GM1) specification standardizes sound patch assignments so that MIDI files sound consistent across different hardware and software synthesizers. In total, the standard General MIDI sound set catalogs exactly 128 melodic instrument sound",
+    false
+  ],
+  [
+    260,
+    "What Is General MIDI Level 1 Sound Set Arrangement?",
+    "The General MIDI Level 1 (GM1) sound set bank arrangement is a standardized specification established in 1991 by the MIDI Manufacturers Association (MMA) to ensure that MIDI compositions sound consistent across different hardware synthesizers, sound card",
+    false
+  ],
+  [
+    259,
+    "How FluidSynth Renders MIDI with SoundFonts",
+    "FluidSynth is a real-time, software-based synthesizer that converts Standard MIDI Files (SMF) or live MIDI streams into audible digital audio using sample-based SoundFont specifications. This article explains the underlying architecture and synthesis pip",
+    false
+  ],
+  [
+    258,
+    "What Is a SoundFont Synthesis Engine?",
+    "A SoundFont synthesis engine is a specialized audio system that converts symbolic Musical Instrument Digital Interface (MIDI) instructions into audible sound using pre-recorded audio samples. This article explains the core concepts behind SoundFont synth",
+    false
+  ],
+  [
+    257,
+    "How MIDI CC 4 Controls Variable Hi-Hat Articulation",
+    "In digital music production and electronic drumming, MIDI Continuous Controller 4 (CC 4) serves as the standard parameter for representing the continuous physical position of a hi-hat pedal. Rather than treating the hi-hat as a simple two-state switch be",
+    false
+  ],
+  [
+    256,
+    "Role of MIDI CC in Hi-Hat Pedal Tracking",
+    "Continuous Controller (CC) data is the backbone of realistic digital hi-hat performance, translating the nuanced, mechanical movement of an acoustic hi-hat pedal into expressive digital commands. While standard MIDI note-on messages only trigger discrete",
+    false
+  ],
+  [
+    255,
+    "Adjusting MIDI Retrigger on High-Speed Double Kick",
+    "High-speed double-kick drumming presents a unique challenge for electronic triggers, as beater bounce and vibrations often produce unintended double hits or choked notes. Retrigger cancellation—frequently labeled as mask time or retrigger delay in drum",
+    false
+  ],
+  [
+    254,
+    "What Is MIDI Pad Velocity Thresholding?",
+    "MIDI pad velocity thresholding is a configuration setting that establishes the minimum force required for a controller pad to register a strike and output a MIDI note. In digital music production, overly sensitive pads often detect subtle vibrations, fin",
+    false
+  ],
+  [
+    253,
+    "How Drum Modules Stop Crosstalk on Simultaneous Hits",
+    "Electronic drum modules distinguish between intentional simultaneous strikes and unwanted crosstalk by pairing digital signal processing (DSP) algorithms with microsecond-level timing windows. When a drummer intentionally plays two pads at the exact same",
+    false
+  ],
+  [
+    252,
+    "Electronic MIDI Mallet Controllers Explained",
+    "Electronic MIDI mallet controllers bridge the gap between traditional acoustic percussion and digital music production, offering mallet players an expressive, portable alternative to acoustic instruments. Designed specifically for vibraphonists, marimbis",
+    false
+  ],
+  [
+    251,
+    "How Akai EWI Touch-Sensitive Keys Trigger MIDI Notes",
+    "The Akai Electronic Wind Instrument (EWI) utilizes stationary, touch-sensitive metal keys to achieve ultra-fast playing speeds unmatched by mechanical instruments. By replacing physical moving pads with capacitive touch sensors, the EWI detects the elect",
+    false
+  ],
+  [
+    250,
+    "What Is a MIDI Wind Controller and How It Works",
+    "A MIDI wind controller is an electronic musical instrument that translates traditional wind-playing techniques—such as breath intensity, fingering, and embouchure—into digital data to control synthesizers and virtual instruments. This article explain",
+    false
+  ],
+  [
+    249,
+    "How Expression Pedals Convert Travel to MIDI Values",
+    "An expression pedal transforms continuous mechanical foot movement into standard 0–127 MIDI values through a sequence of mechanical translation, analog voltage division, digital sampling, and data scaling. This article details each stage of this journe",
+    false
+  ],
+  [
+    248,
+    "S-Trig vs V-Trig: MIDI to CV Adapters Explained",
+    "When bridging modern MIDI gear with vintage analog synthesizers, understanding trigger formats is critical for proper note gating. This article explains the difference between Voltage Triggers (V-Trig) and Switch Triggers (S-Trig), why standard MIDI-to-C",
+    false
+  ],
+  [
+    247,
+    "Korg vs Moog MIDI to CV Trigger Standards",
+    "Interfacing modern MIDI gear with vintage analog synthesizers requires translating digital note data into analog control voltages (CV) and gate triggers. Moog and vintage Korg synthesizers rely on fundamentally different engineering standards for both pi",
+    false
+  ],
+  [
+    246,
+    "V/Oct vs Hz/V Conversion for Vintage Synthesizers",
+    "Integrating modern MIDI equipment with vintage analog synthesizers requires converting digital note data into analog control voltages (CV) to dictate pitch. This article breaks down the primary differences between the two dominant vintage pitch standards",
+    false
+  ],
+  [
+    245,
+    "How Analog Sequencers Convert MIDI Pitch to CV",
+    "Analog sequencers generate control voltages (CV) from incoming MIDI pitch signals through a dedicated digital-to-analog conversion subsystem. When a digital MIDI Note On message arrives, the sequencer isolates the signal, extracts the pitch data via an i",
+    false
+  ],
+  [
+    244,
+    "Pure Data for Generative MIDI Sequencers",
+    "Pure Data (Pd) is an open-source visual programming environment that plays a foundational role in the design and execution of experimental, generative MIDI sequencers. By utilizing a dataflow architecture, it frees musicians and developers from the const",
+    false
+  ],
+  [
+    243,
+    "Processing Raw MIDI Arrays in Max/MSP",
+    "Modular software environments like Max/MSP provide a flexible framework for intercepting, manipulating, and retransmitting MIDI data at the lowest programmatic level. By treating MIDI events as structured byte arrays or sequential numerical lists, users",
+    false
+  ],
+  [
+    242,
+    "Virtual MIDI Loopback Tools for Windows",
+    "Windows operating systems do not natively provide internal MIDI loopback routing, which means software applications cannot directly send MIDI messages to one another without an intermediary bridge. Virtual MIDI loopback tools solve this problem by creati",
+    false
+  ],
+  [
+    241,
+    "macOS IAC Driver: Inter-App MIDI Routing",
+    "The Inter-Application Communication (IAC) driver is a native macOS feature that routes MIDI data between different software programs running on the same computer without requiring external hardware. This article explains how the IAC driver functions, how",
+    false
+  ],
+  [
+    240,
+    "What Is a Virtual MIDI Port and How Does It Work?",
+    "A virtual MIDI port is a software-based bridge that enables digital audio workstations (DAWs), standalone instruments, and MIDI utilities to send and receive MIDI messages directly on the same computer without physical cables or external hardware interfa",
+    false
+  ],
+  [
+    239,
+    "Disabling MIDI Local Control to Stop Double Notes",
+    "Disabling MIDI Local Control eliminates double-triggered notes by breaking the internal feedback loop created when a hardware synthesizer is connected to a digital audio workstation (DAW). By default, a keyboard triggers its own internal sound engine dir",
+    false
+  ],
+  [
+    238,
+    "What Is Local Control on a Digital Piano?",
+    "Local control is a setting found on most digital pianos and MIDI keyboards that dictates whether the physical keys are directly connected to the instrument's internal sound engine. This article explains how local control functions, why leaving it enabled",
+    false
+  ],
+  [
+    237,
+    "How to Split a MIDI Keyboard for Bass and Piano",
+    "Splitting a MIDI keyboard allows a performer to play two distinct instruments simultaneously by dividing the keybed into two zones at a designated \"split point.\" This guide explains how to configure your setup so that keys to the left of the split trigge",
+    false
+  ],
+  [
+    236,
+    "Linear vs Logarithmic MIDI Velocity Curves",
+    "MIDI velocity response curves determine how a digital controller translates the physical force or speed of a key strike into a digital value ranging from 0 to 127. While both linear and logarithmic curves bridge the gap between physical touch and sound o",
+    false
+  ],
+  [
+    235,
+    "Realistic Woodwind Dynamics with MIDI Breath Controllers",
+    "A MIDI breath controller bridges the gap between digital synthesis and acoustic performance by translating the player’s respiration and embouchure movements into continuous digital control data. Unlike standard keyboard controllers that rely on static",
+    false
+  ],
+  [
+    234,
+    "MIDI CC 66 Explained: The Sostenuto Function",
+    "MIDI Control Change (CC) 66 is the universal MIDI standard for the sostenuto pedal. This article outlines the exact purpose of MIDI CC 66, explains how selective sustain operates differently from standard sustain, and highlights its practical application",
+    false
+  ],
+  [
+    233,
+    "Digital Piano Soft Pedal and MIDI CC 67 Mapping",
+    "This article explains how hardware digital pianos translate the physical depression of a soft pedal (una corda) into digital MIDI Control Change 67 (CC 67) data. It covers the electro-mechanical sensing methods, the translation of analog signals to stand",
+    false
+  ],
+  [
+    232,
+    "How MIDI CC 93 Controls Chorus Modulation Depth",
+    "MIDI Continuous Controller 93 (CC 93) is the designated standard control change message used to adjust chorus depth—specifically the intensity of chorus modulation—on sound modules, synthesizers, and virtual instruments. This article explains the ope",
+    false
+  ],
+  [
+    231,
+    "How MIDI CC 91 Controls Reverb Send Depth",
+    "In General MIDI (GM) specifications, MIDI Continuous Controller 91 (CC 91) is standardly defined as \"Effects 1 Depth,\" universally implemented as the control for reverb send level. Rather than generating a distinct reverb effect for each individual track",
+    false
+  ],
+  [
+    230,
+    "Understanding MIDI CC 10 for Stereo Panning",
+    "MIDI Control Change 10 (CC 10) is the universal control message designated for stereophonic panning within the standard MIDI specification. It dictates the horizontal placement of a sound within a stereo soundstage by adjusting the volume balance between",
+    false
+  ],
+  [
+    229,
+    "How Synths Evaluate MIDI Bank Select MSB and LSB",
+    "Standard MIDI Program Change messages are limited to accessing only 128 sounds, a restriction modern synthesizers overcome using MIDI Bank Select. By combining two standard Control Change (CC) messages—Most Significant Byte (MSB, CC 0) and Least Signif",
+    false
+  ],
+  [
+    228,
+    "Understanding MIDI CC 0 and CC 32 Bank Select",
+    "Standard MIDI Program Change commands can only recall up to 128 presets, creating a severe bottleneck for modern hardware and software instruments with extensive sound libraries. MIDI Continuous Controllers CC 0 and CC 32 solve this limitation by serving",
+    false
+  ],
+  [
+    227,
+    "How MIDI Patch Scripts Show Legacy Synth Names",
+    "A MIDI patch script is a configuration file that acts as a translation map between a digital audio workstation (DAW) and external hardware synthesizers. By linking abstract MIDI data values to human-readable sound titles, the script allows a DAW to displ",
+    false
+  ],
+  [
+    226,
+    "Wiring Phantom Power Over 5-Pin MIDI Safely",
+    "Wiring non-standard phantom power over a 5-pin DIN MIDI cable allows you to power external devices like foot controllers without dedicated wall warts, but it introduces serious risks to standard MIDI equipment. This article details the essential precauti",
+    false
+  ],
+  [
+    225,
+    "Powering MIDI Pedals Using Unused DIN Pins",
+    "Standard 5-pin DIN MIDI connections traditionally use only three of their five available conductors for transmitting serial data, leaving two pins entirely unused. To eliminate redundant wall warts and streamline pedalboard wiring, modern music equipment",
+    false
+  ],
+  [
+    224,
+    "Why MIDI 1.0 Ports Leave Pins 1 and 3 Unconnected",
+    "Standard 5-pin DIN MIDI 1.0 interfaces rely on only three of the five available pins to transmit serial data, leaving pins 1 and 3 entirely unconnected. This design choice was deliberately established in the 1983 MIDI specification to balance cost-effect",
+    false
+  ],
+  [
+    223,
+    "5-Pin DIN MIDI Connector Pinout Guide",
+    "This guide outlines the pinout specifications for the standard 5-pin DIN cable used in MIDI connections. Although the connector features five physical pins arranged in a 180-degree arc, traditional MIDI 1.0 architecture uses only three of them to transmi",
+    false
+  ],
+  [
+    222,
+    "Phantom Power Over MIDI for Stage Footboards",
+    "Phantom power over MIDI cables allows custom stage footboards to receive operating electrical power directly through the same cable used for transmitting MIDI control data. By consolidating power and signal into a single run, this technique eliminates th",
+    false
+  ],
+  [
+    221,
+    "Using MIDI Foot Controllers for Live Guitar Preset Rigs",
+    "Managing an intricate live guitar setup—spanning multi-effects units, analog pedals, rack processors, and multi-channel tube amplifiers—often leads to the dreaded \"tap dance\" during performance transitions. MIDI foot controllers solve this problem by",
+    false
+  ],
+  [
+    220,
+    "Motorized Fader Touch Resistance and Capacitance",
+    "Motorized MIDI faders rely on touch resistance and capacitive sensing to distinguish between automated movement and manual user intervention. This article examines how touch resistance functions in motorized fader systems, how capacitive sensing detects",
+    false
+  ],
+  [
+    219,
+    "How Wireless MIDI Converts 5-Pin DIN to RF Signals",
+    "Wireless MIDI transmitters allow musicians to replace traditional cables with wireless connections by intercepting standard MIDI data from a legacy 5-pin DIN port and converting it into radio frequency (RF) broadcasts. This conversion process takes the l",
+    false
+  ],
+  [
+    218,
+    "Apple BLE MIDI Connection Latency",
+    "Bluetooth Low Energy (BLE) MIDI on Apple devices typically achieves a one-way transmission latency between 7.5 milliseconds (ms) and 15 ms under optimal conditions. When factoring in hardware input scanning, operating system scheduling, and digital audio",
+    false
+  ],
+  [
+    217,
+    "MIDI Over Bluetooth Packet Loss in Dense RF Venues",
+    "Operating MIDI over Bluetooth Low Energy (BLE) in crowded radio frequency (RF) environments presents significant challenges due to severe 2.4 GHz spectrum congestion. This article examines how the BLE MIDI specification and Bluetooth link-layer protocols",
+    false
+  ],
+  [
+    216,
+    "How to Sniff Raw MIDI Packets on macOS and Windows",
+    "Sniffing raw MIDI packets is an essential troubleshooting step for musicians, hardware developers, and audio engineers looking to diagnose communication faults between controllers, synthesizers, and software. This article outlines the premier software ut",
+    false
+  ],
+  [
+    215,
+    "Troubleshooting MIDI Hex Bytes with MIDI Monitors",
+    "In digital audio production, MIDI monitors are essential diagnostic tools that intercept, log, and display raw MIDI communications in real time. When corrupted hexadecimal message bytes disrupt hardware or virtual instruments—leading to hanging notes,",
+    false
+  ],
+  [
+    214,
+    "What Causes MIDI Stuck Notes and Infinite Sustain?",
+    "A MIDI stuck note is an unintended, indefinitely ringing tone that occurs when a digital instrument receives an instruction to start playing a note but never receives the corresponding command to stop. In standard MIDI protocol, sound generation relies o",
+    false
+  ],
+  [
+    213,
+    "Why Faulty MIDI Cables Cause Stuck Synthesizer Notes",
+    "A stuck synthesizer note during a live performance is a musician's nightmare, often caused by a faulty MIDI cable. MIDI relies on precise paired messages—specifically \"Note On\" to trigger a sound and \"Note Off\" to stop it. When a cable degrades physica",
+    false
+  ],
+  [
+    212,
+    "What Happens When a MIDI Optocoupler Degrades",
+    "When the optocoupler in a standard 5-pin DIN MIDI input port begins to degrade, it causes signal distortion, data corruption, and communication failures. The optocoupler provides electrical isolation by converting incoming current pulses into light via a",
+    false
+  ],
+  [
+    211,
+    "Hardware MIDI Thru vs Software MIDI Thru",
+    "When chaining multiple synthesizers, drum machines, and sequencers together, the method used to pass MIDI data down the chain significantly impacts timing and performance. While modern gear often cuts manufacturing costs by replacing dedicated hardware M",
+    false
+  ],
+  [
+    210,
+    "How MIDI Thru Boxes Split Signals Without Latency",
+    "A MIDI Thru box duplicates a single incoming MIDI data stream across multiple outputs simultaneously without introducing perceptible delay by operating entirely at the hardware level. Instead of decoding, storing, and resending data using a microprocesso",
+    false
+  ],
+  [
+    209,
+    "Why Early MIDI 1.0 Lacked Microsecond Timestamping",
+    "When the Musical Instrument Digital Interface (MIDI) 1.0 specification was standardized in 1983, it was designed without native, hardware-level microsecond timestamping. This omission was the deliberate result of severe bandwidth limits, the high cost of",
+    false
+  ],
+  [
+    208,
+    "MIDI Time Stamping and Sample-Accurate Playback",
+    "MIDI time stamping is a synchronization technology used by digital audio workstations (DAWs) and hardware interfaces to eliminate timing jitter, ensuring that MIDI notes and controller data trigger at the exact digital audio sample intended. Traditional",
+    false
+  ],
+  [
+    207,
+    "How Universal MIDI Packet Expands to 256 Channels",
+    "The Universal MIDI Packet (UMP) format introduced in MIDI 2.0 fundamentally transforms musical device communication by expanding the classic 16-channel ceiling to 256 channels. This article explains how the UMP architecture uses a dedicated 4-bit Group f",
+    false
+  ],
+  [
+    206,
+    "Maximum MIDI Channels in Universal MIDI Packet Groups",
+    "The Universal MIDI Packet (UMP) format, introduced with the MIDI 2.0 specification, drastically expands channel capacity beyond legacy MIDI constraints. By organizing data into distinct logical streams known as Groups, the Universal MIDI Packet supports",
+    false
+  ],
+  [
+    205,
+    "How USB-C Handles Modern High-Bandwidth MIDI Rigs",
+    "USB-C has transformed modern music production by replacing legacy 5-pin DIN cables with a single interface capable of handling bidirectional, high-bandwidth data, multi-channel digital audio, and power delivery. By combining dedicated full-duplex communi",
+    false
+  ],
+  [
+    204,
+    "Official Connectors for MIDI 2.0 Data Streams",
+    "This article provides an overview of the physical connectors officially recognized and utilized for transmitting MIDI 2.0 data streams. Unlike legacy MIDI, which was originally tied to a specific hardware port, MIDI 2.0 is designed as a transport-agnosti",
+    false
+  ],
+  [
+    203,
+    "MIDI 2.0 Property Exchange: JSON Patch Names",
+    "MIDI 2.0 revolutionizes musical instrument communication by replacing static, manual patch name lists with dynamic, bi-directional discovery through MIDI Capability Inquiry (MIDI-CI) Property Exchange. By leveraging standard JSON payloads encapsulated wi",
+    false
+  ],
+  [
+    202,
+    "What Is a Profile in MIDI 2.0?",
+    "In MIDI 2.0, a Profile is a standardized set of rules and capabilities that dictates how a device responds to specific musical contexts, workflows, or instrument types. Rather than requiring musicians and engineers to manually map controllers, channels,",
+    false
+  ],
+  [
+    201,
+    "How MIDI 2.0 Devices Discover Profiles Automatically",
+    "MIDI 2.0 revolutionizes hardware and software communication by replacing static, one-way messaging with dynamic bidirectional negotiation. This article explains how two MIDI 2.0 devices automatically discover each other's configuration profiles using MID",
+    false
+  ],
+  [
+    200,
+    "MIDI-CI Explained: How Capability Inquiry Works",
+    "MIDI Capability Inquiry (MIDI-CI) is a foundational extension to the MIDI standard that allows devices to communicate bidirectionally, discover each other's capabilities, and automatically configure advanced features. This article explains what the MIDI-",
+    false
+  ],
+  [
+    199,
+    "How MIDI 2.0 Eliminates Channel Cycling",
+    "This article examines how the MIDI 2.0 specification resolves the longstanding need for channel cycling during expressive polyphonic performances. In legacy setups, modulating individual notes within a chord required distributing each voice across separa",
+    false
+  ],
+  [
+    198,
+    "MIDI 2.0 Per-Note Controllers for Cinematic Sound",
+    "MIDI 2.0 Per-Note Controllers represent a paradigm shift in modern cinematic sound design, replacing the global channel restrictions of MIDI 1.0 with independent, high-resolution control over every individual note in a performance. This article explores",
+    false
+  ],
+  [
+    197,
+    "How Parameter Smoothing Stops MIDI CC Stepping",
+    "Parameter smoothing is a digital signal processing technique designed to eliminate audible \"zipper noise\" and harsh transitions caused by standard MIDI resolution. Because traditional MIDI Continuous Controller (CC) messages transmit data in discrete 7-b",
+    false
+  ],
+  [
+    196,
+    "How Hardware Engineers Fixed MIDI Zipper Noise",
+    "When the MIDI 1.0 standard was introduced, volume and continuous controller (CC) messages were limited to a 7-bit resolution, providing only 128 discrete values (0 to 127). Sweeping through these coarse values caused noticeable, stair-stepped amplitude j",
+    false
+  ],
+  [
+    195,
+    "Why MIDI 1.0 Limits Parameters to 128 Steps",
+    "The MIDI 1.0 specification, standardized in 1983, restricts continuous control parameters to 128 distinct values due to its underlying 7-bit data architecture. While modern digital systems typically operate on 8-bit bytes or higher, MIDI 1.0 reserves one",
+    false
+  ],
+  [
+    194,
+    "Why MIDI Data Bytes Have Their MSB Set to Zero",
+    "In the MIDI (Musical Instrument Digital Interface) specification, data bytes always have their Most Significant Bit (MSB) set to zero to distinguish them immediately from status bytes, which always have their MSB set to one. This single-bit flag system a",
+    false
+  ],
+  [
+    193,
+    "Why MIDI Status Bytes Always Have MSB Set to 1",
+    "The Musical Instrument Digital Interface (MIDI) protocol distinguishes command instructions from numerical parameters by reserving the most significant bit (MSB) of every 8-bit byte. When the MSB is set to one, the byte is interpreted as a status byte, w",
+    false
+  ],
+  [
+    192,
+    "Hexadecimal Representation of MIDI Note On Messages",
+    "This article provides an overview of the hexadecimal structure used in a standard Musical Instrument Digital Interface (MIDI) Note On message. It breaks down the standard three-byte sequence—the status byte, the note number, and the velocity value—ex",
+    false
+  ],
+  [
+    191,
+    "How MIDI Transport Controls Work Across Devices",
+    "MIDI transport control allows a single master hardware controller or Digital Audio Workstation (DAW) to synchronize basic playback and tape-style navigation commands across multiple connected instruments, synthesizers, and recording interfaces. By utiliz",
+    false
+  ],
+  [
+    190,
+    "What Is a MIDI Clock Divider and How Does It Work?",
+    "A MIDI clock divider is a hardware device, module, or software utility that accepts standard MIDI timing data and scales it down to generate slower, synchronized tempo signals. This guide explains the core architecture of standard MIDI clock signals, how",
+    false
+  ],
+  [
+    189,
+    "How to Sequence Analog Gear Using Groovebox MIDI",
+    "Hardware grooveboxes frequently serve as the central brain of an electronic music setup by utilizing internal MIDI tracks to control external analog instruments. This article explains how a groovebox generates and transmits digital control messages, brid",
+    false
+  ],
+  [
+    188,
+    "What Is a Multitimbral MIDI Sound Module?",
+    "A multitimbral MIDI sound module is an electronic instrument without a built-in keyboard that can generate multiple distinct instrument sounds simultaneously from a single unit. This article explains what these hardware units are, how multitimbrality wor",
+    false
+  ],
+  [
+    187,
+    "Why Disable MIDI Omni Mode in Studio Sequencing?",
+    "MIDI Omni Mode is generally disabled during multitrack studio sequencing because it forces a MIDI instrument to respond to data transmitted across all 16 MIDI channels simultaneously. In a modern production environment where multiple tracks send distinct",
+    false
+  ],
+  [
+    186,
+    "MIDI Omni On vs Omni Off Explained",
+    "MIDI Omni On and Omni Off are receiver settings that dictate how a MIDI instrument filters incoming channel data. In short, Omni On instructs an instrument to respond to incoming MIDI messages sent across all 16 channels simultaneously, while Omni Off in",
+    false
+  ],
+  [
+    185,
+    "MIDI Poly Mode 3 in Multi-Voice Analog Synths",
+    "This article explains the purpose, architecture, and practical application of MIDI Poly Mode 3 (Omni Off / Poly) in multi-voice analog synthesizers. It details how this standard MIDI configuration manages voice allocation across discrete analog voice cir",
+    false
+  ],
+  [
+    184,
+    "How MIDI Mono Mode Works Across Multiple Channels",
+    "MIDI Mono Mode, officially designated as MIDI Mode 4 (Omni Off/Mono), assigns individual monophonic synthesizer voices to dedicated MIDI channels. Unlike standard polyphonic modes that route all performance data through a single channel, Mono Mode distri",
+    false
+  ],
+  [
+    183,
+    "Polyphonic vs Monophonic MIDI Synthesizers",
+    "Understanding the difference between polyphonic and monophonic MIDI synthesizer modes is fundamental to music production and sound design. At its core, the distinction lies in voice count: monophonic synthesizers can only play one note at a time, while p",
+    false
+  ],
+  [
+    182,
+    "Fixing MIDI Octave Confusion Using DAW Pitch Offset",
+    "MIDI octave confusion is a common issue in digital music production where hardware controllers, virtual instruments, and digital audio workstations (DAWs) disagree on which octave corresponds to Middle C. This article explains why this discrepancy occurs",
+    false
+  ],
+  [
+    181,
+    "MIDI Middle C Octave Numbering in DAWs",
+    "While all Digital Audio Workstations (DAWs) agree that MIDI note number 60 represents the pitch of Middle C (approximately 261.63 Hz), they do not agree on how to label that note's octave. Depending on the software, MIDI note 60 is designated as C3, C4,",
+    false
+  ],
+  [
+    180,
+    "Why MIDI Note 60 Is Middle C",
+    "In electronic music production, MIDI note 60 universally corresponds to Middle C because of how the MIDI 1.0 specification mapped standard acoustic instruments onto binary architecture. When standardizing the protocol in the early 1980s, engineers chose",
+    false
+  ],
+  [
+    179,
+    "MIDI Drum Map for Bass Drum and Snare Triggers",
+    "This article provides a concise guide to the General MIDI (GM) drum map layout specifically for bass drum and snare triggers. In standard MIDI setups, percussion tracks default to MIDI Channel 10, utilizing specific note numbers to trigger consistent dru",
+    false
+  ],
+  [
+    178,
+    "How Drum Machine Step Pads Map MIDI Notes 36 to 51",
+    "This article explains how drum machine step pads assign, trigger, and transmit MIDI note numbers 36 through 51 for standard drum kits. By following the General MIDI (GM) percussion standard, modern and vintage drum machines use internal microcontroller f",
+    false
+  ],
+  [
+    177,
+    "MIDI Step Recording for Complex Sheet Music",
+    "MIDI step recording is an input method in digital audio workstations (DAWs) and music notation programs where notes are entered one step at a time rather than captured in real time. This article explains how step recording functions, how it differs from",
+    false
+  ],
+  [
+    176,
+    "How Arpeggiator Swing Creates Triplet Offsets in MIDI",
+    "Arpeggiator swing settings transform rigid, computer-quantized MIDI sequences into rhythmic, humanized grooves by delaying alternating notes to mirror triplet timing. By adjusting the temporal placement of off-beat subdivisions, swing settings systematic",
+    false
+  ],
+  [
+    175,
+    "What Is MIDI Strumming Mode?",
+    "MIDI strumming mode is a performance feature in digital audio workstations (DAWs), virtual instruments, and MIDI controllers that emulates the organic sound of a played string instrument. This article explains what MIDI strumming mode is, how it offsets",
+    false
+  ],
+  [
+    174,
+    "How MIDI Chord Memory Triggers Chords from One Key",
+    "MIDI chord memory is a performance feature found in modern synthesizers, digital audio workstations (DAWs), and MIDI controllers that allows musicians to play complex, multi-note chords by striking just a single key. This article explains the underlying",
+    false
+  ],
+  [
+    173,
+    "MIDI CC Envelopes and Automated Filter Sweeps",
+    "This article explains the concept of MIDI Continuous Controller (CC) envelopes and how digital audio workstations (DAWs) use them to create automated filter sweeps. You will learn what MIDI CC data is, how graphical envelopes represent this data over tim",
+    false
+  ],
+  [
+    172,
+    "Live Performance MIDI Routing with Bome MIDI Translator",
+    "Bome MIDI Translator Pro is a versatile utility that acts as the central nervous system for complex stage setups. By running between physical controllers, synthesizers, and digital audio workstations (DAWs), it intercepts, modifies, and redirects MIDI da",
+    false
+  ],
+  [
+    171,
+    "How MIDI Translator Scripts Remap Keys to Hotkeys",
+    "A MIDI translator script is a specialized software program that intercepts signals sent from a MIDI controller and converts them into standard keyboard strokes, mouse clicks, or operating system hotkeys. By acting as a digital bridge between music hardwa",
+    false
+  ],
+  [
+    170,
+    "Sync Laser Beam Animations with MIDI Timecode",
+    "Synchronizing laser beam animations with MIDI timecode (MTC) enables laser show operators to align complex optical effects with audio tracks down to the individual frame. This article explains the technical workflow used by production professionals, deta",
+    false
+  ],
+  [
+    169,
+    "How MIDI Controls Stadium Concert Pyrotechnics",
+    "Musical Instrument Digital Interface (MIDI) is the critical synchronization bridge between live music performance and automated pyrotechnics in modern stadium concerts. By translating musical timing data into precise digital commands, MIDI enables show d",
+    false
+  ],
+  [
+    168,
+    "Using MIDI Controllers for Video Game Macros",
+    "Video game speedrunners frequently push hardware to its limits to execute frame-perfect glitches, and repurposing Musical Instrument Digital Interface (MIDI) controllers has emerged as an effective technique for executing complex input sequences. By rout",
+    false
+  ],
+  [
+    167,
+    "What Is a MIDI Vocoder and How Does It Work?",
+    "A MIDI vocoder is an audio effect that uses incoming musical note data to dynamically tune and play a synthesized sound source, which is then shaped by the spectral characteristics of a separate vocal or audio signal. This article explains the fundamenta",
+    false
+  ],
+  [
+    166,
+    "How a MIDI Talkbox Routes Notes for Vocal Resonance",
+    "A MIDI talkbox transforms digital keyboard performances into expressive, vocalized synthesizer tones through an electro-acoustic hybrid process. A player triggers MIDI note and expression data from a keyboard, which prompts a sound engine to produce harm",
+    false
+  ],
+  [
+    165,
+    "Vocal Artifacts Causing Audio-to-MIDI Tracking Errors",
+    "Audio-to-MIDI converters rely on monophonic pitch-detection algorithms to translate acoustic vibrations into discrete digital notes, but the human voice presents unique acoustical challenges to these systems. This article outlines the primary vocal artif",
+    false
+  ],
+  [
+    164,
+    "Real-Time Voice to MIDI Pitch Tracking for Singers",
+    "Microphone pitch-tracking plugins allow vocalists to convert their live singing directly into MIDI data in real time. By routing microphone input through a dedicated pitch-to-MIDI plugin inside a Digital Audio Workstation (DAW), singers can perform melod",
+    false
+  ],
+  [
+    163,
+    "What Is an Audio-to-MIDI Drum Trigger Interface?",
+    "An audio-to-MIDI trigger interface is a specialized hardware or software processor that converts analog acoustic drum signals into digital MIDI data. By capturing the electrical impulses generated by acoustic drum triggers or microphones, the device dete",
+    false
+  ],
+  [
+    162,
+    "How Audio Sync Boxes Eliminate USB MIDI Jitter",
+    "Hardware sync boxes solve one of the most persistent problems in electronic music production: timing instability when synchronizing external hardware sequencers, synthesizers, and drum machines to a computer. By abandoning the operating system's native U",
+    false
+  ],
+  [
+    161,
+    "What Is MIDI Jitter and Clock Instability?",
+    "MIDI jitter refers to the irregular, unpredictable fluctuation in the timing of MIDI message delivery, distinguishing it from static latency. While fixed latency introduces a consistent delay that can be compensated for easily, jitter introduces variance",
+    false
+  ],
+  [
+    160,
+    "Automate Carillon Tower Bells Using MIDI",
+    "Automating carillon tower bells with MIDI sequencing engines bridges historic acoustic instruments with modern digital control. By mapping standard Musical Instrument Digital Interface (MIDI) signals to electromechanical strikers through specialized deco",
+    false
+  ],
+  [
+    159,
+    "How MIDI Controls Pipe Organ Pull-Down Magnets",
+    "This article examines how Musical Instrument Digital Interface (MIDI) technology integrates with traditional pipe organs featuring electronic pull-down magnets. It outlines the operational pipeline from digital performance data to physical sound producti",
+    false
+  ],
+  [
+    158,
+    "How Bagpipe MIDI Controllers Emulate Articulation",
+    "Bagpipe MIDI controllers replicate traditional piping articulation by combining high-speed touch sensors, dedicated chanter firmware, and legato MIDI sound mapping. Because traditional bagpipes produce continuous sound without tongue-based articulation,",
+    false
+  ],
+  [
+    157,
+    "What Is a MIDI Breath Controller Headset?",
+    "A MIDI breath controller headset is a specialized performance interface that converts the force of a musician's breath into real-time digital MIDI control data. This article explains the core hardware components of breath controller headsets, details the",
+    false
+  ],
+  [
+    156,
+    "Why Pitch Wheels Snap Back But Mod Wheels Do Not",
+    "MIDI controllers feature two primary wheels that behave in fundamentally different ways: the pitch bend wheel snaps back to the center when released, while the modulation wheel stays wherever it is placed. This mechanical difference directly reflects the",
+    false
+  ],
+  [
+    155,
+    "MIDI Pitch Wheel Center Spring Mechanism Explained",
+    "The MIDI pitch wheel center spring mechanism is a dedicated hardware component inside electronic keyboards and synthesizers that automatically pulls the pitch bend wheel back to its exact middle position when released. This article explains the mechanica",
+    false
+  ],
+  [
+    154,
+    "How Haken Continuum Outputs High-Precision MIDI",
+    "The Haken Continuum Fingerboard achieves high-precision continuous MIDI output through a specialized array of magnetic Hall-effect sensors, ultra-fast internal scan rates, and modern transmission protocols like MIDI Polyphonic Expression (MPE). By conver",
+    false
+  ],
+  [
+    153,
+    "Why the LinnStrument Is a Unique MPE MIDI Controller",
+    "The LinnStrument, designed by electronic music pioneer Roger Linn, stands as a benchmark in the world of MIDI Polyphonic Expression (MPE). While most MIDI hardware relies on traditional piano keyboards or trigger pads, the LinnStrument re-imagines musica",
+    false
+  ],
+  [
+    152,
+    "How Roli Seaboard Bends Individual Chord Voices with MPE",
+    "The Roli Seaboard achieves independent pitch bending within chords by utilizing MIDI Polyphonic Expression (MPE), an advanced extension of the standard MIDI specification. Unlike conventional MIDI controllers that apply pitch bend messages globally to al",
+    false
+  ],
+  [
+    151,
+    "The 3 Primary Dimensions of MPE MIDI Controllers",
+    "MIDI Polyphonic Expression (MPE) is an advanced MIDI specification that allows electronic musicians to modulate individual notes independently. Unlike standard MIDI controllers, which apply modulation globally across all sustained notes, MPE hardware tra",
+    false
+  ],
+  [
+    150,
+    "Why MPE Requires Multitimbral Synths for Pitch Bends",
+    "MIDI Polyphonic Expression (MPE) enables musicians to perform per-note pitch bends and modulation within chords, closely mimicking the dynamic response of acoustic instruments. This article explains why MPE requires a multitimbral synth architecture to a",
+    false
+  ],
+  [
+    149,
+    "How MPE Allocates MIDI Channels Explained",
+    "MIDI Polyphonic Expression (MPE) achieves per-finger expressive control by dynamically assigning each newly played note to its own dedicated MIDI channel from a predefined pool. Unlike traditional MIDI, which transmits performance data for all notes acro",
+    false
+  ],
+  [
+    148,
+    "The Role of MIDI Polyphonic Expression (MPE)",
+    "MIDI Polyphonic Expression (MPE) is an official specification adopted by the MIDI Association that fundamentally expands the expressive capabilities of electronic musical instruments. Historically, MIDI control messages like pitch bend, aftertouch, and m",
+    false
+  ],
+  [
+    147,
+    "How the MIDI DLS Standard Unified Sound Banks",
+    "The Downloadable Sounds (DLS) standard was introduced by the MIDI Manufacturers Association to solve the problem of inconsistent audio playback across different computer hardware. Before its introduction, General MIDI guaranteed which instruments played,",
+    false
+  ],
+  [
+    146,
+    "What Is a SoundFont File and How Does It Work?",
+    "A SoundFont file is a standardized audio format that enables MIDI sequences to trigger real, digitized sound recordings instead of relying on basic synthetic tones. This article explains what SoundFont technology is, how it organizes digital audio sample",
+    false
+  ],
+  [
+    145,
+    "MIDI Synthesis vs Audio Files in Mobile Games",
+    "Interactive mobile games frequently balance performance, storage footprint, and dynamic responsiveness, leading developers to occasionally favor internal MIDI synthesis over pre-rendered audio formats like MP3, OGG, or WAV. While raw audio provides guara",
+    false
+  ],
+  [
+    144,
+    "Interactive MIDI Playback in Wwise and FMOD",
+    "Game audio engines like Audiokinetic Wwise and Firelight Technologies FMOD leverage interactive MIDI playback to build highly adaptive, storage-efficient musical systems. Rather than relying solely on pre-rendered audio stems, these engines use MIDI data",
+    false
+  ],
+  [
+    143,
+    "What Is a MIDI Track Transform Script?",
+    "A MIDI track transform script is a programmable tool used within digital audio workstations (DAWs) to systematically process, filter, and alter MIDI event data in a musical sequence. This article explains the core purpose of MIDI track transform scripts",
+    false
+  ],
+  [
+    142,
+    "How DAWs Chase MIDI CC Automation States",
+    "MIDI CC chasing is the process by which a Digital Audio Workstation (DAW) scans backward from the current playhead position to locate the most recent Control Change (CC) events and instantly applies them before playback resumes. Without chasing, jumping",
+    false
+  ],
+  [
+    141,
+    "What Is MIDI Chase and Why Do You Need It?",
+    "MIDI chase is a feature in digital audio workstations (DAWs) that scans prior measures to locate and apply earlier MIDI events when playback begins midway through a project. Instead of only reading data that occurs after the playhead's start position, MI",
+    false
+  ],
+  [
+    140,
+    "How Orchestral Libraries Use MIDI Key Switches",
+    "Orchestral sample libraries utilize MIDI key switches—assigned trigger notes placed outside an instrument’s natural acoustic register—to let composers alternate between different playing techniques within a single track. By sending MIDI note comman",
+    false
+  ],
+  [
+    139,
+    "MIDI Articulation Maps and Key Switches Explained",
+    "A MIDI articulation map is a digital audio workstation (DAW) feature that organizes, labels, and automates different playing techniques for virtual instruments. Instead of manually drawing low-octave trigger notes into a piano roll, articulation maps all",
+    false
+  ],
+  [
+    138,
+    "How to Use MIDI CC1 and CC11 for Orchestral Swells",
+    "This article provides an overview of how film composers combine MIDI CC 1 (Modulation) and CC 11 (Expression) to craft realistic orchestral swells. You will learn the distinct technical functions of both controllers, why relying on only one produces unna",
+    false
+  ],
+  [
+    137,
+    "MIDI Velocity Scaling for Soft Sample Libraries",
+    "MIDI velocity scaling is the process of altering the incoming velocity data from a MIDI controller before it triggers a virtual instrument, effectively reshaping how hard you must strike a key to produce a given volume or timbre. For keyboardists with a",
+    false
+  ],
+  [
+    136,
+    "MIDI Foot Switch: Toggle vs Momentary Signals",
+    "This article provides an overview of how MIDI foot switches communicate toggle and momentary gate behaviors to hardware and software instruments. While traditional analog pedals rely on physical circuit breaks, MIDI foot controllers translate mechanical",
+    false
+  ],
+  [
+    135,
+    "What Is a MIDI Expression Pedal Input?",
+    "An expression pedal input on a MIDI keyboard controller is a dedicated port that allows musicians to connect a sweepable foot pedal to alter sound parameters in real time. Unlike standard sustain pedals that simply switch on and off, an expression pedal",
+    false
+  ],
+  [
+    134,
+    "How MIDI Pedals Control Wah in Amp Modelers",
+    "MIDI expression pedals communicate wah-wah sweep actions to guitar amp modeling software by translating continuous physical motion into standardized digital data packets called Control Change (CC) messages. This article explains the technical chain of ev",
+    false
+  ],
+  [
+    133,
+    "MIDI All Notes Off vs All Sound Off: The Difference",
+    "While both MIDI commands are designed to silence unwanted or hanging audio on a specific channel, the fundamental difference lies in how the sound terminates. MIDI \"All Notes Off\" (CC 123) functions like releasing all held keys simultaneously, allowing a",
+    false
+  ],
+  [
+    132,
+    "MIDI CC 120: How All Sound Off Works",
+    "MIDI Continuous Controller 120 (CC 120) functions as the \"All Sound Off\" command, a specialized Channel Mode Message designed to instantly silence all active audio generation on a designated MIDI channel. Unlike standard note-ending commands that permit",
+    false
+  ],
+  [
+    131,
+    "MIDI All Notes Off: How It Resolves Hanging Notes",
+    "This article explains the function of the MIDI \"All Notes Off\" command, detailing how it serves as an essential fail-safe mechanism when unexpected system hangs, crashes, or transmission errors occur. It covers the underlying mechanics of stuck MIDI note",
+    false
+  ],
+  [
+    130,
+    "MIDI CC for Stereo Pan Position",
+    "In MIDI production, spatial placement of an audio signal across the stereo field is handled by standard Continuous Controller (CC) messages. This article explains the universal MIDI CC message assigned to stereo panning, detailing its standard controller",
+    false
+  ],
+  [
+    129,
+    "How MIDI 14-Bit CC Pairs Increase Resolution on Legacy Gear",
+    "Standard MIDI Continuous Controller (CC) messages are inherently limited to 7-bit resolution, providing only 128 discrete values that often cause noticeable stepping or \"zipper noise\" during parameter sweeps. By pairing two standard CC messages together",
+    false
+  ],
+  [
+    128,
+    "Understanding MIDI Continuous Controllers",
+    "MIDI Continuous Controllers (CC) are specific data messages used to shape, manipulate, and automate parameters in electronic musical instruments and digital audio workstations (DAWs). This guide explains the function of MIDI CC messages, their role in ad",
+    false
+  ],
+  [
+    127,
+    "Why Hardware MIDI Sequencers Have Tighter Timing",
+    "Dedicated hardware MIDI sequencers are renowned for their rock-solid groove and microscopic timing accuracy, often outperforming modern, multi-core personal computers. While modern computers have vastly superior raw processing power, they struggle with t",
+    false
+  ],
+  [
+    126,
+    "MIDI Latency Overhead in Generic OS Schedulers",
+    "Generic operating system kernel schedulers prioritize general computational throughput, power efficiency, and fair CPU time allocation across processes rather than deterministic execution. When processing Musical Instrument Digital Interface (MIDI) event",
+    false
+  ],
+  [
+    125,
+    "How Android Handles USB Host Mode for MIDI Devices",
+    "Android manages external MIDI instrument connections through USB host mode by turning the mobile device into the controlling hardware hub, detecting class-compliant instruments, and routing signals via low-level Linux drivers up to the native Android MID",
+    false
+  ],
+  [
+    124,
+    "Bonjour and Apple Network MIDI Discovery",
+    "Bonjour serves as the zero-configuration networking backbone for Apple Network MIDI, enabling devices on a local area network to locate and connect with one another automatically. By leveraging Multicast DNS (mDNS) and DNS-Based Service Discovery (DNS-SD",
+    false
+  ],
+  [
+    123,
+    "How Modern MIDI Over Wi-Fi Maintains Timing Integrity",
+    "Modern MIDI over Wi-Fi enables wireless music production and performance without physical cables, but wireless networks naturally introduce packet jitter, latency, and dropouts that can degrade musical timing. This article examines the technical mechanis",
+    false
+  ],
+  [
+    122,
+    "Intelligent Mode vs UART Mode on Early MIDI Cards",
+    "Early PC MIDI interfaces, defined largely by the Roland MPU-401 standard, communicated with computers using two distinct operational states: Intelligent Mode and UART Mode. The primary difference lies in where the processing occurred. Intelligent Mode of",
+    false
+  ],
+  [
+    121,
+    "Roland MPU-401: The Industry Standard for PC MIDI",
+    "The Roland MPU-401 revolutionized computer music production in the 1980s by providing an intelligent, hardware-timed interface that eliminated host CPU bottlenecks. This article explores how Roland's innovative architecture, widespread developer adoption",
+    false
+  ],
+  [
+    120,
+    "Why Early Music Producers Chose the Atari ST for MIDI",
+    "During the late 1980s and early 1990s, the Atari ST became the undisputed centerpiece of both bedroom studios and professional music production facilities worldwide. While competitors like the Apple Macintosh, Commodore Amiga, and IBM PC dominated genera",
+    false
+  ],
+  [
+    119,
+    "Atari ST MIDI Sequencing in Commercial Studios",
+    "During the late 1980s and early 1990s, the Atari ST transformed music production by establishing itself as the premier MIDI sequencing platform in professional recording studios worldwide. Released in 1985, the computer featured built-in MIDI ports, exce",
+    false
+  ],
+  [
+    118,
+    "Why USB Replaced MIDI Sample Dump Standard",
+    "The MIDI Sample Dump Standard (SDS) was introduced in the late 1980s as a way to transfer digital audio samples between hardware samplers and computers over traditional 5-pin MIDI connections. While innovative for its time, SDS was quickly outpaced by di",
+    false
+  ],
+  [
+    117,
+    "MIDI Sample Dump Standard: How Waveform Transfer Works",
+    "The MIDI Sample Dump Standard (SDS) is a specialized communication protocol established by the MIDI Manufacturers Association that allows hardware samplers and computers to transmit raw digital audio waveforms across standard MIDI connections. By transla",
+    false
+  ],
+  [
+    116,
+    "What Is a MIDI Universal SysEx Message?",
+    "This article provides an overview of Universal System Exclusive (SysEx) messages within the broader MIDI specification, detailing their purpose, structure, and operational categories. Unlike proprietary SysEx commands tied to specific brands, Universal S",
+    false
+  ],
+  [
+    115,
+    "How MIDI Manufacturer ID Identifies Hardware in SysEx",
+    "System Exclusive (SysEx) messages allow MIDI hardware and software to transmit proprietary configuration and patch data, and the MIDI Manufacturer ID byte is the critical identifier that directs these messages to the correct brand. Positioned immediately",
+    false
+  ],
+  [
+    114,
+    "What Is a MIDI Breakout Cable and Why Is It Used?",
+    "This article explains what a MIDI breakout cable is, how it functions, and why hardware manufacturers rely on it for modern, portable audio gear. You will learn about the physical limitations of standard MIDI ports, the transition to compact alternatives",
+    false
+  ],
+  [
+    113,
+    "How Hardware Synths Handle MIDI Buffer Overflow",
+    "Hardware synthesizers process incoming musical performance data through dedicated communication buffers, but heavy streams of continuous controller (CC) messages, polyphonic aftertouch, or System Exclusive (SysEx) dumps can quickly overwhelm their proces",
+    false
+  ],
+  [
+    112,
+    "What Is a MIDI Active Sensing Message?",
+    "This article explains the concept and purpose of the MIDI Active Sensing message, an optional System Real-Time command used in musical instrument communication. It details how this single-byte message acts as a safety \"heartbeat\" across physical MIDI cab",
+    false
+  ],
+  [
+    111,
+    "How Motorized Fader Packs Receive MIDI Feedback",
+    "Motorized fader packs maintain synchronization with digital audio workstations (DAWs) through continuous, bidirectional MIDI communication. When automation moves in the DAW, the software transmits real-time data back to the hardware controller rather tha",
+    false
+  ],
+  [
+    110,
+    "What Is a MIDI Ribbon Controller?",
+    "A MIDI ribbon controller is a tactile, touch-sensitive linear strip used to control synthesizers and digital audio workstations by translating finger movements into electronic signals. Unlike traditional keys or buttons, a ribbon controller allows perfor",
+    false
+  ],
+  [
+    109,
+    "How to Connect MIDI to Eurorack Modular Systems",
+    "Modern Eurorack modular systems integrate MIDI input modules to bridge the gap between digital controllers, computers, and analog hardware. By translating digital MIDI data into analog control voltages (CV), gates, and clock pulses, these modules allow m",
+    false
+  ],
+  [
+    108,
+    "What Is MIDI Echo in Hardware Sequencers?",
+    "MIDI echo, often referred to as software MIDI Thru or soft thru, is a critical routing feature found in modern and vintage hardware sequencers. This article explains how MIDI echo functions, why it is vital for controlling multiple synthesizers from a si",
+    false
+  ],
+  [
+    107,
+    "How MIDI Layering Triggers Multiple Sounds",
+    "MIDI layering is a production technique that allows a single performance gesture, such as striking a keyboard key, to simultaneously trigger multiple independent sound engines. By separating the transmission of performance data from the generation of aud",
+    false
+  ],
+  [
+    106,
+    "MIDI Channel Split Zones on Stage Controllers",
+    "MIDI channel split zones are dedicated configuration areas on professional stage performance controllers that divide a single physical keyboard into distinct ranges, with each range transmitting data across a separate MIDI channel. This article explains",
+    false
+  ],
+  [
+    105,
+    "Setting Pitch Bend Range on Hardware Tone Generators",
+    "Configuring MIDI pitch bend sensitivity on hardware tone generators determines how far a sound's pitch shifts when moving a pitch wheel or sending pitch bend data. This article explains the primary methods used to adjust this behavior, focusing on standa",
+    false
+  ],
+  [
+    104,
+    "MIDI Reset Commands in Stage Show Rescue Scripts",
+    "MIDI reset commands serve as an automated failsafe in stage show rescue scripts, instantly terminating stuck synthesizer notes, zeroing erratic control data, and clearing internal communication buffers during live performance glitches. When software cras",
+    false
+  ],
+  [
+    103,
+    "How Electronic Accordions Generate MIDI Data",
+    "Electronic accordions bridge acoustic playing techniques with digital synthesis by translating physical mechanical movements into standard MIDI protocol. This article explains how onboard microcontrollers process key contacts across the treble keyboard,",
+    false
+  ],
+  [
+    102,
+    "Silent Piano Systems and MIDI Muting Rails Explained",
+    "A silent piano system bridges the gap between traditional acoustic craftsmanship and modern digital audio technology, allowing pianists to play a real acoustic instrument privately through headphones. This article explains the fundamentals of silent pian",
+    false
+  ],
+  [
+    101,
+    "How Optical Sensors Capture Hammer Velocity for MIDI",
+    "Smart and hybrid acoustic pianos bridge the traditional physical playing experience with the digital world by translating physical key strikes into digital MIDI data without altering the instrument's authentic touch. Instead of using mechanical switches",
+    false
+  ],
+  [
+    100,
+    "Challenges of Transcribing Acoustic Audio to Clean MIDI",
+    "Transcribing an expressive acoustic performance into clean MIDI notation involves bridging the gap between fluid human artistry and rigid digital data. While human performers rely on subtle timing variations, dynamic swells, and continuous pitch modulati",
+    false
+  ],
+  [
+    99,
+    "How Notation Software Converts Sheet Music to MIDI",
+    "Music notation software converts visual sheet music into MIDI playback through a multi-step translation pipeline. The program reads visual symbols—such as notes, rests, key signatures, and expression marks—and interprets their contextual musical valu",
+    false
+  ],
+  [
+    98,
+    "Python for Parsing and Generating SMF MIDI Files",
+    "Python serves as a powerful bridge between low-level binary music data and high-level software applications, making it a primary language for parsing and generating Standard MIDI Files (SMF). By leveraging dedicated libraries, Python abstracts the comple",
+    false
+  ],
+  [
+    97,
+    "How Algorithmic Scripts Generate Complex MIDI Files",
+    "Algorithmic composition scripts generate complex MIDI files by combining musical theory rules, mathematical logic, and binary data encoding into automated workflows. Rather than recording physical performances, these programs compute pitch, duration, vel",
+    false
+  ],
+  [
+    96,
+    "What Is MIDI Polyphony and Voice Stealing?",
+    "MIDI polyphony refers to the capacity of a digital instrument or synthesizer to sound multiple notes at the same time, constrained by the hardware or software's available voice count. When a performance requires more simultaneous voices than the system c",
+    false
+  ],
+  [
+    95,
+    "Using MIDI Loopers for Live Multitrack Arrangements",
+    "MIDI loopers allow musicians to capture, manipulate, and layer musical performance data in real time to create full, evolving songs on stage. Unlike traditional audio loopers that record static audio waveforms, MIDI loopers record digital control message",
+    false
+  ],
+  [
+    94,
+    "Why Long MIDI Cables Degrade Signal Quality",
+    "Standard serial MIDI communicates using an asynchronous 5-volt, 5-milliamp current loop operating at a baud rate of 31.25 kbps. When MIDI cable runs exceed the official specification limit of 15 meters (approximately 50 feet), passive electrical properti",
+    false
+  ],
+  [
+    93,
+    "Maximum Length for 5-Pin DIN MIDI Cables",
+    "The official specification for standard 5-pin DIN MIDI cables establishes a maximum recommended length of 50 feet (approximately 15 meters). This article covers the technical standards behind this distance limit, the electrical factors that cause signal",
+    false
+  ],
+  [
+    92,
+    "How a Hardware MIDI Splitter Routes 16 Modules",
+    "A hardware MIDI splitter—commonly known as an active MIDI Thru box—distributes a single MIDI track to sixteen separate hardware modules by electrically duplicating a unified serial data stream across multiple physical output ports. Because standard M",
+    false
+  ],
+  [
+    91,
+    "What Is MIDI Beat Clock and How Does It Work?",
+    "MIDI Beat Clock is a standard synchronization protocol that locks the tempo of digital audio workstations, hardware synthesizers, drum machines, and sequencers together. This article explains what MIDI Beat Clock is, how its foundational 24 pulses per qu",
+    false
+  ],
+  [
+    90,
+    "How to Trigger DMX Lighting with MIDI Cues",
+    "Synchronizing lighting with audio or multimedia playback is essential for live concerts, theatrical productions, and automated installations. Lighting designers achieve this precision by using Musical Instrument Digital Interface (MIDI) signals generated",
+    false
+  ],
+  [
+    89,
+    "MIDI Show Control in Stage Lighting and Automation",
+    "This article examines the function and significance of MIDI Show Control (MSC) in modern theatrical productions. It covers how MSC acts as a universal communication protocol to synchronize lighting cues, stage machinery, audio, and visual effects. By cre",
+    false
+  ],
+  [
+    88,
+    "How DAWs Record Automation from MIDI Streams",
+    "This article explains how digital audio workstations (DAWs) capture continuous incoming MIDI streams and translate them into editable, smooth vector automation curves. It covers the end-to-end technical process, including MIDI message reception, paramete",
+    false
+  ],
+  [
+    87,
+    "What Is MIDI Learn in Modern DAWs?",
+    "MIDI Learn is a utility found in virtually every modern digital audio workstation (DAW) that allows users to quickly map hardware controllers to software parameters. Instead of manually looking up and entering MIDI Continuous Controller (CC) numbers, thi",
+    false
+  ],
+  [
+    86,
+    "MIDI Mapping Rotary Knobs to Mixing Parameters",
+    "MIDI mapping links the physical rotary knobs on a hardware controller to virtual controls within a Digital Audio Workstation (DAW) or mixing software. By translating physical rotations into digital Control Change (CC) messages, hardware controllers allow",
+    false
+  ],
+  [
+    85,
+    "MIDI CC 2 for Wind Synth Players Explained",
+    "MIDI Continuous Controller 2 (CC 2), designated in the standard MIDI specification as the Breath Controller, is the foundational expressive tool for wind synthesizer players. Unlike traditional keyboard controllers that rely heavily on initial strike vel",
+    false
+  ],
+  [
+    84,
+    "MIDI CC 11 vs CC 7 Explained: Expression vs Volume",
+    "Understanding the difference between MIDI CC 7 (Volume) and MIDI CC 11 (Expression) is essential for creating realistic, dynamic virtual instrument performances. While both control loudness, CC 7 sets the overall master volume ceiling for a track, functi",
+    false
+  ],
+  [
+    83,
+    "Role of MIDI CC 64 in Classical Piano Libraries",
+    "MIDI Control Change 64 (CC 64) serves as the standard MIDI message for the sustain or damper pedal, playing a foundational role in classical piano virtual instrument libraries. In high-end classical virtual instruments (VSTs), CC 64 extends far beyond a",
+    false
+  ],
+  [
+    82,
+    "How MIDI Jog Wheels Emulate Vinyl Scratching",
+    "Modern DJ controllers achieve authentic vinyl scratch emulation by combining capacitive touch-sensing surfaces, optical rotational encoders, and high-resolution MIDI or HID protocols with advanced software algorithms. While traditional MIDI lacked the gr",
+    false
+  ],
+  [
+    81,
+    "Why Hardware Controllers Need Proprietary MIDI Drivers",
+    "While class-compliant MIDI hardware offers effortless plug-and-play convenience, many advanced controllers require proprietary drivers to function correctly. This article examines the technical reasons manufacturers opt for custom drivers over standard U",
+    false
+  ],
+  [
+    80,
+    "How Class-Compliant MIDI Drivers Work in Modern OS",
+    "Modern operating systems recognize and operate MIDI hardware instantly without requiring third-party software installations through standardized native class-compliant drivers. By adopting unified USB communication standards set by the USB Implementers F",
+    false
+  ],
+  [
+    79,
+    "Primary Cause of Latency in USB MIDI Setups",
+    "When musicians experience a delay between pressing a key on a MIDI controller and hearing the sound from their computer, they often blame the USB cable or the MIDI protocol itself. However, the primary cause of latency in software-based USB MIDI setups i",
+    false
+  ],
+  [
+    78,
+    "How to Send MIDI Messages in JavaScript",
+    "This article provides an overview of how web developers can transmit Musical Instrument Digital Interface (MIDI) messages directly to hardware synthesizers and software DAWs using modern JavaScript libraries. While the browser-native Web MIDI API provide",
+    false
+  ],
+  [
+    77,
+    "What Is Web MIDI API and How Does It Work?",
+    "The Web MIDI API bridges the gap between web applications and physical musical hardware, such as synthesizers, drum pads, and MIDI controllers. This article explores the core concepts of the Web MIDI API, explains how the browser communicates with extern",
+    false
+  ],
+  [
+    76,
+    "How 1990s PC Games Relied on MIDI Playback Engines",
+    "During the early 1990s, severe storage limitations and constrained processor budgets prevented personal computers from playing back pre-recorded, multi-track digital audio in real time. To overcome this, game developers relied on MIDI (Musical Instrument",
+    false
+  ],
+  [
+    75,
+    "How Sound Blaster Popularized MIDI Music in PC Gaming",
+    "The Sound Blaster family of audio cards, developed by Creative Labs, served as the primary catalyst for bringing high-quality MIDI music into mainstream PC gaming during the late 1980s and 1990s. Before its arrival, personal computers relied mostly on pr",
+    false
+  ],
+  [
+    74,
+    "Why Early PC Soundcards Used OPL3 MIDI Chips",
+    "In the late 1980s and early 1990s, personal computers lacked the processing power and storage capacity to play recorded digital audio tracks during games and applications. To provide music without crippling system performance, soundcard manufacturers int",
+    false
+  ],
+  [
+    73,
+    "Microtonal Tuning with MIDI Tuning Standard (MTS)",
+    "The MIDI Tuning Standard (MTS) is an official extension of the MIDI specification that allows musicians and developers to define alternate tunings, microtonal scales, and historical temperaments beyond the standard 12-tone equal temperament (12-TET). By",
+    false
+  ],
+  [
+    72,
+    "What Is a MIDI Event List Editor in a DAW?",
+    "A MIDI event list editor is a specialized, text-based editing window within a digital audio workstation (DAW) that displays musical and performance data as an ordered chronological ledger. While graphical editors like the piano roll represent notes visua",
+    false
+  ],
+  [
+    71,
+    "MIDI Gate Timing to Analog Synth Envelope Triggers",
+    "Translating digital MIDI gate timing into analog synthesizer envelope triggers requires converting discrete digital data packets into continuous, physical electrical voltages. When a digital performance transmits MIDI Note On and Note Off commands, a MID",
+    false
+  ],
+  [
+    70,
+    "MIDI to CV Converter Voltage Standards",
+    "MIDI to Control Voltage (CV) converters bridge modern digital gear and analog synthesizers by translating digital MIDI messages into analog control voltages. This article provides a comprehensive overview of the primary voltage standards supported by the",
+    false
+  ],
+  [
+    69,
+    "How MIDI to CV Converters Control Vintage Synths",
+    "A MIDI to CV converter serves as an essential bridge between modern digital music production and classic analog gear by translating digital data into electrical voltages. Before MIDI became the universal standard in 1983, analog synthesizers relied on Co",
+    false
+  ],
+  [
+    68,
+    "MIDI RPN and NRPN: Expanding MIDI Parameter Control",
+    "This article provides a comprehensive overview of MIDI Registered Parameter Numbers (RPN) and Non-Registered Parameter Numbers (NRPN). It examines how these protocols overcome the technical limitations of traditional 7-bit MIDI Continuous Controller (CC)",
+    false
+  ],
+  [
+    67,
+    "How MIDI Bank Select Accesses More Than 128 Presets",
+    "The original MIDI specification limits sound selection to 128 patches due to the 7-bit architecture of standard Program Change messages. To overcome this limitation, the MIDI Manufacturers Association introduced the Bank Select protocol, which uses stand",
+    false
+  ],
+  [
+    66,
+    "What Does a MIDI Panic Button Do?",
+    "A MIDI panic button is an essential utility feature found on hardware synthesizers, MIDI controllers, and digital audio workstations (DAWs) designed to instantly silence \"stuck\" or endlessly droning notes. By immediately transmitting a burst of reset com",
+    false
+  ],
+  [
+    65,
+    "Arcade Fightsticks as MIDI CC Controllers for DJing",
+    "Arcade fightsticks and modular button pads can serve as expressive, ultra-durable controllers for DJ software like Traktor, Serato, and Rekordbox. Because these devices typically output standard gamepad or Human Interface Device (HID) data rather than mu",
+    false
+  ],
+  [
+    64,
+    "TRS MIDI Type A vs Type B: Pinout Differences",
+    "This article provides a clear overview of the differences between Type A and Type B TRS MIDI adapters, explaining how traditional 5-pin DIN connections translate to a 3.5mm stereo jack. You will learn the exact pinout configurations of each type, why two",
+    false
+  ],
+  [
+    63,
+    "3.5mm TRS MIDI Type A Wiring and Transmission",
+    "This article explains how standard MIDI data is transmitted over a 3.5mm TRS (Tip, Ring, Sleeve) connector using the Type A specification. It details the physical pinout mapping between legacy 5-pin DIN connectors and the 3.5mm jack, the mechanics of the",
+    false
+  ],
+  [
+    62,
+    "Why MIDI Hardware Isolates Ground Connections",
+    "The Musical Instrument Digital Interface (MIDI) standard mandates electrical ground isolation to protect audio equipment from electrical interference and physical damage. By requiring an optoisolator on the receiving port and using a current loop design,",
+    false
+  ],
+  [
+    61,
+    "MIDI Receiver Optocoupler Circuit Explained",
+    "In a standard 5-pin DIN MIDI receiver, an optocoupler circuit is primarily used to provide galvanic isolation between connected devices while converting an incoming current-loop signal into standard digital logic levels. By electrically decoupling the tr",
+    false
+  ],
+  [
+    60,
+    "MIDI Association Standards and Equipment Certification",
+    "The MIDI Association (TMA) is the global non-profit organization responsible for maintaining, expanding, and promoting MIDI technology across the music and tech industries. This article examines how the MIDI Association governs technical specifications,",
+    false
+  ],
+  [
+    59,
+    "MIDI 1.0 and MIDI 2.0 Backwards Compatibility",
+    "MIDI 2.0 was developed with seamless interoperability in mind, ensuring that existing MIDI 1.0 gear remains functional alongside modern equipment. Rather than rendering legacy hardware obsolete, the MIDI 2.0 specification incorporates explicit architectu",
+    false
+  ],
+  [
+    58,
+    "How MIDI 2.0 Achieves 32-Bit Controller Resolution",
+    "MIDI 2.0 fundamentally upgrades digital music communication by expanding parameter control from the legacy 7-bit architecture to a massive 32-bit resolution for Continuous Controllers (CC). This article explains the technical mechanics behind this leap,",
+    false
+  ],
+  [
+    57,
+    "What Is the MIDI 2.0 Universal MIDI Packet?",
+    "The Universal MIDI Packet (UMP) is the foundational data format introduced in the MIDI 2.0 specification, designed to modernize how digital musical instruments and software exchange control data. This article explores the architecture of the UMP format,",
+    false
+  ],
+  [
+    56,
+    "MIDI 2.0 Property Exchange Feature Discovery",
+    "MIDI 2.0 Property Exchange fundamentally changes music hardware integration by allowing connected devices to automatically query, understand, and configure each other's capabilities without manual MIDI mapping. Built on top of MIDI Capability Inquiry (MI",
+    false
+  ],
+  [
+    55,
+    "What Is Polyphonic Aftertouch and Why Is It Popular?",
+    "MIDI Polyphonic Aftertouch allows musicians to modulate individual notes within a chord independently by varying finger pressure on specific keys after the initial strike. While long considered a rare and costly luxury in electronic music, polyphonic aft",
+    false
+  ],
+  [
+    54,
+    "MIDI Step Entry in Step Sequencers for Beat Making",
+    "Step sequencers streamline beat production by dividing musical time into equal increments, and integrating MIDI step entry elevates this process by allowing producers to program complex rhythms without relying on real-time performance skills. This articl",
+    false
+  ],
+  [
+    53,
+    "What Is a MIDI Arpeggiator and How Does It Work?",
+    "A MIDI arpeggiator is a music production tool—available as hardware or software—that automatically transforms static chords into rhythmic, sequential patterns of individual notes. Instead of sounding all input notes at the same time, it cycles throug",
+    false
+  ],
+  [
+    52,
+    "Using MIDI Transpose to Play in Unfamiliar Keys",
+    "The MIDI transpose function is an essential tool for modern keyboardists, allowing players to instantly shift the pitch of their instruments by semitone increments while physically playing in a familiar key. This article examines how digital transpositio",
+    false
+  ],
+  [
+    51,
+    "What Is a MIDI Velocity Curve?",
+    "A MIDI velocity curve is a mathematical mapping setting that determines how a MIDI controller translates the physical force and speed of a keystroke into digital MIDI data. By reshaping this curve, you fundamentally alter how sensitive your keys feel, al",
+    false
+  ],
+  [
+    50,
+    "How MIDI Humanization Algorithms Create Natural Groove",
+    "MIDI humanization algorithms bridge the gap between mechanical digital sequencing and authentic human performance by applying controlled, non-destructive variations to programmed notes. Rather than relying on simple randomization, advanced humanization t",
+    false
+  ],
+  [
+    49,
+    "Why Use MIDI Quantization on Sloppy Performances",
+    "MIDI quantization is a digital audio workstation (DAW) editing process that aligns recorded MIDI notes to a specified rhythmic grid, effectively correcting human timing errors made during a performance. This article explains the core purpose of quantizat",
+    false
+  ],
+  [
+    48,
+    "How Virtual Instruments Process MIDI Data in DAWs",
+    "Virtual instruments rely on a precise sequence of data routing, parsing, and digital synthesis to turn abstract musical performance data into audible sound. When an artist plays a keyboard or draws notes on a piano roll, the Digital Audio Workstation (DA",
+    false
+  ],
+  [
+    47,
+    "Why MIDI Files Are Smaller Than MP3 Files",
+    "A standard MIDI file requires significantly less storage space than an MP3 file because it stores musical performance instructions rather than actual recorded audio waveforms. While an MP3 contains encoded, digitized audio frequencies that can reproduce",
+    false
+  ],
+  [
+    46,
+    "Audio Waveforms vs MIDI: What Is the Difference?",
+    "While both audio waveforms and MIDI sequence data are fundamental to modern music production, they represent sound in entirely different ways. An audio waveform is a digital recording of actual acoustic sound waves captured as amplitude over time, wherea",
+    false
+  ],
+  [
+    45,
+    "How MIDI Machine Control Drives Video Recorders",
+    "MIDI Machine Control (MMC) is a specialized communication protocol that allows external hardware transport bars, digital audio workstations (DAWs), and master consoles to remotely operate video recording decks and playback hardware. This article explains",
+    false
+  ],
+  [
+    44,
+    "What Is MIDI Time Code in Video Post-Production?",
+    "MIDI Time Code (MTC) is a protocol that translates standard SMPTE timecode into a digital MIDI data stream, allowing audio software, video editing systems, and hardware devices to synchronize along a shared timeline. This article breaks down the technica",
+    false
+  ],
+  [
+    43,
+    "How MIDI Running Status Optimizes Bandwidth",
+    "This article examines how the Musical Instrument Digital Interface (MIDI) uses \"running status\" to maximize throughput across limited serial transmission channels. It covers the bandwidth constraints of the original MIDI 1.0 hardware standard, breaks dow",
+    false
+  ],
+  [
+    42,
+    "What Causes MIDI Loops and How They Crash Hardware",
+    "A MIDI feedback loop occurs when a continuous stream of digital musical data is accidentally routed back into the device that generated it, creating an endless, compounding cycle. This article examines the root causes of MIDI loops—such as improper cab",
+    false
+  ],
+  [
+    41,
+    "How a MIDI Merger Combines Two MIDI Signals",
+    "A MIDI merger box accepts data from two or more independent MIDI controllers and combines them into a single, unified stream that can control a single sound module or digital audio workstation. Because MIDI relies on a serial communication protocol, you",
+    false
+  ],
+  [
+    40,
+    "RTP-MIDI Explained: Streaming MIDI Over Ethernet",
+    "RTP-MIDI is an open specification that enables the transmission of Musical Instrument Digital Interface (MIDI) messages over standard IP networks, such as local Ethernet and Wi-Fi. This article provides a comprehensive breakdown of what RTP-MIDI is, its",
+    false
+  ],
+  [
+    39,
+    "How BLE MIDI Handles Wireless Keyboard Latency",
+    "Bluetooth Low Energy (BLE) MIDI addresses wireless latency through optimized connection parameters, packet timestamping, and streamlined operating system integration. While standard wireless communication often introduces noticeable delays unsuitable for",
+    false
+  ],
+  [
+    38,
+    "Motorized Faders in Modern Audio Mixing Consoles",
+    "MIDI motorized faders serve as the critical physical bridge between audio engineers and modern digital audio workstations (DAWs) or digital mixing consoles. By utilizing bidirectional communication protocols, these motorized sliders automatically move to",
+    false
+  ],
+  [
+    37,
+    "How Electronic Drums Convert Piezo Vibrations to MIDI",
+    "Electronic drum kits bridge the gap between acoustic percussion and digital sound production by translating physical strikes into digital music data. This article explains the technical pipeline of this conversion process, covering how the mechanical imp",
+    false
+  ],
+  [
+    36,
+    "MIDI Guitar Pickup vs Electromagnetic Pickup",
+    "A standard electromagnetic pickup captures the physical vibrations of all guitar strings collectively and converts them into an analog audio signal sent directly to an amplifier. In contrast, a MIDI guitar pickup acts as a data sensor, isolating the vibr",
+    false
+  ],
+  [
+    35,
+    "How MIDI Breath Controllers Capture Wind Phrasing",
+    "MIDI breath controllers bridge the gap between organic acoustic wind performance and digital music production by translating human respiratory effort into continuous digital control streams. This article examines the hardware mechanisms behind breath con",
+    false
+  ],
+  [
+    34,
+    "What Is a MIDI Controller and Why It Makes No Sound",
+    "A MIDI controller keyboard is an input device designed to send performance data to external hardware or software, acting as a bridge between a musician and digital audio software. Unlike traditional digital pianos or synthesizers, it contains no internal",
+    false
+  ],
+  [
+    33,
+    "Why Is MIDI Channel 10 Reserved for Drums?",
+    "In the General MIDI (GM) standard, channel 10 is universally reserved for percussion rather than melodic instruments. This convention originated in the late 1980s with early multi-timbral hardware synthesizers—most notably the Roland MT-32—which perm",
+    false
+  ],
+  [
+    32,
+    "How General MIDI 2 Expands General MIDI",
+    "Introduced in 1999 by the MIDI Manufacturers Association, General MIDI 2 (GM2) significantly upgraded the original 1991 General MIDI (GM1) specification to meet the demands of advancing music technology. While GM1 provided a baseline for consistent playb",
+    false
+  ],
+  [
+    31,
+    "General MIDI: Standardizing Sound Card Instruments",
+    "General MIDI (GM) established a universal standard that mapped specific instrument sounds to designated program numbers across digital synthesizers and computer sound cards. Before its introduction, a MIDI file composed on one hardware device would sound",
+    false
+  ],
+  [
+    30,
+    "How MIDI Song Position Pointer Works in Hardware Sync",
+    "MIDI Song Position Pointer (SPP) enables hardware synchronizers and slave sequencers to lock perfectly with track playback by transmitting absolute timeline position data alongside relative tempo pulses. Rather than forcing external hardware to start pla",
+    false
+  ],
+  [
+    29,
+    "Understanding MIDI Real-Time Messages and Priority",
+    "MIDI Real-Time messages are a specialized category of single-byte commands within the MIDI specification designed to handle synchronization, transport, and timing across connected musical equipment. Unlike standard channel voice messages that trigger not",
+    false
+  ],
+  [
+    28,
+    "How MIDI Clock Syncs Drum Machines to a DAW",
+    "MIDI clock synchronization allows external hardware drum machines to run in perfect rhythmic harmony with a Digital Audio Workstation (DAW). By sending a continuous stream of timing pulses, transport commands, and position markers over a standard MIDI ca",
+    false
+  ],
+  [
+    27,
+    "Difference Between MIDI Format 0 and Format 1",
+    "Standard MIDI Files (SMF) are universally categorized into distinct formats, with Format 0 and Format 1 being the most widely used. The fundamental difference between the two lies in how they organize musical tracks and channels. A MIDI Format 0 file mer",
+    false
+  ],
+  [
+    26,
+    "Multitrack Organization in Standard MIDI Files",
+    "Standard MIDI Files (SMF) organize multitrack musical sequences through a structured chunk-based architecture composed of a header chunk and one or more track chunks. This system relies on distinct file format specifications, delta-time stamping, and cha",
+    false
+  ],
+  [
+    25,
+    "MIDI Program Change for Live Performance",
+    "MIDI Program Change (PC) messages are digital control commands used in live music production to instantly switch patches, presets, and device configurations across hardware and software instruments. During live stage performances, these messages serve as",
+    false
+  ],
+  [
+    24,
+    "How Manufacturers Use MIDI SysEx for Firmware Updates",
+    "This article explores how hardware manufacturers utilize MIDI System Exclusive (SysEx) messages to deliver firmware updates to audio interfaces, synthesizers, and controllers. By leveraging SysEx as a standardized, platform-independent transport layer, d",
+    false
+  ],
+  [
+    23,
+    "What Is a MIDI System Exclusive Message?",
+    "A MIDI System Exclusive (SysEx) message is a specialized data format within the Musical Instrument Digital Interface standard that transmits proprietary information directly between compatible devices or software. Unlike standard MIDI messages, which use",
+    false
+  ],
+  [
+    22,
+    "How MIDI Pitch Bend Achieves 14-Bit Resolution",
+    "Standard MIDI protocol relies on 7-bit data architecture, which limits most continuous controllers to just 128 discrete values. Because human hearing is exceptionally sensitive to subtle changes in pitch, this coarse resolution causes audible stepping ar",
+    false
+  ],
+  [
+    21,
+    "Independent MIDI Channels in MIDI 1.0",
+    "This article provides a concise overview of the channel capabilities within the MIDI 1.0 specification. It outlines the exact numerical range of independent channels available to musicians and producers, explains the technical architecture behind this li",
+    false
+  ],
+  [
+    20,
+    "MIDI Channel Pressure vs Polyphonic Aftertouch",
+    "MIDI aftertouch allows musicians to modulate sound by applying extra physical pressure to keys after they have already been struck. The primary difference between MIDI channel pressure and polyphonic key aftertouch lies in how that pressure is detected a",
+    false
+  ],
+  [
+    19,
+    "What Is the Default Function of MIDI CC 1?",
+    "MIDI CC 1 is universally assigned to the Modulation Wheel (often abbreviated as the Mod Wheel) on virtually all standard keyboard controllers. This article explores the standard role of CC 1 in music production, its behavioral characteristics compared to",
+    false
+  ],
+  [
+    18,
+    "Which MIDI CC Controls the Sustain Pedal?",
+    "In MIDI production and digital music performance, standard Control Change (CC) messages govern various expressive parameters. This guide identifies the standard MIDI CC number assigned to the sustain pedal, explains how its data values trigger note hold",
+    false
+  ],
+  [
+    17,
+    "How MIDI CC Messages Modify Synth Parameters",
+    "MIDI Control Change (CC) messages modify synthesizer parameters in real time by transmitting standardized digital control data from a hardware controller or digital audio workstation (DAW) to a sound engine. These messages allow musicians to dynamically",
+    false
+  ],
+  [
+    16,
+    "What Is a MIDI Patch Bay Used For in Studios?",
+    "A MIDI patch bay serves as a centralized hardware routing hub designed to manage, direct, and reconfigure MIDI data across multiple instruments, controllers, and sequencers without needing to manually swap physical cables. In complex studio environments",
+    false
+  ],
+  [
+    15,
+    "Why MIDI Daisy Chains Cause Latency and Jitter",
+    "MIDI daisy chaining allows musicians to connect multiple hardware synthesizers and drum machines sequentially using standard MIDI THRU ports. While this eliminates the need for separate interfaces for every instrument, extended daisy chains often introdu",
+    false
+  ],
+  [
+    14,
+    "MIDI Daisy Chain Routing for Multiple Synthesizers",
+    "A MIDI daisy chain routes digital performance data from a single master controller to multiple hardware synthesizers connected in a sequential series. By transmitting instructions through standard 5-pin DIN cables using dedicated input and pass-through p",
+    false
+  ],
+  [
+    13,
+    "Differences Between MIDI In, MIDI Out, and MIDI Thru",
+    "Musical Instrument Digital Interface (MIDI) uses distinct ports to manage the flow of digital performance data between instruments, computers, and hardware. While these standard 5-pin DIN ports look physically identical, they serve completely different d",
+    false
+  ],
+  [
+    12,
+    "How USB MIDI Simplifies Home Studio Setups",
+    "USB MIDI has transformed modern music production by streamlining the connection between hardware instruments and digital audio workstations (DAWs). Traditionally, integrating synthesizers and controllers required dedicated MIDI interfaces, complex multi-",
+    false
+  ],
+  [
+    11,
+    "Role of a MIDI Interface for Older Hardware",
+    "A MIDI interface serves as the essential bridge between vintage music equipment and modern computer-based production environments. While legacy hardware relies on traditional 5-pin DIN connections, contemporary computers use USB or Thunderbolt ports. A M",
+    false
+  ],
+  [
+    10,
+    "How MPE Changes Traditional Keyboard Performance",
+    "MIDI Polyphonic Expression (MPE) fundamentally transforms standard keyboard playing by enabling independent, multidimensional control over every individual note within a chord. While traditional MIDI applies modulations like pitch bend and modulation glo",
+    false
+  ],
+  [
+    9,
+    "What Is the MIDI Velocity Range?",
+    "In digital music production, MIDI velocity measures how hard or fast a key, pad, or string is struck, primarily controlling volume and dynamic expression. The standard range of values typically allowed for MIDI velocity is 0 to 127. This article breaks d",
+    false
+  ],
+  [
+    8,
+    "How MIDI Note Off Messages Work in Synthesizers",
+    "A MIDI Note Off message is a digital instruction that tells a synthesizer to stop sustaining a specific pitch and begin ending the sound. While it does not instantly cut off the audio abruptly, it signals the synthesizer's internal voice architecture tha",
+    false
+  ],
+  [
+    7,
+    "What Is the Purpose of a MIDI Note On Message?",
+    "A MIDI Note On message is a fundamental digital command used to instruct electronic musical instruments and software to begin sounding a specific musical pitch. This article explains the primary function of the Note On command, dissects the essential dat",
+    false
+  ],
+  [
+    6,
+    "MIDI 1.0 vs MIDI 2.0: Technical Differences",
+    "This article examines the core technical differences between the legacy MIDI 1.0 specification and the modernized MIDI 2.0 standard. While MIDI 1.0 served the music industry for nearly four decades with basic unidirectional signaling, MIDI 2.0 introduces",
+    false
+  ],
+  [
+    5,
+    "Standard Serial MIDI Communication Baud Rate",
+    "Standard serial MIDI (Musical Instrument Digital Interface) communication operates at a fixed transfer speed of 31,250 bits per second, commonly referred to as 31.25 kbaud. Established with the MIDI 1.0 specification in 1983, this asynchronous serial pro",
+    false
+  ],
+  [
+    4,
+    "How 5-Pin DIN MIDI Cables Transmit Data",
+    "A traditional 5-pin DIN Musical Instrument Digital Interface (MIDI) cable transmits digital event messages—not audio signals—between electronic musical instruments and audio hardware. This article details the physical and electrical architecture of t",
+    false
+  ],
+  [
+    3,
+    "Who Created MIDI? Key Inventors and Companies",
+    "The Musical Instrument Digital Interface, universally known as MIDI, revolutionized music production in the early 1980s by establishing a common language that allowed electronic musical instruments and computers to communicate with each other. Rather tha",
+    false
+  ],
+  [
+    2,
+    "When Was the Original MIDI Specification Published?",
+    "The original Musical Instrument Digital Interface (MIDI) specification was officially published in the 1980s. This landmark standard revolutionized music production by enabling electronic instruments, computers, and audio hardware from different manufact",
+    false
+  ],
+  [
+    1,
+    "What Does MIDI Stand For in Music Technology?",
+    "In music technology, MIDI stands for Musical Instrument Digital Interface. Developed in the early 1980s, it is a universally recognized technical standard that enables electronic instruments, computers, and other audio hardware to communicate with one an",
+    false
+  ]
+]

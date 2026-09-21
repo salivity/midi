@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standard Serial MIDI Communication Baud Rate - midi</title>
+    <meta name="description" content="Standard serial MIDI (Musical Instrument Digital Interface) communication operates at a fixed transfer speed of 31,250 bits per second, commonly referred to as 31.25 kbaud. Established with the MIDI 1.0 specification in 1983, this asynchronous serial pro">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/standard-serial-midi-communication-baud-rate">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Standard Serial MIDI Communication Baud Rate - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/standard-serial-midi-communication-baud-rate" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard serial MIDI (Musical Instrument Digital Interface) communication operates at a fixed transfer speed of 31,250 bits per second, commonly referred to as 31.25 kbaud. Established with the MIDI 1.0 specification in 1983, this asynchronous serial pro" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="standard-serial-midi-communication-baud-rate">Standard Serial
+MIDI Communication Baud Rate</h1>
+<p>Standard serial MIDI (Musical Instrument Digital Interface)
+communication operates at a fixed transfer speed of 31,250 bits per
+second, commonly referred to as 31.25 kbaud. Established with the MIDI
+1.0 specification in 1983, this asynchronous serial protocol allows
+synthesizers, sequencers, computers, and other musical hardware to
+reliably transmit performance data in real time. This article covers the
+exact specifications of the MIDI baud rate, the engineering reasons
+behind its selection, data framing details, and how it impacts
+latency.</p>
+<h2 id="the-standard-baud-rate-31250-baud">The Standard Baud Rate:
+31,250 Baud</h2>
+<p>The official baud rate for traditional 5-pin DIN serial MIDI is
+precisely 31,250 baud (±1%). At this rate, the interface transmits
+31,250 bits per second over a current loop cable system.</p>
+<p>Unlike modern computer interfaces such as USB, standard serial MIDI
+does not negotiate transfer speeds. Every traditional MIDI 1.0 compliant
+transmitter and receiver must operate at this exact rate to maintain
+synchronization and prevent communication errors.</p>
+<h2 id="why-31250-was-chosen">Why 31,250 Was Chosen</h2>
+<p>The rate of 31,250 baud was chosen primarily due to the hardware
+limitations and microprocessors widely used in the early 1980s:</p>
+<ul>
+<li><strong>Direct Clock Division:</strong> Many standard
+microprocessors of that era operated using internal clocks derived from
+common crystal frequencies. Dividing a 1 MHz clock signal by 32 results
+exactly in 31,250.</li>
+<li><strong>Cost Efficiency:</strong> Using a standard binary divisor of
+32 allowed manufacturers to implement the UART (Universal Asynchronous
+Receiver/Transmitter) logic using simple, inexpensive digital divider
+circuits rather than dedicated, costly baud rate generators.</li>
+<li><strong>Optocoupler Performance:</strong> MIDI employs optoisolators
+to prevent ground loops between audio gear. In 1983, low-cost
+optocouplers could reliably handle signals at around 31.25 kHz without
+introducing excessive rise and fall time distortion.</li>
+</ul>
+<h2 id="framing-and-transmission-speed">Framing and Transmission
+Speed</h2>
+<p>Standard MIDI uses asynchronous serial communication without hardware
+flow control. Each byte of data is packaged into a 10-bit serial
+frame:</p>
+<ul>
+<li><strong>1 Start Bit</strong> (logic low / 0)</li>
+<li><strong>8 Data Bits</strong> (transmitted least significant bit
+first)</li>
+<li><strong>1 Stop Bit</strong> (logic high / 1)</li>
+<li><strong>No Parity Bit</strong></li>
+</ul>
+<p>Because each byte requires 10 bits of transmission time:</p>
+<p><span class="math display">\[\frac{31,250 \text{ bits/second}}{10
+\text{ bits/byte}} = 3,125 \text{ bytes/second}\]</span></p>
+<p>The interface can transmit a maximum of 3,125 bytes per second.
+Transmission time for an individual byte is exactly 320 microseconds
+(0.32 ms).</p>
+<h2 id="throughput-and-latency-considerations">Throughput and Latency
+Considerations</h2>
+<p>Most standard MIDI channel voice messages—such as "Note On" or "Note
+Off"—consist of three bytes (a status byte followed by two data bytes
+representing pitch and velocity):</p>
+<ul>
+<li><strong>3-Byte Message:</strong> 30 bits total.</li>
+<li><strong>Transmission Time:</strong> 30 bits / 31,250 bits/second =
+0.96 milliseconds.</li>
+</ul>
+<p>Under normal conditions, playing a single note incurs less than one
+millisecond of transmission latency, which is virtually imperceptible to
+the human ear. However, sending complex sequences, polyphonic chords, or
+continuous controller data (such as pitch bend or modulation wheel
+sweeps) can saturate the 3,125 byte/second limit, leading to noticeable
+timing delays known as MIDI jitter. To help mitigate this, the
+specification includes "Running Status," a protocol feature that omits
+the status byte for consecutive messages of the same type, reducing
+transmission requirements to two bytes per message.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

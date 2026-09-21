@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Motorized Fader Packs Receive MIDI Feedback - midi</title>
+    <meta name="description" content="Motorized fader packs maintain synchronization with digital audio workstations (DAWs) through continuous, bidirectional MIDI communication. When automation moves in the DAW, the software transmits real-time data back to the hardware controller rather tha">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-motorized-fader-packs-receive-midi-feedback">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Motorized Fader Packs Receive MIDI Feedback - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-motorized-fader-packs-receive-midi-feedback" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Motorized fader packs maintain synchronization with digital audio workstations (DAWs) through continuous, bidirectional MIDI communication. When automation moves in the DAW, the software transmits real-time data back to the hardware controller rather tha" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-motorized-fader-packs-receive-midi-feedback">How Motorized
+Fader Packs Receive MIDI Feedback</h1>
+<p>Motorized fader packs maintain synchronization with digital audio
+workstations (DAWs) through continuous, bidirectional MIDI
+communication. When automation moves in the DAW, the software transmits
+real-time data back to the hardware controller rather than just
+receiving inputs. This article explains the mechanisms behind this data
+exchange, detailing the communication protocols used, how position data
+is formatted, and the internal hardware process that converts incoming
+MIDI signals into physical movement.</p>
+<h3 id="bidirectional-midi-routing">Bidirectional MIDI Routing</h3>
+<p>Standard MIDI controllers operate unidirectionally by sending control
+change (CC) or note data to the computer. Motorized faders require a
+closed bidirectional loop, utilizing both MIDI Input and MIDI Output
+ports (typically routed over a single USB connection).</p>
+<ul>
+<li><strong>Transmit (Hardware to DAW):</strong> When a user moves a
+physical fader, the controller transmits position values to update the
+virtual mixer.</li>
+<li><strong>Receive (DAW to Hardware):</strong> When the timeline plays
+existing automation, or when a track volume changes via software or
+another remote, the DAW immediately broadcasts matching data back down
+the MIDI line to the fader pack.</li>
+</ul>
+<h3 id="protocols-and-resolution-mcu-hui-and-midi-cc">Protocols and
+Resolution: MCU, HUI, and MIDI CC</h3>
+<p>Standard 7-bit MIDI Continuous Controller (CC) messages offer only
+128 discrete steps (values 0–127). If used directly for motor control,
+this low resolution causes noticeable "zipper noise" and choppy physical
+movement. To ensure smooth, precise travel, manufacturers rely on
+specialized protocols:</p>
+<ul>
+<li><strong>Mackie Control Universal (MCU):</strong> The most common
+protocol for motorized hardware. MCU repurposes 14-bit MIDI Pitch Bend
+messages to represent fader positions. Because Pitch Bend offers 16,384
+distinct values (10-bit to 14-bit resolution depending on the DAW
+implementation), the hardware receives exceptionally fine position
+increments, allowing smooth motor gliding.</li>
+<li><strong>Human User Interface (HUI):</strong> An older protocol
+developed by Digidesign that achieves higher resolution by combining two
+distinct 7-bit controller messages (Coarse and Fine) into a single
+coordinate for the motor.</li>
+<li><strong>Standard High-Resolution CC:</strong> Some modern systems
+utilize registered parameter numbers (RPN) or dual CC pairs to provide
+high-resolution feedback without requiring dedicated MCU/HUI
+emulation.</li>
+</ul>
+<h3 id="the-feedback-cycle">The Feedback Cycle</h3>
+<p>When automated playback occurs within a DAW, the feedback process
+executes in distinct stages:</p>
+<ol type="1">
+<li><strong>Automation Read:</strong> The DAW reads the automation
+envelope on a specific audio track during playback.</li>
+<li><strong>Channel Mapping:</strong> The DAW maps that track to a
+corresponding physical channel strip on the controller interface.</li>
+<li><strong>Data Packaging:</strong> The software encodes the volume
+level into the designated protocol message (e.g., Pitch Bend on MIDI
+Channel 1 for Fader 1).</li>
+<li><strong>Data Transmission:</strong> The packet is sent across the
+output MIDI port at a high update rate (often matching or exceeding the
+graphical frame rate of the DAW, typically 20–60 times per second).</li>
+</ol>
+<h3 id="hardware-translation-and-motor-activation">Hardware Translation
+and Motor Activation</h3>
+<p>Once the MIDI stream reaches the controller's internal
+microcontroller, it is converted into physical mechanical work:</p>
+<ul>
+<li><strong>Signal Parsing:</strong> The onboard microprocessor reads
+the incoming MIDI stream, isolates the value assigned to that specific
+fader, and maps it to a target physical location.</li>
+<li><strong>Position Comparison:</strong> The microcontroller reads the
+current position of the fader via an internal resistance strip (wiper
+track). It compares the target position from the DAW to the current
+physical position.</li>
+<li><strong>Motor Drive:</strong> If a difference exists, the processor
+sends a drive signal—usually via Pulse Width Modulation (PWM)—to a small
+DC servo motor or miniature stepper motor. A miniature toothed belt or
+pulley system connected to the motor pulls the fader along its rail to
+the target point.</li>
+<li><strong>Capacitive Touch Interruption:</strong> Motorized faders
+feature conductive, touch-sensitive caps. When a human finger makes
+contact, a capacitive sensor immediately halts the incoming motor drive
+signal. This prevents the motor from fighting the user's hand when
+manually overriding automation during a punch-in or live
+adjustment.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

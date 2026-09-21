@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is MIDI Pad Velocity Thresholding? - midi</title>
+    <meta name="description" content="MIDI pad velocity thresholding is a configuration setting that establishes the minimum force required for a controller pad to register a strike and output a MIDI note. In digital music production, overly sensitive pads often detect subtle vibrations, fin">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-midi-pad-velocity-thresholding">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is MIDI Pad Velocity Thresholding? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-midi-pad-velocity-thresholding" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI pad velocity thresholding is a configuration setting that establishes the minimum force required for a controller pad to register a strike and output a MIDI note. In digital music production, overly sensitive pads often detect subtle vibrations, fin" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-midi-pad-velocity-thresholding">What Is MIDI Pad
+Velocity Thresholding?</h1>
+<p>MIDI pad velocity thresholding is a configuration setting that
+establishes the minimum force required for a controller pad to register
+a strike and output a MIDI note. In digital music production, overly
+sensitive pads often detect subtle vibrations, finger rests, or
+structural reverberations, resulting in quiet, unintended triggers known
+as ghost notes. By raising the baseline sensitivity floor, velocity
+thresholding ensures that only deliberate, decisive physical impacts
+trigger sound, effectively cleaning up your performance data.</p>
+<h3 id="understanding-velocity-and-thresholding">Understanding Velocity
+and Thresholding</h3>
+<p>In the MIDI protocol, velocity represents the force or speed with
+which a key or pad is struck, quantified on a scale from 0 to 127.
+Velocity determines attributes like sample volume, filter cutoff, or
+sample layer selection.</p>
+<p>Sensors inside MIDI controllers—typically piezoelectric sensors or
+force-sensitive resistors (FSRs)—generate an electrical voltage
+proportional to the force applied. Velocity thresholding sets a cut-off
+point at the bottom of this voltage spectrum. If a physical strike
+generates a signal below this designated threshold value, the
+controller's internal processor discards the data instead of
+transmitting a MIDI Note-On message.</p>
+<h3 id="why-unintended-ghost-notes-occur">Why Unintended Ghost Notes
+Occur</h3>
+<p>Ghost notes in MIDI tracking refer to spurious, low-velocity notes
+that clutter recorded sequences. These unwanted events typically stem
+from three physical issues:</p>
+<ol type="1">
+<li><strong>Chassis Crosstalk:</strong> Striking one pad forcefully
+sends mechanical vibrations through the controller’s frame, vibrating
+adjacent sensors enough to produce low-velocity notes.</li>
+<li><strong>Pad Rebound and Double-Triggering:</strong> After striking a
+pad, the physical rebound of the rubber or the musician's finger can
+cause a secondary micro-tap.</li>
+<li><strong>Resting Weight:</strong> Drummers and beatmakers often rest
+their fingers lightly on pads between strikes. Highly sensitive pads can
+interpret this light pressure as an intentional performance event.</li>
+</ol>
+<h3 id="how-thresholding-eliminates-ghost-notes">How Thresholding
+Eliminates Ghost Notes</h3>
+<p>Velocity thresholding operates essentially as a digital noise gate
+for physical force. It solves the ghost note issue through direct
+mechanical filtering:</p>
+<ul>
+<li><strong>Suppressing Structural Vibrations:</strong> Because
+crosstalk vibrations produce significantly lower voltage than direct
+hits, a properly calibrated threshold allows the controller to ignore
+the physical shockwaves traveling through the plastic or metal
+casing.</li>
+<li><strong>Eliminating Rebound Artifacts:</strong> Pad bounce
+inherently dissipates energy rapidly. While the primary strike hits with
+high velocity, the follow-up micro-bounce registers at an extremely low
+level that falls below the threshold floor.</li>
+<li><strong>Ignoring Surface Grazes:</strong> Setting the threshold
+slightly above zero ensures that casual contact or moving fingers
+between pads won't inadvertently fire off a sound.</li>
+</ul>
+<h3 id="finding-the-right-balance">Finding the Right Balance</h3>
+<p>Calibrating velocity thresholding requires balancing responsiveness
+and noise rejection. If the threshold is set too low, the pad becomes
+hyper-sensitive, letting crosstalk and double-triggers seep into the
+performance. If set too high, the pad loses its dynamic range, ignoring
+subtle, intentional ghost notes often used in expressive drumming and
+finger-drumming techniques.</p>
+<p>The ideal threshold is the lowest possible value that completely
+eliminates mechanical crosstalk and unintentional triggers while
+preserving the player's lightest intentional taps.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

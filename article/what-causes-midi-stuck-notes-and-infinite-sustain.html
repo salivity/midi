@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Causes MIDI Stuck Notes and Infinite Sustain? - midi</title>
+    <meta name="description" content="A MIDI stuck note is an unintended, indefinitely ringing tone that occurs when a digital instrument receives an instruction to start playing a note but never receives the corresponding command to stop. In standard MIDI protocol, sound generation relies o">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-causes-midi-stuck-notes-and-infinite-sustain">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Causes MIDI Stuck Notes and Infinite Sustain? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-causes-midi-stuck-notes-and-infinite-sustain" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI stuck note is an unintended, indefinitely ringing tone that occurs when a digital instrument receives an instruction to start playing a note but never receives the corresponding command to stop. In standard MIDI protocol, sound generation relies o" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-causes-midi-stuck-notes-and-infinite-sustain">What Causes
+MIDI Stuck Notes and Infinite Sustain?</h1>
+<p>A MIDI stuck note is an unintended, indefinitely ringing tone that
+occurs when a digital instrument receives an instruction to start
+playing a note but never receives the corresponding command to stop. In
+standard MIDI protocol, sound generation relies on distinct pairs of
+messages: "Note On" and "Note Off." If the data packet containing the
+Note Off command is lost, corrupted, or delayed in transit, the
+receiving synthesizer remains in an active sustain state, creating an
+infinite drone until the voice is manually reset.</p>
+<h3 id="the-mechanics-of-midi-note-messages">The Mechanics of MIDI Note
+Messages</h3>
+<p>Unlike analog audio signals, MIDI (Musical Instrument Digital
+Interface) transmits performance data rather than actual sound. When you
+press a key on a MIDI controller, the device transmits a <strong>Note
+On</strong> message. This message typically consists of three bytes:</p>
+<ol type="1">
+<li><strong>Status Byte:</strong> Identifies the message type (Note On)
+and the MIDI channel.</li>
+<li><strong>Data Byte 1:</strong> The pitch value (0 to 127).</li>
+<li><strong>Data Byte 2:</strong> The velocity or how hard the key was
+struck (1 to 127).</li>
+</ol>
+<p>Critically, a standard Note On message contains no information about
+duration. The receiving sound module or virtual instrument (VST) has no
+idea how long the note is intended to last. It simply allocates a
+synthesizer voice to that pitch, triggers the attack and decay stages of
+its envelope generator, and holds the sound in the <strong>sustain
+phase</strong> indefinitely.</p>
+<h3 id="how-a-missing-note-off-byte-causes-infinite-sustain">How a
+Missing Note Off Byte Causes Infinite Sustain</h3>
+<p>To end a note, the controller must send a matching command when the
+key is released. This can take the form of an explicit <strong>Note
+Off</strong> status byte followed by the pitch and release velocity, or
+a <strong>Note On</strong> message sent with a velocity of zero (a
+common bandwidth-saving technique known as "running status").</p>
+<p>The synthesizer relies entirely on receiving this specific
+termination byte to trigger the <strong>release phase</strong> of the
+audio envelope. If the Note Off message fails to arrive, the synthesizer
+assumes the musician is still physically holding the key down.</p>
+<p>Because MIDI instruments do not have an automated internal timeout
+for held notes, the sound engine continues to loop the sample or sustain
+the synthesized waveform. The sound will ring out infinitely until the
+maximum voice polyphony is reached and the voice is stolen, or the
+instrument is manually interrupted.</p>
+<h3 id="common-causes-of-dropped-note-off-messages">Common Causes of
+Dropped Note Off Messages</h3>
+<p>A Note Off byte can be dropped or bypassed due to several hardware
+and software issues:</p>
+<ul>
+<li><strong>Buffer Overflow:</strong> When an excessive amount of
+continuous controller (CC) data—such as pitch bend or modulation—is sent
+simultaneously, the MIDI interface or serial buffer may choke, dropping
+trailing bytes.</li>
+<li><strong>Physical Disconnection:</strong> Unplugging a MIDI cable or
+turning off a controller while holding down keys interrupts the signal
+path before the Note Off message can be transmitted.</li>
+<li><strong>DAW/Software Glitches:</strong> Latency spikes, audio engine
+dropouts, or abruptly stopping playback in a digital audio workstation
+(DAW) in the middle of a MIDI sequence can leave active notes open.</li>
+<li><strong>Packet Loss over USB/Network:</strong> Legacy 5-pin DIN
+connections, poor-quality USB-MIDI hubs, or Wi-Fi-based RTP-MIDI setups
+can experience electrical interference or packet drops that swallow
+critical data bytes.</li>
+</ul>
+<h3 id="clearing-stuck-notes-the-midi-panic-function">Clearing Stuck
+Notes: The "MIDI Panic" Function</h3>
+<p>Because dropped Note Off messages are a fundamental limitation of
+unidirectional, event-based data streams, the MIDI standard includes
+safeguards.</p>
+<p>Synthesizers and DAWs utilize a "MIDI Panic" feature, which sends a
+series of emergency control messages. Most notably, it transmits
+<strong>Control Change (CC) 123 (All Notes Off)</strong> and <strong>CC
+120 (All Sound Off)</strong> across all 16 MIDI channels. If that fails,
+modern software often sends a batch of Note Off commands for all 128
+available pitches sequentially, forcing every lingering voice into its
+release cycle.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
