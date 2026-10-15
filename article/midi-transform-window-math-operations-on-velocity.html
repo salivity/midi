@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Transform Window: Math Operations on Velocity - midi</title>
+    <meta name="description" content="A MIDI transform window is an advanced digital audio workstation (DAW) utility designed to process, filter, and modify MIDI performance data using rule-based algorithmic instructions. While standard editing requires manual adjustments or basic quantizatio">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-transform-window-math-operations-on-velocity">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Transform Window: Math Operations on Velocity - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-transform-window-math-operations-on-velocity" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI transform window is an advanced digital audio workstation (DAW) utility designed to process, filter, and modify MIDI performance data using rule-based algorithmic instructions. While standard editing requires manual adjustments or basic quantizatio" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-transform-window-math-operations-on-velocity">MIDI
+Transform Window: Math Operations on Velocity</h1>
+<p>A MIDI transform window is an advanced digital audio workstation
+(DAW) utility designed to process, filter, and modify MIDI performance
+data using rule-based algorithmic instructions. While standard editing
+requires manual adjustments or basic quantization, a transform window
+allows producers to target specific MIDI events—such as note pitches,
+lengths, or velocities—and alter them systematically. When applied to
+velocity, the transform window executes mathematical functions across
+selected notes to alter dynamic range, correct human performance
+inconsistencies, or automate expressive variation without requiring
+manual redrawing.</p>
+<h3 id="understanding-the-midi-transform-window">Understanding the MIDI
+Transform Window</h3>
+<p>Found in DAWs such as Apple Logic Pro (Transform Window), Steinberg
+Cubase (Logical Editor), and Presonus Studio One, this tool operates on
+an "If/Then" conditional logic system. The user defines two primary
+parameter blocks:</p>
+<ol type="1">
+<li><strong>Conditions (Input/Filter):</strong> Determines which events
+are affected. Criteria can include event type (Notes, Control Change,
+Pitch Bend), specific pitch ranges, position within a bar, or existing
+velocity values.</li>
+<li><strong>Operations (Output/Action):</strong> Dictates how the
+parameters of those filtered events will be modified.</li>
+</ol>
+<p>Velocity represents the speed and force with which a MIDI note is
+struck, expressed as an integer between 1 and 127 (with 0 functioning as
+a note-off event). In a MIDI transform window, this integer serves as a
+numerical variable that can be manipulated using basic to complex
+arithmetic.</p>
+<h3 id="mathematical-operations-applied-to-velocity">Mathematical
+Operations Applied to Velocity</h3>
+<p>By targeting the "Velocity" parameter column within the action block,
+the transform window can apply several distinct mathematical
+operators:</p>
+<h4 id="1-addition-and-subtraction-offset">1. Addition and Subtraction
+(Offset)</h4>
+<ul>
+<li><strong>Operation:</strong> <span class="math inline">\(V_{new} =
+V_{current} \pm n\)</span></li>
+<li><strong>Function:</strong> Adds or subtracts a fixed integer from
+the existing velocity of every targeted note.</li>
+<li><strong>Use Case:</strong> Increasing or decreasing the overall
+loudness of a performance while preserving the relative volume
+differences between individual notes. Built-in boundary limits ensure
+the value does not drop below 1 or exceed 127.</li>
+</ul>
+<h4 id="2-multiplication-and-division-scaling-and-compressing">2.
+Multiplication and Division (Scaling and Compressing)</h4>
+<ul>
+<li><strong>Operation:</strong> <span class="math inline">\(V_{new} =
+V_{current} \times n\)</span> or <span class="math inline">\(V_{new} =
+V_{current} \div n\)</span> (often represented as a factor, such as
+<span class="math inline">\(0.8\)</span> or <span
+class="math inline">\(1.25\)</span>)</li>
+<li><strong>Function:</strong> Multiplies the velocity value by a
+designated ratio.</li>
+<li><strong>Use Case:</strong> Acting as a MIDI-level dynamic expander
+or compressor. Multiplying by a decimal less than 1.0 narrows the
+dynamic range by pulling louder notes closer to softer ones. Multiplying
+by a factor greater than 1.0 increases the dynamic spread between soft
+and hard hits.</li>
+</ul>
+<h4 id="3-scaling-to-a-range-remapping">3. Scaling to a Range
+(Remapping)</h4>
+<ul>
+<li><strong>Operation:</strong> Linear interpolation mapping an input
+range <span class="math inline">\([A, B]\)</span> to an output range
+<span class="math inline">\([C, D]\)</span>.</li>
+<li><strong>Function:</strong> Compresses or expands existing velocity
+dynamics to fit strictly within newly defined minimum and maximum
+boundaries.</li>
+<li><strong>Use Case:</strong> Ensuring a drum track remains within an
+expressive sweet spot (e.g., remapping a performance that ranges from
+30–120 into a controlled range of 75–105) without clipping or flattening
+the performance.</li>
+</ul>
+<h4 id="4-randomization-stochastic-variation">4. Randomization
+(Stochastic Variation)</h4>
+<ul>
+<li><strong>Operation:</strong> <span class="math inline">\(V_{new} =
+V_{current} \pm \text{Random}(0, n)\)</span></li>
+<li><strong>Function:</strong> Introduces a controlled pseudo-random
+integer within a specified deviation limit (<span
+class="math inline">\(n\)</span>) to the existing velocity value.</li>
+<li><strong>Use Case:</strong> "Humanizing" programmed or quantized MIDI
+tracks where uniform velocities sound robotic. Adding a random range of
+<span class="math inline">\(\pm 5\)</span> produces natural, subtle
+dynamic variance across hi-hats, piano chords, or rhythm sections.</li>
+</ul>
+<h4 id="5-fixed-assignment-constant-replacement">5. Fixed Assignment
+(Constant Replacement)</h4>
+<ul>
+<li><strong>Operation:</strong> <span class="math inline">\(V_{new} =
+n\)</span></li>
+<li><strong>Function:</strong> Completely overrides the current velocity
+and assigns a static numerical value across all filtered notes.</li>
+<li><strong>Use Case:</strong> Creating hard-hitting, consistent
+electronic patterns, such as setting all kick drum hits to an absolute
+value of 127.</li>
+</ul>
+<h4 id="6-inversion">6. Inversion</h4>
+<ul>
+<li><strong>Operation:</strong> <span class="math inline">\(V_{new} =
+127 - V_{current}\)</span> (or based around a user-defined median)</li>
+<li><strong>Function:</strong> Reverses the dynamic values, turning the
+softest notes into the loudest and vice versa.</li>
+<li><strong>Use Case:</strong> Creative sound design, ghost-note
+accentuation, or producing reversed dynamic envelopes across looped
+patterns.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

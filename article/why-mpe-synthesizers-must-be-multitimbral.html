@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MPE Synthesizers Must Be Multitimbral - midi</title>
+    <meta name="description" content="MIDI Polyphonic Expression (MPE) allows electronic musicians to modulate continuous parameters—such as pitch bend, timbre, and pressure—on a per-note basis rather than globally across all notes. To accurately interpret an incoming MPE data stream, a virtu">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-mpe-synthesizers-must-be-multitimbral">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MPE Synthesizers Must Be Multitimbral - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-mpe-synthesizers-must-be-multitimbral" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Polyphonic Expression (MPE) allows electronic musicians to modulate continuous parameters—such as pitch bend, timbre, and pressure—on a per-note basis rather than globally across all notes. To accurately interpret an incoming MPE data stream, a virtu" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-mpe-synthesizers-must-be-multitimbral">Why MPE Synthesizers
+Must Be Multitimbral</h1>
+<p>MIDI Polyphonic Expression (MPE) allows electronic musicians to
+modulate continuous parameters—such as pitch bend, timbre, and
+pressure—on a per-note basis rather than globally across all notes. To
+accurately interpret an incoming MPE data stream, a virtual instrument
+synthesizer must be fundamentally multitimbral. This article breaks down
+how MPE utilizes multi-channel MIDI routing to isolate voice parameters
+and why non-multitimbral architectures fail to process per-note
+expressive control.</p>
+<p>Under the conventional MIDI 1.0 specification, continuous control
+messages are channel-wide. Pitch bend, channel pressure (aftertouch),
+and continuous controllers like CC 74 (brightness/cutoff) apply
+universally to every active note sounding on that specific channel. If a
+musician plays a triad on Channel 1 and bends a single pitch, the
+standard MIDI protocol forces all three notes in the chord to bend
+together.</p>
+<p>MPE overcomes this limitation through channel allocation. Instead of
+broadcasting all notes and control data on a single channel, an MPE
+transmitter distributes each new note to its own unique MIDI channel
+within an assigned zone (typically channels 2 through 16). Channel 1 is
+reserved as a master channel for global parameters like program changes
+and master volume, while individual notes occupy dedicated member
+channels.</p>
+<p>Because MPE distributes individual notes across separate channels,
+the receiving virtual synthesizer must possess a multitimbral
+architecture. By definition, a multitimbral synthesizer can listen to,
+receive, and process multiple discrete MIDI channels simultaneously.</p>
+<p>If a synthesizer engine is monotimbral, it can only respond to a
+single assigned MIDI channel at any given moment. Feeding an MPE stream
+into a monotimbral instrument results in two failure states depending on
+how the plugin is coded:</p>
+<ol type="1">
+<li><strong>Ignored Channels:</strong> The synthesizer only responds to
+messages sent to its single designated channel, discarding notes sent to
+other channels and resulting in dropped notes.</li>
+<li><strong>Omni-Mode Collapse:</strong> If set to receive all channels
+(Omni mode) without true multitimbral voice isolation, the synth pools
+every incoming controller message into a shared engine. Pitch bends and
+CC modulations transmitted on Channel 2 will erroneously modulate the
+notes sounding on Channels 3, 4, and 5, completely destroying the
+independent, per-note articulation intended by the performer.</li>
+</ol>
+<p>A multitimbral engine solves this by instantiating voice modules that
+read discrete control pipelines. In the context of MPE, this
+multitimbral engine does not require loading entirely different sound
+patches on each channel; rather, it clones the same patch architecture
+across multiple channels. Each channel instance maintains its own
+dedicated memory registers for pitch offset, pressure, and designated CC
+dimensions.</p>
+<p>Ultimately, MPE is a protocol hack that achieves polyphonic
+modulation within the constraints of channel-wide MIDI 1.0 messages.
+Because the individual expression data streams are separated by channel,
+the receiving instrument must be multitimbral to parse those channels
+independently and preserve the polyphonic nuance of the performance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

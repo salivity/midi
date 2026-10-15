@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Cable Shields Are Grounded at One End - midi</title>
+    <meta name="description" content="Standard 5-pin DIN MIDI cables connect the shield to ground at only one end to prevent ground loops while still protecting data signals from electromagnetic interference. Because the MIDI specification mandates opto-isolation at the receiving device, a co">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-cable-shields-are-grounded-at-one-end">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Cable Shields Are Grounded at One End - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-cable-shields-are-grounded-at-one-end" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard 5-pin DIN MIDI cables connect the shield to ground at only one end to prevent ground loops while still protecting data signals from electromagnetic interference. Because the MIDI specification mandates opto-isolation at the receiving device, a co" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-cable-shields-are-grounded-at-one-end">Why MIDI Cable
+Shields Are Grounded at One End</h1>
+<p>Standard 5-pin DIN MIDI cables connect the shield to ground at only
+one end to prevent ground loops while still protecting data signals from
+electromagnetic interference. Because the MIDI specification mandates
+opto-isolation at the receiving device, a common ground connection
+between interconnected equipment is completely unnecessary. Grounding
+the cable shield solely at the transmitting port allows it to act as an
+effective antenna shield against external noise without creating a
+closed electrical path between the grounds of two different pieces of
+gear.</p>
+<h3 id="preventing-ground-loops">Preventing Ground Loops</h3>
+<p>In audio and music production environments, multiple electronic
+devices—such as synthesizers, audio interfaces, and computers—are
+typically plugged into the same power distribution system. If a data
+cable connects the metal chassis or electrical grounds of two separate
+devices, it forms a closed conductive circle known as a ground loop.</p>
+<p>Ground loops are susceptible to stray magnetic fields from power
+transformers, mains wiring, and lighting systems. These fields induce
+unwanted 50 Hz or 60 Hz electrical currents across the ground wiring,
+resulting in audible hum, buzz, and digital noise leaking into the
+analog audio path. By leaving the shield floating (disconnected) at one
+end of the physical cable run, the loop is broken, eliminating this path
+for ground current.</p>
+<h3 id="the-role-of-opto-isolation">The Role of Opto-Isolation</h3>
+<p>The original 1983 MIDI 1.0 specification was explicitly engineered to
+prevent ground noise by utilizing optical isolation at every MIDI IN
+port.</p>
+<p>A standard MIDI connection operates as a 5 milliamp (mA) current loop
+rather than a ground-referenced voltage system:</p>
+<ul>
+<li><strong>Pin 4</strong> provides the current source (+5V through a
+pull-up resistor).</li>
+<li><strong>Pin 5</strong> serves as the current sink (the data
+line).</li>
+<li><strong>Pin 2</strong> is designated for the cable shield.</li>
+</ul>
+<p>When a message is transmitted, current flows from Pin 4 of the MIDI
+OUT port, down the cable, through an LED inside an optocoupler at the
+MIDI IN port, and returns via Pin 5. Inside the receiver, the LED
+flashes to transmit the binary data via light pulses to a
+phototransistor. Because the signal is transferred via light, there is
+no direct electrical connection between the transmitter's circuitry and
+the receiver's circuitry.</p>
+<p>Connecting a ground wire directly between the devices would bypass
+the galvanic isolation provided by the optocoupler, defeating its
+primary design purpose.</p>
+<h3 id="how-one-end-shielding-works">How One-End Shielding Works</h3>
+<p>Even though the shield is grounded at only one end—specifically at
+the MIDI OUT or transmitter port—it still functions effectively against
+Radio Frequency Interference (RFI) and Electromagnetic Interference
+(EMI).</p>
+<p>When connected to ground at the transmitter, the shield acts as a
+Faraday cage around the twisted pair of data conductors inside the
+cable. External radio signals and high-frequency interference hit the
+shield and drain directly into the transmitter's chassis ground. Because
+the shield is left unconnected at the MIDI IN socket (where Pin 2 is
+intentionally left floating or grounded only through a small capacitor
+for RF suppression in certain designs), no current can traverse the
+length of the shield between the two devices. This configuration yields
+optimal noise shielding with zero risk of ground-induced audio hum.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

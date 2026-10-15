@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is an Automatic MIDI Switchbox? - midi</title>
+    <meta name="description" content="An automatic MIDI switchbox is a specialized hardware redundancy device used in live performance rigs to seamlessly transfer control from a primary playback computer to a synchronized backup system if the primary machine fails. By continuously monitoring">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-an-automatic-midi-switchbox">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is an Automatic MIDI Switchbox? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-an-automatic-midi-switchbox" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An automatic MIDI switchbox is a specialized hardware redundancy device used in live performance rigs to seamlessly transfer control from a primary playback computer to a synchronized backup system if the primary machine fails. By continuously monitoring" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-an-automatic-midi-switchbox">What Is an Automatic MIDI
+Switchbox?</h1>
+<p>An automatic MIDI switchbox is a specialized hardware redundancy
+device used in live performance rigs to seamlessly transfer control from
+a primary playback computer to a synchronized backup system if the
+primary machine fails. By continuously monitoring a dedicated
+"heartbeat" signal transmitted by the primary computer, the switchbox
+can instantly identify a software crash, system freeze, or cable
+disconnection, rerouting all MIDI streams to the backup computer within
+milliseconds to prevent show-stopping interruptions.</p>
+<h3 id="the-role-of-an-automatic-midi-switchbox">The Role of an
+Automatic MIDI Switchbox</h3>
+<p>In modern live music production, playback computers often handle
+critical tasks, including triggering backing tracks, changing
+synthesizer presets, routing click tracks, and automating stage lighting
+or video cues. Because a computer crash on stage can disrupt an entire
+performance, touring engineers run two identical playback computers
+(System A and System B) in parallel.</p>
+<p>An automatic MIDI switchbox sits between these two computers and the
+stage gear. It accepts the MIDI outputs from both systems while passing
+only System A's data downstream to synthesizers, samplers, and lighting
+controllers. If System A becomes unresponsive, the switchbox
+automatically switches all inputs and outputs over to System B without
+requiring manual intervention from a playback technician.</p>
+<h3 id="how-it-detects-computer-crashes-instantly">How It Detects
+Computer Crashes Instantly</h3>
+<p>To achieve instant, imperceptible switching, an automatic MIDI
+switchbox relies on an active monitoring technique commonly known as a
+"heartbeat" or "keep-alive" signal.</p>
+<ol type="1">
+<li><p><strong>Continuous Heartbeat Transmission</strong><br />
+Inside the Digital Audio Workstation (DAW) running on the primary
+computer, an engineer configures a dedicated track to send a continuous
+stream of specific MIDI data—such as high-frequency MIDI Control Change
+(CC) messages, continuous MIDI clock pulses, or alternating note
+messages.</p></li>
+<li><p><strong>Microcontroller Monitoring</strong><br />
+The switchbox features an internal microcontroller that monitors this
+designated incoming data stream in real time. As long as the
+microcontroller registers the expected data packets at the defined
+interval, it keeps the physical relays or digital switches routed to
+System A.</p></li>
+<li><p><strong>Missing Packet and Timeout Thresholds</strong><br />
+Operating system crashes, DAW freezes, and kernel panics immediately
+halt outgoing data streams. If the switchbox fails to detect the
+heartbeat within a predetermined time threshold (often between 10 to 50
+milliseconds), the internal logic interprets this absence as an
+immediate system failure.</p></li>
+<li><p><strong>Hardware-Level Switching and Note
+Management</strong><br />
+Upon detecting the failure, the switchbox instantly drops the connection
+to System A and opens the connection to System B. Advanced switchboxes
+also transmit immediate "All Notes Off" and "Reset All Controllers"
+commands across all channels to prevent stuck or sustained notes caused
+by interrupted data from the failed machine.</p></li>
+</ol>
+<p>Because the switch happens in a fraction of a second, the backup
+machine—which is running the exact same session in parallel sync—takes
+over controls, automation, and virtual instruments without an audible
+break in the performance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

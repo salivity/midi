@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Audio Plugins Smooth 7-Bit MIDI CC Steps - midi</title>
+    <meta name="description" content="Standard MIDI Continuous Controller (CC) messages transmit values using a 7-bit integer range from 0 to 127, which frequently causes audible &quot;zipper noise&quot; and stepping artifacts when adjusting sensitive parameters like filter cutoffs or gain levels. To r">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-audio-plugins-smooth-7-bit-midi-cc-steps">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Audio Plugins Smooth 7-Bit MIDI CC Steps - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-audio-plugins-smooth-7-bit-midi-cc-steps" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard MIDI Continuous Controller (CC) messages transmit values using a 7-bit integer range from 0 to 127, which frequently causes audible &quot;zipper noise&quot; and stepping artifacts when adjusting sensitive parameters like filter cutoffs or gain levels. To r" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-audio-plugins-smooth-7-bit-midi-cc-steps">How Audio Plugins
+Smooth 7-Bit MIDI CC Steps</h1>
+<p>Standard MIDI Continuous Controller (CC) messages transmit values
+using a 7-bit integer range from 0 to 127, which frequently causes
+audible "zipper noise" and stepping artifacts when adjusting sensitive
+parameters like filter cutoffs or gain levels. To resolve this, digital
+audio plugins implement real-time parameter smoothing using techniques
+such as linear interpolation, low-pass filtering, and slew-rate
+limiting. These algorithms translate low-resolution control messages
+into high-resolution, sample-accurate modulation streams, bridging the
+gap between discrete control data and continuous audio signals.</p>
+<h2 id="the-cause-of-stepped-audio-artifacts">The Cause of Stepped Audio
+Artifacts</h2>
+<p>The core issue stems from the disparity between MIDI data rates and
+digital audio sample rates. With only 128 discrete values, mapping a
+7-bit message to a wide dynamic range produces massive jumps. For
+instance, mapping 0–127 across a logarithmic frequency range from 20 Hz
+to 20,000 Hz means a single CC increment can alter the frequency by
+hundreds of Hertz instantly. When an audio parameter abruptly changes
+value between two adjacent audio samples, the sudden discontinuity
+introduces high-frequency energy into the signal, perceived by listeners
+as clicks, pops, or a coarse "zipper" sound.</p>
+<h2 id="one-pole-low-pass-filtering-leaky-integrators">One-Pole Low-Pass
+Filtering (Leaky Integrators)</h2>
+<p>The most common internal method for parameter smoothing is a
+single-pole Infinite Impulse Response (IIR) low-pass filter, often
+implemented as an exponential smoothing algorithm. Instead of jumping
+immediately to a new target value, the plugin updates the internal
+parameter on a per-sample basis using a weighted average of the current
+value and the incoming target:</p>
+<p><span class="math display">\[y[n] = y[n-1] + \alpha \cdot (x[n] -
+y[n-1])\]</span></p>
+<p>In this equation, <span class="math inline">\(x[n]\)</span>
+represents the target MIDI value (normalized or mapped to the target
+parameter scale), <span class="math inline">\(y[n]\)</span> is the
+smoothed output value applied to the audio processing loop, and <span
+class="math inline">\(\alpha\)</span> is a smoothing coefficient
+calculated from a designated time constant (typically between 5 to 50
+milliseconds) relative to the sample rate. This ensures an
+asymptotically smooth transition toward the target value without sudden
+steps.</p>
+<h2 id="linear-and-polynomial-interpolation">Linear and Polynomial
+Interpolation</h2>
+<p>Another widely used technique, particularly within block-based audio
+architectures, is linear ramp interpolation. Digital audio workstations
+(DAWs) process audio in blocks or buffers (e.g., 64, 128, or 512
+samples). When a new MIDI CC message arrives within a buffer:</p>
+<ol type="1">
+<li>The plugin notes the starting parameter value at sample 0 of the
+block.</li>
+<li>It sets the destination value based on the incoming MIDI
+message.</li>
+<li>It calculates a step delta: <span class="math inline">\(\text{Delta}
+= (\text{Target} - \text{Current}) / N\)</span>, where <span
+class="math inline">\(N\)</span> is the number of samples over which the
+transition should occur.</li>
+<li>The plugin increments the parameter value by this fractional delta
+at every sample calculation.</li>
+</ol>
+<p>For more natural modulation behavior—such as simulating analog
+potentiometer resistance or non-linear human hearing—plugins often
+employ polynomial, logarithmic, or S-curve interpolation to avoid
+mechanical-sounding linear sweeps.</p>
+<h2 id="slew-rate-limiting">Slew-Rate Limiting</h2>
+<p>Slew-rate limiters smooth incoming signals by enforcing a strict
+maximum rate of change per unit of time (<span
+class="math inline">\(dV/dt\)</span>). If a user moves a MIDI controller
+knob violently, the incoming data creates steep value differentials. A
+slew limiter permits the parameter to follow the incoming value exactly,
+provided the change per sample remains below a pre-set threshold. If the
+incoming change exceeds that threshold, the parameter only increases or
+decreases by the maximum allowed delta per sample until it catches up to
+the target. This eliminates instant jumps while preserving maximum
+responsiveness for slow, deliberate movements.</p>
+<h2 id="framework-implementations-and-native-de-zippering">Framework
+Implementations and Native De-Zippering</h2>
+<p>Modern plugin development frameworks automate these processes through
+built-in parameter smoothing classes. For example, JUCE provides the
+<code>juce::SmoothedValue</code> class, which allows developers to
+configure either linear ramping or exponential smoothing over a
+specified duration in seconds or sample counts.</p>
+<p>Under the hood, these modern engines convert incoming 7-bit MIDI CC
+values immediately into 32-bit or 64-bit floating-point numbers. Once
+normalized, the smoothing engine updates the parameter at the full audio
+sample rate (e.g., 44.1 kHz or 96 kHz) or at a slightly downsampled
+control rate (e.g., every 8 or 16 samples). By continuously updating the
+DSP coefficients at audio rate rather than control rate, plugins
+completely eliminate zipper noise and deliver continuous, analog-style
+parameter sweeps.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

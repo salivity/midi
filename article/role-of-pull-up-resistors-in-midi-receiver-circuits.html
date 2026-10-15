@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role of Pull-Up Resistors in MIDI Receiver Circuits - midi</title>
+    <meta name="description" content="In a standard MIDI receiver circuit, the pull-up resistor plays a critical role in converting optical current-loop pulses into valid binary voltage levels for a microcontroller or UART. Situated at the output of the receiver’s optocoupler, this resistor d">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/role-of-pull-up-resistors-in-midi-receiver-circuits">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Role of Pull-Up Resistors in MIDI Receiver Circuits - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/role-of-pull-up-resistors-in-midi-receiver-circuits" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In a standard MIDI receiver circuit, the pull-up resistor plays a critical role in converting optical current-loop pulses into valid binary voltage levels for a microcontroller or UART. Situated at the output of the receiver’s optocoupler, this resistor d" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="role-of-pull-up-resistors-in-midi-receiver-circuits">Role of
+Pull-Up Resistors in MIDI Receiver Circuits</h1>
+<p>In a standard MIDI receiver circuit, the pull-up resistor plays a
+critical role in converting optical current-loop pulses into valid
+binary voltage levels for a microcontroller or UART. Situated at the
+output of the receiver’s optocoupler, this resistor defines the logic
+high state, enables open-collector transistor switching, and directly
+dictates the rise time and integrity of the serial digital signal.</p>
+<h3 id="enabling-open-collector-operation">Enabling Open-Collector
+Operation</h3>
+<p>Standard MIDI hardware specification dictates an optoisolated input
+to prevent ground loops between interconnected musical devices. The
+output side of the optocoupler typically features an open-collector (or
+open-drain) phototransistor. An open-collector configuration can
+actively sink current to ground, but it cannot actively source current
+to drive a line high.</p>
+<p>The pull-up resistor, placed between the positive supply voltage
+(commonly +5V or +3.3V) and the phototransistor’s collector, provides
+the voltage source necessary to complete the output circuit.</p>
+<h3 id="establishing-the-default-logic-high-idle-state">Establishing the
+Default Logic HIGH (Idle State)</h3>
+<p>MIDI serial communication is inverted relative to the optical
+loop:</p>
+<ul>
+<li><strong>Idle / Logic 1 (Mark):</strong> When no MIDI data is being
+transmitted, or when a bit value of <code>1</code> is sent, no current
+flows through the MIDI cable loop. The optocoupler's internal LED
+remains dark, and the phototransistor remains switched off
+(non-conducting). Because the transistor is off, the pull-up resistor
+ties the UART RX line directly to the supply rail, establishing a stable
+logic HIGH state.</li>
+<li><strong>Active / Logic 0 (Space):</strong> When a bit value of
+<code>0</code> is transmitted, current energizes the optocoupler's
+internal LED, turning the phototransistor on. The transistor conducts to
+ground, overcoming the pull-up resistor and driving the UART RX line to
+logic LOW.</li>
+</ul>
+<p>Without the pull-up resistor, the input pin of the receiving UART
+would float during the idle state or whenever a <code>1</code> is
+transmitted, leading to spurious noise and framing errors.</p>
+<h3 id="controlling-switching-speed-and-rise-time">Controlling Switching
+Speed and Rise Time</h3>
+<p>MIDI operates at an asynchronous baud rate of 31.25 kbaud, meaning
+each bit duration is exactly 32 microseconds. The value of the pull-up
+resistor directly impacts the circuit's switching performance.</p>
+<p>When the phototransistor turns off, the line transitions from LOW to
+HIGH. This transition is passive; the parasitic capacitance of the board
+traces, the UART input pin, and the phototransistor itself must recharge
+through the pull-up resistor.</p>
+<ul>
+<li>If the pull-up resistance is <strong>too high</strong>, the RC time
+constant creates a slow voltage rise time, rounding off the rising edge
+of the square wave and causing timing jitter or data corruption at the
+UART.</li>
+<li>If the pull-up resistance is <strong>too low</strong>, excessive
+current flows through the phototransistor when it is turned on,
+potentially exceeding its maximum collector current rating or preventing
+the transistor from pulling the line fully down to a valid logic LOW
+voltage threshold.</li>
+</ul>
+<p>The pull-up resistor balances these constraints, ensuring sharp edges
+and standard-compliant TTL or CMOS logic transitions.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

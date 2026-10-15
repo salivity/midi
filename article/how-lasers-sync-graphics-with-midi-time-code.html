@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Lasers Sync Graphics with MIDI Time Code - midi</title>
+    <meta name="description" content="Laser projection systems synchronize complex visual displays with audio by interpreting MIDI Time Code (MTC) as a universal clock source. By translating SMPTE time data embedded in MIDI messages into precise timeline positions, laser control software cont">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-lasers-sync-graphics-with-midi-time-code">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Lasers Sync Graphics with MIDI Time Code - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-lasers-sync-graphics-with-midi-time-code" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Laser projection systems synchronize complex visual displays with audio by interpreting MIDI Time Code (MTC) as a universal clock source. By translating SMPTE time data embedded in MIDI messages into precise timeline positions, laser control software cont" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-lasers-sync-graphics-with-midi-time-code">How Lasers Sync
+Graphics with MIDI Time Code</h1>
+<p>Laser projection systems synchronize complex visual displays with
+audio by interpreting MIDI Time Code (MTC) as a universal clock source.
+By translating SMPTE time data embedded in MIDI messages into precise
+timeline positions, laser control software continuously aligns vector
+graphics, beam sequences, and safety zones with accompanying music
+tracks. This article breaks down the technical mechanism behind MTC
+reception, data parsing, clock drift compensation, and the
+vector-rendering pipeline that guarantees frame-accurate visual
+synchronization.</p>
+<h3 id="the-role-of-midi-time-code-mtc">The Role of MIDI Time Code
+(MTC)</h3>
+<p>MIDI Time Code is a digital translation of standard SMPTE timecode
+into the MIDI protocol. It represents time in
+Hours:Minutes:Seconds:Frames (HH:MM:SS:FF) format. In production
+environments, a Digital Audio Workstation (DAW) or master playback
+system broadcasts MTC over standard 5-pin DIN MIDI, USB-MIDI, or network
+protocols like RTP-MIDI (AppleMIDI) to the laser control software.</p>
+<p>Unlike simple MIDI clock signals, which measure tempo-based pulses
+per quarter note (PPQN), MTC provides absolute linear time coordinates.
+This allows laser systems to jump to specific points on a timeline,
+scrub through a show, or immediately locate cues without needing to
+track playback from the start.</p>
+<h3 id="parsing-quarter-frame-and-full-frame-messages">Parsing
+Quarter-Frame and Full-Frame Messages</h3>
+<p>To minimize bandwidth usage over standard 31.25 kbaud MIDI
+connections, running MTC does not transmit the complete timestamp in a
+single data burst. Instead, it breaks the SMPTE timestamp into smaller
+packets:</p>
+<ol type="1">
+<li><strong>Quarter-Frame Messages:</strong> During continuous playback,
+the master audio device sends one Quarter-Frame message every quarter of
+a frame. It takes eight consecutive Quarter-Frame messages—spanning two
+complete video/SMPTE frames—to reconstruct a full timecode reading. Each
+message carries a 4-bit nibble containing partial time data (frame
+units, frame tens, seconds units, etc.) along with a 3-bit piece
+identifier.</li>
+<li><strong>Full-Frame Messages:</strong> If the master transport stops,
+scrubs, or relocates, it transmits a 10-byte MIDI SysEx (System
+Exclusive) Full-Frame message. The laser software reads this packet to
+instantly identify the absolute position and relocate the visual
+timeline.</li>
+</ol>
+<h3 id="software-interpolation-and-clock-smoothing">Software
+Interpolation and Clock Smoothing</h3>
+<p>Because a complete time update takes two frames to assemble via
+Quarter-Frame messages, the laser control software cannot rely solely on
+raw incoming packets for real-time rendering. Doing so would introduce
+noticeable visual stuttering.</p>
+<p>To solve this, laser control engines employ internal interpolation
+algorithms, often backed by software Phase-Locked Loops (PLLs). The
+system uses the incoming quarter-frame timestamps to calculate the exact
+playback speed and direction, while an internal high-resolution software
+timer fills in the intervals between updates. If jitter or packet loss
+occurs on the MIDI bus, the PLL smooths out the variance, preventing
+erratic jumps in the laser display.</p>
+<h3 id="triggering-vector-graphics-and-timeline-events">Triggering
+Vector Graphics and Timeline Events</h3>
+<p>Once the internal clock is locked to the MTC stream, the laser
+software maps the resolved timestamp to its own show timeline:</p>
+<ul>
+<li><strong>Cue Triggering:</strong> Cues containing vector animations,
+abstract patterns, or beam positions are placed at specific timestamps.
+When the interpolated timecode matches a cue's start time, the cue
+activates instantly.</li>
+<li><strong>Vector Interpolation:</strong> Unlike raster video, which
+displays static pixel frames at fixed intervals (e.g., 30 or 60 fps),
+laser graphics are vector paths drawn by mechanical scanning
+galvanometers (galvos). The laser engine maps the incoming timecode
+directly to the morphing, rotation, and point-drawing speeds of vector
+objects, ensuring fluid motion regardless of the audio frame rate.</li>
+</ul>
+<h3 id="latency-and-galvanometer-compensation">Latency and Galvanometer
+Compensation</h3>
+<p>Audio processing, digital-to-analog conversion, and mechanical
+scanner inertia create inherent hardware delays. Moving a set of mirrors
+attached to galvanometers requires a few milliseconds to overcome
+physical mass and reach target coordinates without overshoot or
+distortion.</p>
+<p>Professional laser software includes configurable timecode offsets
+(pre-roll or latency buffers). Operators calibrate these offsets down to
+the millisecond, shifting the visual timeline slightly ahead of or
+behind the incoming MTC. This microsecond-level tuning ensures that
+instantaneous musical transients, like the attack of a kick drum or a
+sharp snare strike, visually hit the exact apex of the laser effect
+simultaneously.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

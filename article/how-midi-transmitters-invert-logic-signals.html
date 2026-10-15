@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Transmitters Invert Logic Signals - midi</title>
+    <meta name="description" content="The hardware specification for MIDI 1.0 defines a 5 mA current-loop interface where logical states correspond directly to the presence or absence of electrical current. To translate the standard asynchronous serial data from a Universal Asynchronous Recei">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-transmitters-invert-logic-signals">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Transmitters Invert Logic Signals - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-transmitters-invert-logic-signals" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The hardware specification for MIDI 1.0 defines a 5 mA current-loop interface where logical states correspond directly to the presence or absence of electrical current. To translate the standard asynchronous serial data from a Universal Asynchronous Recei" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-transmitters-invert-logic-signals">How MIDI
+Transmitters Invert Logic Signals</h1>
+<p>The hardware specification for MIDI 1.0 defines a 5 mA current-loop
+interface where logical states correspond directly to the presence or
+absence of electrical current. To translate the standard asynchronous
+serial data from a Universal Asynchronous Receiver-Transmitter (UART)
+into the physical current-loop domain, the transmitter stage utilizes
+logic-inverting integrated circuits, such as standard hex inverters.
+This inversion ensures that UART idle and active bits correctly activate
+and deactivate the external optical isolator at the receiving
+device.</p>
+<h3 id="the-uart-logic-and-midi-current-loop-polarity">The UART Logic
+and MIDI Current-Loop Polarity</h3>
+<p>A standard microcontroller UART idling state is logic HIGH (mark),
+while transmission start bits and binary zeroes are represented by logic
+LOW (space). In contrast, the MIDI physical layer operates on an
+active-current system:</p>
+<ul>
+<li><strong>Logic 0 (Active / Space):</strong> Current flows through the
+loop (5 mA nominal).</li>
+<li><strong>Logic 1 (Idle / Mark):</strong> No current flows through the
+loop (0 mA).</li>
+</ul>
+<p>Because current must flow during a binary 0 and cease during a binary
+1, the voltage signal from the transmitter's UART output must be
+conditioned to pull the connection low when active, creating the path
+for current.</p>
+<h3 id="the-inverter-hardware-implementation">The Inverter Hardware
+Implementation</h3>
+<p>The traditional MIDI 1.0 hardware specification achieves this using
+standard 74-series TTL or CMOS logic gates, historically specifying
+parts such as the 7404, 74LS04, or 74HCT04 hex inverters.</p>
+<p>In the standardized MIDI Out circuit:</p>
+<ol type="1">
+<li><strong>Line Drive Pin (MIDI Pin 5):</strong> The UART transmit (TX)
+pin connects to the input of an inverter gate. The output of this
+inverter is routed through a 220-ohm current-limiting resistor directly
+to Pin 5 of the 5-pin DIN connector.</li>
+<li><strong>Pull-Up Voltage Reference (MIDI Pin 4):</strong> Pin 4 is
+tied to the +5V power rail through a separate 220-ohm resistor. In some
+transmitter designs, Pin 4 is driven through a second inverter with its
+input tied to ground, functioning as a matched impedance buffer to
+ensure symmetrical rise and fall times.</li>
+</ol>
+<h3 id="signal-inversion-in-operation">Signal Inversion in
+Operation</h3>
+<p>When the UART transmits a binary 0 (0V):</p>
+<ul>
+<li>The inverter input receives a LOW signal (0V).</li>
+<li>The inverter output switches to HIGH (+5V), or in configurations
+where the output serves as a current sink, it inverts the state relative
+to the reference. In standard sinking setups where the driver pulls Pin
+5 down to ground, an odd number of inversions or an active-low
+open-collector buffer creates a ground path.</li>
+<li>With Pin 4 sitting at +5V and Pin 5 pulled down toward 0V (ground),
+a voltage drop develops across the loop, turning the receiver's
+optocoupler LED on (current flows).</li>
+</ul>
+<p>When the UART transmits a binary 1 or idles (5V):</p>
+<ul>
+<li>The inverter input receives a HIGH signal (+5V).</li>
+<li>The inverter output pulls the pin up to matching potential
+(+5V).</li>
+<li>Because both Pin 4 and Pin 5 are at +5V, the differential voltage
+drops to 0V, cutting off the current flow through the receiver's
+optocoupler.</li>
+</ul>
+<h3 id="33v-system-adaptations">3.3V System Adaptations</h3>
+<p>In modern 3.3V logic implementations, simple single-ended TTL
+inverters are replaced by low-voltage CMOS inverters (such as the 74LVC
+family) or dedicated open-drain/open-collector drivers. The principle
+remains identical: the logic state is inverted to ensure that UART
+transmission activity pulls the sinking pin to ground, guaranteeing
+strict electrical compatibility with legacy 5V receiver
+optoisolators.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relative Encoding Modes for Endless MIDI Encoders - midi</title>
+    <meta name="description" content="Endless MIDI rotary encoders eliminate parameter jumping by transmitting relative changes (increments and decrements) rather than fixed absolute values between 0 and 127. Because standard MIDI Control Change (CC) messages lack a universal relative standar">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/relative-encoding-modes-for-endless-midi-encoders">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Relative Encoding Modes for Endless MIDI Encoders - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/relative-encoding-modes-for-endless-midi-encoders" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Endless MIDI rotary encoders eliminate parameter jumping by transmitting relative changes (increments and decrements) rather than fixed absolute values between 0 and 127. Because standard MIDI Control Change (CC) messages lack a universal relative standar" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="relative-encoding-modes-for-endless-midi-encoders">Relative
+Encoding Modes for Endless MIDI Encoders</h1>
+<p>Endless MIDI rotary encoders eliminate parameter jumping by
+transmitting relative changes (increments and decrements) rather than
+fixed absolute values between 0 and 127. Because standard MIDI Control
+Change (CC) messages lack a universal relative standard, hardware
+manufacturers and Digital Audio Workstations (DAWs) rely on a handful of
+established encoding formats. This article covers the primary relative
+encoding modes used in modern MIDI devices, including Sign-Magnitude,
+2's Complement, Binary Offset, and Single-Value stepping.</p>
+<h3 id="why-endless-encoders-use-relative-modes">Why Endless Encoders
+Use Relative Modes</h3>
+<p>Standard potentiometers send an absolute value based on their
+physical angle. If a software control is set to 100 and an absolute knob
+currently resting at 20 is moved, the software value instantly snaps to
+20. Endless encoders prevent this issue by transmitting how far and in
+which direction the knob has turned, allowing software to smoothly
+adjust values from their existing positions.</p>
+<h3 id="2s-complement-relative-1">2's Complement (Relative 1)</h3>
+<p>In 2's Complement mode, values starting from 1 represent clockwise
+(positive) rotation, while values counting down from 127 represent
+counterclockwise (negative) rotation.</p>
+<ul>
+<li><strong>Clockwise (Increment):</strong> <code>1</code> (+1 step),
+<code>2</code> (+2 steps), <code>3</code> (+3 steps), etc.</li>
+<li><strong>Counterclockwise (Decrement):</strong> <code>127</code> (-1
+step), <code>126</code> (-2 steps), <code>125</code> (-3 steps),
+etc.</li>
+</ul>
+<p>Because it mimics standard binary two's complement notation in a
+7-bit system, this format is widely supported and commonly serves as the
+default relative mode in DAWs like Ableton Live, Bitwig, and Cockos
+Reaper (often labeled "Relative 1").</p>
+<h3 id="binary-offset-relative-2">Binary Offset (Relative 2)</h3>
+<p>Binary Offset centers the resting point at value 64. Movement above
+64 indicates positive adjustment, while movement below 64 indicates
+negative adjustment.</p>
+<ul>
+<li><strong>Clockwise (Increment):</strong> <code>65</code> (+1 step),
+<code>66</code> (+2 steps), <code>67</code> (+3 steps), etc.</li>
+<li><strong>Counterclockwise (Decrement):</strong> <code>63</code> (-1
+step), <code>62</code> (-2 steps), <code>61</code> (-3 steps), etc.</li>
+</ul>
+<p>This format provides a simple arithmetic approach where the offset
+(<code>value - 64</code>) directly yields the directional speed and step
+count.</p>
+<h3 id="sign-magnitude-relative-3">Sign-Magnitude (Relative 3)</h3>
+<p>Sign-Magnitude reserves one bit to define direction, while the
+remaining bits indicate the magnitude (number of steps or acceleration
+speed). In MIDI's 7-bit architecture, bit 6 (value 64) acts as the sign
+flag:</p>
+<ul>
+<li><strong>Clockwise (Increment, Bit 6 = 0):</strong> <code>1</code>
+(+1 step), <code>2</code> (+2 steps), <code>3</code> (+3 steps), up to
+<code>63</code>.</li>
+<li><strong>Counterclockwise (Decrement, Bit 6 = 1):</strong>
+<code>65</code> (-1 step, calculated as 64 + 1), <code>66</code> (-2
+steps), <code>67</code> (-3 steps), etc.</li>
+</ul>
+<p>This mode is standard on equipment from manufacturers such as Arturia
+and Native Instruments, and is frequently labeled "Relative 3" or
+"Signed Bit" in MIDI configuration utilities.</p>
+<h3 id="single-value--fixed-increment-decrement">Single-Value / Fixed
+Increment-Decrement</h3>
+<p>Some hardware designs do not transmit variable velocity or step
+sizes. Instead, they output single static values for movement in either
+direction regardless of rotational speed:</p>
+<ul>
+<li><strong>Clockwise:</strong> Transmits a static value, typically
+<code>1</code> or <code>127</code>.</li>
+<li><strong>Counterclockwise:</strong> Transmits a static value,
+typically <code>127</code> or <code>0</code>.</li>
+</ul>
+<p>The DAW detects the specific value sent to determine whether to
+increment or decrement the targeted parameter by a fixed amount.</p>
+<h3 id="matching-hardware-to-software">Matching Hardware to
+Software</h3>
+<p>For an endless encoder to function properly, the output mode chosen
+in the hardware's editor must match the relative decoding mode selected
+inside the receiving DAW or plugin. If the modes are mismatched, common
+issues occur: turning the knob counterclockwise may jump the value to
+maximum, or turning clockwise may cause the parameter to flutter back
+and forth instead of moving smoothly.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

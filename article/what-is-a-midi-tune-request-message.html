@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Tune Request Message? - midi</title>
+    <meta name="description" content="The MIDI Tune Request message is a single-byte System Common command introduced in the original MIDI specification to help analog synthesizers maintain accurate pitch. Because early analog oscillators frequently drifted out of tune due to temperature and">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-tune-request-message">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Tune Request Message? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-tune-request-message" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Tune Request message is a single-byte System Common command introduced in the original MIDI specification to help analog synthesizers maintain accurate pitch. Because early analog oscillators frequently drifted out of tune due to temperature and" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-tune-request-message">What Is a MIDI Tune Request
+Message?</h1>
+<p>The MIDI Tune Request message is a single-byte System Common command
+introduced in the original MIDI specification to help analog
+synthesizers maintain accurate pitch. Because early analog oscillators
+frequently drifted out of tune due to temperature and electrical
+fluctuations, this message allowed external sequencers or master
+keyboards to remotely trigger a synthesizer's internal auto-tune routine
+without requiring the musician to press a physical button on the
+instrument's front panel.</p>
+<h3 id="technical-structure">Technical Structure</h3>
+<p>In the MIDI protocol, the Tune Request message is represented in
+hexadecimal as <code>0xF6</code>. It is a System Common message
+consisting solely of this single status byte, carrying no additional
+data bytes. Because it has no channel assignment, any connected MIDI
+device set to recognize System Common messages receives and interprets
+it simultaneously.</p>
+<h3 id="the-challenge-of-vintage-analog-drift">The Challenge of Vintage
+Analog Drift</h3>
+<p>Analog synthesizers rely on Voltage-Controlled Oscillators (VCOs) to
+generate sound. These circuits are notoriously sensitive to ambient room
+temperatures, internal heat buildup from power supplies, and component
+aging. As the internal components warm up, the voltage-to-pitch ratio
+shifts, causing the instrument to go flat or sharp.</p>
+<p>By the late 1970s and early 1980s, polyphonic analog synthesizers
+incorporated onboard microprocessors to manage tuning. Synthesizers like
+the Sequential Circuits Prophet-5, Oberheim OB-8, and Roland Jupiter-6
+featured dedicated physical "Auto-Tune" or "Tune" buttons. Pressing this
+button instructed the microprocessor to measure the frequency of each
+voice card, compare it to an internal reference pitch, and apply digital
+corrective offsets via digital-to-analog converters (DACs).</p>
+<h3 id="how-the-tune-request-message-functions">How the Tune Request
+Message Functions</h3>
+<p>The <code>0xF6</code> Tune Request message essentially automates that
+physical front-panel button press over a MIDI cable. When an analog
+synthesizer receives a Tune Request command, it executes the following
+steps:</p>
+<ol type="1">
+<li><strong>Audio Muting:</strong> The synthesizer temporarily mutes its
+master audio outputs to prevent the audible, dissonant pitch sweeps
+generated during calibration.</li>
+<li><strong>Frequency Measurement:</strong> The internal CPU plays
+reference pitches through each individual voice circuitry, analyzing the
+generated frequencies using hardware timers.</li>
+<li><strong>Offset Calibration:</strong> The CPU calculates the pitch
+discrepancies across all VCOs and updates the internal voltage
+correction tables for each voice.</li>
+<li><strong>Resumed Operation:</strong> Once all oscillators match the
+internal reference standard, the voice circuits are unmuted, returning
+the instrument to play mode.</li>
+</ol>
+<p>Depending on the synthesizer's architecture and the number of voices,
+this routine typically took anywhere from two to ten seconds.</p>
+<h3 id="implementation-and-legacy">Implementation and Legacy</h3>
+<p>Musicians and engineers commonly inserted a Tune Request message at
+the very beginning of a MIDI sequence or song file. This guaranteed that
+all connected analog synthesizers recalibrated automatically before
+playback or recording began. It could also be embedded during extended
+rests within a live performance set, allowing instruments to retune
+transparently between songs.</p>
+<p>As the industry shifted toward Digitally Controlled Oscillators
+(DCOs) in the mid-1980s and later toward full digital synthesis,
+oscillator drift ceased to be an issue for mainstream hardware. While
+modern digital synths simply ignore the <code>0xF6</code> status byte,
+the Tune Request message remains an active part of the official MIDI
+specification and continues to be supported by modern, discrete-circuit
+analog synthesizers that require periodic thermal stabilization.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

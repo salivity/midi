@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Stop Action Systems and Automated Drawknobs - midi</title>
+    <meta name="description" content="A MIDI stop action system on an electronic organ bridges digital performance data with physical organ controls, allowing stops to be read, manipulated, and physically moved via MIDI messages. This system combines electronic sensing, microcontrollers, and">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-stop-action-systems-and-automated-drawknobs">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Stop Action Systems and Automated Drawknobs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-stop-action-systems-and-automated-drawknobs" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI stop action system on an electronic organ bridges digital performance data with physical organ controls, allowing stops to be read, manipulated, and physically moved via MIDI messages. This system combines electronic sensing, microcontrollers, and" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-stop-action-systems-and-automated-drawknobs">MIDI Stop
+Action Systems and Automated Drawknobs</h1>
+<p>A MIDI stop action system on an electronic organ bridges digital
+performance data with physical organ controls, allowing stops to be
+read, manipulated, and physically moved via MIDI messages. This system
+combines electronic sensing, microcontrollers, and electromechanical
+actuators to ensure that the physical state of the console's drawknobs
+or tilt tabs matches the internal registration of the organ or virtual
+pipe organ software. Through dedicated MIDI commands, external
+sequencers, software, or internal combination actions can physically
+reposition these controls in real time, providing seamless visual
+feedback and physical synchronization during a performance.</p>
+<h2 id="what-is-a-midi-stop-action-system">What is a MIDI Stop Action
+System?</h2>
+<p>In pipe and electronic organs, stops control which pipe ranks or
+digital audio voices are active. While modern electronic organs generate
+sound digitally, many traditionalists and concert organists prefer the
+mechanical tactile experience of authentic physical drawknobs or tab
+switches.</p>
+<p>A MIDI Stop Action System is the hardware and firmware infrastructure
+that manages these physical controls electronically. Instead of purely
+mechanical linkages, the system uses digital sensors to detect when an
+organist moves a knob by hand, converts that physical movement into a
+standard MIDI command, and uses electromagnetic actuators to physically
+move the knob when commanded by an internal preset system, computer
+software (such as Hauptwerk or GrandOrgue), or an external MIDI
+sequencer.</p>
+<h2 id="the-mechanical-hardware-stop-action-magnets-sams">The Mechanical
+Hardware: Stop Action Magnets (SAMs)</h2>
+<p>At the heart of an automated drawknob is a Stop Action Magnet (SAM)
+unit. Each drawknob is attached to a dual-action mechanism
+containing:</p>
+<ul>
+<li><strong>Solenoids or Coils:</strong> Most modern units utilize two
+independent electromagnetic coils (or a reversible magnetic armature
+with bi-polar drive). One coil pulls the drawknob "On" (outward toward
+the player), and the other pushes it "Off" (inward toward the
+console).</li>
+<li><strong>Sensors/Contacts:</strong> Reed switches, optical sensors,
+or Hall effect sensors monitor the physical position of the knob shaft.
+This allows the system to determine whether a stop has been engaged or
+disengaged manually without mechanical friction or wear.</li>
+<li><strong>Driver Boards:</strong> Because MIDI operates on
+low-voltage, low-current signals (typically 3.3V or 5V logic), it cannot
+directly power the heavy electromagnetic coils. Dedicated driver boards
+equipped with power MOSFETs or Darlington transistors interface between
+the logic circuits and the 12V to 24V DC power supply required to fire
+the magnets.</li>
+</ul>
+<h2 id="how-drawknobs-are-automated-via-midi-commands">How Drawknobs are
+Automated via MIDI Commands</h2>
+<p>Automating a drawknob requires a bidirectional flow of MIDI data:
+reading the physical state and commanding physical motion.</p>
+<h3 id="1-mapping-midi-messages-to-stops">1. Mapping MIDI Messages to
+Stops</h3>
+<p>Stop action systems are configured to associate each physical stop
+with a distinct MIDI message. Depending on the manufacturer and the
+organ software:</p>
+<ul>
+<li><strong>Note On/Note Off:</strong> Many systems assign each stop to
+a specific MIDI note number on a dedicated MIDI channel. Sending a
+<code>Note On</code> event (with velocity &gt; 0) commands the stop to
+turn on, while <code>Note Off</code> (or <code>Note On</code> with
+velocity 0) commands it to turn off.</li>
+<li><strong>Control Change (CC):</strong> Alternatively, continuous
+controller messages can be assigned to individual stops, where CC value
+127 engages the stop and CC value 0 disengages it.</li>
+<li><strong>System Exclusive (SysEx):</strong> Some commercial organ
+builders use proprietary SysEx strings to update multiple stops
+simultaneously in combination actions.</li>
+</ul>
+<h3 id="2-signal-decoding-and-current-pulse-delivery">2. Signal Decoding
+and Current Pulse Delivery</h3>
+<p>When a MIDI command reaches the stop action controller:</p>
+<ol type="1">
+<li><strong>Decoding:</strong> The onboard microcontroller reads the
+incoming MIDI stream and identifies the command directed to a specific
+stop index.</li>
+<li><strong>Current Pulsing:</strong> To avoid burning out the
+electromagnetic coils, the driver board delivers a brief, high-current
+pulse—typically lasting only 50 to 150 milliseconds—to the appropriate
+coil.</li>
+<li><strong>Physical Actuation:</strong> The resulting magnetic field
+rapidly pulls or pushes the armature, mechanically throwing the drawknob
+into the corresponding position.</li>
+</ol>
+<h3 id="3-loop-prevention-and-state-synchronization">3. Loop Prevention
+and State Synchronization</h3>
+<p>A critical feature of automated drawknobs is loop prevention. When an
+incoming MIDI command fires the magnet to pull a knob outward, the
+knob’s internal position sensor will detect that motion. Without
+intelligent logic, the sensor would interpret this as a manual action
+and transmit a redundant MIDI message back into the network, creating an
+infinite feedback loop.</p>
+<p>To solve this, the stop action system’s firmware temporarily
+suppresses its own MIDI output for that specific stop during and
+immediately following an automated actuation, ensuring the console stays
+synchronized without data flooding.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Active Sensing Prevents Stuck Notes - midi</title>
+    <meta name="description" content="MIDI Active Sensing is a continuous heartbeat mechanism designed to prevent &quot;stuck&quot; or hanging notes when a connection is abruptly severed. This article explains how transmitting devices use the 0xFE status byte, how receiving synthesizers monitor this si">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-active-sensing-prevents-stuck-notes">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Active Sensing Prevents Stuck Notes - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-active-sensing-prevents-stuck-notes" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Active Sensing is a continuous heartbeat mechanism designed to prevent &quot;stuck&quot; or hanging notes when a connection is abruptly severed. This article explains how transmitting devices use the 0xFE status byte, how receiving synthesizers monitor this si" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-active-sensing-prevents-stuck-notes">How MIDI Active
+Sensing Prevents Stuck Notes</h1>
+<p>MIDI Active Sensing is a continuous heartbeat mechanism designed to
+prevent "stuck" or hanging notes when a connection is abruptly severed.
+This article explains how transmitting devices use the <code>0xFE</code>
+status byte, how receiving synthesizers monitor this signal, and how the
+sudden absence of the byte triggers an internal fail-safe that silences
+active voices.</p>
+<h3 id="the-problem-of-stuck-notes">The Problem of Stuck Notes</h3>
+<p>In the standard MIDI protocol, sound generation relies on paired
+messages: a <code>Note On</code> message initiates a sound, and a
+corresponding <code>Note Off</code> message terminates it. If a physical
+MIDI cable is pulled or cut while a note is sustaining, the synthesizer
+never receives the <code>Note Off</code> command. Without an automated
+safety protocol, the synthesizer's sound engine will continue playing
+that note indefinitely.</p>
+<h3 id="the-active-sensing-heartbeat-0xfe">The Active Sensing
+"Heartbeat" (<code>0xFE</code>)</h3>
+<p>To safeguard against this issue, the MIDI specification defines a
+specific System Real-Time message known as Active Sensing, represented
+by the single byte value <code>0xFE</code>.</p>
+<p>When a transmitting MIDI controller or sequencer supports this
+feature, it enters an active monitoring state:</p>
+<ul>
+<li>As long as normal MIDI traffic (such as note data, pitch bend, or
+control changes) is being transmitted, the line remains active.</li>
+<li>When the transmission line goes idle, the sending device
+automatically transmits an <code>0xFE</code> byte at regular intervals,
+typically once every 300 milliseconds.</li>
+</ul>
+<h3 id="how-the-receiver-detects-disconnection">How the Receiver Detects
+Disconnection</h3>
+<p>A remote synthesizer does not inherently expect Active Sensing until
+it receives its first <code>0xFE</code> byte. Once that first byte
+arrives at the receiver's MIDI In port, the synthesizer switches into an
+active monitoring mode and starts an internal countdown timer (usually
+calibrated between 300 and 330 milliseconds).</p>
+<p>Every time a new MIDI message arrives—whether it is a standard
+performance message or another <code>0xFE</code> byte—the receiver
+resets this timer back to zero.</p>
+<p>If a cable is disconnected, damaged, or the transmitting device
+suddenly loses power:</p>
+<ol type="1">
+<li>All incoming MIDI transmission stops instantly.</li>
+<li>The remote synthesizer's countdown timer reaches the 330-millisecond
+threshold without receiving any new data or <code>0xFE</code>
+bytes.</li>
+<li>The receiver concludes that the physical connection has failed.</li>
+</ol>
+<h3 id="the-muting-sequence">The Muting Sequence</h3>
+<p>The <code>0xFE</code> byte does not actively deliver a mute command
+during a disconnect; rather, it is the <em>interruption</em> of the
+<code>0xFE</code> stream that acts as a dead-man's switch.</p>
+<p>Once the timer expires, the remote synthesizer automatically executes
+an internal emergency shut-off sequence. It sends an internal
+<code>All Notes Off</code> or <code>All Sound Off</code> instruction
+directly to its voice architecture, forcing all active envelope
+generators to cut off immediately. It may also reset pitch bend,
+modulation, and sustain controllers back to their default states. This
+internal response eliminates all lingering voices without requiring any
+external commands from the severed cable.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

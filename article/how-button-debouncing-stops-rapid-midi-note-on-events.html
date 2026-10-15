@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Button Debouncing Stops Rapid MIDI Note On Events - midi</title>
+    <meta name="description" content="When a mechanical button is pressed, its physical contacts rapidly bounce against each other, creating dozens of transient electrical connections within a few milliseconds. To an unfiltered microcontroller checking pin states at thousands of cycles per se">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-button-debouncing-stops-rapid-midi-note-on-events">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Button Debouncing Stops Rapid MIDI Note On Events - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-button-debouncing-stops-rapid-midi-note-on-events" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a mechanical button is pressed, its physical contacts rapidly bounce against each other, creating dozens of transient electrical connections within a few milliseconds. To an unfiltered microcontroller checking pin states at thousands of cycles per se" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-button-debouncing-stops-rapid-midi-note-on-events">How
+Button Debouncing Stops Rapid MIDI Note On Events</h1>
+<p>When a mechanical button is pressed, its physical contacts rapidly
+bounce against each other, creating dozens of transient electrical
+connections within a few milliseconds. To an unfiltered microcontroller
+checking pin states at thousands of cycles per second, this erratic
+voltage fluctuation appears as multiple rapid button presses, causing it
+to transmit a rapid-fire cascade of unintended MIDI Note On messages
+known as the "machine-gun" effect. Button debouncing code resolves this
+issue by introducing software-based timing filters and state validation
+routines, ensuring that only a single, deliberate press is processed and
+translated into a single MIDI event.</p>
+<h3 id="the-physics-of-contact-bounce">The Physics of Contact
+Bounce</h3>
+<p>Mechanical switches rely on conductive metal contacts that collide to
+complete a circuit. At a microscopic scale, these metal leaves act like
+springs. When pressed, they do not make instant, continuous contact;
+instead, they bounce against each other for anywhere from 1 to 20
+milliseconds before settling into a closed state.</p>
+<p>Because microcontrollers execute code in microseconds, a loop polling
+a digital input pin will detect every single bounce as an alternating
+sequence of <code>HIGH</code> and <code>LOW</code> logic levels. If the
+program simply maps a <code>LOW-to-HIGH</code> transition directly to a
+MIDI output function, the microcontroller sends a new MIDI Note On
+command (<code>0x90</code>) with every single microscopic bounce. In a
+digital audio workstation (DAW) or synthesizer, this overwhelms the MIDI
+buffer, causes voice-stealing artifacts, and produces an aggressive
+stutter instead of a clean musical note.</p>
+<h3 id="software-debouncing-techniques">Software Debouncing
+Techniques</h3>
+<p>Debouncing code prevents this behavior by ignoring subsequent
+electrical transitions until the mechanical switch has stabilized.
+Microcontrollers achieve this through several primary software
+patterns:</p>
+<h4 id="1-non-blocking-time-lockouts-deadband-timing">1. Non-Blocking
+Time Lockouts (Deadband Timing)</h4>
+<p>The most common approach utilizes a system timer (such as
+<code>millis()</code> or <code>micros()</code> on an Arduino or
+ARM-based board). When the microcontroller detects the initial edge of a
+button press:</p>
+<ol type="1">
+<li>It immediately transmits the MIDI Note On message, ensuring zero
+perceived latency for the musician.</li>
+<li>It records the current timestamp.</li>
+<li>It enters an intentional "lockout" state for a defined debounce
+window—typically 10 to 30 milliseconds.</li>
+<li>Any state changes occurring on the input pin during this lockout
+window are discarded.</li>
+<li>Once the timer expires, the microcontroller resumes listening for
+legitimate state changes (such as a button release).</li>
+</ol>
+<h4 id="2-consecutive-state-sampling">2. Consecutive State Sampling</h4>
+<p>Another method avoids reacting to the very first transition edge.
+Instead, the microcontroller samples the pin at fixed intervals (e.g.,
+every 2 milliseconds). The code maintains a counter:</p>
+<ul>
+<li>If the switch reads <code>HIGH</code>, the counter increments.</li>
+<li>If the switch reads <code>LOW</code>, the counter resets to
+zero.</li>
+</ul>
+<p>Only when the counter reaches a predetermined threshold—proving the
+pin has remained steadily <code>HIGH</code> across multiple consecutive
+readings—does the program register a valid press and transmit the MIDI
+Note On command. While this adds a tiny delay (usually imperceptible
+under 5 milliseconds), it eliminates false triggers caused by
+electromagnetic interference or static spikes.</p>
+<h4 id="3-bitmask-filtering-shift-registers">3. Bitmask Filtering (Shift
+Registers)</h4>
+<p>For microcontrollers handling high-density MIDI control surfaces with
+dozens of buttons, developers often use bit-shift operations. Every
+millisecond, the program reads the physical pin and shifts that binary
+value (<code>0</code> or <code>1</code>) into a single 8-bit
+integer:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> <span class="op">(</span>history <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">)</span> <span class="op">|</span> readPin<span class="op">();</span></span></code></pre></div>
+<p>The code checks whether the 8-bit integer matches a stable pattern.
+For example, <code>0b11111111</code> confirms that the button has been
+held down consistently for eight consecutive checks, while
+<code>0b00000000</code> confirms a stable release. A MIDI Note On is
+dispatched exclusively on the exact cycle the variable transitions from
+containing non-uniform bits to eight consecutive ones.</p>
+<h3 id="debouncing-the-note-off-event">Debouncing the Note Off
+Event</h3>
+<p>Debouncing is not only necessary when a button is pressed; it must
+also be applied when the button is released. As the internal spring
+pulls the contacts apart, the switch bounces again on separation.
+Without release debouncing, a single release could trigger momentary
+contact reconnects, generating accidental secondary Note On events right
+as the musician intends to silence the note. Applying debouncing
+bidirectionally ensures clean MIDI Note Off commands (<code>0x80</code>
+or Note On with velocity 0) and maintains predictable voice allocation
+on the receiving synthesizer.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

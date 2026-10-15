@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absolute vs Relative MIDI Modes Explained - midi</title>
+    <meta name="description" content="External hardware rotary mix controllers primarily rely on two distinct data transmission protocols: Absolute and Relative MIDI modes. This article breaks down the technical and practical differences between these two modes, how they handle parameter data">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/absolute-vs-relative-midi-modes-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Absolute vs Relative MIDI Modes Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/absolute-vs-relative-midi-modes-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="External hardware rotary mix controllers primarily rely on two distinct data transmission protocols: Absolute and Relative MIDI modes. This article breaks down the technical and practical differences between these two modes, how they handle parameter data" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="absolute-vs-relative-midi-modes-explained">Absolute vs Relative
+MIDI Modes Explained</h1>
+<p>External hardware rotary mix controllers primarily rely on two
+distinct data transmission protocols: Absolute and Relative MIDI modes.
+This article breaks down the technical and practical differences between
+these two modes, how they handle parameter data within Digital Audio
+Workstations (DAWs), and how to determine which mode is best suited for
+your mixing and live performance workflow.</p>
+<h3 id="what-is-absolute-midi-mode">What Is Absolute MIDI Mode?</h3>
+<p>In Absolute MIDI mode, the hardware controller transmits a specific,
+fixed numerical value between 0 and 127 corresponding directly to the
+physical position of the knob. This mode is standard on controllers
+equipped with traditional potentiometers that have fixed start and stop
+points (usually rotating about 270 degrees).</p>
+<ul>
+<li><strong>How It Works:</strong> When the physical knob is turned all
+the way down, it sends a value of 0. When turned halfway, it sends 64.
+When turned all the way up, it sends 127.</li>
+<li><strong>The "Value Jump" Problem:</strong> If a software parameter
+(such as a channel fader) is set to 100 in your DAW, but your hardware
+knob is currently sitting at 20, touching the physical knob will
+immediately force the software parameter down to 20. This sudden leap
+can disrupt an audio mix during a live performance or critical mixing
+session.</li>
+<li><strong>Workarounds:</strong> Many DAWs offer "pickup" or "soft
+takeover" modes to mitigate this. In soft takeover mode, the software
+parameter will not respond until the physical knob moves across the
+current software value.</li>
+</ul>
+<h3 id="what-is-relative-midi-mode">What Is Relative MIDI Mode?</h3>
+<p>Relative MIDI mode is designed for endless rotary encoders—knobs that
+rotate continuously 360 degrees without physical end stops. Instead of
+sending a static position value, Relative mode transmits continuous
+increment (increase) and decrement (decrease) commands.</p>
+<ul>
+<li><strong>How It Works:</strong> When you turn the knob clockwise, the
+controller sends a command telling the DAW to increase the parameter
+from its current position. Turning counter-clockwise tells the DAW to
+decrease it. The controller does not track the absolute position of the
+parameter; it only reports the direction and speed of the rotation.</li>
+<li><strong>Elimination of Parameter Jumps:</strong> Because the knob
+sends relative changes rather than absolute positions, switching between
+tracks, plugins, or banks does not cause abrupt value jumps. The knob
+smoothly adjusts whatever value the DAW currently holds.</li>
+<li><strong>Data Formats:</strong> Relative mode relies on specific
+encoding formats within the MIDI standard, such as Signed Bit, Binary
+Offset, or Twos Complement. Both the hardware controller and the DAW
+mapping must be set to the same relative format to work correctly.</li>
+</ul>
+<h3 id="key-differences-at-a-glance">Key Differences at a Glance</h3>
+<ul>
+<li><strong>Physical Hardware:</strong> Absolute mode uses traditional
+potentiometers with hard stops; Relative mode uses endless 360-degree
+encoders.</li>
+<li><strong>Data Transmission:</strong> Absolute mode sends fixed values
+(0–127); Relative mode sends directional change signals (+1, -1, or
+variable increments based on speed).</li>
+<li><strong>Preset and Bank Switching:</strong> Absolute mode requires
+pickup/soft takeover to avoid abrupt audio jumps when changing banks;
+Relative mode naturally transitions smoothly across any bank or
+channel.</li>
+<li><strong>Visual Reference:</strong> Absolute knobs allow you to gauge
+a setting by looking directly at the physical controller's indicator
+line; Relative endless encoders require on-screen monitoring or an LED
+ring around the knob to display current values.</li>
+</ul>
+<h3 id="choosing-the-right-mode">Choosing the Right Mode</h3>
+<p>Absolute mode is best suited for dedicated, single-purpose controls
+where tactile visual feedback is essential—such as a dedicated hardware
+filter cutoff or master monitor level.</p>
+<p>Relative mode is the superior choice for modern DAW mixing,
+controlling virtual instruments, and live performance. It allows a
+single bank of hardware knobs to seamlessly control multiple tracks,
+sends, or plugin parameters without unexpected jumps in volume or
+processing depth.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

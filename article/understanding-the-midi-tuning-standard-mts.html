@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding the MIDI Tuning Standard (MTS) - midi</title>
+    <meta name="description" content="The MIDI Tuning Standard (MTS) is a protocol extension within the MIDI specification that allows electronic musical instruments to deviate from standard twelve-tone equal temperament (12-TET). By transmitting high-precision frequency data directly to hard">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/understanding-the-midi-tuning-standard-mts">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding the MIDI Tuning Standard (MTS) - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/understanding-the-midi-tuning-standard-mts" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Tuning Standard (MTS) is a protocol extension within the MIDI specification that allows electronic musical instruments to deviate from standard twelve-tone equal temperament (12-TET). By transmitting high-precision frequency data directly to hard" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="understanding-the-midi-tuning-standard-mts">Understanding the
+MIDI Tuning Standard (MTS)</h1>
+<p>The MIDI Tuning Standard (MTS) is a protocol extension within the
+MIDI specification that allows electronic musical instruments to deviate
+from standard twelve-tone equal temperament (12-TET). By transmitting
+high-precision frequency data directly to hardware synthesizers via
+System Exclusive (SysEx) messages, MTS enables the implementation of
+alternative tunings, historical temperaments, and microtonal scales.
+This article details how MTS operates, the specific data formats it uses
+to redefine pitch intervals, and how compatible hardware processes these
+instructions to produce non-equal-tempered intervals.</p>
+<h3 id="the-limitations-of-standard-midi">The Limitations of Standard
+MIDI</h3>
+<p>Standard MIDI architecture links note numbers (0 to 127) to specific
+semitone values assuming a fixed 12-TET framework, anchored around A440
+at note 69. In this default configuration, pitch bends can shift
+frequency globally across a channel, but individual intervals between
+discrete notes remain fixed at 100 cents. Consequently, realizing
+complex microtonal frameworks—such as just intonation, quarter-comma
+meantone, or arbitrary microtonal divisions (e.g., 19-TET,
+31-TET)—traditionally required convoluted workarounds like assigning
+different voices to multiple MIDI channels with varying pitch bend
+offsets.</p>
+<h3 id="how-mts-redefines-hardware-frequency">How MTS Redefines Hardware
+Frequency</h3>
+<p>The MIDI Tuning Standard bypasses 12-TET limitations by redefining
+the absolute frequency assigned to any MIDI note number. Rather than
+telling a synthesizer to shift a voice dynamically, MTS reprograms the
+internal tuning table of the hardware sound engine.</p>
+<p>MTS expresses pitch using a 3-byte resolution per note:</p>
+<ul>
+<li><strong>Byte 1:</strong> Defines the base semitone (matching
+standard MIDI note values).</li>
+<li><strong>Bytes 2 and 3:</strong> Represent the fractional semitone
+offset down to a precision of 14 bits (16,384 discrete steps).</li>
+</ul>
+<p>This provides a pitch resolution of roughly 0.0061 cents (calculated
+as <span class="math inline">\(100 \text{ cents} / 16,384\)</span>),
+which is far below the threshold of human pitch discrimination. With
+this level of micro-tuning capability, hardware oscillators can match
+precise mathematical ratios (such as pure thirds or fifths in just
+intonation) without audible quantization artifacts.</p>
+<h3 id="key-mts-message-formats">Key MTS Message Formats</h3>
+<p>Hardware instruments receive MTS commands through specific SysEx
+formats, categorized by how they modify interval tables:</p>
+<ol type="1">
+<li><strong>Bulk Tuning Dump:</strong> Sends an entire scale definition
+consisting of frequency offsets for all 128 note numbers. This is
+typically loaded into a specific tuning bank or program location on the
+synthesizer prior to performance.</li>
+<li><strong>Single Note Tuning Change (Real-Time or
+Non-Real-Time):</strong> Updates the frequency of a single note number
+instantaneously. This allows for adaptive or dynamic retuning, where
+scale intervals shift in real time based on the harmonic context of a
+performance.</li>
+<li><strong>Scale/Octave Tuning Dump:</strong> Instead of defining all
+128 individual keys, this format defines a repeatable 12-tone microtonal
+offset applied uniformly across every octave. This method requires
+significantly less data overhead and is ideal for repeating unequal
+scales, such as Pythagorean or Werckmeister temperaments.</li>
+</ol>
+<h3 id="hardware-execution-of-non-equal-intervals">Hardware Execution of
+Non-Equal Intervals</h3>
+<p>When an MTS-compliant synthesizer receives an MTS SysEx packet, its
+internal micro-controller parses the tuning values and stores them in a
+local lookup table. When a <code>Note On</code> event occurs:</p>
+<ol type="1">
+<li>The synthesizer reads the incoming note number (e.g., note 60 for
+Middle C).</li>
+<li>Instead of routing the default 12-TET frequency (261.63 Hz) to the
+sound engine, it queries the MTS lookup table.</li>
+<li>The oscillator (whether a digital DSP phase accumulator or a
+digitally controlled analog oscillator) generates the specific target
+frequency dictated by the MTS offset.</li>
+</ol>
+<p>By standardizing this process across manufacturers, MTS allows
+external software, master controllers, or sequencers to automate complex
+non-equal microtonality across a hardware studio setup simultaneously
+without requiring manual recalibration of each device.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

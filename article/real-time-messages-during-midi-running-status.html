@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Messages During MIDI Running Status - midi</title>
+    <meta name="description" content="This article examines how the MIDI protocol handles the interruption of an active running status sequence by an unexpected System Real-Time message. It details the underlying specifications that govern receiver behavior, explains why these interruptions o">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/real-time-messages-during-midi-running-status">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Real-Time Messages During MIDI Running Status - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/real-time-messages-during-midi-running-status" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how the MIDI protocol handles the interruption of an active running status sequence by an unexpected System Real-Time message. It details the underlying specifications that govern receiver behavior, explains why these interruptions o" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="real-time-messages-during-midi-running-status">Real-Time
+Messages During MIDI Running Status</h1>
+<p>This article examines how the MIDI protocol handles the interruption
+of an active running status sequence by an unexpected System Real-Time
+message. It details the underlying specifications that govern receiver
+behavior, explains why these interruptions occur, demonstrates how
+running status buffers remain intact, and highlights the single critical
+exception to this standard rule.</p>
+<h3 id="the-mechanics-of-running-status">The Mechanics of Running
+Status</h3>
+<p>Running status is a bandwidth-saving feature defined in the MIDI 1.0
+specification. When multiple consecutive Channel Voice messages share
+the same status byte—such as a sequence of Note On or Control Change
+events—the transmitter can omit the status byte after the first message.
+The receiving device stores the most recent status byte in its buffer
+and automatically applies it to incoming pairs or single data bytes.</p>
+<p>Under standard conditions, any new non-real-time status byte (values
+from <code>0x80</code> to <code>0xF7</code>) overwrites or clears this
+buffer, terminating the active running status sequence.</p>
+<h3 id="how-system-real-time-messages-behave">How System Real-Time
+Messages Behave</h3>
+<p>System Real-Time messages occupy the byte range <code>0xF8</code> to
+<code>0xFF</code>. These include time-critical signals such as:</p>
+<ul>
+<li><strong>Timing Clock (<code>0xF8</code>)</strong></li>
+<li><strong>Start (<code>0xFA</code>)</strong></li>
+<li><strong>Continue (<code>0xFB</code>)</strong></li>
+<li><strong>Stop (<code>0xFC</code>)</strong></li>
+<li><strong>Active Sensing (<code>0xFE</code>)</strong></li>
+<li><strong>System Reset (<code>0xFF</code>)</strong></li>
+</ul>
+<p>Because synchronization requires absolute temporal precision, System
+Real-Time messages cannot wait for multi-byte sequences to finish
+transmitting. The MIDI specification explicitly allows them to be
+inserted at any point in the data stream, including between the status
+byte and data bytes of a standard message, or directly between two data
+bytes in an ongoing running status stream.</p>
+<h3 id="what-occurs-during-an-interruption">What Occurs During an
+Interruption</h3>
+<p>When an unexpected System Real-Time byte arrives during a running
+status sequence, the receiving device processes the byte immediately
+without altering its parsing state.</p>
+<ol type="1">
+<li><strong>Immediate Processing:</strong> The receiver extracts the
+single-byte real-time command directly from the serial input buffer and
+executes it instantaneously (e.g., advancing the clock counter or
+starting playback).</li>
+<li><strong>Buffer Preservation:</strong> The System Real-Time message
+does not alter, overwrite, or clear the stored running status byte.</li>
+<li><strong>Seamless Resumption:</strong> The receiver immediately
+returns to interpreting subsequent bytes as data bytes belonging to the
+previously stored running status.</li>
+</ol>
+<p>For example, if a transmitter sends a Note On status byte followed by
+note and velocity data, a <code>0xF8</code> Timing Clock byte may arrive
+between a note number and its velocity byte. A properly compliant
+receiver executes the clock tick and treats the following byte as the
+velocity byte belonging to the active Note On running status.</p>
+<h3 id="the-exception-system-reset-0xff">The Exception: System Reset
+(<code>0xFF</code>)</h3>
+<p>The only System Real-Time message that terminates running status is
+<strong>System Reset (<code>0xFF</code>)</strong>.</p>
+<p>When a receiver encounters a <code>0xFF</code> byte, it must reset
+all internal states to their default power-up conditions. This action
+explicitly clears the running status buffer, turns off active voices,
+and requires any subsequent MIDI transmission to declare a complete
+status byte before sending data bytes.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

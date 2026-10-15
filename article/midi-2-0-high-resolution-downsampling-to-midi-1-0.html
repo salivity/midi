@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 2.0 High-Resolution Downsampling to MIDI 1.0 - midi</title>
+    <meta name="description" content="This article examines what happens when high-resolution MIDI 2.0 data streams pass through a conversion downsampler into legacy MIDI 1.0 environments. It covers the mechanical and perceptual impacts of bit-depth truncation, data rate throttling, the trans">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-2-0-high-resolution-downsampling-to-midi-1-0">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 2.0 High-Resolution Downsampling to MIDI 1.0 - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-2-0-high-resolution-downsampling-to-midi-1-0" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines what happens when high-resolution MIDI 2.0 data streams pass through a conversion downsampler into legacy MIDI 1.0 environments. It covers the mechanical and perceptual impacts of bit-depth truncation, data rate throttling, the trans" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-20-high-resolution-downsampling-to-midi-10">MIDI 2.0
+High-Resolution Downsampling to MIDI 1.0</h1>
+<p>This article examines what happens when high-resolution MIDI 2.0 data
+streams pass through a conversion downsampler into legacy MIDI 1.0
+environments. It covers the mechanical and perceptual impacts of
+bit-depth truncation, data rate throttling, the translation of per-note
+expressions, and the resulting audio artifacts like parameter
+stepping.</p>
+<h3 id="bit-depth-truncation-and-quantization">Bit-Depth Truncation and
+Quantization</h3>
+<p>MIDI 2.0 introduces dramatically higher resolution across almost all
+data parameters. Velocity, pitch bend, and Continuous Controllers (CCs)
+expand from legacy ranges up to 16-bit or 32-bit values, yielding over 4
+billion discrete steps compared to MIDI 1.0’s standard 7-bit (128 steps)
+or 14-bit (16,384 steps using CC pairs).</p>
+<p>When a MIDI 2.0 signal reaches a downsampler:</p>
+<ul>
+<li><strong>Bit-Shifting Occurs:</strong> The converter typically takes
+the most significant bits (MSB) and discards the least significant bits
+(LSB). For example, a 32-bit CC value is scaled down to a 7-bit value by
+bit-shifting right by 25 bits.</li>
+<li><strong>Loss of Nuance:</strong> Micro-dynamics, subtle expressive
+pitch variations, and ultra-smooth controller curves are permanently
+flattened.</li>
+<li><strong>Zipper Noise:</strong> Parameter sweeps (such as filter
+cutoffs or volume fades) that were completely continuous in MIDI 2.0 can
+re-introduce audible stepping or "zipper noise" when quantized back to
+the 128 discrete values of standard MIDI 1.0.</li>
+</ul>
+<h3 id="bandwidth-throttling-and-decimation">Bandwidth Throttling and
+Decimation</h3>
+<p>Legacy MIDI 1.0 hardware connections (standard 5-pin DIN) are
+constrained to an asynchronous serial baud rate of 31.25 kbps. Because
+MIDI 2.0 can transmit dense, continuous streams of high-resolution
+messages, simply translating 32-bit values into equivalent MIDI 1.0
+messages would immediately flood legacy buffers and saturate the
+transmission line.</p>
+<p>To avoid buffer overflows, dropped notes, and severe latency spikes,
+downsamplers apply message decimation:</p>
+<ul>
+<li><strong>Time-Based Filtering:</strong> The downsampler drops
+intermediate updates, only sending a MIDI 1.0 message when a defined
+time interval has elapsed or when the value changes beyond a designated
+threshold.</li>
+<li><strong>Throughput Capping:</strong> The density of continuous
+controller information is intentionally lowered to fit within the
+restrictive bandwidth of the legacy protocol.</li>
+</ul>
+<h3 id="handling-of-per-note-controllers">Handling of Per-Note
+Controllers</h3>
+<p>One of MIDI 2.0's defining capabilities is native per-note expression
+(per-note pitch bend, per-note timbre, and per-note pressure) operating
+over a single channel. Standard MIDI 1.0 architectures apply controller
+data to the entire channel rather than individual notes.</p>
+<p>When downsampling per-note data to legacy MIDI 1.0:</p>
+<ul>
+<li><strong>MPE Mapping (Best Case):</strong> If the downsampler
+supports MIDI Polyphonic Expression (MPE), it redistributes individual
+notes and their associated controller curves across multiple legacy MIDI
+channels (Channels 2–16), reserving Channel 1 for global messages.</li>
+<li><strong>Flattening or Discarding (Worst Case):</strong> If
+converting to standard single-channel MIDI 1.0, per-note data must
+either be converted into channel-wide messages (causing one note's
+modulation to erroneously affect all other sustained notes on that
+channel) or stripped completely.</li>
+</ul>
+<h3 id="metadata-and-attribute-stripping">Metadata and Attribute
+Stripping</h3>
+<p>MIDI 2.0 Universal MIDI Packets (UMP) contain rich metadata,
+including note attributes (such as articulation flags, tuning standards,
+and acoustic modeling parameters) and bidirectional profile
+configurations. Because MIDI 1.0 devices have no native data fields to
+read or process these attributes, downsamplers strip this information
+entirely, preserving only the fundamental Note-On, Note-Off, and
+standard controller commands.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

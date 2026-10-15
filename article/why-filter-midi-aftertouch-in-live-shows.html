@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Filter MIDI Aftertouch in Live Shows - midi</title>
+    <meta name="description" content="In complex live performance environments where sound, lighting, automation, and video are interconnected, managing data traffic is critical for system stability. High-density MIDI aftertouch—both channel and polyphonic pressure—generates massive streams o">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-filter-midi-aftertouch-in-live-shows">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Filter MIDI Aftertouch in Live Shows - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-filter-midi-aftertouch-in-live-shows" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In complex live performance environments where sound, lighting, automation, and video are interconnected, managing data traffic is critical for system stability. High-density MIDI aftertouch—both channel and polyphonic pressure—generates massive streams o" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-filter-midi-aftertouch-in-live-shows">Why Filter MIDI
+Aftertouch in Live Shows</h1>
+<p>In complex live performance environments where sound, lighting,
+automation, and video are interconnected, managing data traffic is
+critical for system stability. High-density MIDI aftertouch—both channel
+and polyphonic pressure—generates massive streams of continuous data
+that can quickly saturate communication protocols, overwhelm processor
+buffers, and introduce latency into critical cues. Filtering out this
+often superfluous data ensures that primary performance instructions,
+such as note triggers and clock synchronization, execute with absolute
+precision and zero perceptible delay.</p>
+<h3 id="bandwidth-limitations-and-serial-bottlenecks">Bandwidth
+Limitations and Serial Bottlenecks</h3>
+<p>Traditional 5-pin DIN MIDI runs at a legacy baud rate of 31.25 kbps.
+Because it is a slow serial protocol, a musician resting heavily on keys
+with aftertouch enabled can generate hundreds of continuous messages per
+second. This data flood creates an immediate bottleneck, delaying
+subsequent "Note Off," "Note On," and timing clock messages. The result
+on stage is stuck notes, erratic timing, and sluggish instrument
+response. Even over USB-MIDI, sending hundreds of redundant messages can
+throttle the bandwidth of hardware hubs and USB controllers handling
+multiple mission-critical peripherals.</p>
+<h3 id="processor-and-software-buffer-overruns">Processor and Software
+Buffer Overruns</h3>
+<p>Live performance rigs typically rely on Digital Audio Workstations
+(DAWs) and show-control platforms running at very low audio buffer sizes
+(such as 64 or 128 samples) to minimize latency. When a high-density
+stream of aftertouch data enters the processing pipeline, the system
+must parse and calculate values for every discrete message. This rapid
+influx can lead to CPU spikes, buffer underruns, and audio dropouts. If
+the receiving software is simultaneously handling multi-track playback,
+automation, and software synthesis, parsing unnecessary pressure data
+drains processing overhead better reserved for stable audio
+rendering.</p>
+<h3 id="show-control-and-network-desynchronization">Show-Control and
+Network Desynchronization</h3>
+<p>Modern arena and touring rigs frequently bridge MIDI with
+network-based protocols like RTP-MIDI, OSC (Open Sound Control), or
+Art-Net to trigger lighting consoles, pyro, and media servers. Flooding
+a local network or an automation bridge with high-frequency aftertouch
+messages introduces network packet jitter. If show-control nodes are
+forced to parse continuous pressure streams not tied to any visual or
+automation cue, timestamped commands can fall out of sync, leading to
+misaligned video cues or delayed lighting state changes.</p>
+<h3 id="prevention-of-accidental-parameter-modulation">Prevention of
+Accidental Parameter Modulation</h3>
+<p>Many modern synthesizers and virtual instruments map aftertouch to
+parameters like pitch bend, filter cutoff, or LFO depth by default. In
+high-adrenaline live environments, keyboardists frequently exert
+inconsistent physical force, inadvertently activating aftertouch layers.
+Filtering this data at the input stage prevents accidental detuning or
+sonic alterations that can ruin a front-of-house mix, especially on
+patches where expressiveness was never intended to rely on key
+pressure.</p>
+<h3 id="optimizing-the-live-midi-pipeline">Optimizing the Live MIDI
+Pipeline</h3>
+<p>Eliminating aftertouch data is straightforward and can be implemented
+at various points in the signal chain:</p>
+<ul>
+<li><strong>Hardware Controller Configuration:</strong> Disabling
+aftertouch directly on master keyboards and drum pads prevents the data
+from ever entering the transmission chain.</li>
+<li><strong>Inline MIDI Processors:</strong> Hardware MIDI event
+processors can sit between controllers and interfaces to filter out
+status bytes <code>0xD0</code> through <code>0xDF</code> (Channel
+Pressure) and <code>0xA0</code> through <code>0xAF</code> (Polyphonic
+Key Pressure) in real time.</li>
+<li><strong>DAW and Host Filtering:</strong> Most live-performance hosts
+feature global MIDI input filters, allowing engineers to strip
+continuous pressure data at the software input before it reaches plugins
+or output routings.</li>
+</ul>
+<p>Stripping out high-density aftertouch data preserves bandwidth,
+reduces latency, eliminates unintended sonic artifacts, and guarantees
+that complex live systems remain responsive and crash-free.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

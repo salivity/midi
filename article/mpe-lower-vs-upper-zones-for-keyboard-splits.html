@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPE Lower vs Upper Zones for Keyboard Splits - midi</title>
+    <meta name="description" content="MIDI Polyphonic Expression (MPE) expands traditional MIDI by allowing multidimensional per-note control across separate channels. When dividing a single physical controller into distinct performance areas, MPE relies on a dual-zone architecture comprising">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/mpe-lower-vs-upper-zones-for-keyboard-splits">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MPE Lower vs Upper Zones for Keyboard Splits - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/mpe-lower-vs-upper-zones-for-keyboard-splits" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Polyphonic Expression (MPE) expands traditional MIDI by allowing multidimensional per-note control across separate channels. When dividing a single physical controller into distinct performance areas, MPE relies on a dual-zone architecture comprising" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="mpe-lower-vs-upper-zones-for-keyboard-splits">MPE Lower vs Upper
+Zones for Keyboard Splits</h1>
+<p>MIDI Polyphonic Expression (MPE) expands traditional MIDI by allowing
+multidimensional per-note control across separate channels. When
+dividing a single physical controller into distinct performance areas,
+MPE relies on a dual-zone architecture comprising a Lower Zone and an
+Upper Zone. This article explores how configuring Lower and Upper Zones
+facilitates keyboard splits, manages independent voice allocation, and
+prevents control data interference between hands.</p>
+<h2 id="the-architecture-of-mpe-zones">The Architecture of MPE
+Zones</h2>
+<p>In standard MIDI, pitch bend, modulation, and aftertouch apply
+globally to all active notes on a given channel. MPE overcomes this
+limitation by assigning individual notes to dedicated "Member Channels,"
+while sending common, global parameters across a designated "Master
+Channel."</p>
+<p>To support keyboard splits without channel conflicts, the MPE
+specification standardizes two specific, non-overlapping zones:</p>
+<ul>
+<li><strong>Lower Zone:</strong> Uses MIDI Channel 1 as its Master
+Channel. Its Member Channels are allocated sequentially upward, starting
+from Channel 2 (e.g., Channels 2 through 8).</li>
+<li><strong>Upper Zone:</strong> Uses MIDI Channel 16 as its Master
+Channel. Its Member Channels are allocated sequentially downward,
+starting from Channel 15 (e.g., Channels 9 through 15).</li>
+</ul>
+<h2 id="how-zones-enable-keyboard-splitting">How Zones Enable Keyboard
+Splitting</h2>
+<p>Dividing an MPE keyboard into two regions requires more than simply
+mapping note numbers; each side of the split must retain independent
+polyphonic expression and global settings.</p>
+<h3 id="1-independent-sound-engine-addressing">1. Independent Sound
+Engine Addressing</h3>
+<p>By assigning the left side of the keyboard to the Lower Zone and the
+right side to the Upper Zone, the hardware can communicate
+simultaneously with two completely different virtual instruments or
+multi-timbral synth layers. A synth engine listening to the Lower Zone
+(Channel 1 + associated members) acts entirely independently of an
+engine configured to receive the Upper Zone (Channel 16 + associated
+members).</p>
+<h3 id="2-isolation-of-global-controls">2. Isolation of Global
+Controls</h3>
+<p>Each zone retains its own Master Channel. If a performer uses a
+sustain pedal, mod wheel, or master pitch bend assigned to the Lower
+Zone (Channel 1), only the notes sounding within that zone are affected.
+The Upper Zone (Channel 16) remains isolated, preventing unwanted
+modulation or pitch changes on the right-hand part.</p>
+<h3 id="3-dynamic-member-channel-distribution">3. Dynamic Member Channel
+Distribution</h3>
+<p>Keyboard splits require setting the size of each zone based on
+polyphony needs. MPE hardware allows the user to define the number of
+active Member Channels per zone:</p>
+<ul>
+<li><strong>Example Configuration:</strong> A user can assign 7 Member
+Channels to the Lower Zone (Channels 2–8) for a bass or pad patch, and 7
+Member Channels to the Upper Zone (Channels 9–15) for a lead or melodic
+patch.</li>
+<li><strong>Expression Integrity:</strong> Because the channel ranges
+never overlap, polyphonic gestures—such as per-note glide, pressure
+(aftertouch), and slide (CC74)—remain strictly confined to the zone in
+which the key was struck.</li>
+</ul>
+<h2 id="practical-advantages-in-performance">Practical Advantages in
+Performance</h2>
+<ul>
+<li><strong>True Polyphonic Expression on Both Sides:</strong>
+Traditional splits often strip down expressive capabilities on secondary
+zones. MPE splits provide full multidimensional control across both
+hands simultaneously.</li>
+<li><strong>Plug-and-Play Standardization:</strong> Because the Master
+Channel rules (1 for Lower, 16 for Upper) are strictly defined by the
+MIDI Association, compatible digital audio workstations (DAWs) and
+software synthesizers can automatically route and parse split MPE data
+without complex manual mapping.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

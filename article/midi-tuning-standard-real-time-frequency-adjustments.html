@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Tuning Standard Real-Time Frequency Adjustments - midi</title>
+    <meta name="description" content="This article provides an overview of the MIDI Tuning Standard (MTS) real-time frequency messages, focusing on how single-byte microtonal adjustments alter sounding notes. It explains the exact numerical resolution of these adjustments, the message structu">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-tuning-standard-real-time-frequency-adjustments">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Tuning Standard Real-Time Frequency Adjustments - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-tuning-standard-real-time-frequency-adjustments" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the MIDI Tuning Standard (MTS) real-time frequency messages, focusing on how single-byte microtonal adjustments alter sounding notes. It explains the exact numerical resolution of these adjustments, the message structu" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-tuning-standard-real-time-frequency-adjustments">MIDI
+Tuning Standard Real-Time Frequency Adjustments</h1>
+<p>This article provides an overview of the MIDI Tuning Standard (MTS)
+real-time frequency messages, focusing on how single-byte microtonal
+adjustments alter sounding notes. It explains the exact numerical
+resolution of these adjustments, the message structure used to transmit
+them, and how synthesizers interpret microtonal offsets on the fly
+without retriggering active voices.</p>
+<h3 id="the-single-byte-microtonal-value-in-mts">The Single-Byte
+Microtonal Value in MTS</h3>
+<p>In the MIDI Tuning Standard, single-byte microtonal adjustments
+depend on the specific real-time message type being transmitted:</p>
+<ol type="1">
+<li><strong>Scale/Octave Real-Time Tuning (1-Byte Format):</strong> When
+using the MTS 1-byte Scale/Octave tuning format, each note is modified
+by a single 7-bit byte representing a deviation in <strong>1-cent
+increments</strong>. The single byte ranges from <code>0x00</code> to
+<code>0x7F</code> (0 to 127 in decimal), centered around
+<code>0x40</code> (64 decimal):
+<ul>
+<li><code>0x00</code> (0) corresponds to a -64 cent shift.</li>
+<li><code>0x40</code> (64) corresponds to 0 cents (no microtonal
+change).</li>
+<li><code>0x7F</code> (127) corresponds to a +63 cent shift.</li>
+</ul></li>
+<li><strong>Standard Frequency Representation (Coarse
+Fraction):</strong> In the primary 3-byte MTS frequency specification
+(which transmits a semitone byte followed by two fractional bytes), the
+first fractional byte provides a single-byte coarse microtonal
+adjustment of <strong>1/128 of a semitone</strong>, which equates to
+approximately <strong>0.78125 cents</strong> per step.</li>
+</ol>
+<h3 id="how-real-time-mts-frequency-messages-work">How Real-Time MTS
+Frequency Messages Work</h3>
+<p>The real-time MIDI Tuning Standard message is a System Exclusive
+(SysEx) command designed to retune active notes instantly without
+requiring the note to be re-struck (Note-Off followed by Note-On).</p>
+<h4 id="single-note-real-time-retuning">Single-Note Real-Time
+Retuning</h4>
+<p>The standard single-note real-time retuning command uses the
+following SysEx structure:</p>
+<pre><code>F0 7F &lt;device ID&gt; 08 02 &lt;tuning program&gt; &lt;tuning bank&gt; &lt;number of changes&gt; [&lt;note number&gt; &lt;freq byte 1&gt; &lt;freq byte 2&gt; &lt;freq byte 3&gt;] F7</code></pre>
+<ul>
+<li><strong>Note Number:</strong> The target MIDI key (0–127).</li>
+<li><strong>Frequency Byte 1:</strong> The base semitone value (0–127),
+referencing standard equal temperament pitch.</li>
+<li><strong>Frequency Byte 2:</strong> The coarse microtonal fraction
+(1/128th semitone resolution).</li>
+<li><strong>Frequency Byte 3:</strong> The fine microtonal fraction
+(1/16,384th semitone resolution, or ~0.0061 cents).</li>
+</ul>
+<p>When only a coarse microtonal modification is evaluated at the
+single-byte level, Frequency Byte 2 governs the primary microtonal
+offset at the 0.78125-cent scale.</p>
+<h4 id="octave-and-scale-real-time-retuning">Octave and Scale Real-Time
+Retuning</h4>
+<p>For broader retuning across the keyboard, the 1-byte Scale/Octave
+real-time message updates 12 notes simultaneously across all octaves
+using 12 individual single-byte values:</p>
+<pre><code>F0 7F &lt;device ID&gt; 08 08 &lt;bank&gt; &lt;preset&gt; &lt;byte 0&gt; ... &lt;byte 11&gt; F7</code></pre>
+<p>Each byte (<code>byte 0</code> to <code>byte 11</code>) corresponds
+to a pitch class (C through B) and dictates the microtonal offset for
+that note using the signed 1-cent resolution spanning from -64 cents to
++63 cents.</p>
+<h3 id="implementation-and-sounding-note-response">Implementation and
+Sounding Note Response</h3>
+<p>When a compatible synthesizer receives a real-time MTS command
+containing single-byte microtonal adjustments:</p>
+<ul>
+<li><strong>Instant Phase Continuity:</strong> The oscillator's playback
+frequency shifts immediately to the target pitch calculation without
+phase resetting or envelope restarting.</li>
+<li><strong>Polyphonic Freedom:</strong> Unlike standard MIDI Pitch Bend
+messages, which affect an entire MIDI channel, MTS single-note frequency
+adjustments allow individual notes within a polyphonic chord to be
+retuned independently.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

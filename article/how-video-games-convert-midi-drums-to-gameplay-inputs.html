@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Video Games Convert MIDI Drums to Gameplay Inputs - midi</title>
+    <meta name="description" content="Rhythm games like Rock Band 3 allow players to connect real electronic drum kits to consoles by translating acoustic-like strikes into digital controller actions. This process begins with a physical hit detected by a drum trigger, converts that impact int">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-video-games-convert-midi-drums-to-gameplay-inputs">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Video Games Convert MIDI Drums to Gameplay Inputs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-video-games-convert-midi-drums-to-gameplay-inputs" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Rhythm games like Rock Band 3 allow players to connect real electronic drum kits to consoles by translating acoustic-like strikes into digital controller actions. This process begins with a physical hit detected by a drum trigger, converts that impact int" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-video-games-convert-midi-drums-to-gameplay-inputs">How Video
+Games Convert MIDI Drums to Gameplay Inputs</h1>
+<p>Rhythm games like <em>Rock Band 3</em> allow players to connect real
+electronic drum kits to consoles by translating acoustic-like strikes
+into digital controller actions. This process begins with a physical hit
+detected by a drum trigger, converts that impact into standard Musical
+Instrument Digital Interface (MIDI) messages via an e-drum module,
+translates those MIDI signals into console-recognized button commands
+through a specialized adapter, and finally interprets those commands
+inside the game engine within designated hit windows.</p>
+<h3 id="1-from-physical-impact-to-piezo-signal">1. From Physical Impact
+to Piezo Signal</h3>
+<p>When a player strikes an electronic drum pad or cymbal, the physical
+energy does not immediately register as a digital event. Inside the pad
+is a piezoelectric sensor—a small crystal or ceramic element that
+generates an electrical voltage spike proportional to the force of the
+strike. This analog voltage signal travels along a standard 1/4-inch
+cable into the electronic drum module, commonly called the "drum
+brain."</p>
+<h3 id="2-the-drum-brain-generates-midi-data">2. The Drum Brain
+Generates MIDI Data</h3>
+<p>The drum module converts the analog voltage spike into digital data.
+It analyzes two primary factors: the location of the hit (which input
+jack received the signal) and the intensity of the hit (the peak
+voltage).</p>
+<p>The module formats this into a standard MIDI Note-On message
+consisting of three main values:</p>
+<ul>
+<li><strong>MIDI Channel:</strong> Usually Channel 10, the universal
+standard for percussion.</li>
+<li><strong>Note Number:</strong> A specific number assigned to each pad
+(for example, standard General MIDI assigns 38 to the snare, 36 to the
+kick, and 42 to the closed hi-hat).</li>
+<li><strong>Velocity:</strong> A value from 1 to 127 indicating the
+force of the strike.</li>
+</ul>
+<p>This data is sent out through the module's 5-pin MIDI Out or USB-MIDI
+port.</p>
+<h3 id="3-translation-via-the-midi-adapter">3. Translation via the MIDI
+Adapter</h3>
+<p>Consoles such as the PlayStation 3, Xbox 360, and Wii do not natively
+interpret raw MIDI commands as game controller presses. An intermediary
+device—such as the official Mad Catz MIDI Pro Adapter or modern
+equivalents like the Roll Limitless—acts as a bridge.</p>
+<p>The adapter performs several tasks in real time:</p>
+<ul>
+<li><strong>Note Mapping:</strong> It listens for specific MIDI note
+values and maps them directly to the corresponding colored pads in the
+game (Red, Yellow, Blue, Green, and Orange for the kick pedal).</li>
+<li><strong>Velocity Thresholding:</strong> The adapter features a
+sensitivity dial or firmware threshold. Incoming hits with a velocity
+below the set threshold are discarded to prevent accidental ghost notes
+or pad crosstalk from breaking a player's combo.</li>
+<li><strong>Protocol Translation:</strong> The adapter translates the
+validated MIDI Note-On message into a native controller input packet
+(such as a standard gamepad button press or drum controller command) and
+sends it over USB to the console.</li>
+</ul>
+<h3 id="4-game-engine-input-registration">4. Game Engine Input
+Registration</h3>
+<p>Once the console receives the USB packet, the game treats the signal
+identically to an input from a standard plastic peripheral.</p>
+<p>The game engine performs the final steps:</p>
+<ul>
+<li><strong>Polling and Timestamps:</strong> The game checks incoming
+controller states each frame or via an asynchronous input thread,
+assigning a precise timestamp to when the button press occurred.</li>
+<li><strong>Hit Window Evaluation:</strong> The game compares the
+timestamp of the physical strike to the timeline of the song's note
+chart. If the strike falls within the timing window (typically within 50
+to 100 milliseconds of the target note), it registers as a hit and
+triggers the corresponding audio and visual feedback.</li>
+<li><strong>Cymbal Differentiation:</strong> In <em>Rock Band 3</em>'s
+"Pro Drums" mode, the adapter and game distinguish between a cymbal hit
+and a tom hit of the same color (for example, a Yellow Cymbal versus a
+Yellow Tom) based on the distinct MIDI note numbers assigned by the drum
+module, enabling full 7-piece drum kit fidelity.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

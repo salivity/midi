@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal MIDI Packet Header: Packet Size and Type - midi</title>
+    <meta name="description" content="The Universal MIDI Packet (UMP) format is the foundational data container designed for modern MIDI communication, unifying both MIDI 1.0 and MIDI 2.0 protocols across high-speed digital transports like USB and Ethernet. At the core of every UMP is its hea">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/universal-midi-packet-header-packet-size-and-type">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Universal MIDI Packet Header: Packet Size and Type - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/universal-midi-packet-header-packet-size-and-type" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Universal MIDI Packet (UMP) format is the foundational data container designed for modern MIDI communication, unifying both MIDI 1.0 and MIDI 2.0 protocols across high-speed digital transports like USB and Ethernet. At the core of every UMP is its hea" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="universal-midi-packet-header-packet-size-and-type">Universal
+MIDI Packet Header: Packet Size and Type</h1>
+<p>The Universal MIDI Packet (UMP) format is the foundational data
+container designed for modern MIDI communication, unifying both MIDI 1.0
+and MIDI 2.0 protocols across high-speed digital transports like USB and
+Ethernet. At the core of every UMP is its header, located in the first
+four bits of the initial 32-bit word, which acts as the message's
+primary identifier. This header explicitly dictates the functional
+classification of the payload and establishes the exact byte length of
+the entire packet, enabling receiving devices to parse and process
+continuous MIDI data streams without framing ambiguity.</p>
+<h3 id="the-universal-midi-packet-architecture">The Universal MIDI
+Packet Architecture</h3>
+<p>A Universal MIDI Packet consists of one to four 32-bit words (32, 64,
+96, or 128 bits). Unlike legacy MIDI 1.0 byte streams that relied on
+variable-length status and data bytes with start/stop framing, every UMP
+message is strictly bounded and self-contained.</p>
+<p>The structure of the first 32-bit word is standardized across all UMP
+messages:</p>
+<ul>
+<li><strong>Bits 31–28 (Nibble 0):</strong> Message Type (MT)</li>
+<li><strong>Bits 27–24 (Nibble 1):</strong> Group Field</li>
+<li><strong>Bits 23–16 (Byte 1):</strong> Status Byte / Opcode</li>
+<li><strong>Bits 15–0 (Bytes 2 and 3):</strong> Message-specific data or
+additional routing</li>
+</ul>
+<h3 id="defining-message-type-via-the-mt-field">Defining Message Type
+via the MT Field</h3>
+<p>The Message Type (MT) is a 4-bit identifier spanning bits 31 through
+28 of the first word. Because it is four bits wide, it supports 16
+distinct categories (hexadecimal values <code>0x0</code> through
+<code>0xF</code>).</p>
+<p>The MT value informs the parser of the exact semantic meaning of the
+payload:</p>
+<ul>
+<li><strong>0x0 (Utility Messages):</strong> Carries non-musical
+synchronization, jitter reduction timestamps, and no-op messages.</li>
+<li><strong>0x1 (System Real-Time &amp; System Common):</strong>
+Transports standard real-time messages (Clock, Start, Stop) and common
+messages (Tune Request, Song Select).</li>
+<li><strong>0x2 (MIDI 1.0 Channel Voice Messages):</strong> Carries
+legacy 7-bit MIDI 1.0 channel messages (Note On, Note Off, Control
+Change) in an encapsulated format.</li>
+<li><strong>0x3 (Data 64-bit):</strong> Used for 7-bit System Exclusive
+(SysEx) data chunks.</li>
+<li><strong>0x4 (MIDI 2.0 Channel Voice Messages):</strong> Carries
+expanded MIDI 2.0 messages featuring high-resolution 16-bit controls,
+32-bit velocity, per-note pitch bend, and attribute data.</li>
+<li><strong>0x5 (Data 128-bit):</strong> Used for 8-bit System Exclusive
+messages and Mixed Data Set transfers.</li>
+<li><strong>0xD (Flex Data):</strong> Transports metadata, lyrics, text,
+and chord information.</li>
+<li><strong>0xF (Stream Messages):</strong> Used for protocol discovery,
+endpoint configuration, and function block management.</li>
+<li><em>Note:</em> Values <code>0x6</code> through <code>0xC</code> and
+<code>0xE</code> are reserved for future protocol expansions.</li>
+</ul>
+<h3 id="how-the-header-determines-packet-size">How the Header Determines
+Packet Size</h3>
+<p>In the UMP specification, packet length is not defined by an
+arbitrary byte counter. Instead, <strong>the Message Type directly locks
+the packet to a fixed size</strong>. A parser inspects bits 31–28 of an
+incoming 32-bit word and immediately knows how many additional 32-bit
+words follow before the next packet begins:</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Message Type (MT)</th>
+<th style="text-align: left;">Name / Category</th>
+<th style="text-align: left;">Word Count</th>
+<th style="text-align: left;">Total Bit Length</th>
+<th style="text-align: left;">Total Byte Length</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>0x0</code></td>
+<td style="text-align: left;">Utility Messages</td>
+<td style="text-align: left;">1 Word</td>
+<td style="text-align: left;">32 bits</td>
+<td style="text-align: left;">4 bytes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x1</code></td>
+<td style="text-align: left;">System Real-Time / Common</td>
+<td style="text-align: left;">1 Word</td>
+<td style="text-align: left;">32 bits</td>
+<td style="text-align: left;">4 bytes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x2</code></td>
+<td style="text-align: left;">MIDI 1.0 Channel Voice</td>
+<td style="text-align: left;">1 Word</td>
+<td style="text-align: left;">32 bits</td>
+<td style="text-align: left;">4 bytes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x3</code></td>
+<td style="text-align: left;">Data Messages (SysEx 7-bit)</td>
+<td style="text-align: left;">2 Words</td>
+<td style="text-align: left;">64 bits</td>
+<td style="text-align: left;">8 bytes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x4</code></td>
+<td style="text-align: left;">MIDI 2.0 Channel Voice</td>
+<td style="text-align: left;">2 Words</td>
+<td style="text-align: left;">64 bits</td>
+<td style="text-align: left;">8 bytes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x5</code></td>
+<td style="text-align: left;">Data Messages (SysEx 8-bit)</td>
+<td style="text-align: left;">4 Words</td>
+<td style="text-align: left;">128 bits</td>
+<td style="text-align: left;">16 bytes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0xD</code></td>
+<td style="text-align: left;">Flex Data</td>
+<td style="text-align: left;">4 Words</td>
+<td style="text-align: left;">128 bits</td>
+<td style="text-align: left;">16 bytes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0xF</code></td>
+<td style="text-align: left;">UMP Stream Messages</td>
+<td style="text-align: left;">4 Words</td>
+<td style="text-align: left;">128 bits</td>
+<td style="text-align: left;">16 bytes</td>
+</tr>
+</tbody>
+</table>
+<p>If a parser reads a word starting with an MT of <code>0x2</code>, it
+processes only that single 32-bit word. If the parser reads an MT of
+<code>0x4</code>, it reads the current 32-bit word along with the
+subsequent 32-bit word to complete the 64-bit structure before resetting
+to read the next header.</p>
+<h3 id="group-field-integration">Group Field Integration</h3>
+<p>Directly adjacent to the Message Type is the 4-bit Group field (bits
+27–24). While the MT specifies packet size and structural
+classification, the Group field designates one of 16 virtual cable
+destinations within the same physical connection. Together, the MT and
+Group nibbles allow modern MIDI hardware to multiplex up to 16
+completely independent MIDI streams (each capable of 16 channels) inside
+deterministic, fixed-boundary packets.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

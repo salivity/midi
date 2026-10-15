@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI CC 84 Portamento Control Explained - midi</title>
+    <meta name="description" content="MIDI Continuous Controller 84 (CC 84), officially designated as Portamento Control, is a specialized MIDI message designed to set the starting pitch of a glide rather than just its speed or state. While conventional portamento typically glides from whatev">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cc-84-portamento-control-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI CC 84 Portamento Control Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cc-84-portamento-control-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Continuous Controller 84 (CC 84), officially designated as Portamento Control, is a specialized MIDI message designed to set the starting pitch of a glide rather than just its speed or state. While conventional portamento typically glides from whatev" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-cc-84-portamento-control-explained">MIDI CC 84 Portamento
+Control Explained</h1>
+<p>MIDI Continuous Controller 84 (CC 84), officially designated as
+Portamento Control, is a specialized MIDI message designed to set the
+starting pitch of a glide rather than just its speed or state. While
+conventional portamento typically glides from whatever note is currently
+sounding to the next one played, CC 84 allows a composer or sequencer to
+explicitly define an exact source note number. This article breaks down
+the technical function of CC 84, explains how its data value dictates
+the glide's origin pitch, and outlines how it differs from standard
+portamento controls.</p>
+<h2 id="the-purpose-of-midi-cc-84">The Purpose of MIDI CC 84</h2>
+<p>In standard MIDI implementations, portamento is managed through two
+primary controllers:</p>
+<ul>
+<li><strong>CC 65 (Portamento On/Off):</strong> Enables or disables
+glide functionality.</li>
+<li><strong>CC 5 (Portamento Time):</strong> Governs how long the
+transition between pitches takes.</li>
+</ul>
+<p>Under this standard behavior, a glide requires a currently active or
+previously sustained note to establish the starting pitch. MIDI CC 84
+eliminates this requirement by providing explicit control over the
+glide's origin. Its core purpose is to allow a sequencer or controller
+to trigger a slide into a new note from a completely independent,
+user-defined pitch without physically playing or sustaining the initial
+note first.</p>
+<h2 id="how-cc-84-designates-the-source-key">How CC 84 Designates the
+Source Key</h2>
+<p>Standard MIDI control change messages consist of a status byte, a
+controller number (84 in this case), and a data value ranging from 0 to
+127.</p>
+<p>When CC 84 is transmitted, its 0–127 value is interpreted as a
+standard MIDI note number:</p>
+<ul>
+<li>Value <code>0</code> corresponds to C-1.</li>
+<li>Value <code>60</code> corresponds to Middle C (C4).</li>
+<li>Value <code>127</code> corresponds to G9.</li>
+</ul>
+<p>Instead of modulating an effect parameter, the value sent via CC 84
+directly names the note that will serve as the launchpad for the
+portamento effect.</p>
+<h3 id="the-execution-sequence">The Execution Sequence</h3>
+<p>For CC 84 to take effect, the MIDI messages must be sent in a
+specific order:</p>
+<ol type="1">
+<li><strong>CC 84 Transmission:</strong> A CC 84 message is sent with a
+specific value (e.g., CC 84, Value 48 [C3]). This pre-loads note C3 into
+the synthesizer's portamento buffer as the source pitch.</li>
+<li><strong>Note-On Message:</strong> Immediately following the CC 84
+message, a standard Note-On command is triggered for the target pitch
+(e.g., Note-On 60 [C4]).</li>
+<li><strong>Synthesis Engine Response:</strong> Rather than sounding C4
+immediately or sliding from the previous key pressed, the synthesizer
+instantly begins generating sound at C3 and glides upward to C4 at the
+speed defined by CC 5.</li>
+</ol>
+<p>Once the target note is reached, the effect is consumed. Subsequent
+Note-On messages without a preceding CC 84 message will either behave
+normally (sounding immediately or gliding from the previously held key
+if CC 65 is enabled) depending on the synth's architecture.</p>
+<h2 id="common-use-cases">Common Use Cases</h2>
+<ul>
+<li><strong>Isolated Pitch Slides:</strong> Creating pitch glides into
+notes that start after a period of silence, where traditional
+legato-based portamento would not trigger.</li>
+<li><strong>Complex Basslines and Lead Solos:</strong> Programming
+realistic slides for instruments like fretless bass, synth leads, or
+pedal steel guitars, where the attack should emulate sliding up or down
+from an un-struck fret or position.</li>
+<li><strong>Deterministic Sequencing:</strong> Ensuring consistent
+playback in studio environments by explicitly writing the starting note
+into the MIDI data, preventing random slide behavior caused by differing
+note overlaps.</li>
+</ul>
+<p><em>Note: Hardware and software synthesizer support for CC 84 varies.
+While it is part of the official MIDI standard, developers must
+explicitly program their synthesis engines to read and respond to CC 84
+source note values.</em></p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

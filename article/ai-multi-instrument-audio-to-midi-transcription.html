@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Multi-Instrument Audio to MIDI Transcription - midi</title>
+    <meta name="description" content="Modern automatic music transcription (AMT) systems utilize deep neural networks to convert complex, multi-instrument polyphonic audio into discrete MIDI data. This process requires a system to separate overlapping harmonic frequencies, identify distinct t">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/ai-multi-instrument-audio-to-midi-transcription">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AI Multi-Instrument Audio to MIDI Transcription - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/ai-multi-instrument-audio-to-midi-transcription" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern automatic music transcription (AMT) systems utilize deep neural networks to convert complex, multi-instrument polyphonic audio into discrete MIDI data. This process requires a system to separate overlapping harmonic frequencies, identify distinct t" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="ai-multi-instrument-audio-to-midi-transcription">AI
+Multi-Instrument Audio to MIDI Transcription</h1>
+<p>Modern automatic music transcription (AMT) systems utilize deep
+neural networks to convert complex, multi-instrument polyphonic audio
+into discrete MIDI data. This process requires a system to separate
+overlapping harmonic frequencies, identify distinct timbres, detect
+individual note onsets and offsets, and export precise musical events.
+By combining time-frequency signal representations with convolutional
+networks, attention-based Transformers, and sequence-to-sequence
+decoding, modern architectures can successfully map raw acoustic
+mixtures into quantized, multi-track symbolic scores.</p>
+<h3 id="time-frequency-acoustic-front-end">Time-Frequency Acoustic
+Front-End</h3>
+<p>Raw digital audio is a one-dimensional pressure wave unsuitable for
+direct pitch extraction due to its lack of explicit frequency
+information. Modern transcription pipelines first transform raw audio
+into time-frequency representations using the Short-Time Fourier
+Transform (STFT), Log-Mel Spectrograms, or Constant-Q Transforms
+(CQT).</p>
+<p>The CQT is particularly useful because its frequency bins are
+geometrically spaced to align with musical semitones. This step produces
+a multi-channel or high-resolution 2D matrix where the vertical axis
+represents pitch frequencies and the horizontal axis represents time,
+preserving both transient attack spikes and sustained harmonic
+overtones.</p>
+<h3 id="feature-extraction-via-convolutional-architectures">Feature
+Extraction via Convolutional Architectures</h3>
+<p>Once the audio is represented as a spectrogram, Convolutional Neural
+Networks (CNNs)—often utilizing residual networks (ResNets) or U-Net
+backbones—process the visual-acoustic patterns.</p>
+<p>Polyphony introduces the problem of harmonic overlap, where notes
+played simultaneously by different instruments share fundamental
+frequencies and overtones. CNN layers apply 2D convolutional filters
+across time and frequency dimensions to isolate:</p>
+<ul>
+<li><strong>Timbral signatures:</strong> Instrument-specific harmonic
+distributions (e.g., the bright, odd harmonics of a clarinet versus the
+complex acoustic body resonance of an acoustic guitar).</li>
+<li><strong>Transients:</strong> Sudden bursts of high-frequency energy
+that signify the onset of a strike, pluck, or hammer-on.</li>
+</ul>
+<h3 id="multi-task-decoding-onsets-frames-and-velocities">Multi-Task
+Decoding: Onsets, Frames, and Velocities</h3>
+<p>A prominent breakthrough in polyphonic transcription is the
+multi-task "Onsets and Frames" paradigm. Instead of predicting sustained
+notes directly, the network breaks transcription into parallel
+sub-tasks:</p>
+<ol type="1">
+<li><strong>Onset Detector:</strong> A dedicated convolutional
+sub-network identifies the exact frame where a note begins. Pinpointing
+onsets drastically reduces false positives caused by lingering
+reverberation or resonance.</li>
+<li><strong>Frame-Level Pitch Predictor:</strong> A secondary head
+estimates which pitches are active during any given time step.</li>
+<li><strong>Offset Detector:</strong> Evaluates when a note ceases or
+decays below a perceptible threshold.</li>
+<li><strong>Velocity Predictor:</strong> Estimates the acoustic energy
+at the onset to assign a MIDI velocity value (0–127).</li>
+</ol>
+<p>The output of the onset detector is conditioned into the frame-level
+predictor, ensuring that a note is only transcribed as active if an
+initial attack was registered, or if clear continuity exists from a
+prior frame.</p>
+<h3
+id="multi-instrument-disentanglement-and-transformers">Multi-Instrument
+Disentanglement and Transformers</h3>
+<p>To handle multi-instrument mixtures, architectures like MT3
+(Multi-Task Multitrack Music Transcription) incorporate
+sequence-to-sequence Transformer models, similar to the T5 language
+architecture.</p>
+<p>Self-attention mechanisms allow the model to compare any point in the
+recording with every other point, learning long-range musical context
+such as meter, chord progressions, and stylistic conventions. Instead of
+using separate specialized models for each instrument, a single
+Transformer decoder uses cross-attention between the acoustic features
+and previously predicted tokens.</p>
+<p>The network predicts discrete vocabulary tokens in a serialized
+stream, including:</p>
+<ul>
+<li>Time shifts (e.g., <code>TIME_SHIFT &lt;10ms&gt;</code>)</li>
+<li>Musical actions (e.g., <code>NOTE_ON</code>,
+<code>NOTE_OFF</code>)</li>
+<li>Pitch values (e.g., <code>PITCH &lt;60&gt;</code>)</li>
+<li>Instrument program tags (e.g., <code>INSTRUMENT &lt;BASS&gt;</code>,
+<code>INSTRUMENT &lt;PIANO&gt;</code>)</li>
+</ul>
+<h3 id="token-to-midi-serialization">Token-to-MIDI Serialization</h3>
+<p>Once the network outputs its token stream or continuous activation
+matrices, a decoding layer parses these predictions into standard MIDI
+files.</p>
+<p>For continuous architectures, note activations undergo thresholding
+and peak-picking algorithms to link onsets to their corresponding
+offsets, grouping them by the predicted instrument class. For
+sequence-to-sequence autoregressive models, the output tokens directly
+match the MIDI specification. The system compiles the labeled notes into
+separate MIDI channels, assigns the appropriate General MIDI program
+numbers, adjusts note timing to match detected tempos, and exports the
+final polyphonic <code>.mid</code> file.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

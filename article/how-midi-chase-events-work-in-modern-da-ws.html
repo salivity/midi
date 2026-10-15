@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Chase Events Work in Modern DAWs - midi</title>
+    <meta name="description" content="The Chase Events feature in modern digital audio workstations (DAWs) ensures that long, sustained MIDI notes play correctly even when playback begins mid-bar. Under standard MIDI protocol, instruments only sound when a playback head crosses a discrete &quot;No">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-chase-events-work-in-modern-da-ws">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Chase Events Work in Modern DAWs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-chase-events-work-in-modern-da-ws" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Chase Events feature in modern digital audio workstations (DAWs) ensures that long, sustained MIDI notes play correctly even when playback begins mid-bar. Under standard MIDI protocol, instruments only sound when a playback head crosses a discrete &quot;No" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-chase-events-work-in-modern-daws">How MIDI Chase Events
+Work in Modern DAWs</h1>
+<p>The Chase Events feature in modern digital audio workstations (DAWs)
+ensures that long, sustained MIDI notes play correctly even when
+playback begins mid-bar. Under standard MIDI protocol, instruments only
+sound when a playback head crosses a discrete "Note On" message. Chase
+Events solves the issue of silence during mid-note playback by analyzing
+the timeline prior to the playhead, identifying active notes, and
+instantly synthesizing the necessary commands to trigger them
+seamlessly.</p>
+<h3 id="the-underlying-problem-the-midi-note-structure">The Underlying
+Problem: The MIDI Note Structure</h3>
+<p>Standard MIDI data is event-based rather than continuous audio. When
+a musician plays a note, the DAW records a <code>Note On</code> message
+with a specific timestamp, pitch, and velocity. The note sounds until
+the DAW encounters a corresponding <code>Note Off</code> message.</p>
+<p>If an ambient pad, bass note, or string section holds a note spanning
+four measures, the <code>Note On</code> command exists solely at beat
+one of the first measure. If playback starts at measure two or three,
+the DAW typically bypasses the <code>Note On</code> message entirely.
+Because the instrument never received the command to start sounding, the
+track remains silent until a new note is struck.</p>
+<h3 id="how-the-chase-engine-scans-the-timeline">How the Chase Engine
+Scans the Timeline</h3>
+<p>When Chase Events is enabled, the DAW alters its playback
+initialization routine:</p>
+<ol type="1">
+<li><strong>Pre-Roll Interrogation:</strong> The moment the transport
+engages, the software scans backward from the current playhead position
+across all active MIDI tracks.</li>
+<li><strong>State Calculation:</strong> The engine checks for any
+<code>Note On</code> messages that do not yet have a matching
+<code>Note Off</code> message before the playhead location.</li>
+<li><strong>Event Generation:</strong> If an unresolved note is
+detected, the DAW immediately generates a new <code>Note On</code>
+message at the exact position of the playhead.</li>
+</ol>
+<p>By sending this retroactive message directly to the virtual
+instrument or external synthesizer, the sound initiates immediately,
+simulating continuous playback as if the project had been running from
+the start of the section.</p>
+<h3 id="handling-continuous-controllers-cc-and-modulation">Handling
+Continuous Controllers (CC) and Modulation</h3>
+<p>Sustained notes rarely remain static; they rely heavily on Continuous
+Controller (CC) messages, such as expression (CC11), modulation (CC1),
+sustain pedal (CC64), and pitch bend data to shape the sound.</p>
+<p>A comprehensive Chase Events system does not merely retrigger the
+pitch; it searches backward for the most recent values of all CC
+parameters. It instantly transmits these parameter states to the
+instrument alongside the note trigger. This ensures that the note sounds
+with the correct volume, timbre, filter cutoff, and pitch adjustments
+corresponding precisely to that point in the timeline.</p>
+<h3 id="benefits-during-composition-and-mixing">Benefits During
+Composition and Mixing</h3>
+<p>Without Chase Events, producers and engineers must constantly rewind
+to the initial strike of a long passage to hear arrangements properly.
+By recalculating the complete MIDI state at any random point on the
+timeline, modern DAWs provide an uninterrupted, accurate representation
+of the arrangement during detailed editing, arranging, and mixing
+tasks.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

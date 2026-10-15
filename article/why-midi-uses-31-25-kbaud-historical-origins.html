@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Uses 31.25 kbaud: Historical Origins - midi</title>
+    <meta name="description" content="When the Musical Instrument Digital Interface (MIDI) was standardized in the early 1980s, engineers had to solve the challenge of transmitting polyphonic performance data with negligible latency without inflating the cost of consumer synthesizers. The spe">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-uses-31-25-kbaud-historical-origins">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Uses 31.25 kbaud: Historical Origins - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-uses-31-25-kbaud-historical-origins" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When the Musical Instrument Digital Interface (MIDI) was standardized in the early 1980s, engineers had to solve the challenge of transmitting polyphonic performance data with negligible latency without inflating the cost of consumer synthesizers. The spe" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-uses-3125-kbaud-historical-origins">Why MIDI Uses 31.25
+kbaud: Historical Origins</h1>
+<p>When the Musical Instrument Digital Interface (MIDI) was standardized
+in the early 1980s, engineers had to solve the challenge of transmitting
+polyphonic performance data with negligible latency without inflating
+the cost of consumer synthesizers. The specification of a 31.25 kbaud
+transmission rate was not a random figure; it was a deliberate
+engineering compromise driven by microprocessor clock division, the high
+cost of high-speed optocouplers, and debates between American and
+Japanese manufacturers over communication speed and reliability.</p>
+<h3 id="the-conflict-usi-vs-japanese-proposals">The Conflict: USI vs.
+Japanese Proposals</h3>
+<p>In 1981, Dave Smith and Chet Wood of Sequential Circuits presented a
+paper proposing the Universal Synthesizer Interface (USI). The original
+USI proposal suggested a relatively modest transmission speed of 19.2
+kbaud, utilizing standard RS-232-style serial hardware and standard
+telephone jacks. The goal was simplicity and low cost.</p>
+<p>However, when Smith met with representatives from Japanese
+synthesizer manufacturers—most notably Ikutaro Kakehashi of Roland,
+alongside engineers from Yamaha, Korg, and Kawai—the Japanese contingent
+argued that 19.2 kbaud was too slow. Musicians were already sensitive to
+latency, and chaining multiple instruments over a slow serial bus would
+cause perceptible delays in dense multi-timbral arrangements. Roland
+proposed faster alternatives, but extreme speed brought a different set
+of technical hurdles.</p>
+<h3 id="clock-division-and-cheap-microprocessors">Clock Division and
+Cheap Microprocessors</h3>
+<p>The most critical factor in landing on precisely 31,250 baud (31.25
+kbaud) was the internal architecture of microprocessors in 1982. Common
+microcontrollers of the era, such as the Intel 8048, 8051, and Motorola
+6800 variants, operated using master clocks or system clocks derived
+from inexpensive, ubiquitous quartz crystals operating at frequencies
+such as 1 MHz, 2 MHz, 4 MHz, or 8 MHz.</p>
+<p>To generate a baud rate, a chip’s internal counter divides the master
+clock down using binary integer dividers (powers of two). Dividing a
+standard 1 MHz clock by 32 yields exactly 31,250:</p>
+<p><span class="math display">\[\frac{1,000,000 \text{ Hz}}{32} = 31,250
+\text{ baud}\]</span></p>
+<p>Similarly, a 2 MHz clock divided by 64 or a 4 MHz clock divided by
+128 results in exactly 31.25 kbaud. Choosing this frequency allowed
+manufacturers to use existing internal timers and Universal Asynchronous
+Receiver-Transmitters (UARTs) already present in microcontrollers
+without requiring dedicated, costly external baud-rate generators or
+non-standard crystal frequencies.</p>
+<h3 id="the-optoisolator-bottleneck">The Optoisolator Bottleneck</h3>
+<p>The primary engineering constraint capping the upper speed limit was
+the requirement for electrical isolation. Early electronic instruments
+were notorious for ground loops, which introduced severe hum, buzz, and
+radio-frequency noise into audio signal paths.</p>
+<p>To eliminate ground loops between connected synthesizers, the draft
+specification mandated optoisolators (optical couplers) on the receiving
+input (MIDI IN). In 1982, high-speed optoisolators capable of handling
+megabit speeds existed, but they were prohibitively expensive for
+consumer hardware. Readily available, cost-effective optocouplers (such
+as the PC900 or Sharp standard components) had slow rise and fall times
+that rounded off digital square waves at speeds higher than roughly 50
+kbaud.</p>
+<p>At 31.25 kbaud, cheap optocouplers could reliably reproduce
+transitions without signal distortion or high bit-error rates over
+standard cable lengths, keeping the cost per instrument to just a few
+dollars.</p>
+<h3 id="perceptual-latency">Perceptual Latency</h3>
+<p>At 31.25 kbaud, serial transmission sends 3,125 bytes per second
+(given 1 start bit, 8 data bits, and 1 stop bit per byte, totaling 10
+bits per frame). A standard Note On or Note Off message consists of
+three bytes:</p>
+<p><span class="math display">\[\frac{3 \text{ bytes} \times 10 \text{
+bits}}{31,250 \text{ bits/second}} = 0.96 \text{
+milliseconds}\]</span></p>
+<p>A sub-millisecond delay for a single musical event fell well beneath
+the psychoacoustic threshold for perceptible human latency (generally
+accepted to be around 5 to 10 milliseconds). The designers determined
+that while dense, multi-channel chords might cause minor flamming if
+chained poorly, under 1 ms per note was an acceptable real-time
+performance trade-off to ensure the interface remained cheap, robust,
+and universally implementable across all major hardware brands.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

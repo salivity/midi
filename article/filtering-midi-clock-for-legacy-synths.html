@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtering MIDI Clock for Legacy Synths - midi</title>
+    <meta name="description" content="Dedicated MIDI processing boxes prevent vintage synthesizers from crashing, lagging, or dropping notes by intercepting incoming serial data, identifying high-frequency real-time commands such as MIDI clock, and discarding those specific bytes before trans">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/filtering-midi-clock-for-legacy-synths">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Filtering MIDI Clock for Legacy Synths - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/filtering-midi-clock-for-legacy-synths" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Dedicated MIDI processing boxes prevent vintage synthesizers from crashing, lagging, or dropping notes by intercepting incoming serial data, identifying high-frequency real-time commands such as MIDI clock, and discarding those specific bytes before trans" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="filtering-midi-clock-for-legacy-synths">Filtering MIDI Clock for
+Legacy Synths</h1>
+<p>Dedicated MIDI processing boxes prevent vintage synthesizers from
+crashing, lagging, or dropping notes by intercepting incoming serial
+data, identifying high-frequency real-time commands such as MIDI clock,
+and discarding those specific bytes before transmitting note data to the
+output. Older synthesizers rely on slow microprocessors and small input
+buffers that easily become overwhelmed by modern master clocks and
+synchronization data. By stripping away these continuous messages at the
+hardware level, a processing box preserves critical bandwidth and
+ensures that only performance messages reach legacy hardware.</p>
+<h3 id="the-problem-with-real-time-data-on-vintage-hardware">The Problem
+with Real-Time Data on Vintage Hardware</h3>
+<p>MIDI is an asynchronous serial protocol operating at a rate of 31.25
+kbaud. A master sequencer sends a MIDI Timing Clock message 24 times per
+quarter note (24 PPQN), alongside Start, Stop, and Active Sensing
+messages. While modern gear handles this influx without issue, vintage
+synthesizers—many powered by modest 8-bit microcontrollers from the
+1980s—must trigger an interrupt routine for every single byte received.
+When flooded with constant clock pulses, the vintage synthesizer's CPU
+spends most of its processing cycles handling interrupts rather than
+generating sound, resulting in audible latency, hanging notes, or total
+freeze-ups.</p>
+<h3 id="byte-level-inspection">Byte-Level Inspection</h3>
+<p>A hardware MIDI processor features a dedicated microcontroller or
+FPGA equipped with a Universal Asynchronous Receiver-Transmitter (UART).
+The processor reads the serial bitstream entering its 5-pin DIN input
+port and reconstructs the data into raw 8-bit bytes.</p>
+<p>MIDI messages fall into distinct categories defined by the value of
+their first byte:</p>
+<ul>
+<li><strong>Status Bytes:</strong> Always have their most significant
+bit set to 1 (values <code>0x80</code> to <code>0xFF</code>).</li>
+<li><strong>Data Bytes:</strong> Always have their most significant bit
+set to 0 (values <code>0x00</code> to <code>0x7F</code>).</li>
+<li><strong>System Real-Time Bytes:</strong> A specific subset of status
+bytes ranging from <code>0xF8</code> to <code>0xFF</code>.</li>
+</ul>
+<p>Among real-time bytes, <code>0xF8</code> represents the MIDI Timing
+Clock, <code>0xFA</code> through <code>0xFC</code> control playback
+transport (Start, Continue, Stop), and <code>0xFE</code> represents
+Active Sensing.</p>
+<h3 id="the-interception-and-stripping-process">The Interception and
+Stripping Process</h3>
+<p>Because MIDI specification allows System Real-Time messages to be
+inserted anywhere in the data stream—even in the middle of a multi-byte
+Note On or Pitch Bend sequence—the processor cannot simply parse whole
+phrases at once. Instead, it evaluates every byte immediately upon
+reception:</p>
+<ol type="1">
+<li><strong>Byte Interception:</strong> The processor receives a byte in
+its hardware input buffer.</li>
+<li><strong>Bitwise Comparison:</strong> The processor checks if the
+byte is greater than or equal to <code>0xF8</code>. If it matches a
+defined filter rule (such as <code>0xF8</code> for clock), the
+processing unit flags it.</li>
+<li><strong>Discarding:</strong> The flagged byte is dropped entirely
+from memory and is not passed to the output queue.</li>
+<li><strong>Running Status Handling:</strong> If a real-time byte
+arrives between a Status byte (e.g., Note On <code>0x90</code>) and its
+parameters (e.g., Key Number <code>0x3C</code>, Velocity
+<code>0x64</code>), discarding the real-time byte ensures the original
+multi-byte structure remains intact without invalidating the running
+status logic.</li>
+</ol>
+<h3 id="transmission-to-the-synth">Transmission to the Synth</h3>
+<p>Bytes that are not flagged for removal—primarily Channel Voice
+messages like Note On (<code>0x9n</code>), Note Off (<code>0x8n</code>),
+Control Change (<code>0xBn</code>), and Program Change
+(<code>0xCn</code>)—are immediately routed to the processor's output
+UART buffer.</p>
+<p>The sanitized data is converted back into an electrical serial stream
+and transmitted to the synth via the output port. Because the hardware
+performs this check in clock cycles rather than milliseconds, latency is
+virtually undetectable (typically well under 1 millisecond), allowing
+the legacy synthesizer to play reliably with accurate timing.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

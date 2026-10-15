@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Wind Synth Bite Sensors Control MIDI Pitch Bend - midi</title>
+    <meta name="description" content="Wind synthesizers bridge traditional acoustic playing techniques with digital sound generation by using bite sensors in the mouthpiece to translate jaw pressure into real-time MIDI data. This article explains the electromechanical process behind bite sens">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-wind-synth-bite-sensors-control-midi-pitch-bend">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Wind Synth Bite Sensors Control MIDI Pitch Bend - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-wind-synth-bite-sensors-control-midi-pitch-bend" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Wind synthesizers bridge traditional acoustic playing techniques with digital sound generation by using bite sensors in the mouthpiece to translate jaw pressure into real-time MIDI data. This article explains the electromechanical process behind bite sens" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-wind-synth-bite-sensors-control-midi-pitch-bend">How Wind
+Synth Bite Sensors Control MIDI Pitch Bend</h1>
+<p>Wind synthesizers bridge traditional acoustic playing techniques with
+digital sound generation by using bite sensors in the mouthpiece to
+translate jaw pressure into real-time MIDI data. This article explains
+the electromechanical process behind bite sensors, how physical pressure
+translates into continuous digital values, and how these values are
+formatted into high-resolution MIDI Pitch Bend messages to emulate
+natural vibrato and expressive pitch manipulation.</p>
+<h3 id="the-mouthpiece-sensor-mechanism">The Mouthpiece Sensor
+Mechanism</h3>
+<p>The mouthpiece of an Electronic Wind Instrument (EWI) or wind
+controller contains a dedicated transducer designed to detect embouchure
+changes. The most common technologies include:</p>
+<ul>
+<li><strong>Force-Sensing Resistors (FSRs):</strong> Materials that
+decrease their electrical resistance as physical pressure
+increases.</li>
+<li><strong>Piezoelectric Elements:</strong> Crystals or ceramics that
+generate an electrical charge when mechanically deformed.</li>
+<li><strong>Optical or Capacitive Sensors:</strong> Systems that track
+physical deflection of a flexible mouthpiece reed or silicone cover
+without requiring direct mechanical contact.</li>
+</ul>
+<p>When a performer applies or releases pressure with their teeth or
+lips, the sensor generates a variable analog voltage directly
+proportional to the force exerted.</p>
+<h3 id="analog-to-digital-conversion-and-processing">Analog-to-Digital
+Conversion and Processing</h3>
+<p>The continuous analog voltage generated by the sensor is routed to
+the instrument’s internal microcontroller. An Analog-to-Digital
+Converter (ADC) samples this voltage at high speeds to prevent
+noticeable latency.</p>
+<p>The onboard firmware processes the raw digital signal through
+user-defined parameters, including:</p>
+<ul>
+<li><strong>Dead Zones:</strong> A customizable threshold around the
+player's neutral resting bite, ensuring that standard mouth placement
+does not trigger accidental pitch shifts.</li>
+<li><strong>Scaling and Curves:</strong> Linear, logarithmic, or
+exponential response curves that match the physical resistance of the
+mouthpiece to the player's natural jaw physiology.</li>
+<li><strong>Filtering:</strong> Low-pass filtering or smoothing
+algorithms that remove electrical noise while preserving fast embouchure
+movements like vibrato.</li>
+</ul>
+<h3 id="mapping-to-midi-pitch-bend-messages">Mapping to MIDI Pitch Bend
+Messages</h3>
+<p>Once the signal is processed, the microcontroller formats the data
+into standard MIDI Pitch Bend messages.</p>
+<p>Unlike standard 7-bit Continuous Controllers (CC), which offer only
+128 discrete steps, MIDI Pitch Bend uses a 14-bit data structure
+composed of two 7-bit bytes (Least Significant Byte and Most Significant
+Byte). This yields 16,384 distinct values (0 to 16,383), where 8,192
+represents the center, unbent pitch. This high resolution eliminates
+audible "zipper noise" or stepping artifacts during smooth pitch
+fluctuations.</p>
+<p>Depending on the instrument’s configuration, the bite sensor maps to
+this 14-bit scale in one of two primary ways:</p>
+<ol type="1">
+<li><strong>Bi-directional Embouchure (Acoustic Style):</strong> The
+neutral bite pressure rests at value 8,192. Increasing bite pressure
+pushes the value toward 16,383 (pitch up), while relaxing the jaw drops
+the value toward 0 (pitch down). This replicates the behavior of a
+traditional saxophone or clarinet embouchure.</li>
+<li><strong>Uni-directional Modulation:</strong> Zero pressure sits at
+the center value of 8,192, and biting only bends the pitch upward toward
+16,383. Downward bends are handled by a separate thumb sensor or
+dedicated pitch ribbon.</li>
+</ol>
+<h3 id="synthesis-and-sound-engine-response">Synthesis and Sound Engine
+Response</h3>
+<p>When the connected synthesizer receives these MIDI Pitch Bend
+commands, its internal pitch-bend range settings determine how far the
+pitch actually moves. If the receiving patch is set to a range of two
+semitones, moving the bite sensor from its resting state to full
+pressure shifts the sound up by a whole step. This tight integration of
+high-resolution data conversion allows performers to execute subtle
+microtonal inflections, wide portamento slides, and realistic jaw
+vibrato that responds identically to acoustic wind performance.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

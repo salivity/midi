@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Song Select Message 0xF3? - midi</title>
+    <meta name="description" content="The MIDI Song Select message (0xF3) is a specialized System Common message used to remotely cue and load pre-programmed songs, patterns, or arrangements in external hardware. Unlike standard patch-changing messages that alter individual instrument sounds,">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-song-select-message-0-x-f-3">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Song Select Message 0xF3? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-song-select-message-0-x-f-3" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Song Select message (0xF3) is a specialized System Common message used to remotely cue and load pre-programmed songs, patterns, or arrangements in external hardware. Unlike standard patch-changing messages that alter individual instrument sounds," />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-song-select-message-0xf3">What Is a MIDI Song
+Select Message 0xF3?</h1>
+<p>The MIDI Song Select message (<code>0xF3</code>) is a specialized
+System Common message used to remotely cue and load pre-programmed
+songs, patterns, or arrangements in external hardware. Unlike standard
+patch-changing messages that alter individual instrument sounds, Song
+Select directs an entire device to load a specific sequence into its
+active playback buffer. This article explains the technical structure of
+the <code>0xF3</code> message and details how hardware drum machines
+interpret it to recall stored rhythm sequences.</p>
+<h3 id="understanding-the-0xf3-message-structure">Understanding the 0xF3
+Message Structure</h3>
+<p>In the MIDI 1.0 specification, messages are divided into categories
+such as Channel Voice, System Real-Time, and System Common. Song Select
+belongs to the System Common category, meaning it is not bound to a
+specific MIDI channel (1–16). Instead, it communicates globally with any
+receiving device capable of sequence playback.</p>
+<p>The message consists of two bytes:</p>
+<ol type="1">
+<li><strong>Status Byte (<code>0xF3</code>):</strong> In hexadecimal
+notation, <code>0xF3</code> (binary <code>11110011</code>, or 243 in
+decimal) alerts the receiving device that a Song Select command is
+arriving.</li>
+<li><strong>Data Byte (<code>0x00</code> to <code>0x7F</code>):</strong>
+A single 7-bit data byte directly follows the status byte, providing a
+value between 0 and 127 in decimal. This number identifies the target
+sequence, pattern, or song index to be loaded.</li>
+</ol>
+<p>Because the data byte is 7-bit, a single <code>0xF3</code> message
+can address up to 128 discrete songs or sequences (numbered 0 through
+127).</p>
+<h3 id="song-select-vs-program-change">Song Select vs. Program
+Change</h3>
+<p>While both messages recall saved data, they serve different
+functional layers:</p>
+<ul>
+<li><strong>Program Change (<code>0xCn</code>):</strong> A Channel Voice
+message that changes the sound preset, patch, or kit on a specific MIDI
+channel without changing the sequencer arrangement.</li>
+<li><strong>Song Select (<code>0xF3</code>):</strong> A global command
+that instructs the device's internal sequencer to change the entire
+active musical sequence or song layout.</li>
+</ul>
+<h3 id="how-it-loads-sequences-on-external-drum-machines">How It Loads
+Sequences on External Drum Machines</h3>
+<p>Modern and vintage drum machines—such as those manufactured by
+Roland, Elektron, Akai, or Alesis—often feature onboard step sequencers
+that store discrete "Patterns" or chained "Songs." When an external
+master controller (such as a DAW, hardware master sequencer, or MIDI
+pedalboard) transmits a Song Select command, the drum machine processes
+the request through the following steps:</p>
+<ol type="1">
+<li><strong>Reception and Filtering:</strong> The drum machine receives
+the incoming serial MIDI stream. If its MIDI settings have System Common
+messages enabled, it identifies <code>0xF3</code> and reads the
+subsequent data byte.</li>
+<li><strong>Index Mapping:</strong> The drum machine maps the value of
+the data byte to its internal memory structure. Depending on the
+machine’s architecture, this value corresponds to an internal Song
+memory location (e.g., Song 01 to Song 128) or, on some devices, a
+direct Pattern bank slot (such as Pattern A01 through H16).</li>
+<li><strong>Buffer Loading:</strong> The drum machine unloads the
+current pattern from memory and loads the designated sequence into its
+active playback queue. The sequencer resets its internal playhead to
+beat one, measure one of the chosen sequence.</li>
+<li><strong>Synchronization and Playback:</strong> Loading a sequence
+via <code>0xF3</code> does not automatically start playback. Typically,
+the master device sends <code>0xF3</code> while the transport is stopped
+to give the drum machine time to fetch the pattern data. Once loaded,
+the master sends MIDI Clock (<code>0xF8</code>) pulses to establish
+tempo, followed by a MIDI Start message (<code>0xFA</code>) to trigger
+the newly loaded sequence in tight synchronization with the rest of the
+rig.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

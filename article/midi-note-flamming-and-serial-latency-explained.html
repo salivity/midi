@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Note Flamming and Serial Latency Explained - midi</title>
+    <meta name="description" content="MIDI note flamming is an audible artifact where notes meant to sound simultaneously are played back with slight, sequential delays, resembling a drummer&#39;s &quot;flam.&quot; This article explains what MIDI flamming is, breaks down the technical limitations of tradit">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-note-flamming-and-serial-latency-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Note Flamming and Serial Latency Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-note-flamming-and-serial-latency-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI note flamming is an audible artifact where notes meant to sound simultaneously are played back with slight, sequential delays, resembling a drummer&#39;s &quot;flam.&quot; This article explains what MIDI flamming is, breaks down the technical limitations of tradit" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-note-flamming-and-serial-latency-explained">MIDI Note
+Flamming and Serial Latency Explained</h1>
+<p>MIDI note flamming is an audible artifact where notes meant to sound
+simultaneously are played back with slight, sequential delays,
+resembling a drummer's "flam." This article explains what MIDI flamming
+is, breaks down the technical limitations of traditional 5-pin DIN
+serial cables, and details the mathematical reasons why transmitting a
+ten-note chord over a serial connection inherently produces perceptible
+timing offsets between notes.</p>
+<h2 id="what-is-midi-note-flamming">What Is MIDI Note Flamming?</h2>
+<p>In acoustic percussion, a "flam" consists of two drum strikes played
+very close together, creating a smeared or thickened transient rather
+than a single distinct hit. In digital music production, "MIDI note
+flamming" describes an unwanted, staggered playback of notes that share
+the exact same start time in a sequence.</p>
+<p>When a keyboard player strikes a chord or a sequencer triggers
+multiple voices at the same instant, all notes are intended to sound
+concurrently. However, if those notes are separated by micro-delays
+during transmission, the chord's attack loses its punch. Instead of a
+crisp, unified hit, the notes smear across several milliseconds, which
+is especially noticeable on instruments with sharp, instantaneous
+attacks such as acoustic pianos, clavichords, or synthesizer plucks.</p>
+<h2 id="the-architecture-of-traditional-serial-midi">The Architecture of
+Traditional Serial MIDI</h2>
+<p>To understand why flamming occurs, one must look at how legacy MIDI
+hardware communicates. Traditional MIDI interfaces use a 5-pin DIN
+connector operating as an asynchronous serial communication
+protocol.</p>
+<p>Unlike parallel connections, which can send multiple bits across
+several wires simultaneously, a serial connection sends data
+sequentially down a single wire, one bit at a time. The original MIDI
+1.0 specification defines a fixed transmission rate of <strong>31,250
+bits per second (31.25 kbaud)</strong>.</p>
+<p>Because data can only move as a single-file stream of bits, true
+simultaneity is physically impossible over a standard MIDI cable. Every
+single musical event must wait in line for the preceding event to finish
+transmitting.</p>
+<h2 id="the-math-behind-a-ten-note-chord">The Math Behind a Ten-Note
+Chord</h2>
+<p>The physical delay introduced by a ten-note chord can be measured
+directly using standard MIDI data structures and the cable's fixed baud
+rate.</p>
+<h3 id="1-frame-size-and-byte-duration">1. Frame Size and Byte
+Duration</h3>
+<p>MIDI data is packaged into 10-bit asynchronous frames:</p>
+<ul>
+<li>1 start bit</li>
+<li>8 data bits (1 byte)</li>
+<li>1 stop bit</li>
+</ul>
+<p>At a transmission speed of 31,250 bits per second, each individual
+bit takes 32 microseconds (<span class="math inline">\(0.032\text{
+ms}\)</span>) to travel down the line:</p>
+<p><span class="math display">\[\frac{1 \text{ second}}{31,250 \text{
+bits}} = 0.000032 \text{ seconds} = 0.032\text{ ms per bit}\]</span></p>
+<p>Because each byte requires 10 bits, transmitting a single byte of
+MIDI data requires <strong>0.32 milliseconds</strong>:</p>
+<p><span class="math display">\[10 \text{ bits} \times 0.032\text{ ms} =
+0.32\text{ ms per byte}\]</span></p>
+<h3 id="2-the-size-of-a-note-on-message">2. The Size of a Note-On
+Message</h3>
+<p>A standard MIDI Note-On message requires three distinct bytes:</p>
+<ol type="1">
+<li><strong>Status Byte:</strong> Specifies the command (Note-On) and
+the target MIDI channel.</li>
+<li><strong>Data Byte 1:</strong> Specifies the Note Number (pitch from
+0–127).</li>
+<li><strong>Data Byte 2:</strong> Specifies the Velocity (force from
+0–127).</li>
+</ol>
+<p>Sending one fully defined Note-On command requires:</p>
+<p><span class="math display">\[3 \text{ bytes} \times 0.32\text{ ms} =
+0.96\text{ ms}\]</span></p>
+<h3 id="3-calculating-the-total-delay-for-ten-notes">3. Calculating the
+Total Delay for Ten Notes</h3>
+<p>If an artist plays a ten-note chord where all notes are struck at the
+exact same instant, the transmitting device must queue ten separate
+Note-On messages.</p>
+<ul>
+<li><p><strong>Standard Transmission:</strong> Without optimization, ten
+3-byte messages equal 30 bytes. <span class="math display">\[30 \text{
+bytes} \times 0.32\text{ ms} = 9.6\text{ ms}\]</span> The tenth note
+leaves the cable nearly <strong>10 milliseconds</strong> after the first
+note begins transmission.</p></li>
+<li><p><strong>Running Status Optimization:</strong> The MIDI standard
+includes an efficiency feature called "Running Status." If several
+consecutive messages share the same status byte (such as multiple
+Note-Ons on the same channel), the status byte only needs to be sent
+once. The remaining notes require only two data bytes each (pitch and
+velocity). For a ten-note chord:</p>
+<ul>
+<li>1 Status Byte + (10 notes <span
+class="math inline">\(\times\)</span> 2 Data Bytes) = 21 bytes</li>
+<li><span class="math display">\[21 \text{ bytes} \times 0.32\text{ ms}
+= 6.72\text{ ms}\]</span></li>
+</ul></li>
+</ul>
+<p>Even under optimal conditions with Running Status enabled, the tenth
+note is delayed by <strong>6.72 milliseconds</strong> relative to the
+first note.</p>
+<h2 id="why-this-causes-audible-flamming">Why This Causes Audible
+Flamming</h2>
+<p>Human auditory perception is sensitive to micro-timing differences in
+transient sounds. The threshold for detecting distinct timing
+differences between sharp audio events is generally between 2 and 5
+milliseconds.</p>
+<p>When a chord's notes are spread across 7 to 10 milliseconds:</p>
+<ul>
+<li>The ear stops hearing the chord as a single, coherent acoustic
+impact.</li>
+<li>The transients blur, making percussive sounds feel sloppy or
+sluggish.</li>
+<li>If the chord is layered across multiple synthesizers daisy-chained
+via MIDI Thru ports, processing latency at each synth adds to the serial
+transmission delay, pushing the offset even further into the audible
+range.</li>
+</ul>
+<p>While modern protocols like USB-MIDI, RTP-MIDI (Ethernet), and MIDI
+2.0 feature substantially higher bandwidths that virtually eliminate
+this issue, hardware setups relying on original 5-pin DIN cables remain
+subject to the physical speed limits of 31.25 kbaud serial data.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

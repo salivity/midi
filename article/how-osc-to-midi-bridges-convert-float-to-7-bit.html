@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How OSC to MIDI Bridges Convert Float to 7-Bit - midi</title>
+    <meta name="description" content="An Open Sound Control (OSC) to MIDI bridge converts high-resolution, continuous floating-point values into standard 7-bit MIDI messages through a pipeline of clamping, linear scaling, quantization, and message formatting. Because OSC natively uses 32-bit">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-osc-to-midi-bridges-convert-float-to-7-bit">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How OSC to MIDI Bridges Convert Float to 7-Bit - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-osc-to-midi-bridges-convert-float-to-7-bit" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An Open Sound Control (OSC) to MIDI bridge converts high-resolution, continuous floating-point values into standard 7-bit MIDI messages through a pipeline of clamping, linear scaling, quantization, and message formatting. Because OSC natively uses 32-bit" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-osc-to-midi-bridges-convert-float-to-7-bit">How OSC to MIDI
+Bridges Convert Float to 7-Bit</h1>
+<p>An Open Sound Control (OSC) to MIDI bridge converts high-resolution,
+continuous floating-point values into standard 7-bit MIDI messages
+through a pipeline of clamping, linear scaling, quantization, and
+message formatting. Because OSC natively uses 32-bit floating-point
+numbers—typically normalized between 0.0 and 1.0—and standard MIDI
+Control Change (CC) commands require integer values from 0 to 127, the
+bridge translates modern network-based control data into
+legacy-compatible hardware and software instructions without
+overwhelming system bandwidth.</p>
+<h3 id="1-clamping-and-range-validation">1. Clamping and Range
+Validation</h3>
+<p>The incoming OSC packet carries an address pattern and a payload
+containing one or more 32-bit floats. While software controllers usually
+output values between <code>0.0</code> and <code>1.0</code>,
+uncalibrated sensors or custom interfaces may send numbers outside this
+expected range. The bridge first applies a clamping function to prevent
+overflow errors:</p>
+<ul>
+<li>If the incoming float is less than the defined minimum (typically
+<code>0.0</code>), it is forced to the minimum.</li>
+<li>If the incoming float exceeds the defined maximum (typically
+<code>1.0</code>), it is forced to the maximum.</li>
+</ul>
+<h3 id="2-linear-scaling">2. Linear Scaling</h3>
+<p>Once validated, the float must be mapped to MIDI's discrete domain.
+For standard normalized inputs, the bridge multiplies the floating-point
+value by 127:</p>
+<p><span class="math display">\[\text{Scaled Value} = \text{Input Float}
+\times 127\]</span></p>
+<p>If the OSC stream uses an arbitrary range (such as sensor data from
+<code>-1.0</code> to <code>1.0</code> or frequencies from
+<code>20.0</code> to <code>20000.0</code>), the bridge applies standard
+linear interpolation:</p>
+<p><span class="math display">\[\text{Scaled Value} = \left(
+\frac{\text{Input} - \text{In}_{\min}}{\text{In}_{\max} -
+\text{In}_{\min}} \right) \times 127\]</span></p>
+<h3 id="3-quantization-and-rounding">3. Quantization and Rounding</h3>
+<p>MIDI 1.0 controller bytes do not support fractional components. The
+scaled result is a floating-point number (e.g., <span
+class="math inline">\(0.5 \times 127 = 63.5\)</span>) that must be
+converted into an integer.</p>
+<p>Translators achieve this by applying a rounding algorithm:</p>
+<ul>
+<li><strong>Round to Nearest:</strong> Adding <code>0.5</code> and
+truncating (flooring) the decimal, ensuring even distribution across all
+128 intervals.</li>
+<li><strong>Truncation:</strong> Discarding the fractional part entirely
+(less common, as it creates an uneven mapping for the value 127).</li>
+</ul>
+<p>The output is a single integer strictly bounded between
+<code>0</code> and <code>127</code> (<span
+class="math inline">\(0000000_2\)</span> to <span
+class="math inline">\(01111111_2\)</span>).</p>
+<h3 id="4-thinning-and-change-detection">4. Thinning and Change
+Detection</h3>
+<p>OSC operates over high-speed networks (UDP/IP), frequently
+transmitting updates at hundreds or thousands of packets per second.
+Sending a MIDI message for every single micro-change would cause MIDI
+buffer congestion and latency.</p>
+<p>To prevent this, the bridge caches the last transmitted 7-bit value
+for that specific controller channel. If a newly calculated integer
+matches the cached value, the message is discarded. A new MIDI
+transmission only triggers when the floating-point change is large
+enough to shift the resulting integer to a new 7-bit step.</p>
+<h3 id="5-byte-assembly-and-dispatch">5. Byte Assembly and Dispatch</h3>
+<p>Finally, the bridge encapsulates the 7-bit integer into a standard
+3-byte MIDI Control Change packet:</p>
+<ul>
+<li><strong>Status Byte:</strong> Identifies the message as a Control
+Change command and specifies the target MIDI channel (e.g.,
+<code>0xB0</code> for CC on Channel 1).</li>
+<li><strong>Data Byte 1:</strong> Specifies the controller number
+(0–127).</li>
+<li><strong>Data Byte 2:</strong> Carries the newly converted 7-bit
+integer value (0–127).</li>
+</ul>
+<p>The assembled message is then written to the designated virtual MIDI
+port, hardware serial interface, or USB endpoint.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Convert Bass Guitar Audio to MIDI - midi</title>
+    <meta name="description" content="Converting a monophonic bass guitar audio track into clean, editable MIDI notes involves preparing the raw audio, applying pitch and transient detection algorithms, and refining the resulting MIDI data. Audio editors and digital audio workstations (DAWs)">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-convert-bass-guitar-audio-to-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Convert Bass Guitar Audio to MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-convert-bass-guitar-audio-to-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Converting a monophonic bass guitar audio track into clean, editable MIDI notes involves preparing the raw audio, applying pitch and transient detection algorithms, and refining the resulting MIDI data. Audio editors and digital audio workstations (DAWs)" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-convert-bass-guitar-audio-to-midi">How to Convert Bass
+Guitar Audio to MIDI</h1>
+<p>Converting a monophonic bass guitar audio track into clean, editable
+MIDI notes involves preparing the raw audio, applying pitch and
+transient detection algorithms, and refining the resulting MIDI data.
+Audio editors and digital audio workstations (DAWs) use these processes
+to translate analog pitch and dynamics into digital note values,
+allowing producers to correct performance errors, double lines with
+virtual synthesizers, or replace the bass tone entirely.</p>
+<h3 id="1-pre-processing-the-audio-track">1. Pre-Processing the Audio
+Track</h3>
+<p>Low-frequency instruments like the bass guitar present unique
+challenges for pitch detection due to sub-bass rumble, complex harmonic
+overtones, and fret buzz. Before conversion, editors pre-filter the
+audio:</p>
+<ul>
+<li><strong>High-Pass Filtering:</strong> Removing sub-audible
+frequencies below 30–40 Hz prevents the detection algorithm from
+mistaking rumble for low notes.</li>
+<li><strong>Low-Pass Filtering:</strong> Cutting high frequencies above
+2 kHz to 4 kHz removes string squeaks, finger noise, and high harmonic
+overtones that can confuse pitch-tracking algorithms.</li>
+<li><strong>Dynamic Control:</strong> Applying gentle compression or
+limiting evens out the performance, giving the detector a more
+consistent signal level to read.</li>
+</ul>
+<h3 id="2-transient-and-pitch-detection">2. Transient and Pitch
+Detection</h3>
+<p>Once prepped, the DAW's detection engine analyzes the audio file
+using two primary mechanisms:</p>
+<ul>
+<li><strong>Fundamental Frequency Tracking:</strong> The software uses
+algorithms such as autocorrelation or spectral analysis to identify the
+fundamental frequency (<span class="math inline">\(F_0\)</span>) of each
+note. Since a monophonic bass track plays one note at a time, the engine
+isolates this base frequency while ignoring the upper harmonics.</li>
+<li><strong>Transient Detection:</strong> Fast amplitude spikes at the
+start of each pluck mark the note's onset. The software uses these
+transients to determine exactly where a MIDI note should start (Note-On)
+and how hard it was struck, translating peak amplitude into MIDI
+velocity.</li>
+</ul>
+<h3 id="3-audio-to-midi-translation">3. Audio-to-MIDI Translation</h3>
+<p>The software maps the detected acoustic parameters directly into the
+standard MIDI protocol:</p>
+<ul>
+<li><strong>Pitch to MIDI Note Number:</strong> The detected fundamental
+frequency (measured in Hertz) is mapped to the nearest standard MIDI
+note number (e.g., 41.2 Hz corresponds to low E, or MIDI note E1).</li>
+<li><strong>Amplitude to Velocity:</strong> The initial attack volume
+determines the velocity value (from 1 to 127).</li>
+<li><strong>Sustained Energy to Duration:</strong> The engine monitors
+when the signal drops below a specific amplitude threshold, generating
+the Note-Off command to set the duration of the MIDI event.</li>
+</ul>
+<h3 id="4-cleaning-and-editing-the-generated-midi">4. Cleaning and
+Editing the Generated MIDI</h3>
+<p>Automated conversion rarely produces a perfect result without human
+refinement. The final phase involves cleaning up common tracking
+artifacts:</p>
+<ul>
+<li><strong>Octave Correction:</strong> Bass notes can sometimes be
+misread as an octave higher or lower due to strong harmonic content.
+Editors quickly scan the piano roll to shift any misplaced notes back to
+the proper octave.</li>
+<li><strong>Removing Ghost Notes:</strong> Unintended noises—such as
+fingers lifting off the strings or light fret taps—often register as
+ultra-short, low-velocity MIDI notes. Selecting all notes below a
+specific velocity or duration threshold allows for quick deletion.</li>
+<li><strong>Quantization:</strong> Once the notes are clean, producers
+apply timing quantization to lock the performance to the project tempo
+grid or adjust note lengths for consistent sustain.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

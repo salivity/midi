@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a USB MIDI Endpoint? - midi</title>
+    <meta name="description" content="In USB technology, an endpoint is the fundamental, addressable data buffer on a peripheral device that serves as the entry or exit point for digital communication with a host operating system. In the context of a class-compliant USB MIDI interface, endpoi">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-usb-midi-endpoint">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a USB MIDI Endpoint? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-usb-midi-endpoint" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In USB technology, an endpoint is the fundamental, addressable data buffer on a peripheral device that serves as the entry or exit point for digital communication with a host operating system. In the context of a class-compliant USB MIDI interface, endpoi" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-usb-midi-endpoint">What Is a USB MIDI Endpoint?</h1>
+<p>In USB technology, an endpoint is the fundamental, addressable data
+buffer on a peripheral device that serves as the entry or exit point for
+digital communication with a host operating system. In the context of a
+class-compliant USB MIDI interface, endpoints enable standardized,
+bidirectional transmission of musical performance data without requiring
+proprietary third-party drivers. This article explains how USB MIDI
+endpoints function, how they interact with operating systems, and how
+they handle multiple streams of musical data.</p>
+<h3 id="the-role-of-an-endpoint-in-usb-architecture">The Role of an
+Endpoint in USB Architecture</h3>
+<p>At the hardware level, a USB connection does not establish an
+open-ended, continuous electrical circuit for data streaming. Instead,
+all communication is divided into discrete packets scheduled and managed
+exclusively by the host operating system's USB controller.</p>
+<p>An endpoint is a dedicated memory buffer located inside the USB
+microcontroller of the MIDI interface. The host operating system
+communicates with these endpoints through logical communication channels
+called "pipes." Each endpoint possesses a unique address on the device
+and operates strictly in a single direction:</p>
+<ul>
+<li><strong>IN Endpoints:</strong> Transmit data <em>in</em> to the host
+operating system from the device (e.g., key presses, knob turns, or
+incoming MIDI DIN signals from a controller).</li>
+<li><strong>OUT Endpoints:</strong> Receive data sent <em>out</em> from
+the host operating system to the device (e.g., MIDI clock sync,
+parameter feedback, or note data routed to hardware synthesizers).</li>
+</ul>
+<p>Every USB device reserves Endpoint 0 for control transfers, which
+handles device identification and setup. Musical performance data is
+handled by separate, dedicated data endpoints.</p>
+<h3 id="endpoints-in-class-compliant-usb-midi">Endpoints in
+Class-Compliant USB MIDI</h3>
+<p>When a USB MIDI interface is "class-compliant," it strictly adheres
+to the universal <em>USB Device Class Definition for MIDI Devices</em>
+published by the USB Implementers Forum.</p>
+<p>During the initial connection (enumeration), the interface presents
+standard descriptors to the operating system. These descriptors specify
+its identity, supported configurations, and available endpoints. Because
+the interface relies on standardized protocols:</p>
+<ol type="1">
+<li><strong>Native Driver Binding:</strong> The operating system (such
+as Windows, macOS, Linux, iOS, or Android) recognizes the standard class
+descriptors and automatically attaches its built-in MIDI class driver
+directly to the interface's IN and OUT endpoints.</li>
+<li><strong>Transfer Types:</strong> Class-compliant USB MIDI 1.0
+interfaces typically utilize <strong>Bulk</strong> or
+<strong>Interrupt</strong> endpoints. Interrupt endpoints provide
+guaranteed polling intervals for predictable timing, while Bulk
+endpoints allow fast transfer of non-periodic data like system-exclusive
+(SysEx) dumps when bandwidth is available.</li>
+</ol>
+<h3 id="handling-virtual-cables-over-a-single-endpoint">Handling Virtual
+Cables Over a Single Endpoint</h3>
+<p>A single physical MIDI 1.0 5-pin DIN port is restricted to 16
+channels, but a class-compliant USB MIDI interface can carry much more
+traffic through a single endpoint. The USB MIDI specification solves
+this via 32-bit USB MIDI Event Packets.</p>
+<p>Each 32-bit packet sent to or from an endpoint contains:</p>
+<ul>
+<li>A 4-bit <strong>Cable Number (CN)</strong>, which acts as a virtual
+routing identifier.</li>
+<li>A 4-bit <strong>Code Index Number (CIN)</strong>, describing the
+type of MIDI command.</li>
+<li>Up to three bytes of standard MIDI data (such as Note On, Note Off,
+or Pitch Bend).</li>
+</ul>
+<p>By using Cable Numbers, a single IN or OUT endpoint can multiplex up
+to 16 independent virtual "cables" (each supporting 16 standard MIDI
+channels), allowing a single physical USB connection to stream up to 256
+distinct MIDI channels simultaneously to the host operating system.</p>
+<h3 id="interaction-with-the-operating-system">Interaction with the
+Operating System</h3>
+<p>Once enumeration is complete, the operating system continuously
+manages data flow through the endpoints:</p>
+<ul>
+<li><strong>Receiving Data:</strong> When a physical control is
+triggered, the interface's microprocessor formats the action into a USB
+MIDI packet and stores it in the IN endpoint buffer. The operating
+system polls this endpoint, retrieves the packets, unpacks them via its
+core audio/MIDI framework (such as CoreMIDI on Apple platforms or ALSA
+on Linux), and delivers the MIDI events to active digital audio
+workstations (DAWs) or software instruments.</li>
+<li><strong>Transmitting Data:</strong> When a DAW generates notes or
+automation, the operating system's driver packages the events and writes
+them across the bus to the interface's OUT endpoint buffer. The
+interface reads this buffer and translates it to internal hardware
+actions, CV outputs, or physical 5-pin MIDI DIN outs.</li>
+</ul>
+<p>By defining explicit buffers for directed data flow, endpoints form
+the operational foundation that allows class-compliant USB MIDI hardware
+to achieve fast, reliable, and driverless communication with modern
+operating systems.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

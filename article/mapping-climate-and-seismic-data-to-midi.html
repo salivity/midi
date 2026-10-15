@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Climate and Seismic Data to MIDI - midi</title>
+    <meta name="description" content="Data sonification transforms complex scientific measurements into auditory experiences by converting numerical values into sound parameters. This article explains the technical process scientists use to sonify seismic wave activity and climate temperature">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/mapping-climate-and-seismic-data-to-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mapping Climate and Seismic Data to MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/mapping-climate-and-seismic-data-to-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Data sonification transforms complex scientific measurements into auditory experiences by converting numerical values into sound parameters. This article explains the technical process scientists use to sonify seismic wave activity and climate temperature" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="mapping-climate-and-seismic-data-to-midi">Mapping Climate and
+Seismic Data to MIDI</h1>
+<p>Data sonification transforms complex scientific measurements into
+auditory experiences by converting numerical values into sound
+parameters. This article explains the technical process scientists use
+to sonify seismic wave activity and climate temperature records using
+the Musical Instrument Digital Interface (MIDI) protocol. By scaling
+real-world datasets into MIDI attributes such as pitch, velocity, and
+duration, researchers create accurate acoustic representations of
+physical phenomena to identify hidden patterns, monitor real-time
+events, and communicate environmental trends to the public.</p>
+<h3 id="1-data-collection-and-preprocessing">1. Data Collection and
+Preprocessing</h3>
+<p>Before translating data into sound, raw scientific inputs must be
+cleaned, filtered, and normalized.</p>
+<ul>
+<li><strong>Seismic Data:</strong> Seismometers record ground
+displacement, velocity, or acceleration across three spatial axes at
+high sampling rates (often 20 to 100 Hz). The resulting time-series data
+contains rapid oscillations representing primary (P) waves, secondary
+(S) waves, and surface waves.</li>
+<li><strong>Climate Data:</strong> Climate datasets, such as global
+surface temperature anomalies or ice core records, operate on much
+longer timescales (monthly, yearly, or millennial increments) with
+smaller, gradual variance.</li>
+</ul>
+<p>Because standard MIDI operates on discrete 7-bit values (integers
+ranging from 0 to 127), continuous scientific metrics must be scaled
+mathematically. Using linear interpolation or min-max normalization,
+scientists map the lowest observed value in a dataset to 0 and the
+highest to 127, or constrain them to a musically practical sub-range
+(such as 36 to 96, covering typical instrumental registers).</p>
+<h3 id="2-parameter-mapping-strategies">2. Parameter Mapping
+Strategies</h3>
+<p>Sonification relies on assigning specific scientific variables to
+corresponding MIDI message types.</p>
+<h4 id="pitch-note-number">Pitch (Note Number)</h4>
+<p>The MIDI note range (0–127, where 60 represents Middle C) is most
+commonly mapped to primary indicators of magnitude or state:</p>
+<ul>
+<li><strong>Climate:</strong> Global mean temperature anomalies are
+typically assigned to pitch. Baseline historical temperatures trigger
+lower pitches, while positive temperature anomalies trigger higher
+pitches, allowing listeners to perceive global warming as an upward
+melodic trajectory.</li>
+<li><strong>Seismology:</strong> Frequency content or dominant wave
+frequency can determine pitch. Alternatively, pitch can reflect the
+absolute vertical displacement of the ground. Microtonal shifts can be
+achieved by utilizing MIDI Pitch Bend messages alongside standard note
+numbers.</li>
+</ul>
+<h4 id="velocity-amplitude-and-intensity">Velocity (Amplitude and
+Intensity)</h4>
+<p>MIDI velocity ranges from 0 (silent) to 127 (maximum strike force),
+governing loudness and timbre:</p>
+<ul>
+<li><strong>Seismic Waveforms:</strong> Ground acceleration or signal
+amplitude maps directly to MIDI velocity. Ambient background noise
+produces soft velocities, whereas the sudden onset of an S-wave triggers
+high-velocity notes, mirroring the physical impact of the
+earthquake.</li>
+<li><strong>Climate:</strong> Velocity can represent secondary
+variables, such as the rate of temperature change (acceleration) or the
+statistical uncertainty of a measurement.</li>
+</ul>
+<h4 id="timing-tempo-and-duration">Timing, Tempo, and Duration</h4>
+<p>Scientific time must be compressed or expanded to fit the human
+auditory range:</p>
+<ul>
+<li><strong>Time Compression:</strong> Climate records spanning
+centuries are compressed into minutes by defining a fixed temporal ratio
+(for example, one calendar year equals one sixteenth note, or one decade
+equals one beat at 120 BPM).</li>
+<li><strong>Time Scaling:</strong> High-frequency seismic events lasting
+only seconds can be played back at real-time speeds to create percussive
+bursts, or slowed down significantly to expose the distinct arrivals of
+P-waves and S-waves.</li>
+</ul>
+<h4 id="continuous-controllers-midi-cc">Continuous Controllers (MIDI
+CC)</h4>
+<p>For continuous variables that do not fit discrete note triggers,
+scientists use MIDI Continuous Controller (CC) messages:</p>
+<ul>
+<li><strong>CC 7 (Volume) and CC 11 (Expression):</strong> Modulate
+ongoing drone sounds to reflect sustained seismic rumbling or continuous
+sea-surface temperature changes.</li>
+<li><strong>CC 1 (Modulation) and CC 74 (Filter Cutoff):</strong> Alter
+sound brightness or distortion to represent atmospheric pressure, CO2
+concentration, or secondary wave complexity.</li>
+</ul>
+<h3 id="3-implementation-and-synthesis">3. Implementation and
+Synthesis</h3>
+<p>The transformation pipeline is usually programmed using computational
+environments such as Python (utilizing libraries like <code>mido</code>,
+<code>pretty_midi</code>, or <code>scipy</code>), MATLAB, or visual
+programming languages like Max/MSP and Pure Data.</p>
+<p>The algorithm iterates through the ordered time-series array,
+calculates corresponding MIDI values, and writes a standard
+<code>.mid</code> file or transmits live MIDI events over a virtual bus.
+These MIDI signals are routed into software synthesizers or Digital
+Audio Workstations (DAWs), where specific timbres (such as low sine
+waves for deep crustal movements or orchestral instruments for climate
+shifts) are assigned to the output channels.</p>
+<h3 id="4-analytical-advantages">4. Analytical Advantages</h3>
+<p>Mapping data to MIDI provides distinct analytical benefits over
+visual representation alone. The human auditory system is exceptionally
+sensitive to rhythm, cadence, and transient changes, allowing
+researchers to perceive complex multi-variable relationships and subtle
+harmonic anomalies that might remain undetected in dense two-dimensional
+scatter plots.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

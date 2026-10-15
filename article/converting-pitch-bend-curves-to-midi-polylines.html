@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converting Pitch Bend Curves to MIDI Polylines - midi</title>
+    <meta name="description" content="Digital Audio Workstations (DAWs) bridge the gap between fluid, analog-style performance gestures and the rigid digital framework of MIDI by converting continuous pitch bend curves into stepped, editable polyline shapes. This transformation relies on math">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/converting-pitch-bend-curves-to-midi-polylines">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Converting Pitch Bend Curves to MIDI Polylines - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/converting-pitch-bend-curves-to-midi-polylines" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Digital Audio Workstations (DAWs) bridge the gap between fluid, analog-style performance gestures and the rigid digital framework of MIDI by converting continuous pitch bend curves into stepped, editable polyline shapes. This transformation relies on math" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="converting-pitch-bend-curves-to-midi-polylines">Converting Pitch
+Bend Curves to MIDI Polylines</h1>
+<p>Digital Audio Workstations (DAWs) bridge the gap between fluid,
+analog-style performance gestures and the rigid digital framework of
+MIDI by converting continuous pitch bend curves into stepped, editable
+polyline shapes. This transformation relies on mathematical sampling,
+data reduction algorithms, and vector quantization to balance visual
+clarity for the producer with the high-resolution event streams required
+by MIDI synthesizers. Understanding this pipeline explains how freehand
+curves are converted into manageable vector points and smooth pitch
+transitions.</p>
+<h3 id="continuous-curves-vs-discrete-midi">Continuous Curves vs.
+Discrete MIDI</h3>
+<p>In modern DAW interfaces, users often draw smooth, mathematically
+continuous Bézier curves to modulate pitch. However, standard MIDI
+protocol does not support continuous analog functions; it processes
+discrete digital messages sent across specific time intervals. Pitch
+bend uses a high-resolution 14-bit system offering 16,384 discrete steps
+(-8,192 to +8,191) split into two 7-bit bytes (Most Significant Byte and
+Least Significant Byte). Consequently, any continuous line drawn on a
+display must be mapped onto this 14-bit grid along the timeline's Pulses
+Per Quarter Note (PPQ) resolution.</p>
+<h3 id="temporal-sampling-and-quantization">Temporal Sampling and
+Quantization</h3>
+<p>When a user draws a pitch curve, the DAW tracks the cursor's path
+across the screen coordinates and samples the position at regular
+temporal intervals determined by the project's internal clock or the
+audio buffer rate. The vertical coordinate maps to the target pitch
+value, while the horizontal coordinate maps to project time.</p>
+<p>Because outputting 16,384 distinct values at maximum frequency would
+overwhelm the MIDI engine and create cluttered interfaces, DAWs quantize
+the time domain based on the active snap settings or a fixed sampling
+rate (typically every few milliseconds). Each sample point along the
+continuous visual curve is assigned the nearest corresponding 14-bit
+integer.</p>
+<h3 id="polyline-conversion-via-curve-simplification">Polyline
+Conversion via Curve Simplification</h3>
+<p>To present the user with an editable "polyline" rather than thousands
+of individual vertical data bars, DAWs apply line-simplification
+algorithms. The most common method is an adaptation of the
+Ramer-Douglas-Peucker (RDP) algorithm.</p>
+<ol type="1">
+<li><strong>Baseline Creation:</strong> The algorithm draws an imaginary
+straight segment between the start and end points of a drawn curve.</li>
+<li><strong>Deviation Measurement:</strong> It locates the point on the
+drawn curve furthest from this segment and calculates the perpendicular
+distance.</li>
+<li><strong>Threshold Filtering (Tolerance):</strong> If this distance
+exceeds a predefined tolerance threshold, that point is marked as an
+essential node (anchor point). The process recursively evaluates
+sub-segments until all remaining curve deviations fall within the
+acceptable margin of error.</li>
+<li><strong>Node Generation:</strong> The surviving coordinates become
+the editable vertices of the polyline.</li>
+</ol>
+<p>Through this process, a freehand stroke consisting of thousands of
+individual mouse movements is reduced to a concise set of vector nodes
+connected by straight line segments or editable curve handles.</p>
+<h3 id="event-interpolation-and-playback">Event Interpolation and
+Playback</h3>
+<p>The polyline displayed in the DAW interface is a high-level vector
+representation, not the actual data transmitted to the sound engine.
+During playback, the DAW reads the vector polyline and performs
+real-time interpolation:</p>
+<ul>
+<li><strong>Vector Evaluation:</strong> The engine computes the
+mathematical slope between each anchor node.</li>
+<li><strong>Density Generation:</strong> For every tick on the timeline,
+the DAW calculates the exact expected pitch value along that slope.</li>
+<li><strong>Redundancy Stripping:</strong> To optimize processing,
+identical consecutive values are skipped. A new MIDI pitch bend message
+is generated only when the value changes to a new integer step on the
+14-bit scale.</li>
+</ul>
+<p>This two-tier architecture allows producers to edit a clean, minimal
+set of polyline points while the DAW generates the stepped, high-density
+14-bit MIDI data stream required to prevent audible pitch stepping or
+"zipper noise" during playback.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

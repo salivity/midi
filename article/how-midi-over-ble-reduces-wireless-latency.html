@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI over BLE Reduces Wireless Latency - midi</title>
+    <meta name="description" content="MIDI over Bluetooth Low Energy (BLE) delivers real-time musical performance by dynamically optimizing connection intervals, eliminating peripheral transmission delays, and utilizing microsecond-level timestamps to reconstruct accurate timing. This article">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-over-ble-reduces-wireless-latency">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI over BLE Reduces Wireless Latency - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-over-ble-reduces-wireless-latency" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI over Bluetooth Low Energy (BLE) delivers real-time musical performance by dynamically optimizing connection intervals, eliminating peripheral transmission delays, and utilizing microsecond-level timestamps to reconstruct accurate timing. This article" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-over-ble-reduces-wireless-latency">How MIDI over BLE
+Reduces Wireless Latency</h1>
+<p>MIDI over Bluetooth Low Energy (BLE) delivers real-time musical
+performance by dynamically optimizing connection intervals, eliminating
+peripheral transmission delays, and utilizing microsecond-level
+timestamps to reconstruct accurate timing. This article explains how
+Bluetooth Low Energy negotiates transmission frequency between central
+and peripheral devices, configures packet timing, and resolves wireless
+jitter to maintain the low latency required for music production and
+live playing.</p>
+<h3 id="the-role-of-connection-intervals-in-ble">The Role of Connection
+Intervals in BLE</h3>
+<p>In Bluetooth Low Energy, devices do not transmit data continuously to
+conserve power. Instead, data exchange occurs strictly during periodic
+communication windows known as connection intervals. The Bluetooth Core
+Specification defines this interval in discrete steps of 1.25
+milliseconds, spanning a permissible range from 7.5 milliseconds to 4.0
+seconds.</p>
+<p>For standard consumer peripherals, longer intervals (such as 30 ms to
+100 ms) are common to maximize battery longevity. However, musical
+performance demands imperceptible lag, making these default intervals
+unusable for real-time input.</p>
+<h3 id="negotiating-minimum-connection-intervals">Negotiating Minimum
+Connection Intervals</h3>
+<p>To achieve responsive performance, MIDI over BLE peripherals
+automatically request a connection parameter update upon establishing a
+link with a host (central) device, such as a computer, tablet, or
+smartphone.</p>
+<ol type="1">
+<li><strong>Targeting the Minimum Boundary:</strong> The MIDI BLE
+specification recommends negotiating a connection interval as close to
+the 7.5 ms floor as possible. Operating systems like Apple’s iOS and
+macOS natively support intervals between 7.5 ms and 15 ms for recognized
+MIDI endpoints.</li>
+<li><strong>Dynamic Adaptation:</strong> If the host cannot accommodate
+the lowest interval due to multiple active Bluetooth radios or hardware
+limits, the devices negotiate the lowest common denominator, usually
+stabilizing around 11.25 ms to 15 ms.</li>
+</ol>
+<h3 id="eliminating-slave-latency">Eliminating Slave Latency</h3>
+<p>Along with the connection interval, BLE defines a parameter called
+"Slave Latency." This allows a peripheral device to skip a predetermined
+number of connection intervals if it has no data to send, reducing radio
+usage.</p>
+<p>In MIDI over BLE, Slave Latency is explicitly set to zero during
+active performance. A setting of zero ensures that the transmitter
+checks in at every single scheduled interval. The moment a musician
+strikes a key, the data packet does not have to wait for a sleep cycle
+to expire; it is queued and dispatched at the very next interval
+boundary.</p>
+<h3 id="managing-jitter-with-hardware-timestamps">Managing Jitter with
+Hardware Timestamps</h3>
+<p>Even with an interval of 7.5 ms, variations in packet arrival
+time—known as jitter—can compromise musical rhythm. If two notes played
+consecutively fall on opposite sides of a connection interval boundary,
+their playback timing can become distorted.</p>
+<p>MIDI over BLE resolves this by incorporating high-resolution, 13-bit
+millisecond timestamps inside each transmitted data packet:</p>
+<ul>
+<li><strong>Event Tagging:</strong> When an action occurs (such as a
+Note On command), the peripheral assigns a precise timestamp relative to
+its internal clock.</li>
+<li><strong>Payload Bundling:</strong> Multiple MIDI events can be
+packaged into a single BLE packet if they occur within the same interval
+window, each bearing its own distinct timestamp.</li>
+<li><strong>Buffer Reconstruction:</strong> Upon receiving the packet,
+the host software reads these timestamps and schedules the audio
+synthesis accurately on the playback timeline, effectively decoupling
+musical rhythm from the periodic arrival times of wireless packets.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

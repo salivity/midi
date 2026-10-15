@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Event List Editor: Surgical Timing in DAWs - midi</title>
+    <meta name="description" content="A MIDI Event List editor is a specialized, text-based interface inside a digital audio workstation (DAW) that displays musical and control performance data as a chronological, spreadsheet-like ledger rather than a graphical piano roll. This article explai">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-event-list-editor-surgical-timing-in-da-ws">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Event List Editor: Surgical Timing in DAWs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-event-list-editor-surgical-timing-in-da-ws" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI Event List editor is a specialized, text-based interface inside a digital audio workstation (DAW) that displays musical and control performance data as a chronological, spreadsheet-like ledger rather than a graphical piano roll. This article explai" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-event-list-editor-surgical-timing-in-daws">MIDI Event List
+Editor: Surgical Timing in DAWs</h1>
+<p>A MIDI Event List editor is a specialized, text-based interface
+inside a digital audio workstation (DAW) that displays musical and
+control performance data as a chronological, spreadsheet-like ledger
+rather than a graphical piano roll. This article explains what the MIDI
+Event List is, how it represents low-level MIDI data, and how producers
+and audio engineers use it to execute surgical, tick-accurate, and
+hex-level timing edits that graphical editors cannot easily
+accommodate.</p>
+<h3 id="understanding-the-midi-event-list">Understanding the MIDI Event
+List</h3>
+<p>Most modern DAWs default to visual MIDI representations such as the
+Piano Roll or Drum Grid. While these views excel at intuitive melodic
+composition and broad arrangement, they obscure the true nature of MIDI:
+a continuous stream of discrete serial messages.</p>
+<p>The MIDI Event List exposes this raw data line by line. Every single
+action—a note pressed, a pitch wheel shifted, a sustain pedal engaged,
+or aftertouch applied—is cataloged chronologically. A standard event
+entry typically contains the following columns:</p>
+<ul>
+<li><strong>Timestamp:</strong> The exact temporal position of the
+event, expressed in bars, beats, and ticks (divisions of a quarter
+note).</li>
+<li><strong>Status/Event Type:</strong> The classification of the MIDI
+message (e.g., Note On, Note Off, Polyphonic Aftertouch, Control Change,
+Pitch Bend, Program Change, or System Exclusive).</li>
+<li><strong>MIDI Channel:</strong> The destination channel (1–16).</li>
+<li><strong>Data Byte 1:</strong> The primary parameter, such as note
+number (0–127 / C-2 to G8) or CC controller ID (e.g., CC 64 for
+sustain).</li>
+<li><strong>Data Byte 2:</strong> The secondary parameter or value, such
+as velocity or controller value (0–127).</li>
+<li><strong>Length:</strong> The exact duration of note events.</li>
+</ul>
+<h3 id="low-level-and-hexadecimal-representation">Low-Level and
+Hexadecimal Representation</h3>
+<p>Under the hood, MIDI 1.0 communicates through 8-bit bytes typically
+represented in hexadecimal format. A standard Note On command for middle
+C (MIDI note 60) played at a velocity of 100 on Channel 1 translates
+to:</p>
+<p><code>90 3C 64</code></p>
+<ul>
+<li><code>90</code> (Hex): Status byte indicating a Note On event on
+Channel 1.</li>
+<li><code>3C</code> (Hex for 60): Data Byte 1, specifying middle C.</li>
+<li><code>64</code> (Hex for 100): Data Byte 2, specifying the
+velocity.</li>
+</ul>
+<p>While many DAWs convert these hex values into human-readable text and
+decimal numbers (e.g., "Note On | C3 | 100"), advanced DAWs provide raw
+hex views—particularly when dealing with System Exclusive (SysEx)
+messages. SysEx messages always begin with <code>F0</code> and end with
+<code>F7</code>, bypassing generic MIDI constraints to send
+manufacturer-specific hex strings directly to hardware synthesizers for
+microtonal tuning, patch dumps, and internal parameter modulation.</p>
+<h3 id="executing-surgical-timing-edits">Executing Surgical Timing
+Edits</h3>
+<p>The primary utility of the Event List editor is micro-precision. In
+visual editors, snap-to-grid behaviors, display resolution, and mouse
+movements introduce small inaccuracies. The Event List bypasses the
+visual rendering layer, allowing edits directly at the tick level.</p>
+<h4 id="tick-accurate-phase-and-alignment">Tick-Accurate Phase and
+Alignment</h4>
+<p>DAWs operate at internal resolutions defined by Pulses Per Quarter
+Note (PPQ), commonly set between 960 and 1920 PPQ. At 960 PPQ, a single
+quarter note is divided into 960 discrete slices. In an Event List, you
+can manually type or nudge timestamps at the single-tick level. This
+precision is essential for:</p>
+<ul>
+<li><strong>Transient Stacking:</strong> Aligning multiple layered drum
+samples down to the exact millisecond/tick to prevent phase
+cancellation.</li>
+<li><strong>De-flamming:</strong> Ensuring layered chords trigger on the
+exact same tick, or deliberately introducing uniform 2-to-5 tick offsets
+to simulate human finger-strumming without random jitter.</li>
+</ul>
+<h4 id="eliminating-hidden-data-bloat">Eliminating Hidden Data
+Bloat</h4>
+<p>Performance controllers generate massive amounts of continuous
+controller (CC) data and pitch-bend events that often stack invisibly
+beneath notes in a Piano Roll. This data can choke hardware MIDI
+interfaces, cause buffer underruns, or introduce timing jitter due to
+bandwidth limits (31.25 kbaud over traditional 5-pin DIN cables). An
+Event List allows users to filter by event type, isolate superfluous CC
+messages (such as redundant high-density CC 11 or CC 1 data), and delete
+them instantly without disturbing the musical notes.</p>
+<h4 id="zero-length-and-overlapping-note-correction">Zero-Length and
+Overlapping Note Correction</h4>
+<p>Software instruments can glitch, drop voices, or hang notes when
+receiving duplicate Note On commands or when Note Off commands collide
+with incoming Note On triggers on the exact same tick. In an Event List,
+duplicate timestamps can be identified visually in seconds. Conflicting
+notes can be separated by a single tick (e.g., terminating a previous
+note at tick 479 instead of letting it bleed into tick 480),
+guaranteeing clean polyphony and reliable sample-trigger behavior.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

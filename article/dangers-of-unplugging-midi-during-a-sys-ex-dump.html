@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dangers of Unplugging MIDI During a SysEx Dump - midi</title>
+    <meta name="description" content="Unplugging a MIDI cable during an active, high-capacity System Exclusive (SysEx) patch dump can cause severe data corruption, device lockups, and irreversible loss of presets. SysEx transmissions deliver raw, manufacturer-specific data streams directly to">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/dangers-of-unplugging-midi-during-a-sys-ex-dump">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dangers of Unplugging MIDI During a SysEx Dump - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/dangers-of-unplugging-midi-during-a-sys-ex-dump" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Unplugging a MIDI cable during an active, high-capacity System Exclusive (SysEx) patch dump can cause severe data corruption, device lockups, and irreversible loss of presets. SysEx transmissions deliver raw, manufacturer-specific data streams directly to" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="dangers-of-unplugging-midi-during-a-sysex-dump">Dangers of
+Unplugging MIDI During a SysEx Dump</h1>
+<p>Unplugging a MIDI cable during an active, high-capacity System
+Exclusive (SysEx) patch dump can cause severe data corruption, device
+lockups, and irreversible loss of presets. SysEx transmissions deliver
+raw, manufacturer-specific data streams directly to a hardware
+synthesizer's internal memory. Interrupting this process breaks the
+communication protocol before the receiving unit can verify or organize
+the data, often requiring a full factory reset or extensive
+troubleshooting to restore the instrument to working order.</p>
+<p>Unlike standard MIDI performance messages—such as Note On or Control
+Change, which are small, independent three-byte packets—SysEx messages
+transmit large blocks of data. These continuous byte streams are framed
+by a specific start byte (<code>F0</code>) and an end-of-exclusive
+terminator (<code>F7</code>). When a cable is disconnected mid-transfer,
+the receiving synthesizer never registers the terminating byte.
+Consequently, the device's internal buffer remains open and expects data
+that will never arrive, leading to buffer overflows, system hangs, or
+complete interface freezes.</p>
+<p>The primary risk during an interrupted dump is non-volatile memory
+corruption. Modern and vintage synthesizers alike store user banks,
+custom waveforms, and routing matrices in rewritable EEPROM, flash
+memory, or battery-backed RAM. During a bulk patch transfer, incoming
+bytes sequentially overwrite existing memory addresses. A sudden
+disconnection leaves patches half-written. When the synthesizer attempts
+to recall a fragmented patch containing invalid parameters, it can
+produce deafening audio artifacts, glitching behavior, or fail to boot
+entirely.</p>
+<p>In the worst scenarios, bulk SysEx transfers contain operating system
+updates, FPGA bitstreams, or global calibration data alongside patch
+banks. Severing the connection while writing to critical memory sectors
+can soft-brick the hardware. Recovering the device typically requires
+specialized emergency bootloader procedures, opening the chassis to
+short service pins, or sending the unit to a certified technician to
+manually reflash the system chips.</p>
+<p>To avoid hardware instability and lost work, always wait until both
+the sending software (or hardware sequencer) and the receiving
+instrument confirm that the transfer is 100% complete. Once the transfer
+concludes and the synthesizer exits its internal writing state, it is
+safe to disconnect the MIDI cables.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

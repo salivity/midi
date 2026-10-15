@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Was the MIDI Sample Dump Standard So Slow? - midi</title>
+    <meta name="description" content="The MIDI Sample Dump Standard (SDS) was notoriously sluggish when transferring multi-megabyte sound libraries because it relied on an architecture engineered exclusively for real-time performance data rather than high-speed file transfers. Introduced in t">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-was-the-midi-sample-dump-standard-so-slow">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Was the MIDI Sample Dump Standard So Slow? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-was-the-midi-sample-dump-standard-so-slow" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Sample Dump Standard (SDS) was notoriously sluggish when transferring multi-megabyte sound libraries because it relied on an architecture engineered exclusively for real-time performance data rather than high-speed file transfers. Introduced in t" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-was-the-midi-sample-dump-standard-so-slow">Why Was the MIDI
+Sample Dump Standard So Slow?</h1>
+<p>The MIDI Sample Dump Standard (SDS) was notoriously sluggish when
+transferring multi-megabyte sound libraries because it relied on an
+architecture engineered exclusively for real-time performance data
+rather than high-speed file transfers. Introduced in the late 1980s, SDS
+was forced to operate within the strict physical and logical boundaries
+of the standard MIDI specification. A combination of a tiny hardware
+bandwidth, severe 7-bit data packaging constraints, packet verification
+overhead, and the sheer mathematical scale of multi-megabyte audio files
+created a massive bottleneck that often stretched transfer times into
+hours.</p>
+<h3 id="the-3125-kbaud-physical-bandwidth-limit">The 31.25 kbaud
+Physical Bandwidth Limit</h3>
+<p>The primary bottleneck was the physical MIDI hardware specification
+itself. Standard 5-pin DIN MIDI communicates via an asynchronous serial
+interface locked at a fixed transmission rate of 31,250 bits per second
+(31.25 kbaud).</p>
+<p>Because asynchronous serial transmission requires start and stop
+framing bits alongside the eight data bits, transmitting a single 8-bit
+byte actually requires 10 bits on the wire. This immediately lowered the
+absolute theoretical throughput of the hardware connection to just 3,125
+bytes per second (approximately 3.05 KB/s), regardless of the host
+computer's or sampler's processing power.</p>
+<h3 id="7-bit-data-encoding-penalties">7-Bit Data Encoding
+Penalties</h3>
+<p>The MIDI protocol reserves the eighth bit (the Most Significant Bit,
+or MSB) of every byte to differentiate between status commands (bit = 1)
+and data values (bit = 0). As a result, all payload data transmitted
+over MIDI is restricted to a 7-bit format (values 0–127).</p>
+<p>Digital audio samples, however, are typically recorded in 12-bit,
+16-bit, or 24-bit linear resolution. To transmit this data without
+triggering an unintended MIDI status command, SDS had to chop native
+binary audio words into 7-bit fragments. For example, transmitting a
+single 16-bit audio sample required three separate 7-bit MIDI bytes (21
+bits of serial data to convey 16 bits of actual audio). This bit-packing
+scheme instantly inflated the total volume of raw data that needed to
+travel over the wire by roughly 30 percent.</p>
+<h3 id="packet-framing-and-handshaking-latency">Packet Framing and
+Handshaking Latency</h3>
+<p>SDS packages audio into System Exclusive (SysEx) messages. To prevent
+buffer overflows on hardware samplers with limited internal memory and
+slow microprocessors, sample data was split into tiny packets containing
+just 120 bytes of actual audio data.</p>
+<p>Each packet carried extensive overhead:</p>
+<ul>
+<li>SysEx start (<code>F0</code>) and end (<code>F7</code>) markers</li>
+<li>Manufacturer and device identification codes</li>
+<li>Packet number identifiers</li>
+<li>Error-checking checksums</li>
+</ul>
+<p>Additionally, transfers could operate in "closed-loop" (handshake)
+mode. In this mode, the receiving sampler had to verify the checksum and
+send an explicit Acknowledge (ACK), Wait (WAIT), or Cancel (CANCEL)
+packet back through the reverse MIDI cable before the transmitting
+device was permitted to send the next packet. The hardware latency of
+the sampler's CPU parsing the checksum and responding added significant
+dead time between every 120-byte burst.</p>
+<h3 id="the-scale-of-multi-megabyte-banks">The Scale of Multi-Megabyte
+Banks</h3>
+<p>When accounting for serial framing, 7-bit expansion, packet headers,
+and handshaking pauses, the real-world throughput of an SDS transfer
+generally hovered between 1.5 KB/s and 2.2 KB/s.</p>
+<p>Under these conditions, simple mathematics highlights why
+multi-megabyte sound banks were impractical:</p>
+<ul>
+<li><strong>1 Megabyte of audio:</strong> Approximately 8 to 11 minutes
+to transfer.</li>
+<li><strong>4 Megabytes of audio:</strong> Approximately 35 to 45
+minutes to transfer.</li>
+<li><strong>16 Megabytes of audio:</strong> Over two to three hours to
+transfer.</li>
+</ul>
+<p>Any transmission error or dropped packet during a long transfer could
+freeze the hardware or force a complete restart. This extreme slowness
+made SDS a last resort for gigging musicians and studio engineers,
+ultimately driving the industry toward much faster parallel solutions
+like SCSI and the SCSI Musical Data Interchange (SMDI) protocol in the
+1990s.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mac IAC Driver Explained: How to Route Internal MIDI - midi</title>
+    <meta name="description" content="The Inter-Application Communication (IAC) driver is a native macOS utility that allows digital audio workstations (DAWs), sequencers, and music utilities to transmit MIDI data directly to one another on the same computer without external cables or hardwar">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/mac-iac-driver-explained-how-to-route-internal-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mac IAC Driver Explained: How to Route Internal MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/mac-iac-driver-explained-how-to-route-internal-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Inter-Application Communication (IAC) driver is a native macOS utility that allows digital audio workstations (DAWs), sequencers, and music utilities to transmit MIDI data directly to one another on the same computer without external cables or hardwar" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="mac-iac-driver-explained-how-to-route-internal-midi">Mac IAC
+Driver Explained: How to Route Internal MIDI</h1>
+<p>The Inter-Application Communication (IAC) driver is a native macOS
+utility that allows digital audio workstations (DAWs), sequencers, and
+music utilities to transmit MIDI data directly to one another on the
+same computer without external cables or hardware interfaces. This
+article explains what the IAC driver is, how it utilizes Apple's
+CoreMIDI framework to create virtual signal paths, how to enable and
+configure it, and key technical considerations such as latency and
+feedback loops.</p>
+<hr />
+<h3 id="what-is-the-iac-driver">What Is the IAC Driver?</h3>
+<p>Built directly into macOS via the Audio MIDI Setup utility, the IAC
+driver serves as a software-based MIDI loopback device. In a standard
+hardware setup, sending MIDI from one device to another requires
+physical 5-pin DIN or USB cables connected to a MIDI interface. The IAC
+driver replicates this behavior entirely within the operating system. It
+creates virtual input and output ports—referred to as "buses"—that any
+MIDI-compatible macOS application can recognize as standard hardware
+ports.</p>
+<h3 id="how-internal-midi-routing-works-on-apple-platforms">How Internal
+MIDI Routing Works on Apple Platforms</h3>
+<p>The IAC driver relies on Apple’s system-level
+<strong>CoreMIDI</strong> architecture:</p>
+<ol type="1">
+<li><strong>System Registration:</strong> When enabled, the IAC driver
+registers as an active MIDI endpoint in macOS. The system presents its
+configured buses to the CoreMIDI server as available sources
+(transmitters) and destinations (receivers).</li>
+<li><strong>Inter-Process Data Transfer:</strong> When Application A
+sends a MIDI message (such as a Note On, Control Change, or Clock event)
+to an IAC bus, the CoreMIDI server captures this data packet. Instead of
+routing the packet to a USB driver or external device, CoreMIDI holds
+the data in system memory and immediately dispatches it to any
+application registered to listen to that same IAC bus.</li>
+<li><strong>Receipt and Processing:</strong> Application B, configured
+to monitor the corresponding IAC bus as an input, receives the MIDI
+messages as if they arrived from an external MIDI controller or hardware
+sequencer.</li>
+</ol>
+<p>Because the data never leaves system memory, the transmission occurs
+with near-zero latency, avoiding the timing jitter and physical
+transmission delays associated with USB polling rates and hardware
+buffers.</p>
+<h3 id="configuring-the-iac-driver">Configuring the IAC Driver</h3>
+<p>To configure and enable the IAC driver in macOS:</p>
+<ol type="1">
+<li>Launch <strong>Audio MIDI Setup</strong> (located in
+<code>/Applications/Utilities</code>).</li>
+<li>Go to the menu bar and select <strong>Window &gt; Show MIDI
+Studio</strong>.</li>
+<li>Locate the <strong>IAC Driver</strong> icon (often grayed out by
+default) and double-click it to open its properties window.</li>
+<li>Check the box labeled <strong>Device is online</strong>.</li>
+<li>Under the <strong>Ports</strong> section, review or add buses by
+clicking the <code>+</code> button. You can rename these buses (e.g.,
+"IAC Bus 1", "Clock Bus") for clearer identification in your
+software.</li>
+<li>Click <strong>Apply</strong>.</li>
+</ol>
+<p>Once activated, these buses appear as standard MIDI Inputs and
+Outputs across all running software capable of CoreMIDI
+communication.</p>
+<h3 id="common-use-cases">Common Use Cases</h3>
+<ul>
+<li><strong>Routing Algorithmic Sequencers:</strong> Streaming real-time
+MIDI data generated in programming environments like Max/MSP, Pure Data,
+or SuperCollider directly into instruments hosted within DAWs like Logic
+Pro, Ableton Live, or Pro Tools.</li>
+<li><strong>Master Clock Synchronization:</strong> Sending MIDI Clock or
+MIDI Time Code (MTC) from one standalone application to slave another
+project running concurrently.</li>
+<li><strong>Bridging Standalone Synths and DAWs:</strong> Recording the
+MIDI performance of standalone soft synths or arpeggiators directly into
+a DAW’s timeline for editing.</li>
+</ul>
+<h3 id="critical-considerations-avoiding-midi-feedback-loops">Critical
+Considerations: Avoiding MIDI Feedback Loops</h3>
+<p>The most common issue when working with the IAC driver is a
+<strong>MIDI feedback loop</strong>. This occurs when an application
+receives MIDI from an IAC bus and simultaneously echoes or routes that
+same MIDI back out to the same bus (often caused by selecting "All MIDI
+Inputs" on a track while routing its output back to the IAC bus). This
+creates an infinite, processor-choking loop of duplicated messages that
+can freeze your audio applications.</p>
+<p>To prevent feedback loops:</p>
+<ul>
+<li>Explicitly assign specific MIDI inputs to tracks rather than using
+generic "All Inputs" settings.</li>
+<li>Disable software MIDI thru functions for the specific IAC bus in use
+unless strictly required by your signal chain.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

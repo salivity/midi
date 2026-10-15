@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How a MIDI Merger Prevents Interleaved Data Corruption - midi</title>
+    <meta name="description" content="A dedicated MIDI merger prevents data corruption by isolating concurrent incoming serial streams into independent input buffers, reconstructing complete MIDI messages using an internal state machine, and scheduling them sequentially through a single outpu">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-a-midi-merger-prevents-interleaved-data-corruption">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How a MIDI Merger Prevents Interleaved Data Corruption - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-a-midi-merger-prevents-interleaved-data-corruption" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A dedicated MIDI merger prevents data corruption by isolating concurrent incoming serial streams into independent input buffers, reconstructing complete MIDI messages using an internal state machine, and scheduling them sequentially through a single outpu" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-a-midi-merger-prevents-interleaved-data-corruption">How a
+MIDI Merger Prevents Interleaved Data Corruption</h1>
+<p>A dedicated MIDI merger prevents data corruption by isolating
+concurrent incoming serial streams into independent input buffers,
+reconstructing complete MIDI messages using an internal state machine,
+and scheduling them sequentially through a single output queue. Because
+standard MIDI 1.0 communicates over an asynchronous serial protocol,
+physically combining wire signals without processing causes bytes from
+different streams to interleave, generating invalid and unparseable
+commands. Hardware MIDI mergers resolve this challenge through active
+microcontroller-based buffering, packet validation, distinct Running
+Status management, and strict serialization of multi-byte messages.</p>
+<h3 id="independent-input-buffering">Independent Input Buffering</h3>
+<p>A hardware MIDI merger features dedicated hardware receivers
+(typically independent UARTs or high-speed optocoupler interfaces
+managed by a central microcontroller) for each physical MIDI IN port.
+When two or more devices transmit data simultaneously, the incoming
+bytes do not collide on a shared line. Instead, each input port places
+incoming raw bytes into its own discrete First-In, First-Out (FIFO)
+circular buffer in memory. This physical and logical separation
+guarantees that raw bytes remain isolated at the hardware boundary.</p>
+<h3 id="packet-parsing-and-message-assembly">Packet Parsing and Message
+Assembly</h3>
+<p>The merger's processor continuously reads from each input buffer and
+routes the bytes through dedicated software state machines. The standard
+MIDI protocol dictates that messages consist of a status byte (most
+significant bit set to 1) followed by zero, one, or two data bytes (most
+significant bit set to 0), with the exception of variable-length System
+Exclusive (SysEx) messages.</p>
+<p>The merger evaluates the stream byte-by-byte to reconstruct full,
+discrete MIDI events. A standard Channel Voice message, such as a Note
+On command (three bytes: Status, Note Number, Velocity), is held in an
+internal message assembly struct until all associated data bytes have
+arrived from that specific input port. By withholding transmission until
+a complete packet is formed, the merger ensures that data bytes from
+Port A can never be interspersed among the data bytes belonging to Port
+B.</p>
+<h3 id="managing-running-status">Managing Running Status</h3>
+<p>The MIDI specification includes an optimization known as "Running
+Status," where a transmitter omits the status byte if consecutive
+messages share the same status type and channel (for example, sending
+multiple Note On events by transmitting only note numbers and
+velocities).</p>
+<p>If a basic merger simply forwarded bytes, a message from Port B would
+interrupt the running status context of Port A, causing subsequent data
+bytes on Port A to be misattributed or discarded. A dedicated merger
+tracks the Running Status state independently for every input port. When
+assembling output messages, the merger can either explicitly reinject
+the missing status byte into the output stream or maintain an output
+Running Status tracker, guaranteeing that the target receiver correctly
+interprets every data byte.</p>
+<h3 id="real-time-message-interleaving">Real-Time Message
+Interleaving</h3>
+<p>The only exception to MIDI's strict sequential messaging rules is
+System Real-Time messages (such as MIDI Clock, Start, Continue, and
+Stop), which are single-byte commands (0xF8 through 0xFF). The MIDI
+specification explicitly allows Real-Time bytes to appear anywhere in
+the stream—even embedded inside multi-byte messages—without disrupting
+the surrounding status context.</p>
+<p>Dedicated mergers are programmed to handle Real-Time bytes with high
+priority to avoid timing jitter. While a merger may permit a
+high-priority Real-Time byte to bypass a pending multi-byte message in
+the output queue, it strictly prohibits standard multi-byte messages
+from interrupting one another.</p>
+<h3 id="serialized-output-transmission">Serialized Output
+Transmission</h3>
+<p>Once whole messages are validated and assembled, the merger passes
+them to a single outbound FIFO queue linked to the MIDI OUT transmitter.
+The processor releases these messages onto the physical output line
+strictly one complete message at a time. By enforcing message-level
+granularity rather than byte-level forwarding, the merger eliminates
+byte interleaving and delivers a continuous, standards-compliant stream
+to the receiving equipment.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

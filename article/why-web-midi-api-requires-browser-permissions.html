@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Web MIDI API Requires Browser Permissions - midi</title>
+    <meta name="description" content="The Web MIDI API enables web applications to interact directly with Musical Instrument Digital Interface (MIDI) hardware, bridging the gap between web software and external audio equipment like synthesizers, drum pads, and controllers. While this capabili">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-web-midi-api-requires-browser-permissions">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Web MIDI API Requires Browser Permissions - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-web-midi-api-requires-browser-permissions" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Web MIDI API enables web applications to interact directly with Musical Instrument Digital Interface (MIDI) hardware, bridging the gap between web software and external audio equipment like synthesizers, drum pads, and controllers. While this capabili" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-web-midi-api-requires-browser-permissions">Why Web MIDI API
+Requires Browser Permissions</h1>
+<p>The Web MIDI API enables web applications to interact directly with
+Musical Instrument Digital Interface (MIDI) hardware, bridging the gap
+between web software and external audio equipment like synthesizers,
+drum pads, and controllers. While this capability allows for
+sophisticated browser-based digital audio workstations, it also creates
+direct communication pathways to external hardware. Because this
+low-level interaction poses severe security and privacy
+threats—including malicious firmware modification, hardware hijacking,
+and persistent cross-site tracking—modern web browsers require explicit
+user permission before granting access to connected MIDI devices.</p>
+<h3 id="system-exclusive-sysex-vulnerabilities">System Exclusive (SysEx)
+Vulnerabilities</h3>
+<p>The most significant security hazard within the MIDI protocol is the
+use of System Exclusive (SysEx) messages. Unlike standard MIDI signals
+that transmit basic musical instructions such as note activations or
+pitch modulation, SysEx messages are vendor-specific commands intended
+to configure internal device settings.</p>
+<p>Through SysEx communication, an external program can read internal
+memory, alter global device configurations, and transmit firmware
+updates. Without browser permission prompts, a malicious website running
+in the background could send rogue SysEx payloads to reflash a connected
+instrument's firmware. This could permanently disable (brick) the
+equipment or inject malicious persistent code into devices with
+programmable microcontrollers.</p>
+<h3 id="hardware-fingerprinting-and-tracking">Hardware Fingerprinting
+and Tracking</h3>
+<p>Browsers enforce permissions to prevent unauthorized digital
+fingerprinting. When a web application queries the Web MIDI API, the
+interface returns detailed device metadata, including:</p>
+<ul>
+<li>Device manufacturer and vendor names</li>
+<li>Model identifiers and product names</li>
+<li>Specific port configurations and connection states</li>
+</ul>
+<p>Because physical MIDI gear is relatively uncommon compared to
+standard peripherals, the presence of specific musical hardware provides
+an exceptionally distinct tracking signal. Data brokers and malicious
+trackers could query connected MIDI devices silently, creating a
+persistent identifier to track users across unrelated websites,
+effectively bypassing incognito modes, VPNs, and standard cookie
+protections.</p>
+<h3 id="control-of-non-musical-hardware">Control of Non-Musical
+Hardware</h3>
+<p>The MIDI protocol is widely adopted outside the realm of musical
+performance. Many industrial systems, stage lighting rigs (via
+DMX-to-MIDI converters), video switchers, and specialized input
+interfaces rely on MIDI commands for real-time control.</p>
+<p>Granting an untrusted webpage unfettered access to the MIDI subsystem
+could allow it to manipulate physical infrastructure. A malicious script
+could trigger high-intensity stage lighting, actuate mechanical
+equipment, or interfere with ongoing live broadcast automation connected
+to the host computer.</p>
+<h3 id="physical-damage-and-auditory-risks">Physical Damage and Auditory
+Risks</h3>
+<p>Unchecked MIDI transmission can pose physical risks to both equipment
+and human hearing. A rogue script could rapidly send commands setting
+volume controls, amplifier gains, or digital resonance filters to their
+maximum levels while simultaneously triggering loud chords. These
+sudden, unexpected sound bursts can cause acoustic trauma to users
+wearing headphones and potentially blow out connected studio monitors,
+subwoofers, and PA systems.</p>
+<h3 id="modern-browser-permission-policies">Modern Browser Permission
+Policies</h3>
+<p>Originally, browsers like Google Chrome allowed standard Web MIDI
+access silently, only prompting the user when an application requested
+<code>sysex: true</code>. However, due to rising fingerprinting concerns
+and the security overlap between standard messages and internal device
+memory, the W3C Audio Working Group and major browser vendors updated
+their security models.</p>
+<p>Modern browsers treat all MIDI interactions as powerful features,
+placing basic MIDI access alongside camera, microphone, and geolocation
+permissions. Users must actively click an explicit prompt to grant
+access, ensuring that low-level hardware remains isolated from untrusted
+web content.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

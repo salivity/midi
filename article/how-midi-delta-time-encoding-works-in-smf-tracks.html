@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Delta-Time Encoding Works in SMF Tracks - midi</title>
+    <meta name="description" content="Inside a Standard MIDI File (SMF), track chunks (MTrk) organize musical performances by sequencing commands chronologically without using absolute timestamps. Instead, every event is preceded by a value known as &quot;delta-time,&quot; which dictates the amount of">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-delta-time-encoding-works-in-smf-tracks">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Delta-Time Encoding Works in SMF Tracks - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-delta-time-encoding-works-in-smf-tracks" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Inside a Standard MIDI File (SMF), track chunks (MTrk) organize musical performances by sequencing commands chronologically without using absolute timestamps. Instead, every event is preceded by a value known as &quot;delta-time,&quot; which dictates the amount of" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-delta-time-encoding-works-in-smf-tracks">How MIDI
+Delta-Time Encoding Works in SMF Tracks</h1>
+<p>Inside a Standard MIDI File (SMF), track chunks (<code>MTrk</code>)
+organize musical performances by sequencing commands chronologically
+without using absolute timestamps. Instead, every event is preceded by a
+value known as "delta-time," which dictates the amount of time elapsed
+since the preceding event. This article explains how delta-time is
+structured, how it leverages Variable-Length Quantity (VLQ) encoding to
+minimize file size, and how audio engines interpret these values to
+recreate accurate musical timing.</p>
+<h3 id="the-role-of-delta-time-in-track-chunks">The Role of Delta-Time
+in Track Chunks</h3>
+<p>A Standard MIDI File track chunk consists of a 4-byte identifier
+(<code>MTrk</code>), a 4-byte chunk length, and a stream of paired
+elements: a delta-time followed immediately by an event (such as a Note
+On, Note Off, or Meta Event).</p>
+<p>Unlike digital audio, which streams continuous samples, MIDI relies
+on instructions. Rather than tagging an instruction with an absolute
+timestamp like "play at tick 1920," the format uses relative timing. A
+delta-time indicates how many clock ticks the sequencer must wait
+<em>after</em> the previous event before executing the next one. If
+multiple events occur simultaneously—such as notes in a chord—the first
+event carries the elapsed delta-time from the previous moment, while the
+subsequent concurrent events each have a delta-time of zero. The very
+first event in a track chunk carries a delta-time measured from the
+start of the sequence, which is typically zero.</p>
+<h3 id="variable-length-quantity-vlq-encoding">Variable-Length Quantity
+(VLQ) Encoding</h3>
+<p>To prevent wasting storage space, delta-times are not stored as fixed
+16-bit or 32-bit integers. A fixed 32-bit integer would require four
+bytes for every single timing gap, even though most musical intervals
+fit into small numbers. SMF resolves this by utilizing Variable-Length
+Quantity (VLQ) encoding.</p>
+<p>VLQ allows an integer to be represented using between one and four
+bytes, depending on its size:</p>
+<ol type="1">
+<li><strong>The 7-Bit Payload:</strong> Each byte in a VLQ value
+dedicates its lower 7 bits (bits 0 through 6) to the actual numeric
+data.</li>
+<li><strong>The Continuation Bit:</strong> The most significant bit
+(MSB, bit 7) acts as a flag. If the MSB is <code>1</code>, it signals
+that at least one more byte follows. If the MSB is <code>0</code>, it
+marks the final byte of the delta-time value.</li>
+</ol>
+<p>To decode a VLQ delta-time:</p>
+<ul>
+<li>Read bytes sequentially.</li>
+<li>Strip off bit 7 from each byte.</li>
+<li>Shift the accumulated 7-bit values to the left by 7 bits for each
+subsequent byte.</li>
+<li>Stop reading when a byte with an MSB of <code>0</code> is
+encountered.</li>
+</ul>
+<h4 id="examples-of-vlq-values">Examples of VLQ Values:</h4>
+<ul>
+<li><strong>0 ticks:</strong> Represented in hexadecimal as
+<code>0x00</code> (binary <code>00000000</code>). The MSB is
+<code>0</code>, indicating a single-byte number with a value of 0.</li>
+<li><strong>127 ticks:</strong> Represented as <code>0x7F</code> (binary
+<code>01111111</code>). The MSB is <code>0</code>, marking the end of
+the byte.</li>
+<li><strong>128 ticks:</strong> Represented as <code>0x81 0x00</code>.
+In binary, this is <code>10000001 00000000</code>. Stripping the MSBs
+leaves <code>0000001</code> and <code>0000000</code>, which concatenate
+to <code>10000000</code> in binary, or 128 in decimal.</li>
+<li><strong>16,383 ticks:</strong> Represented as
+<code>0xFF 0x7F</code>. Stripping the MSBs leaves fourteen
+<code>1</code> bits, totaling 16,383.</li>
+</ul>
+<p>The maximum permissible delta-time in the MIDI specification consists
+of four bytes (<code>0xFF 0xFF 0xFF 0x7F</code>), representing a 28-bit
+integer with a maximum value of 268,435,455 ticks.</p>
+<h3 id="converting-ticks-to-real-time">Converting Ticks to Real
+Time</h3>
+<p>A delta-time value does not inherently define seconds or
+milliseconds; it strictly denotes abstract sequencer "ticks." To convert
+delta-ticks into physical wall-clock time, a MIDI parser references two
+parameters:</p>
+<ol type="1">
+<li><strong>Division (Time Base):</strong> Stored in the file’s header
+chunk (<code>MThd</code>), this 16-bit integer defines the resolution of
+the sequence, most commonly expressed as Pulses Per Quarter Note (PPQN).
+A common PPQN setting is 480 or 960 ticks per quarter note.</li>
+<li><strong>Tempo:</strong> Defined by a Meta Event
+(<code>FF 51 03</code>) within the track chunk, tempo is expressed as
+microseconds per quarter note. The default tempo is 500,000 microseconds
+per quarter note (equivalent to 120 beats per minute).</li>
+</ol>
+<p>The physical time duration represented by a delta-time is calculated
+using the formula:</p>
+<p><span class="math display">\[\text{Time (seconds)} =
+\text{Delta-Ticks} \times \left( \frac{\text{Microseconds per Quarter
+Note}}{\text{PPQN} \times 1,000,000} \right)\]</span></p>
+<p>Whenever a tempo meta-event occurs, the real-world duration of
+subsequent delta-ticks adjusts accordingly, while the relative tick
+count remains constant.</p>
+<h3 id="track-traversal-and-end-of-track">Track Traversal and End of
+Track</h3>
+<p>Because delta-times directly prefix every MIDI message, an
+<code>MTrk</code> chunk cannot be parsed by simply searching for status
+bytes. The parser must always read the delta-time first, advance its
+internal playback clock by that number of ticks, and then read and
+execute the MIDI or Meta event that follows. This cycle repeats until
+the parser encounters the mandatory End of Track meta-event
+(<code>FF 2F 00</code>), which also carries its own delta-time to ensure
+any trailing silence at the end of the musical piece is preserved.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

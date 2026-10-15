@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Sync Analog Tape to a DAW with SMPTE - midi</title>
+    <meta name="description" content="Synchronizing an analog tape machine to a modern digital audio workstation (DAW) bridges classic analog warmth with contemporary digital editing capabilities. This integration is accomplished by striping an analog track with SMPTE Longitudinal Timecode (L">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-sync-analog-tape-to-a-daw-with-smpte">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Sync Analog Tape to a DAW with SMPTE - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-sync-analog-tape-to-a-daw-with-smpte" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Synchronizing an analog tape machine to a modern digital audio workstation (DAW) bridges classic analog warmth with contemporary digital editing capabilities. This integration is accomplished by striping an analog track with SMPTE Longitudinal Timecode (L" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-sync-analog-tape-to-a-daw-with-smpte">How to Sync Analog
+Tape to a DAW with SMPTE</h1>
+<p>Synchronizing an analog tape machine to a modern digital audio
+workstation (DAW) bridges classic analog warmth with contemporary
+digital editing capabilities. This integration is accomplished by
+striping an analog track with SMPTE Longitudinal Timecode (LTC), feeding
+that signal into a dedicated synchronizer hardware unit that converts
+LTC into MIDI Timecode (MTC), and configuring the DAW to chase the
+incoming MTC as a slave device. This workflow guarantees that both
+playback systems remain locked in positional alignment from tracking
+through mixdown.</p>
+<h3 id="1-striping-the-analog-tape-with-smpte">1. Striping the Analog
+Tape with SMPTE</h3>
+<p>Before recording audio, the engineer must print (or "stripe") a
+continuous SMPTE LTC audio signal onto a dedicated track of the
+multitrack tape machine.</p>
+<ul>
+<li><strong>Track Selection:</strong> Use an outside track—typically the
+highest-numbered track (e.g., Track 8 on an 8-track, Track 16 on a
+16-track, or Track 24 on a 24-track). Outside tracks are prone to edge
+damage, making them less ideal for primary audio, and using an edge
+track prevents high-frequency timecode bleed from leaking into sensitive
+audio channels. Leave the adjacent guard track unrecorded if bleed is an
+issue.</li>
+<li><strong>Levels and Processing:</strong> Generate the SMPTE signal
+(typically at 30 fps non-drop or 24 fps) from the synchronizer or a DAW
+utility, printing it between -10 VU and -3 VU. It is critical to bypass
+all EQ, compression, and noise reduction (such as Dolby or dbx) on this
+track, as dynamic processing will distort the square-wave signal and
+cause synchronization dropouts.</li>
+</ul>
+<h3 id="2-physical-connections-and-signal-routing">2. Physical
+Connections and Signal Routing</h3>
+<p>Once the tape is striped, the physical signal path connects the tape
+machine to the computer:</p>
+<ol type="1">
+<li><strong>Tape Output to Converter:</strong> Route the line output of
+the SMPTE track on the tape machine into the LTC/SMPTE input jack
+(usually an XLR or 1/4-inch connection) of the SMPTE-to-MIDI converter
+(e.g., a MOTU MIDI Express XT or vintage JLCooper synchronizer).</li>
+<li><strong>Converter to DAW:</strong> Connect the MIDI Out port of the
+converter unit to the MIDI In port of your audio interface or USB-MIDI
+hub connected to your computer.</li>
+</ol>
+<h3 id="3-converter-setup">3. Converter Setup</h3>
+<p>Configure the hardware converter to translate incoming analog LTC
+pulses into digital MIDI Timecode (MTC) packets in real time:</p>
+<ul>
+<li>Set the converter's operating mode to "LTC to MTC" (or "SMPTE to
+MIDI").</li>
+<li>Ensure the converter is set to auto-detect or manually match the
+exact frame rate of the recorded SMPTE track (e.g., 30 fps, 29.97 fps,
+25 fps, or 24 fps).</li>
+</ul>
+<h3 id="4-daw-synchronization-configuration">4. DAW Synchronization
+Configuration</h3>
+<p>The DAW must be set to receive external positional commands rather
+than generating its own internal clock:</p>
+<ul>
+<li><strong>Sync Source:</strong> Open the DAW's synchronization
+preferences and change the clock source/timecode source from "Internal"
+to "MTC" (MIDI Timecode).</li>
+<li><strong>Port Selection:</strong> Designate the specific MIDI port
+receiving data from the converter as the active timecode input.</li>
+<li><strong>Frame Rate Matching:</strong> Match the DAW project frame
+rate identically to the incoming timecode frame rate. A mismatch will
+cause drift or stuttering.</li>
+<li><strong>Timecode Offset:</strong> Set the project start timecode to
+match the starting timecode recorded on the tape (e.g.,
+01:00:00:00).</li>
+<li><strong>Engage Chase:</strong> Enable the DAW's "Sync" or "Chase"
+mode (often represented by a small clock icon near the transport
+controls).</li>
+</ul>
+<h3 id="5-playback-and-tracking">5. Playback and Tracking</h3>
+<p>With the system configured, the analog tape machine functions as the
+master transport, and the DAW operates as the slave:</p>
+<ol type="1">
+<li>Press <strong>Play</strong> on the analog tape deck.</li>
+<li>The tape outputs the audible SMPTE tone into the converter.</li>
+<li>The converter translates the tone into MTC data and feeds it to the
+DAW.</li>
+<li>The DAW recognizes the incoming timecode, locks onto the positional
+marker, and automatically begins playback in sync with the tape.</li>
+</ol>
+<p><em>(Note: While MTC handles positional synchronization, analog tape
+machines naturally exhibit slight speed variations known as wow and
+flutter. For short passes or general overdubbing, standard MTC sync is
+sufficient. For multi-hour transfers or drift-free long takes, a
+synchronizer capable of resolving the tape's speed via a capstan motor
+controller or resolving the DAW's word clock to tape is
+recommended.)</em></p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

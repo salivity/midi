@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Pedalboards Trigger 32-Foot Pipe Bass Ranks - midi</title>
+    <meta name="description" content="This article explains the electro-mechanical process through which an automated organ pedalboard uses MIDI contact switches to trigger deep 32-foot pipe bass ranks. By translating physical foot movements into digital control data, modern organ systems bri">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-pedalboards-trigger-32-foot-pipe-bass-ranks">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Pedalboards Trigger 32-Foot Pipe Bass Ranks - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-pedalboards-trigger-32-foot-pipe-bass-ranks" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains the electro-mechanical process through which an automated organ pedalboard uses MIDI contact switches to trigger deep 32-foot pipe bass ranks. By translating physical foot movements into digital control data, modern organ systems bri" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-pedalboards-trigger-32-foot-pipe-bass-ranks">How MIDI
+Pedalboards Trigger 32-Foot Pipe Bass Ranks</h1>
+<p>This article explains the electro-mechanical process through which an
+automated organ pedalboard uses MIDI contact switches to trigger deep
+32-foot pipe bass ranks. By translating physical foot movements into
+digital control data, modern organ systems bridge digital performance
+interfaces with massive acoustic pipe chests. Readers will learn how
+switch actuation, MIDI signal processing, and low-voltage electrical
+relays work together to open heavy wind valves and produce fundamental
+frequencies as low as 16 Hertz.</p>
+<h3 id="1-pedal-actuation-and-midi-contact-switches">1. Pedal Actuation
+and MIDI Contact Switches</h3>
+<p>When an organist depresses a wooden pedal, physical motion is
+instantly detected by an electronic contact assembly mounted beneath or
+behind the pedal keys. Modern pedalboards typically employ one of three
+switch types:</p>
+<ul>
+<li><strong>Magnetic Reed Switches:</strong> A permanent magnet affixed
+to the underside of the moving pedal passes near a sealed glass reed
+switch, pulling the flexible metal contacts together.</li>
+<li><strong>Hall-Effect Sensors:</strong> A solid-state alternative
+where the pedal magnet alters an electrical current across a
+semiconductor, offering non-contact operation with zero mechanical
+wear.</li>
+<li><strong>Mechanical Spring Contacts:</strong> Traditional physical
+contacts made of gold or silver-plated wire that physically touch a
+busbar to close an electrical circuit.</li>
+</ul>
+<p>Closing the switch sends a momentary direct current (DC) signal to an
+onboard MIDI encoder board.</p>
+<h3 id="2-digital-encoding-and-transmission">2. Digital Encoding and
+Transmission</h3>
+<p>The encoder microcontroller reads the closed circuit, identifies the
+specific key (pedal notes typically span 30 to 32 notes, mapped from C2
+to F4 or G4 in general MIDI nomenclature), and generates standard serial
+MIDI data.</p>
+<p>This data packet consists of a <strong>Note On</strong> command, the
+specific note number, and a velocity value (typically a fixed value of
+64 or 127 in organ control systems). When the foot leaves the pedal, the
+switch opens, generating a corresponding <strong>Note Off</strong>
+command. This digital stream is transmitted instantly via a standard
+5-pin DIN cable, an optical cable, or a serial control network to the
+organ’s central transmission system or relay driver.</p>
+<h3 id="3-relay-decoding-and-stop-registration">3. Relay Decoding and
+Stop Registration</h3>
+<p>Before a 32-foot pipe can sound, the MIDI message passes through the
+organ’s registration logic—either in a dedicated solid-state relay (SSR)
+computer or an automated console controller.</p>
+<p>The system verifies whether a 32-foot stop (such as a 32' Contra
+Violone, Subbass, or Contra Bombarde) is currently engaged. If the stop
+is drawn, the control system routes the MIDI note to the corresponding
+electrical driver board dedicated to that specific pipe chest.
+Solid-state output drivers (such as MOSFETs or Darlington transistors)
+switch a higher-current 12V to 24V DC circuit on and off in exact
+synchronization with the incoming MIDI data.</p>
+<h3 id="4-electro-pneumatic-pallet-operation">4. Electro-Pneumatic
+Pallet Operation</h3>
+<p>A 32-foot pipe requires an enormous volume of low-pressure wind,
+meaning the valve (or "pallet") allowing wind into the pipe toe must be
+large and heavily weighted. Direct human physical linkage cannot easily
+pull open such large pallets; instead, the system utilizes
+electro-pneumatic action:</p>
+<ol type="1">
+<li><strong>Chest Magnet:</strong> The 12V–24V DC pulse from the driver
+energizes an electro-magnet inside the windchest.</li>
+<li><strong>Armature Lift:</strong> The energized magnet lifts a small
+iron disc (armature), venting air from a miniature internal pneumatic
+bellows.</li>
+<li><strong>Valve Exhaust:</strong> The collapsing primary pneumatic
+exhausts a secondary, larger pneumatic motor that holds the main pallet
+shut.</li>
+<li><strong>Pallet Release:</strong> The main pallet pulls open, dumping
+air directly from the pressurized windchest into the foot of the 32-foot
+pipe.</li>
+</ol>
+<h3 id="5-acoustic-wave-generation">5. Acoustic Wave Generation</h3>
+<p>With the windchest valve open, pressurized air streams through the
+pipe's flue or reed assembly. For a 32-foot low C, the pipe column
+vibrates at a fundamental pitch of roughly 16.35 Hz—a frequency at the
+absolute threshold of human hearing that is perceived more as physical
+floor vibration and acoustic pressure than a discrete tone.</p>
+<p>The moment the organ pedal is released, the contact switch breaks,
+the MIDI encoder transmits a Note Off command, the relay cuts the
+current to the chest magnet, the pneumatic motor re-inflates, and the
+heavy pallet valve shuts, terminating wind flow to the pipe.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

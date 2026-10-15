@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI CC Numbers for High-Resolution LSB Pairs - midi</title>
+    <meta name="description" content="Standard MIDI Continuous Controller (CC) messages typically provide 7-bit resolution, yielding 128 discrete steps. To achieve smoother adjustments, the MIDI specification allows 14-bit high-resolution control by pairing two 7-bit controllers together as M">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cc-numbers-for-high-resolution-lsb-pairs">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI CC Numbers for High-Resolution LSB Pairs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cc-numbers-for-high-resolution-lsb-pairs" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard MIDI Continuous Controller (CC) messages typically provide 7-bit resolution, yielding 128 discrete steps. To achieve smoother adjustments, the MIDI specification allows 14-bit high-resolution control by pairing two 7-bit controllers together as M" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-cc-numbers-for-high-resolution-lsb-pairs">MIDI CC Numbers
+for High-Resolution LSB Pairs</h1>
+<p>Standard MIDI Continuous Controller (CC) messages typically provide
+7-bit resolution, yielding 128 discrete steps. To achieve smoother
+adjustments, the MIDI specification allows 14-bit high-resolution
+control by pairing two 7-bit controllers together as Most Significant
+Byte (MSB) and Least Significant Byte (LSB) values. This article
+identifies the exact MIDI CC numbers permanently designated to handle
+LSB data for these high-resolution pairs and explains how they function
+within the MIDI specification.</p>
+<h2 id="the-designated-lsb-range-cc-32-to-cc-63">The Designated LSB
+Range: CC 32 to CC 63</h2>
+<p>In the MIDI 1.0 specification, <strong>MIDI CC 32 through CC
+63</strong> are permanently assigned as the LSB counterparts for primary
+controllers.</p>
+<p>These numbers directly mirror the first 32 continuous controllers (CC
+0 through CC 31), which serve as the MSB. To calculate the corresponding
+LSB CC number for any primary controller in the 0–31 range, you simply
+add 32:</p>
+<p><span class="math display">\[\text{LSB CC Number} = \text{MSB CC
+Number} + 32\]</span></p>
+<h3 id="common-msb-and-lsb-controller-pairs">Common MSB and LSB
+Controller Pairs</h3>
+<p>When paired, the MSB and LSB combine to produce 16,384 possible
+values (<span class="math inline">\(2^{14}\)</span>), eliminating
+audible stepping or "zipper noise" during parameter sweeps. Below are
+some of the most common standard pairings:</p>
+<ul>
+<li><strong>Bank Select:</strong> CC 0 (MSB) and CC 32 (LSB)</li>
+<li><strong>Modulation Wheel:</strong> CC 1 (MSB) and CC 33 (LSB)</li>
+<li><strong>Breath Controller:</strong> CC 2 (MSB) and CC 34 (LSB)</li>
+<li><strong>Foot Controller:</strong> CC 4 (MSB) and CC 36 (LSB)</li>
+<li><strong>Portamento Time:</strong> CC 5 (MSB) and CC 37 (LSB)</li>
+<li><strong>Channel Volume:</strong> CC 7 (MSB) and CC 39 (LSB)</li>
+<li><strong>Balance:</strong> CC 8 (MSB) and CC 40 (LSB)</li>
+<li><strong>Pan:</strong> CC 10 (MSB) and CC 42 (LSB)</li>
+<li><strong>Expression Controller:</strong> CC 11 (MSB) and CC 43
+(LSB)</li>
+</ul>
+<h2 id="transmission-and-parsing-rules">Transmission and Parsing
+Rules</h2>
+<p>When transmitting 14-bit dual-CC data, standard hardware and software
+implementations follow specific operational rules:</p>
+<ol type="1">
+<li><strong>Order of Transmission:</strong> The MSB is typically
+transmitted first to establish the coarse value, followed immediately by
+the LSB to deliver the fine adjustment.</li>
+<li><strong>Coarse Adjustments Only:</strong> If a parameter only
+requires standard 7-bit precision, sending the MSB (CC 0–31) alone is
+permissible; the receiving device assumes an LSB value of 0.</li>
+<li><strong>Fine Adjustments Only:</strong> If fine-tuning is required
+without changing the coarse position, the LSB (CC 32–63) can be
+transmitted independently after the initial MSB has been set.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

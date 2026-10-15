@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Pin 2 Is Grounded Only at MIDI Out - midi</title>
+    <meta name="description" content="In standard MIDI hardware configurations, pin 2 of the 5-pin DIN connector is connected to the cable shield and grounded exclusively at the MIDI Out transmitter, while remaining completely disconnected at the MIDI In receiver. This article explains the el">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-pin-2-is-grounded-only-at-midi-out">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Pin 2 Is Grounded Only at MIDI Out - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-pin-2-is-grounded-only-at-midi-out" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In standard MIDI hardware configurations, pin 2 of the 5-pin DIN connector is connected to the cable shield and grounded exclusively at the MIDI Out transmitter, while remaining completely disconnected at the MIDI In receiver. This article explains the el" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-pin-2-is-grounded-only-at-midi-out">Why MIDI Pin 2 Is
+Grounded Only at MIDI Out</h1>
+<p>In standard MIDI hardware configurations, pin 2 of the 5-pin DIN
+connector is connected to the cable shield and grounded exclusively at
+the MIDI Out transmitter, while remaining completely disconnected at the
+MIDI In receiver. This article explains the electrical engineering
+rationale behind this design, focusing on the elimination of ground
+loops, the preservation of galvanic isolation, and the maintenance of
+radio frequency interference shielding.</p>
+<h3 id="galvanic-isolation-and-the-optocoupler">Galvanic Isolation and
+the Optocoupler</h3>
+<p>The MIDI standard utilizes a 5 mA balanced current loop system. The
+transmitting device drives current through pin 4 (+5V through a pull-up
+resistor) and sinks it through pin 5 (the data signal). At the receiving
+end (MIDI In), this current passes entirely through the infrared LED of
+an optocoupler before returning to the source.</p>
+<p>Because an optocoupler converts the incoming electrical signal into
+light and then back into an electrical signal on the receiving logic
+board, there is no physical conductive path required between the two
+devices to transmit data. The data loop is fully floating with respect
+to the receiver's ground.</p>
+<h3 id="preventing-ground-loops">Preventing Ground Loops</h3>
+<p>The primary electrical reason for leaving pin 2 disconnected at the
+MIDI In port is to eliminate ground loops. In audio and music production
+environments, connected equipment is frequently plugged into different
+mains outlets or different circuit branches, which often sit at slightly
+different electrical ground potentials.</p>
+<p>If pin 2—and consequently the cable's outer braided shield—were tied
+to chassis or signal ground at both the transmitting and receiving ends,
+it would form a direct, low-resistance copper link between the two
+separate chassis grounds. Any potential difference between those grounds
+would force circulating currents through the cable shield. This
+phenomenon causes:</p>
+<ul>
+<li><strong>Audio Hum and Buzz:</strong> Induced AC noise entering
+adjacent analog audio lines running alongside MIDI cables.</li>
+<li><strong>Digital Data Corruption:</strong> High-frequency noise
+riding on ground paths disrupting sensitive logic circuitry.</li>
+<li><strong>Component Damage:</strong> In extreme cases of fault or
+phase differences between equipment on different electrical circuits,
+significant fault current could travel across the shield.</li>
+</ul>
+<p>By breaking the connection at the MIDI In port, the ground loop path
+is physically interrupted, preserving the optical isolation provided by
+the optocoupler.</p>
+<h3 id="maintaining-electrostatic-and-rf-shielding">Maintaining
+Electrostatic and RF Shielding</h3>
+<p>A common misconception is that a cable shield must be connected at
+both ends to function. Electrically, a shield grounded at only one end
+still acts as an effective electrostatic shield (a Faraday cage).</p>
+<p>Connecting pin 2 to ground at the MIDI Out jack ensures that the
+shield has a reference to drain stray capacitive coupling and external
+radio frequency interference (RFI) without permitting current to flow
+through the shield from one device to another. Grounding only at the
+source prevents the shield itself from behaving as an antenna for ground
+noise while still protecting the differential signal carried on pins 4
+and 5.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding MIDI Key Signature Meta Events - midi</title>
+    <meta name="description" content="The MIDI Key Signature Meta Event communicates musical tonality within a standard MIDI file using a compact two-byte payload. Rather than storing explicit note names like &quot;C&quot; or &quot;F#&quot;, the specification encodes the key by defining the count of accidentals">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/understanding-midi-key-signature-meta-events">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding MIDI Key Signature Meta Events - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/understanding-midi-key-signature-meta-events" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Key Signature Meta Event communicates musical tonality within a standard MIDI file using a compact two-byte payload. Rather than storing explicit note names like &quot;C&quot; or &quot;F#&quot;, the specification encodes the key by defining the count of accidentals" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="understanding-midi-key-signature-meta-events">Understanding MIDI
+Key Signature Meta Events</h1>
+<p>The MIDI Key Signature Meta Event communicates musical tonality
+within a standard MIDI file using a compact two-byte payload. Rather
+than storing explicit note names like "C" or "F#", the specification
+encodes the key by defining the count of accidentals alongside a binary
+mode flag. By combining the number of sharps or flats with the specified
+major or minor mode, MIDI playback engines and digital audio
+workstations can unambiguously deduce both the tonic root note and the
+tonal quality of the composition.</p>
+<h3 id="the-meta-event-structure">The Meta Event Structure</h3>
+<p>In standard MIDI file syntax, the Key Signature event is represented
+by the following byte sequence:</p>
+<p><code>FF 59 02 sf mi</code></p>
+<ul>
+<li><strong><code>FF</code></strong>: The status byte indicating a Meta
+Event.</li>
+<li><strong><code>59</code></strong>: The specific Meta Event type for a
+Key Signature.</li>
+<li><strong><code>02</code></strong>: The length of the remaining data
+in bytes.</li>
+<li><strong><code>sf</code></strong>: The number of sharps or
+flats.</li>
+<li><strong><code>mi</code></strong>: The tonality mode (major or
+minor).</li>
+</ul>
+<h3 id="encoding-the-accidentals-sf">Encoding the Accidentals
+(<code>sf</code>)</h3>
+<p>The first data byte (<code>sf</code>) represents the position of the
+key along the Circle of Fifths as a signed 8-bit integer:</p>
+<ul>
+<li><strong>Positive values (<code>0x01</code> to
+<code>0x07</code>)</strong>: Represent keys with one to seven sharps
+(e.g., <code>01</code> = 1 sharp, <code>02</code> = 2 sharps).</li>
+<li><strong>Zero (<code>0x00</code>)</strong>: Represents zero
+accidentals (the natural key signature).</li>
+<li><strong>Negative values (<code>0xFF</code> to <code>0xF9</code> in
+two's complement)</strong>: Represent keys with one to seven flats
+(e.g., <code>-1</code> or <code>0xFF</code> = 1 flat; <code>-7</code> or
+<code>0xF9</code> = 7 flats).</li>
+</ul>
+<h3 id="encoding-the-tonality-mode-mi">Encoding the Tonality Mode
+(<code>mi</code>)</h3>
+<p>The second data byte (<code>mi</code>) dictates whether the key
+signature is interpreted as major or minor:</p>
+<ul>
+<li><strong><code>00</code></strong>: Major key.</li>
+<li><strong><code>01</code></strong>: Minor key.</li>
+</ul>
+<p>The specification only defines <code>00</code> and <code>01</code>.
+Alternate modes (such as Dorian, Mixolydian, or Phrygian) are not
+natively encoded and must be treated as their relative major or minor
+equivalents.</p>
+<h3 id="how-the-tonic-root-is-derived">How the Tonic Root is
+Derived</h3>
+<p>The tonic root note is not explicitly stored; it is derived through
+the relationship between the accidental count (<code>sf</code>) and the
+mode (<code>mi</code>).</p>
+<p>Because every key signature on the Circle of Fifths corresponds to
+one major key and its relative minor (which shares the exact same
+accidentals), the <code>mi</code> byte acts as a switch between the two
+possibilities:</p>
+<ul>
+<li><strong>When <code>mi</code> is <code>0x00</code> (Major):</strong>
+The <code>sf</code> value identifies the root directly from the major
+Circle of Fifths.
+<ul>
+<li><code>sf = 00</code>, <code>mi = 00</code>: 0 accidentals, Major =
+<strong>C Major</strong></li>
+<li><code>sf = 01</code>, <code>mi = 00</code>: 1 sharp, Major =
+<strong>G Major</strong></li>
+<li><code>sf = FE</code> (-2), <code>mi = 00</code>: 2 flats, Major =
+<strong>B♭ Major</strong></li>
+</ul></li>
+<li><strong>When <code>mi</code> is <code>0x01</code> (Minor):</strong>
+The root shifts three semitones (a minor third) down from the major key
+that shares the same accidental count.
+<ul>
+<li><code>sf = 00</code>, <code>mi = 01</code>: 0 accidentals, Minor =
+<strong>A Minor</strong> (relative to C Major)</li>
+<li><code>sf = 01</code>, <code>mi = 01</code>: 1 sharp, Minor =
+<strong>E Minor</strong> (relative to G Major)</li>
+<li><code>sf = FE</code> (-2), <code>mi = 01</code>: 2 flats, Minor =
+<strong>G Minor</strong> (relative to B♭ Major)</li>
+</ul></li>
+</ul>
+<p>Through this pair of values, the MIDI specification provides a
+standardized, mathematically concise method for software to map out both
+the correct pitch center and the harmonic context for notation and
+playback.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

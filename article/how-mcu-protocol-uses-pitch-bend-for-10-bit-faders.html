@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MCU Protocol Uses Pitch Bend for 10-Bit Faders - midi</title>
+    <meta name="description" content="The Mackie Control Universal (MCU) protocol achieves smooth, high-precision mixing by using standard MIDI Pitch Bend messages instead of standard Continuous Controller (CC) messages to communicate fader positions. While standard MIDI CC commands are limit">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-mcu-protocol-uses-pitch-bend-for-10-bit-faders">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MCU Protocol Uses Pitch Bend for 10-Bit Faders - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-mcu-protocol-uses-pitch-bend-for-10-bit-faders" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Mackie Control Universal (MCU) protocol achieves smooth, high-precision mixing by using standard MIDI Pitch Bend messages instead of standard Continuous Controller (CC) messages to communicate fader positions. While standard MIDI CC commands are limit" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-mcu-protocol-uses-pitch-bend-for-10-bit-faders">How MCU
+Protocol Uses Pitch Bend for 10-Bit Faders</h1>
+<p>The Mackie Control Universal (MCU) protocol achieves smooth,
+high-precision mixing by using standard MIDI Pitch Bend messages instead
+of standard Continuous Controller (CC) messages to communicate fader
+positions. While standard MIDI CC commands are limited to a coarse 7-bit
+resolution (128 steps), the MCU protocol repurposes the 14-bit
+architecture of Pitch Bend to deliver 10-bit resolution (1,024 discrete
+steps). This technical design allows hardware controllers and Digital
+Audio Workstations (DAWs) to exchange ultra-smooth volume automation
+data across 100mm motorized faders without introducing audible stepping
+artifacts or overtaxing MIDI bandwidth.</p>
+<h3 id="the-limitation-of-standard-7-bit-midi">The Limitation of
+Standard 7-Bit MIDI</h3>
+<p>Standard MIDI Control Change messages allocate a single data byte for
+the controller value. Because MIDI reserves the most significant bit
+(MSB) of every byte to distinguish status bytes from data bytes, only 7
+bits remain for value representation. This caps standard continuous
+control at 128 values (0 to 127). Spread across a professional 100mm
+fader throw, 128 steps provide less than 1.3 steps per millimeter,
+resulting in noticeable volume jumps, commonly known as "zipper noise,"
+during subtle automation passes.</p>
+<h3 id="pitch-bend-architecture">Pitch Bend Architecture</h3>
+<p>To bypass this restriction without resorting to the processing
+overhead of System Exclusive (SysEx) or Non-Registered Parameter Number
+(NRPN) messages, the MCU specification repurposes the native MIDI Pitch
+Bend message.</p>
+<p>Pitch Bend is uniquely structured in the MIDI 1.0 specification to
+transmit two consecutive 7-bit data bytes:</p>
+<ol type="1">
+<li><strong>Least Significant Byte (LSB):</strong> Holds the lower 7
+bits of resolution.</li>
+<li><strong>Most Significant Byte (MSB):</strong> Holds the upper 7 bits
+of resolution.</li>
+</ol>
+<p>Together, these bytes form a 14-bit integer, yielding a theoretical
+range of 16,384 values (0 to 16,383).</p>
+<h3 id="extracting-10-bit-resolution">Extracting 10-Bit Resolution</h3>
+<p>Although Pitch Bend allows up to 14 bits, physical 100mm faders and
+analog-to-digital converters (ADCs) in motorized control surfaces
+typically operate at a 10-bit depth. A 10-bit resolution yields 1,024
+distinct positions (0 to 1,023), translating to approximately 10 values
+per millimeter on a 100mm fader—far exceeding the threshold of human
+hearing for volume stepping.</p>
+<p>The MCU protocol encodes and decodes this 10-bit value within the
+14-bit Pitch Bend envelope:</p>
+<ul>
+<li><strong>MIDI Message Format:</strong>
+<code>[Status Byte: 0xEn] [Byte 1: LSB] [Byte 2: MSB]</code></li>
+<li>The nibble <code>n</code> represents the MIDI channel (0–8), where
+channels 0 through 7 represent physical faders 1 through 8, and channel
+8 represents the dedicated Master fader.</li>
+<li>The 10-bit value is reconstructed using standard bit-shifting:
+<code>Value = (MSB &lt;&lt; 7) | LSB</code>.</li>
+<li>In the MCU scheme, the 10-bit value (0–1023) is typically
+left-aligned or directly scaled within the data frame, ensuring that the
+hardware motors and DAW mixers synchronize positions down to fractions
+of a decibel.</li>
+</ul>
+<h3 id="bandwidth-and-processing-efficiency">Bandwidth and Processing
+Efficiency</h3>
+<p>By routing fader data through channel-specific Pitch Bend events, MCU
+avoids the multi-byte handshaking required by SysEx strings. Pitch Bend
+messages are standard, high-priority channel voice messages consisting
+of only three bytes. This compactness ensures low latency and
+jitter-free motorized fader tracking, even when multiple faders are
+moving simultaneously during complex multi-track automation
+playback.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

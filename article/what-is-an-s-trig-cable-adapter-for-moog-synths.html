@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is an S-Trig Cable Adapter for Moog Synths? - midi</title>
+    <meta name="description" content="An S-Trig cable adapter is a specialized hardware converter that translates modern positive voltage gate signals into the switch-trigger format required by vintage Moog synthesizers. This article explains the technical differences between modern V-Trig an">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-an-s-trig-cable-adapter-for-moog-synths">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is an S-Trig Cable Adapter for Moog Synths? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-an-s-trig-cable-adapter-for-moog-synths" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An S-Trig cable adapter is a specialized hardware converter that translates modern positive voltage gate signals into the switch-trigger format required by vintage Moog synthesizers. This article explains the technical differences between modern V-Trig an" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-an-s-trig-cable-adapter-for-moog-synths">What Is an
+S-Trig Cable Adapter for Moog Synths?</h1>
+<p>An S-Trig cable adapter is a specialized hardware converter that
+translates modern positive voltage gate signals into the switch-trigger
+format required by vintage Moog synthesizers. This article explains the
+technical differences between modern V-Trig and vintage S-Trig
+standards, the role of an S-Trig adapter in bridging these systems, and
+why it is indispensable when controlling vintage Moog modular equipment
+with modern MIDI-to-CV converters.</p>
+<h3 id="voltage-trigger-v-trig-vs-switch-trigger-s-trig">Voltage Trigger
+(V-Trig) vs. Switch Trigger (S-Trig)</h3>
+<p>Most modern analog synthesizers, Eurorack modules, and MIDI-to-CV
+converters operate on a standard known as <strong>V-Trig</strong>
+(Voltage Trigger). In a V-Trig system, an "off" state is represented by
+0 volts, and an "on" state (such as pressing a key on a MIDI controller)
+sends a positive voltage spike or sustained gate—typically +5V or
++10V—to trigger envelopes and articulate notes.</p>
+<p>Vintage Moog modular systems and classic instruments like the
+Minimoog Model D use <strong>S-Trig</strong> (Switch Trigger). In an
+S-Trig system, the inactive state is held high (often +5V internally),
+while an active trigger occurs when the connection is shorted to ground
+(0V). Essentially, the S-Trig functions as an electronic switch closing
+a circuit rather than sending an incoming positive voltage pulse.</p>
+<h3 id="why-modern-gear-cannot-direct-connect-to-vintage-moog">Why
+Modern Gear Cannot Direct-Connect to Vintage Moog</h3>
+<p>Attempting to connect a standard gate output from a modern MIDI-to-CV
+converter directly into a vintage Moog S-Trig input results in
+incompatible signaling:</p>
+<ol type="1">
+<li><strong>Inverted Behavior:</strong> Because the logic is reversed,
+the synth may sound continuously when no key is pressed and mute when a
+key is engaged.</li>
+<li><strong>Failure to Trigger:</strong> In many cases, sending a
+positive voltage into an S-Trig input will completely fail to activate
+the envelope generators, producing no sound at all.</li>
+<li><strong>Connector Mismatch:</strong> Vintage Moog modular systems
+(such as the 900 series) and the Minimoog use proprietary two-pin
+Cinch-Jones connectors for triggering, whereas modern equipment uses
+3.5mm (1/8") or 6.35mm (1/4") phone jacks.</li>
+</ol>
+<h3 id="how-an-s-trig-cable-adapter-works">How an S-Trig Cable Adapter
+Works</h3>
+<p>An S-Trig adapter solves both the electrical and physical
+incompatibilities. Internally, the adapter contains a simple transistor
+circuit (typically utilizing an NPN transistor and a current-limiting
+resistor):</p>
+<ul>
+<li>When the modern MIDI-to-CV converter sends a positive gate voltage
+(V-Trig), it saturates the transistor's base.</li>
+<li>This causes the transistor to conduct, bridging the vintage synth’s
+trigger line to ground.</li>
+<li>The vintage Moog registers this short-to-ground as a closed switch,
+properly initiating the attack phase of its envelope generators.</li>
+<li>When the MIDI note releases, the voltage drops to zero, the
+transistor closes, and the Moog begins its release phase.</li>
+</ul>
+<p>Physically, the adapter typically features a standard TS jack (3.5mm
+or 1/4") on one end to accept a patch cable from your modern MIDI
+converter, and a two-prong Cinch-Jones plug on the other to insert
+directly into the Moog trigger input.</p>
+<h3 id="summary">Summary</h3>
+<p>If you intend to sequence or play a vintage Moog modular setup using
+modern MIDI hardware, an S-Trig cable adapter is essential. It prevents
+electrical conflicts, adapts the legacy physical connector, and
+accurately translates modern positive voltage gates into the
+ground-shorting signals vintage Moog circuitry expects.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

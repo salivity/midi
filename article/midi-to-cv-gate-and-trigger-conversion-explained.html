@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI to CV Gate and Trigger Conversion Explained - midi</title>
+    <meta name="description" content="A MIDI-to-CV interface bridges the gap between digital musical equipment and analog synthesizers by translating serial digital data packets into continuous and pulsed control voltages. When handling note duration, the interface decodes incoming digital &quot;N">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-to-cv-gate-and-trigger-conversion-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI to CV Gate and Trigger Conversion Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-to-cv-gate-and-trigger-conversion-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI-to-CV interface bridges the gap between digital musical equipment and analog synthesizers by translating serial digital data packets into continuous and pulsed control voltages. When handling note duration, the interface decodes incoming digital &quot;N" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-to-cv-gate-and-trigger-conversion-explained">MIDI to CV
+Gate and Trigger Conversion Explained</h1>
+<p>A MIDI-to-CV interface bridges the gap between digital musical
+equipment and analog synthesizers by translating serial digital data
+packets into continuous and pulsed control voltages. When handling note
+duration, the interface decodes incoming digital "Note On" and "Note
+Off" commands to generate two distinct timing signals: an analog Gate
+signal, which sustains a high voltage for the entire length of the note,
+and a momentary Trigger pulse, which fires an instantaneous voltage
+spike at the exact moment the key is struck.</p>
+<h3 id="decoding-the-midi-stream">Decoding the MIDI Stream</h3>
+<p>MIDI transfers performance data as a serial stream of binary bytes.
+When a key is pressed on a MIDI controller, it sends a <strong>Note
+On</strong> message, typically comprising three bytes:</p>
+<ol type="1">
+<li>Status byte (indicating Note On and the MIDI channel)</li>
+<li>Pitch byte (note number from 0 to 127)</li>
+<li>Velocity byte (how hard the key was struck, 1 to 127)</li>
+</ol>
+<p>When the key is released, the controller sends either a dedicated
+<strong>Note Off</strong> message (status byte 0x80) or a Note On
+message with a velocity value of zero.</p>
+<p>The onboard microprocessor inside the MIDI-to-CV converter
+continuously monitors this incoming serial stream via an optocoupler,
+which isolates the electrical circuits to prevent ground loops. Once the
+processor detects and validates the Note On and Note Off bytes, it
+instructs its output circuits to generate the appropriate analog
+voltages.</p>
+<h3 id="generating-the-gate-signal-note-duration">Generating the Gate
+Signal (Note Duration)</h3>
+<p>The Gate signal directly represents the duration of the played note.
+Unlike pitch, which requires a Digital-to-Analog Converter (DAC) to
+output varying fine-tuned voltages (such as 1V/Octave), a Gate is a
+binary state: on or off.</p>
+<ol type="1">
+<li><strong>Activation:</strong> The moment the microprocessor processes
+a valid Note On message, it switches an internal General-Purpose
+Input/Output (GPIO) pin from a logical LOW (0V) to a logical HIGH
+(typically 3.3V or 5V).</li>
+<li><strong>Voltage Level Shifting:</strong> Because analog synthesizers
+(such as Eurorack systems) typically require higher Gate levels—often
++5V, +10V, or +12V—the microcontroller's low-voltage digital output is
+passed through an analog buffer, transistor switch, or operational
+amplifier circuit to boost the signal to the standard analog level.</li>
+<li><strong>Deactivation:</strong> The interface holds this output
+voltage high for as long as the note is held down. When the
+microprocessor receives the corresponding Note Off command, it drops the
+GPIO pin back to logical LOW, immediately dropping the analog Gate
+output to 0V.</li>
+</ol>
+<p>This sustained voltage tells an analog envelope generator (like an
+ADSR) to complete its Attack and Decay stages and remain at the Sustain
+level until the voltage drops to 0V, initiating the Release phase.</p>
+<h3 id="generating-the-trigger-signal-note-articulation">Generating the
+Trigger Signal (Note Articulation)</h3>
+<p>While a Gate remains active for the full duration of a note, a
+Trigger is a brief, fixed-duration pulse designed solely to mark the
+note’s initiation. It is commonly used to fire envelope generators, step
+sequencers, or drum modules.</p>
+<ol type="1">
+<li><strong>Pulse Initiation:</strong> Concurrently with the Note On
+message, the microprocessor drives a separate dedicated GPIO output pin
+HIGH.</li>
+<li><strong>Pulse Timing:</strong> Instead of waiting for a Note Off
+message, an internal timer within the microprocessor holds this pin HIGH
+for a fixed duration—typically between 1 to 10 milliseconds—before
+automatically resetting it to 0V.</li>
+<li><strong>Buffering:</strong> Like the Gate, this brief pulse is
+level-shifted through a transistor or op-amp to meet analog voltage
+standards (+5V or +10V).</li>
+</ol>
+<h3 id="handling-legato-and-retriggering">Handling Legato and
+Retriggering</h3>
+<p>When notes are played legato (where a second note is pressed before
+the first is released), the MIDI-to-CV interface employs specific logic
+depending on its operating mode:</p>
+<ul>
+<li><strong>Legato Mode:</strong> The Gate output remains continuously
+HIGH across overlapping notes, preventing envelope stages from
+resetting, which allows smooth pitch transitions.</li>
+<li><strong>Retrigger Mode:</strong> Even though the Gate remains held
+high to reflect that a note is still active, the interface generates a
+fresh Trigger pulse with each new Note On message. Alternatively, some
+interfaces briefly pull the Gate voltage down to 0V for a fraction of a
+millisecond before driving it HIGH again, forcing connected analog
+envelope generators to re-execute their Attack phase.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

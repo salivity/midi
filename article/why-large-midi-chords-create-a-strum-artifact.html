@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Large MIDI Chords Create a Strum Artifact - midi</title>
+    <meta name="description" content="When a pianist plays a simultaneous ten-note chord using a traditional serial MIDI connection, the notes do not reach the sound module at the exact same moment. Because standard 5-pin DIN MIDI transmits data sequentially over a low-bandwidth connection, e">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-large-midi-chords-create-a-strum-artifact">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Large MIDI Chords Create a Strum Artifact - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-large-midi-chords-create-a-strum-artifact" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a pianist plays a simultaneous ten-note chord using a traditional serial MIDI connection, the notes do not reach the sound module at the exact same moment. Because standard 5-pin DIN MIDI transmits data sequentially over a low-bandwidth connection, e" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-large-midi-chords-create-a-strum-artifact">Why Large MIDI
+Chords Create a Strum Artifact</h1>
+<p>When a pianist plays a simultaneous ten-note chord using a
+traditional serial MIDI connection, the notes do not reach the sound
+module at the exact same moment. Because standard 5-pin DIN MIDI
+transmits data sequentially over a low-bandwidth connection, each note's
+data must wait in line to be sent. This creates a cumulative delay of
+approximately 7 to 10 milliseconds between the first and last note,
+which the human ear easily perceives as a slight roll, flam, or
+microscopic strumming effect rather than a unified impact.</p>
+<h3 id="the-serial-transmission-bottleneck">The Serial Transmission
+Bottleneck</h3>
+<p>Traditional MIDI relies on a serial interface, meaning it sends
+information sequentially along a single data path, one bit at a time.
+Unlike a modern parallel or packet-based interface that can bundle
+multiple events together, serial MIDI processes musical performances as
+a strict chronological queue. Even if a performer's fingers strike all
+ten keys at the identical physical millisecond, the MIDI interface must
+serialize the physical action into individual electronic messages.</p>
+<h3 id="the-fixed-baud-rate">The Fixed Baud Rate</h3>
+<p>The standard transmission speed of 5-pin DIN MIDI is locked at 31,250
+bits per second (31.25 kbaud). This baud rate was established in the
+early 1980s as a cost-effective, robust standard resistant to electrical
+noise, but it imposes a hard ceiling on data throughput:</p>
+<ul>
+<li>Every byte of MIDI data requires 10 bits in transmission (1 start
+bit, 8 data bits, and 1 stop bit).</li>
+<li>At 31,250 bits per second, transferring a single byte takes exactly
+320 microseconds (0.32 milliseconds).</li>
+</ul>
+<h3 id="data-requirements-of-a-10-note-chord">Data Requirements of a
+10-Note Chord</h3>
+<p>A standard MIDI "Note On" message consists of three sequential bytes:
+the status byte (message type and MIDI channel), the note number
+(pitch), and the velocity (striking force).</p>
+<ol type="1">
+<li><strong>Standard Mode (3 Bytes per Note):</strong>
+<ul>
+<li>1 note = 3 bytes = 30 bits = 0.96 ms.</li>
+<li>10 notes = 30 bytes = 300 bits = <strong>9.6 ms</strong>.</li>
+</ul></li>
+<li><strong>Running Status Mode (Optimized):</strong>
+<ul>
+<li>MIDI protocol allows consecutive messages of the same type to omit
+the status byte.</li>
+<li>The first note uses 3 bytes (30 bits), and the subsequent 9 notes
+use 2 bytes each (180 bits), totaling 210 bits.</li>
+<li>210 bits at 31.25 kbaud = <strong>6.72 ms</strong>.</li>
+</ul></li>
+</ol>
+<p>Under optimal real-world conditions over a serial cable, there is an
+unavoidable hardware latency gap of nearly 7 to 10 milliseconds between
+the start of the first note and the start of the tenth note.</p>
+<h3 id="human-perception-and-transients">Human Perception and
+Transients</h3>
+<p>The human auditory system is exceptionally sensitive to temporal
+differences in sharp, percussive transients. An acoustic piano has an
+abrupt, instantaneous attack transient when the hammer hits the string.
+While humans often perceive delays below 10 milliseconds as simultaneous
+when sounds are sustained or soft, percussive onsets separated by as
+little as 2 to 5 milliseconds are easily distinguished as separate
+events.</p>
+<p>When a 10-note piano attack is stretched across a 7-to-10-millisecond
+transmission window, the transient attacks of the individual notes
+stagger across the timeline. The ear resolves these individual
+high-frequency attacks sequentially, producing an audible flam or strum
+artifact rather than a single, coherent acoustic strike.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

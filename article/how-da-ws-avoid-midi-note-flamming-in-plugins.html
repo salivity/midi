@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DAWs Avoid MIDI Note-Flamming in Plugins - midi</title>
+    <meta name="description" content="Modern Digital Audio Workstations (DAWs) prevent note-flamming—the audible smearing or rolling of simultaneous notes—by abandoning the physical bandwidth constraints of legacy serial MIDI in favor of high-speed memory buffers, sample-accurate event timest">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-da-ws-avoid-midi-note-flamming-in-plugins">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DAWs Avoid MIDI Note-Flamming in Plugins - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-da-ws-avoid-midi-note-flamming-in-plugins" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern Digital Audio Workstations (DAWs) prevent note-flamming—the audible smearing or rolling of simultaneous notes—by abandoning the physical bandwidth constraints of legacy serial MIDI in favor of high-speed memory buffers, sample-accurate event timest" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-daws-avoid-midi-note-flamming-in-plugins">How DAWs Avoid
+MIDI Note-Flamming in Plugins</h1>
+<p>Modern Digital Audio Workstations (DAWs) prevent note-flamming—the
+audible smearing or rolling of simultaneous notes—by abandoning the
+physical bandwidth constraints of legacy serial MIDI in favor of
+high-speed memory buffers, sample-accurate event timestamping, and
+modern plugin architectures. This article explains the underlying
+digital audio engineering techniques that allow DAWs to transmit massive
+polyphonic chords and dense MIDI data to internal virtual instruments
+perfectly in phase and without temporal delay.</p>
+<h3 id="the-origin-of-note-flamming-the-serial-bottleneck">The Origin of
+Note-Flamming: The Serial Bottleneck</h3>
+<p>To understand how modern DAWs solve note-flamming, it is essential to
+understand why it occurs in hardware. The original MIDI 1.0
+specification relies on a serial communication protocol running at a
+fixed baud rate of 31.25 kbaud. A standard three-byte "Note On" message
+takes approximately 0.96 milliseconds to transmit.</p>
+<p>When a keyboardist strikes a ten-note chord, the hardware must
+transmit those messages sequentially. The tenth note sounds nearly 10
+milliseconds after the first, resulting in an audible arpeggiation or
+"flam." While this physical bottleneck still exists when sending data
+through 5-pin DIN cables to external hardware, internal DAW tracks
+handle data entirely within software.</p>
+<h3 id="in-memory-event-buffers-instead-of-serial-streams">In-Memory
+Event Buffers Instead of Serial Streams</h3>
+<p>Inside a modern DAW, MIDI data is not transmitted over a serial line.
+Instead, note data is stored as digital structures in the computer's
+system memory (RAM). When an internal MIDI or instrument track routes
+data to a virtual instrument (software synthesizer or sampler), the DAW
+passes data directly between CPU registers and memory addresses.</p>
+<p>Because memory bus bandwidth operates in gigabytes per second,
+transferring hundreds or thousands of simultaneous events takes
+microseconds, eliminating the transmission delays inherent to serial
+communication protocols.</p>
+<h3 id="sample-accurate-event-timestamping">Sample-Accurate Event
+Timestamping</h3>
+<p>Rather than triggering notes the instant a message arrives at the
+plugin input, modern DAWs and plugin formats (such as VST3, Audio Units,
+CLAP, and AAX) use sample-accurate event scheduling.</p>
+<p>DAWs process digital audio in discrete blocks or buffers—typically
+between 32 and 1024 audio samples at a time. When the DAW calls a
+plugin's audio processing function (commonly called
+<code>process()</code> in the codebase), it delivers two crucial sets of
+data:</p>
+<ol type="1">
+<li><strong>The Audio Buffer:</strong> An array of sample frames waiting
+to be filled with generated sound.</li>
+<li><strong>The Event List:</strong> A queue of all MIDI and automation
+events scheduled to occur during that specific buffer window.</li>
+</ol>
+<p>Every event in the event list contains a precise sample offset
+integer (ranging from zero to the size of the buffer minus one). If a
+user programs a 16-note chord where every note begins at the exact same
+beat, the DAW assigns every single "Note On" event the identical sample
+offset (e.g., offset <code>0</code>).</p>
+<h3 id="synchronous-processing-in-the-dsp-loop">Synchronous Processing
+in the DSP Loop</h3>
+<p>When the software instrument receives the event list, it does not
+process the events asynchronously. Instead, the instrument's digital
+signal processing (DSP) loop iterates through the audio buffer sample by
+sample:</p>
+<ul>
+<li>As the synthesizer algorithm reaches sample <code>0</code>, it
+checks the event queue.</li>
+<li>It encounters all 16 "Note On" messages simultaneously.</li>
+<li>The plugin initializes the phase, envelope generators, and
+oscillators for all 16 voices at that precise sample tick.</li>
+<li>The calculated audio output for all voices is summed into the audio
+buffer starting at sample <code>0</code>.</li>
+</ul>
+<p>Because the voices are initiated within the exact same calculation
+cycle, there is zero time variance between note attacks.</p>
+<h3 id="modern-plugin-protocols-and-internal-precision">Modern Plugin
+Protocols and Internal Precision</h3>
+<p>Legacy plugin standards, such as VST 2.4, handled MIDI data through
+generic <code>VstMidiEvent</code> structures that occasionally suffered
+from timing jitter depending on how the host DAW batched events across
+buffer boundaries.</p>
+<p>Modern standards have eliminated these discrepancies:</p>
+<ul>
+<li><strong>VST3:</strong> Replaces raw MIDI with custom, strongly typed
+event buses. MIDI data is translated into explicit musical parameters
+with mandatory sample-accurate timing.</li>
+<li><strong>CLAP (CLever Audio Plugin):</strong> Introduces native
+polyphonic modulation and parameter changes bound directly to individual
+voice IDs, maintaining sample-accuracy across dense polyphonic streams
+without event collision.</li>
+<li><strong>Sub-Sample Precision:</strong> Advanced plugin hosts and
+synthesis engines even support sub-sample phase interpolation,
+calculating fractional time offsets to eliminate jitter when working at
+high project tempos or low sample rates.</li>
+</ul>
+<p>Through these combined techniques—treating MIDI as memory arrays,
+attaching integer sample offsets to events, and rendering synth voices
+synchronously within the DSP block loop—modern DAWs completely eliminate
+note-flamming for internal virtual instruments.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

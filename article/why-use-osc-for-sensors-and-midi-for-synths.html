@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Use OSC for Sensors and MIDI for Synths - midi</title>
+    <meta name="description" content="Modern multimedia systems frequently combine two distinct messaging standards: Open Sound Control (OSC) transmitted over User Datagram Protocol (UDP) for custom interactive sensors, and Musical Instrument Digital Interface (MIDI) for hardware synthesizers">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-use-osc-for-sensors-and-midi-for-synths">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Use OSC for Sensors and MIDI for Synths - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-use-osc-for-sensors-and-midi-for-synths" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern multimedia systems frequently combine two distinct messaging standards: Open Sound Control (OSC) transmitted over User Datagram Protocol (UDP) for custom interactive sensors, and Musical Instrument Digital Interface (MIDI) for hardware synthesizers" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-use-osc-for-sensors-and-midi-for-synths">Why Use OSC for
+Sensors and MIDI for Synths</h1>
+<p>Modern multimedia systems frequently combine two distinct messaging
+standards: Open Sound Control (OSC) transmitted over User Datagram
+Protocol (UDP) for custom interactive sensors, and Musical Instrument
+Digital Interface (MIDI) for hardware synthesizers. This architectural
+split allows creative coders to capture high-resolution, complex
+gestural data over local networks while preserving universal
+compatibility, zero-configuration routing, and tight clock
+synchronization with traditional music hardware. Understanding the
+design trade-offs between dynamic network messaging and deterministic
+hardware standards explains why both protocols remain essential in
+contemporary interactive design.</p>
+<h3 id="the-strengths-of-osc-over-udp-for-sensors">The Strengths of OSC
+over UDP for Sensors</h3>
+<p>Interactive installations, wearable technology, and computer vision
+systems generate data that exceeds the constraints of traditional
+messaging protocols. Creative environments such as TouchDesigner,
+Max/MSP, and openFrameworks rely on OSC over UDP for custom sensor input
+due to several technical advantages:</p>
+<ul>
+<li><strong>High Resolution and Data Types:</strong> Standard MIDI is
+predominantly limited to 7-bit values (0–127), which creates noticeable
+stepping or "zipper noise" when handling continuous sensor inputs like
+accelerometers, lidars, or distance sensors. OSC natively supports
+32-bit floating-point numbers, integers, strings, and arrays, ensuring
+continuous and smooth sensor streams without quantization
+artifacts.</li>
+<li><strong>Hierarchical and Human-Readable Addressing:</strong> OSC
+uses an open-ended, URL-style namespace (for example,
+<code>/performer/leftHand/gyro/x</code>). This allows developers to
+organize hundreds of sensor endpoints logically, making complex
+interactive networks easy to read, debug, and scale.</li>
+<li><strong>Network-Native Architecture via UDP:</strong> Unlike
+physical hardware buses, OSC is network-native. Transmitting OSC packets
+over UDP delivers high throughput with minimal transmission overhead.
+UDP avoids the latency penalties of TCP handshakes and retransmission
+buffers; in a continuous sensor stream (often running at 60 Hz or
+higher), dropping an outdated packet is preferable to waiting for a
+retransmission that disrupts real-time feedback.</li>
+</ul>
+<h3 id="why-hardware-synths-still-rely-on-midi">Why Hardware Synths
+Still Rely on MIDI</h3>
+<p>While OSC excels in software-driven and networked sensor
+environments, physical synthesizers and drum machines remain anchored to
+the MIDI specification for practical and historical reasons:</p>
+<ul>
+<li><strong>Universal Hardware Interoperability:</strong> MIDI (whether
+over 5-pin DIN or USB-MIDI) has been the global standard for sound
+hardware since 1983. Hardware instruments are built with dedicated UART
+chips and firmware specifically tuned to read discrete MIDI bytes.
+Implementing Ethernet ports and full network stacks on standalone analog
+or digital hardware introduces unnecessary cost and complexity.</li>
+<li><strong>Deterministic, Lightweight Communication:</strong> A
+standard MIDI Note-On message requires only three bytes: status, pitch,
+and velocity. This tiny footprint requires negligible processing power,
+enabling microcontrollers inside hardware synths to trigger notes with
+microsecond-level determinism.</li>
+<li><strong>Zero Network Configuration:</strong> Physical stage and
+studio setups prioritize plug-and-play reliability. MIDI eliminates the
+need for managing IP addresses, subnet masks, UDP port conflicts, and
+Wi-Fi interference. Routing a physical cable ensures an immediate,
+isolated, and interference-free connection.</li>
+</ul>
+<h3 id="the-hybrid-pipeline-in-practice">The Hybrid Pipeline in
+Practice</h3>
+<p>Multimedia programmers treat these protocols not as competitors, but
+as complementary layers within an interactive pipeline. Microcontrollers
+(such as ESP32s or Teensy boards) read sensor voltages, pack the
+continuous values into structured OSC packets, and stream them over
+Wi-Fi or Ethernet to a central host application.</p>
+<p>The host software performs mathematical filtering, gesture
+recognition, and mapping. Once an interaction qualifies as a musical
+event—such as a gesture crossing a threshold or triggering an
+envelope—the software converts that complex floating-point data into
+standard MIDI Note and Control Change messages, outputting them directly
+to hardware synthesizers. This hybrid approach leverages OSC for
+flexible, expressive data acquisition and MIDI for rock-solid,
+production-grade audio generation.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

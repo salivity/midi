@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Chained MIDI Thru Ports Cause Timing Jitter - midi</title>
+    <meta name="description" content="Chaining musical instruments through traditional hardware MIDI Thru ports causes cumulative timing jitter primarily due to the rise and fall time asymmetries of optocouplers, which distort digital serial pulses at each stage. While a single optocoupler ad">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-chained-midi-thru-ports-cause-timing-jitter">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Chained MIDI Thru Ports Cause Timing Jitter - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-chained-midi-thru-ports-cause-timing-jitter" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Chaining musical instruments through traditional hardware MIDI Thru ports causes cumulative timing jitter primarily due to the rise and fall time asymmetries of optocouplers, which distort digital serial pulses at each stage. While a single optocoupler ad" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-chained-midi-thru-ports-cause-timing-jitter">Why Chained
+MIDI Thru Ports Cause Timing Jitter</h1>
+<p>Chaining musical instruments through traditional hardware MIDI Thru
+ports causes cumulative timing jitter primarily due to the rise and fall
+time asymmetries of optocouplers, which distort digital serial pulses at
+each stage. While a single optocoupler adds only a minor signal delay,
+cascading five stages compounds pulse-width distortion and edge
+degradation across the 31.25 kbaud serial line. This progressive signal
+skew shifts the exact moment the receiving Universal Asynchronous
+Receiver-Transmitter (UART) detects start bits and data transitions,
+converting electrical switching delays into variable millisecond-range
+latency that destabilizes rhythmic playback and produces audible musical
+jitter.</p>
+<h3 id="the-role-of-the-optocoupler-in-midi-hardware">The Role of the
+Optocoupler in MIDI Hardware</h3>
+<p>The MIDI specification mandates galvanic isolation on all MIDI In
+ports using an optocoupler—typically an optical isolator like the 6N138
+or PC900—to prevent ground loops and electrical interference between
+interconnected gear. When a message enters a device, the incoming 5mA
+current loop illuminates an internal LED, which activates a
+phototransistor to recreate the digital logic signal. In a standard
+hardware MIDI Thru configuration, this recovered digital signal is
+buffered by an inverter or logic gate and immediately routed to the MIDI
+Thru DIN jack to be sent to the next device down the line.</p>
+<h3
+id="propagation-delay-asymmetry-and-slew-rate-limitations">Propagation
+Delay Asymmetry and Slew Rate Limitations</h3>
+<p>Optocouplers do not turn on and off at identical speeds. The time
+required for the photodetector to charge and turn on (propagation delay
+high-to-low, or <span class="math inline">\(t_{PHL}\)</span>) is
+generally significantly faster than the time it takes to clear the
+stored base charge and turn off (propagation delay low-to-high, or <span
+class="math inline">\(t_{PLH}\)</span>).</p>
+<p>Because the turn-off delay exceeds the turn-on delay, the digital
+square waves of the serial stream undergo duty-cycle distortion. High
+pulses stretch or shrink depending on the pull-up resistor values and
+the switching characteristics of the phototransistor. Instead of clean,
+vertical logic transitions, the signal develops rounded, slewed
+edges.</p>
+<h3 id="cascading-distortion-across-five-stages">Cascading Distortion
+Across Five Stages</h3>
+<p>When five MIDI devices are daisy-chained:</p>
+<ul>
+<li><strong>Pulse-Width Compounding:</strong> The output of device one’s
+Thru port becomes the input to device two’s In port. The duty-cycle
+distortion introduced by the first optocoupler is not corrected by the
+hardware buffer; the distorted waveform is fed directly into the second
+optocoupler, which distorts it further.</li>
+<li><strong>Edge Slew Accumulation:</strong> Over five successive hops,
+the rise and fall times degrade severely. Logic thresholds are crossed
+later and later relative to the ideal clock timing.</li>
+<li><strong>Data-Dependent Delay:</strong> Because consecutive ones and
+zeros interact with the slow discharge rates of the optocouplers, the
+actual delay of a logic transition becomes dependent on the bit pattern
+preceding it. A byte with alternating bits suffers different timing
+shifts than a byte containing consecutive high or low bits.</li>
+</ul>
+<h3 id="uart-framing-and-conversion-into-jitter">UART Framing and
+Conversion into Jitter</h3>
+<p>MIDI data is transmitted asynchronously at 31.25 kbaud, meaning each
+bit is precisely 32 microseconds wide, and a standard three-byte Note On
+message takes roughly 960 microseconds. The receiving UART synchronizes
+its internal clock only when it detects the falling edge of a byte's
+start bit.</p>
+<p>As the cumulative edge degradation skews the start bit transition,
+the receiving UART at the end of the chain samples bits dangerously
+close to logic transition thresholds. If the optocoupler distortion is
+severe enough, the UART may misread bits, require re-synchronization, or
+register the start bit late.</p>
+<p>Furthermore, because multi-device chains transmit shared data
+streams, serial bandwidth serialization means that messages intended to
+trigger simultaneously must wait in a sequential queue. When
+hardware-level pulse distortion expands the effective transmission
+window and introduces data-dependent variance, the arrival time of note
+messages shifts dynamically.</p>
+<h3 id="why-the-jitter-becomes-audible">Why the Jitter Becomes
+Audible</h3>
+<p>Human auditory perception is sensitive to timing variations in
+percussive transients, with discrepancies as small as 1 to 2
+milliseconds disrupting the perceived "tightness" of a groove.</p>
+<p>Across five chained MIDI Thru stages, the combination of asymmetric
+optocoupler propagation delays, variable edge degradation, and
+sequential message queuing can fluctuate the delivery of notes by
+several milliseconds from event to event. Instead of a tight,
+synchronized performance, notes sent to the final instruments in the
+chain lag unpredictably behind earlier units, creating an audible, loose
+flam or flamming effect on simultaneous attacks.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

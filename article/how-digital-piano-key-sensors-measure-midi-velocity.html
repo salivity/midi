@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Digital Piano Key Sensors Measure MIDI Velocity - midi</title>
+    <meta name="description" content="Weighted digital pianos determine how loudly a note should sound not by measuring strike force directly, but by calculating the elapsed time between physical contact points during a keystroke. This article explores the mechanical sensor arrays—predominant">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-digital-piano-key-sensors-measure-midi-velocity">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Digital Piano Key Sensors Measure MIDI Velocity - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-digital-piano-key-sensors-measure-midi-velocity" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Weighted digital pianos determine how loudly a note should sound not by measuring strike force directly, but by calculating the elapsed time between physical contact points during a keystroke. This article explores the mechanical sensor arrays—predominant" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-digital-piano-key-sensors-measure-midi-velocity">How Digital
+Piano Key Sensors Measure MIDI Velocity</h1>
+<p>Weighted digital pianos determine how loudly a note should sound not
+by measuring strike force directly, but by calculating the elapsed time
+between physical contact points during a keystroke. This article
+explores the mechanical sensor arrays—predominantly dual- and
+triple-contact rubber dome switches—that track key or hammer motion. It
+explains how these physical switches register the travel time delta and
+how the piano's internal microprocessor converts that measurement into a
+standardized MIDI velocity value from 1 to 127.</p>
+<h3 id="the-primary-mechanism-rubber-dome-contact-switches">The Primary
+Mechanism: Rubber Dome Contact Switches</h3>
+<p>The most common mechanical sensors in weighted digital pianos are
+elastomeric rubber dome switches. These are arranged in flexible
+silicone strips mounted directly beneath the key bed or hammer assembly
+on a printed circuit board (PCB).</p>
+<p>Each key position features two or three tiny rubber domes with
+conductive carbon pills (or carbon-doped rubber pads) on their interior
+undersides. Directly beneath these domes on the PCB are complementary,
+non-connected pairs of interleaved copper traces. When the key or hammer
+mechanism depresses a dome, the conductive pill bridges the copper
+traces, completing an electrical circuit and sending an instantaneous
+logic signal to the instrument's processor.</p>
+<h3 id="calculating-the-time-delta">Calculating the Time Delta</h3>
+<p>Velocity in physics is distance divided by time (<span
+class="math inline">\(v = \Delta d / \Delta t\)</span>). Because the
+physical distance between the contact switches inside the piano action
+is fixed, velocity is inversely proportional to the time it takes to
+travel between them:</p>
+<ol type="1">
+<li><strong>Upper Sensor (Start Point):</strong> As the key is pressed
+down, the first switch dome is compressed, closing the first circuit.
+This starts an internal microsecond hardware timer.</li>
+<li><strong>Lower Sensor (End Point):</strong> As the key reaches the
+bottom of its travel (the key bed), the second dome is compressed,
+closing the second circuit. This stops the timer.</li>
+</ol>
+<p>The microprocessor records the difference in time (<span
+class="math inline">\(\Delta t\)</span>). A rapid, forceful keystroke
+produces a very small <span class="math inline">\(\Delta t\)</span>,
+which the processor maps to a high MIDI velocity (closer to 127). A
+slow, gentle keystroke results in a larger <span
+class="math inline">\(\Delta t\)</span>, yielding a low MIDI velocity
+(closer to 1). If the time delta exceeds a preset threshold, the note
+registers at the minimum velocity (usually 1), while a zero or near-zero
+delta is filtered out to prevent erroneous triggering.</p>
+<h3 id="dual-sensor-vs-triple-sensor-configurations">Dual-Sensor vs.
+Triple-Sensor Configurations</h3>
+<p>The number of mechanical switches per key directly impacts how
+accurately the instrument reflects acoustic piano performance:</p>
+<ul>
+<li><strong>Dual-Sensor Actions:</strong> These utilize two contact
+points (high and low). To play the same note again, the key must return
+almost completely to its resting position to reset the upper switch
+before another time delta can be calculated.</li>
+<li><strong>Triple-Sensor Actions:</strong> These introduce an
+intermediate contact switch positioned between the top and bottom
+contacts. This third sensor allows the processor to measure velocity
+from a partially released position. If a player lifts the key past the
+middle sensor and strikes downward again, the system calculates a new
+<span class="math inline">\(\Delta t\)</span> between the middle and
+lower sensors without requiring a full key return. This mechanically
+replicates the double-escapement mechanism of an acoustic grand piano,
+permitting rapid note repetition.</li>
+</ul>
+<h3 id="key-sensing-vs-hammer-sensing">Key Sensing vs. Hammer
+Sensing</h3>
+<p>In entry-level weighted actions, the rubber dome switches sit
+directly under the front or middle of the plastic key lever. In advanced
+fully weighted and hammer-action pianos, the sensors are placed beneath
+the counterweighted hammer mechanism at the back of the action.</p>
+<p>Because the hammer is thrown freely by the key lever, sensing the
+hammer's movement rather than the key's movement produces a more
+authentic velocity calculation. It captures the true kinetic energy of
+the simulated hammer throw, accounting for subtleties like playing
+softly from the key surface versus striking from a height.</p>
+<h3 id="alternative-sensor-types">Alternative Sensor Types</h3>
+<p>While rubber dome mechanical contacts dominate the digital piano
+market due to their low cost and tactile reliability, alternative sensor
+technologies are used in select high-end hybrid instruments:</p>
+<ul>
+<li><strong>Optical Sensors:</strong> Infrared light-emitting diodes
+(LEDs) paired with phototransistors read continuous shutters attached to
+the keys or hammers. They calculate <span class="math inline">\(\Delta
+t\)</span> by detecting the interruption of light beams, eliminating
+mechanical friction and physical wear.</li>
+<li><strong>Magnetic (Hall-Effect) Sensors:</strong> Magnets mounted on
+the moving keys generate variable voltage in stationary Hall-effect
+sensors on the circuit board, tracking distance and time electronically
+without direct mechanical contact.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

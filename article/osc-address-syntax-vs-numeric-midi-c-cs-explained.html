@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSC Address Syntax vs Numeric MIDI CCs Explained - midi</title>
+    <meta name="description" content="Open Sound Control (OSC) replaces the rigid, numeric identification system of traditional MIDI with a dynamic, hierarchical string-based syntax. While standard MIDI Continuous Controller (CC) messages rely on arbitrary numbers from 0 to 127 that require e">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/osc-address-syntax-vs-numeric-midi-c-cs-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="OSC Address Syntax vs Numeric MIDI CCs Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/osc-address-syntax-vs-numeric-midi-c-cs-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Open Sound Control (OSC) replaces the rigid, numeric identification system of traditional MIDI with a dynamic, hierarchical string-based syntax. While standard MIDI Continuous Controller (CC) messages rely on arbitrary numbers from 0 to 127 that require e" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="osc-address-syntax-vs-numeric-midi-ccs-explained">OSC Address
+Syntax vs Numeric MIDI CCs Explained</h1>
+<p>Open Sound Control (OSC) replaces the rigid, numeric identification
+system of traditional MIDI with a dynamic, hierarchical string-based
+syntax. While standard MIDI Continuous Controller (CC) messages rely on
+arbitrary numbers from 0 to 127 that require external mapping charts to
+decipher, OSC employs URL-style address patterns like
+<code>/synth/filter/cutoff</code>. This architecture provides
+human-readable, self-documenting labels that inherently reflect the
+layout and routing of complex modern software and hardware
+instruments.</p>
+<h3 id="the-limitations-of-numeric-midi-ccs">The Limitations of Numeric
+MIDI CCs</h3>
+<p>Standard MIDI relies on a flat addressing system. A MIDI CC message
+consists of a channel number (1–16), a controller number (0–127), and a
+value (typically 0–127). Aside from a few loosely standardized
+conventions—such as CC 7 for volume or CC 64 for sustain—the majority of
+CC numbers carry no inherent semantic meaning.</p>
+<p>When configuring a complex setup with hundreds of parameters, a
+producer or developer must manually assign and track numbers like "CC
+14" or "CC 82." This requires lookup tables, implementation charts, and
+manual MIDI-learn routines. If an assignment is lost or modified, the
+numbers provide no context regarding what audio parameter, device, or
+channel they manipulate.</p>
+<h3 id="hierarchical-human-readable-namespaces">Hierarchical,
+Human-Readable Namespaces</h3>
+<p>OSC solves this ambiguity through address patterns structured like
+file paths or URLs. A parameter label begins with a forward slash and
+groups identifiers hierarchically:</p>
+<ul>
+<li><code>/mixer/track/1/fader/volume</code></li>
+<li><code>/synth/voice/2/oscillator/1/pitch</code></li>
+<li><code>/lighting/stage/left/dimmer</code></li>
+</ul>
+<p>This namespace immediately communicates target type, location, and
+function. Any system monitoring an OSC network can interpret the
+intended destination of a message instantly, without needing a secondary
+protocol document or pre-programmed mapping profile.</p>
+<h3 id="modular-organization-and-dynamic-expansion">Modular Organization
+and Dynamic Expansion</h3>
+<p>Because OSC uses arbitrary-length string addresses, control labels
+are virtually limitless. MIDI's 128-controller ceiling often forces
+complex multi-timbral instruments or large digital mixing consoles to
+resort to non-registered parameter numbers (NRPNs) or System Exclusive
+(SysEx) messages, both of which are cumbersome to implement and
+debug.</p>
+<p>In contrast, OSC scales naturally. Adding a new channel strip or an
+additional envelope generator simply requires extending the path
+hierarchy (e.g., <code>/mixer/channel/64/eq/high/gain</code>),
+maintaining strict organizational logic across sprawling, modular
+network setups.</p>
+<h3 id="pattern-matching-and-multi-target-control">Pattern Matching and
+Multi-Target Control</h3>
+<p>OSC address pattern syntax supports wildcards and pattern matching,
+allowing a single message to address multiple descriptive endpoints
+simultaneously:</p>
+<ul>
+<li><strong>Wildcards (<code>*</code>):</strong> A command sent to
+<code>/track/*/mute</code> mutes every track across the entire
+system.</li>
+<li><strong>Single-character matching (<code>?</code>):</strong>
+<code>/synth/filter/?/cutoff</code> addresses both
+<code>/synth/filter/1/cutoff</code> and
+<code>/synth/filter/2/cutoff</code>.</li>
+<li><strong>Lists and ranges (<code>[1-4]</code> or
+<code>{lead,pad}</code>):</strong> Messages can target specific groups,
+such as <code>/synth/{lead,pad}/volume</code>.</li>
+</ul>
+<p>This pattern-matching capability enables precise, expressive control
+over complex systems with minimal network traffic, contrasting sharply
+with MIDI CCs, which require separate, serialized numeric commands to be
+fired sequentially to each individual controller.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Analog Synths Handle MIDI Tune Request 0xF6 - midi</title>
+    <meta name="description" content="A MIDI Tune Request message (status byte 0xF6) commands a synthesizer to calibrate its analog oscillators to a stable pitch reference. During a live performance, receiving this message triggers an automated tuning routine that typically mutes the synthesi">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-analog-synths-handle-midi-tune-request-0-x-f-6">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Analog Synths Handle MIDI Tune Request 0xF6 - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-analog-synths-handle-midi-tune-request-0-x-f-6" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI Tune Request message (status byte 0xF6) commands a synthesizer to calibrate its analog oscillators to a stable pitch reference. During a live performance, receiving this message triggers an automated tuning routine that typically mutes the synthesi" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-analog-synths-handle-midi-tune-request-0xf6">How Analog
+Synths Handle MIDI Tune Request 0xF6</h1>
+<p>A MIDI Tune Request message (status byte <code>0xF6</code>) commands
+a synthesizer to calibrate its analog oscillators to a stable pitch
+reference. During a live performance, receiving this message triggers an
+automated tuning routine that typically mutes the synthesizer's audio
+output, temporarily halts front-panel responsiveness, and recalibrates
+the instrument's voltage-controlled oscillators (VCOs). Because this
+calibration interrupts active playback, understanding the hardware
+response is critical to preventing unintentional dropouts and silence on
+stage.</p>
+<h3 id="the-purpose-of-the-0xf6-message">The Purpose of the 0xF6
+Message</h3>
+<p>Analog synthesizers rely on temperature-sensitive components that
+cause pitch to drift over time. The MIDI 1.0 specification defined the
+<code>0xF6</code> System Common message as a standardized way to
+instruct analog hardware to adjust its internal tuning offsets without
+requiring physical trim-pot adjustments or manual menu navigation.</p>
+<p>Digitally controlled analog synthesizers (which use analog VCOs
+managed by a digital microprocessor) are the primary hardware intended
+to respond to this command. Purely digital synthesizers and those using
+digitally controlled oscillators (DCOs) usually ignore the message
+entirely, as their pitch is locked to a master crystal clock.</p>
+<h3 id="the-hardware-calibration-routine">The Hardware Calibration
+Routine</h3>
+<p>When an analog synthesizer receives an <code>0xF6</code> byte, its
+internal microprocessor executes a low-level calibration routine:</p>
+<ol type="1">
+<li><strong>Audio Muting:</strong> The synthesizer closes its Voltage
+Controlled Amplifiers (VCAs) or software gates to mute the audio output.
+This prevents audiences from hearing high-speed frequency sweeps and
+erratic tones.</li>
+<li><strong>Frequency Measurement:</strong> The microprocessor routes
+the output of each voice's analog oscillator to an internal counter
+circuit.</li>
+<li><strong>Comparison and Correction:</strong> The processor measures
+each oscillator's frequency against an onboard quartz crystal
+oscillator. It checks multiple octaves to establish the tracking slope
+(Volts per Octave).</li>
+<li><strong>DAC Trim Adjustment:</strong> The processor calculates the
+pitch error and updates internal Digital-to-Analog Converter (DAC) bias
+tables or digital compensation offsets.</li>
+<li><strong>Restoration:</strong> Once the target frequency profiles are
+aligned across all voices, the processor reopens the audio path and
+returns the synth to its normal operational state.</li>
+</ol>
+<h3 id="impact-on-a-live-performance">Impact on a Live Performance</h3>
+<p>Because the auto-tune routine requires exclusive access to the voice
+architecture, sending an <code>0xF6</code> message mid-performance
+produces distinct side effects:</p>
+<ul>
+<li><strong>Instant Dropouts:</strong> Any sustained notes, MIDI
+sequences, or arpeggiators currently sounding will cut out instantly due
+to automatic VCA muting.</li>
+<li><strong>Latency and Execution Time:</strong> The calibration cycle
+is not instantaneous. Depending on the synthesizer model and the number
+of voices, a tune routine can take anywhere from 500 milliseconds to
+over ten seconds.</li>
+<li><strong>Control Freeze:</strong> The internal CPU typically
+prioritizes the tuning algorithm over front-panel controls and incoming
+performance data. Knob turns, modulation wheel adjustments, and incoming
+Note-On commands may be ignored or buffered until the cycle
+completes.</li>
+<li><strong>Unmuted Calibration Artifacts:</strong> In older, legacy
+analog synthesizers with early MIDI implementations (such as early
+revisions of the Sequential Circuits Prophet-600 or Oberheim Matrix-12),
+the output muting circuit may be slow or nonexistent. In these
+instruments, the tuning cycle will broadcast a series of rapid,
+dissonant chirps and sweeps directly through the front-of-house sound
+system.</li>
+</ul>
+<h3 id="best-practices-for-live-use">Best Practices for Live Use</h3>
+<p>To avoid catastrophic silence or dissonant artifacts on stage, live
+rigs should never transmit the <code>0xF6</code> message on an automated
+timer or during active playback. If automated tuning is required to
+combat venue temperature changes, configure master MIDI controllers or
+DAWs to send the Tune Request exclusively during song transitions, after
+audio outputs have been lowered or muted at the mixer.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Debounce Algorithms for Microcontroller Firmware - midi</title>
+    <meta name="description" content="Mechanical switches, buttons, and velocity-sensitive keybeds exhibit physical contact bounce that can produce rapid, unintended electrical transitions. In musical instruments, these microsecond-level fluctuations translate into erratic MIDI double-trigger">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-debounce-algorithms-for-microcontroller-firmware">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Debounce Algorithms for Microcontroller Firmware - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-debounce-algorithms-for-microcontroller-firmware" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mechanical switches, buttons, and velocity-sensitive keybeds exhibit physical contact bounce that can produce rapid, unintended electrical transitions. In musical instruments, these microsecond-level fluctuations translate into erratic MIDI double-trigger" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-debounce-algorithms-for-microcontroller-firmware">MIDI
+Debounce Algorithms for Microcontroller Firmware</h1>
+<p>Mechanical switches, buttons, and velocity-sensitive keybeds exhibit
+physical contact bounce that can produce rapid, unintended electrical
+transitions. In musical instruments, these microsecond-level
+fluctuations translate into erratic MIDI double-triggering, sending
+duplicate Note-On and Note-Off events that ruin musical articulation and
+waste bandwidth. This guide outlines the essential firmware debounce
+algorithms used in microcontroller-based MIDI devices, examining their
+mechanics, latency trade-offs, and implementation strategies to maintain
+real-time responsiveness while eliminating false triggers.</p>
+<h2 id="1-immediate-trigger-with-lockout-re-trigger-inhibit">1.
+Immediate Trigger with Lockout (Re-Trigger Inhibit)</h2>
+<p>For musical applications, latency is the primary concern; players can
+perceive delays as small as 5 to 10 milliseconds. The Immediate Trigger
+with Lockout algorithm prioritizes zero-latency response on the initial
+key press.</p>
+<ul>
+<li><strong>How it works:</strong> When a state transition from idle to
+pressed is detected, the microcontroller immediately transmits a MIDI
+Note-On message and starts a non-blocking hardware or software timer
+(the lockout window, typically 5 to 20 ms). During this window, all
+subsequent state changes on that specific input pin are ignored. Once
+the timer expires, the pin is sampled again to confirm its
+steady-state.</li>
+<li><strong>Why it works for MIDI:</strong> The physical action of
+pressing a switch creates contact bounce <em>after</em> the initial
+contact is made. By firing the MIDI event on the very first falling or
+rising edge and ignoring the immediate aftermath, latency is reduced to
+practically zero microseconds without generating redundant notes.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Conceptual Immediate Trigger implementation</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> handleButton<span class="op">(</span><span class="dt">uint8_t</span> pinIndex<span class="op">,</span> <span class="dt">uint32_t</span> currentTime<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> currentReading <span class="op">=</span> digitalRead<span class="op">(</span>pins<span class="op">[</span>pinIndex<span class="op">]);</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>currentReading <span class="op">==</span> PRESSED <span class="op">&amp;&amp;</span> buttonState<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">==</span> RELEASED<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>currentTime <span class="op">-</span> lastStateChangeTime<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">&gt;=</span> LOCKOUT_TIME_MS<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            buttonState<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">=</span> PRESSED<span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            lastStateChangeTime<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">=</span> currentTime<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>            sendMidiNoteOn<span class="op">(</span>notes<span class="op">[</span>pinIndex<span class="op">],</span> <span class="dv">127</span><span class="op">);</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>currentReading <span class="op">==</span> RELEASED <span class="op">&amp;&amp;</span> buttonState<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">==</span> PRESSED<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>currentTime <span class="op">-</span> lastStateChangeTime<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">&gt;=</span> LOCKOUT_TIME_MS<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>            buttonState<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">=</span> RELEASED<span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            lastStateChangeTime<span class="op">[</span>pinIndex<span class="op">]</span> <span class="op">=</span> currentTime<span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            sendMidiNoteOff<span class="op">(</span>notes<span class="op">[</span>pinIndex<span class="op">],</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="2-asymmetric-debouncing-fast-attack-stable-release">2.
+Asymmetric Debouncing (Fast Attack, Stable Release)</h2>
+<p>Symmetric debouncing applies the same delay or filtering algorithm to
+both press (attack) and release (decay). However, mechanical switch
+bounce characteristics often differ substantially between closure and
+opening.</p>
+<ul>
+<li><strong>How it works:</strong> This algorithm uses an immediate
+trigger or short lockout for the Note-On transition (fast attack) to
+minimize latency, combined with an integrating counter or a longer
+lockout period for the Note-Off transition (stable release).</li>
+<li><strong>Why it works for MIDI:</strong> When a key is released,
+spring vibration can momentarily reconnect contacts, causing an instant,
+false re-strike. Increasing the release debounce threshold prevents
+secondary Note-On messages without compromising the attack feel of the
+instrument.</li>
+</ul>
+<h2 id="3-shift-register-state-history-bitmask-filtering">3.
+Shift-Register State History (Bitmask Filtering)</h2>
+<p>For matrix scanning or high-density MIDI controllers (such as
+64-button step sequencers or multi-octave keyboards), saving memory and
+processing overhead is crucial. The shift-register technique stores
+recent pin readings as a bitfield.</p>
+<ul>
+<li><p><strong>How it works:</strong> At fixed intervals (typically
+generated by a 1 kHz timer interrupt), the state of the pin is shifted
+into an 8-bit integer:</p>
+<p><span class="math display">\[\text{history} = (\text{history} \ll 1)
+\mid \text{currentPinValue}\]</span></p>
+<p>A MIDI event is dispatched only when the bitfield matches a
+definitive bitmask pattern:</p>
+<ul>
+<li><strong>Note-On Trigger:</strong> <code>history == 0b10000000</code>
+(transition to pressed across consecutive samples)</li>
+<li><strong>Note-Off Trigger:</strong>
+<code>history == 0b01111111</code> (transition to released)</li>
+<li><strong>Steady State:</strong> <code>0xFF</code> (held) or
+<code>0x00</code> (idle)</li>
+</ul></li>
+<li><p><strong>Why it works for MIDI:</strong> It acts as a
+moving-window digital low-pass filter that requires minimal CPU cycles.
+It can be computed in parallel across entire microchip ports using
+native bitwise operations.</p></li>
+</ul>
+<h2 id="4-integrating-continuous-counters">4. Integrating Continuous
+Counters</h2>
+<p>Integrating debouncers accumulate evidence of a switch state change
+rather than relying on boolean logic or fixed lockouts.</p>
+<ul>
+<li><strong>How it works:</strong> A counter variable is initialized at
+zero. Every polling period (e.g., 1 ms), the algorithm checks the pin.
+If the switch reads as pressed, the counter increments by one; if
+released, it decrements by one. The counter is clamped between zero and
+an upper threshold (e.g., 5).</li>
+<li><strong>State Change:</strong> When the counter hits the upper
+threshold, the official state becomes "pressed," sending a Note-On. When
+it drops to zero, the official state returns to "released," sending a
+Note-Off.</li>
+<li><strong>Why it works for MIDI:</strong> This method is robust
+against continuous electrical noise, such as inductive coupling from
+nearby stage lighting, power supplies, or motor faders, which could
+otherwise falsely break a lockout-based system.</li>
+</ul>
+<h2 id="5-dual-contact-velocity-timing-debounce">5. Dual-Contact
+Velocity Timing Debounce</h2>
+<p>Full-sized synthesizer and digital piano keybeds use two or three
+physical contacts per key (rubber domes over PCB carbon contacts) to
+measure velocity by calculating transit time (<span
+class="math inline">\(v \propto \frac{1}{\Delta t}\)</span>).</p>
+<ul>
+<li><strong>How it works:</strong> The algorithm treats contact A (high
+contact) and contact B (low contact) as an interdependent state machine:
+<ol type="1">
+<li>Key rests at idle: Both A and B are open.</li>
+<li>Travel begins: Contact A closes. A high-resolution microsecond timer
+begins.</li>
+<li>Bottom of keybed: Contact B closes. The timer stops, transit time is
+converted to MIDI velocity (1–127), and Note-On is emitted.</li>
+</ol></li>
+<li><strong>Debounce Role:</strong> The state machine naturally acts as
+a hardware-state debounce filter. Once Contact A activates, Contact B
+cannot trigger a Note-On without the timer initiating first. If Contact
+B bounces, the firmware enters an active "playing" state and ignores
+subsequent B-strikes until Contact A opens first, completely eliminating
+velocity calculation errors and repetitive double-triggers.</li>
+</ul>
+<h2 id="implementation-guidelines">Implementation Guidelines</h2>
+<ul>
+<li><strong>Sample Rates:</strong> Run debouncing routines on dedicated
+hardware timer interrupts set between 500 Hz (2 ms) and 2 kHz (0.5 ms).
+Avoid using polling loops in <code>main()</code> that vary with MIDI
+output throughput.</li>
+<li><strong>Avoid Blocking Code:</strong> Never employ hard delays (such
+as <code>delay()</code> or busy-wait loops) inside debounce logic;
+blocked execution creates MIDI jitter across other inputs and throttles
+the USB/serial transmission buffer.</li>
+<li><strong>Lockout Tuning:</strong> Start with a 15 ms lockout for
+standard silicone pad controllers, 8 to 10 ms for mechanical keyboard
+switches, and 20 to 30 ms for heavy-duty metal footswitches.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

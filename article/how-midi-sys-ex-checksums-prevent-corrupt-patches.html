@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI SysEx Checksums Prevent Corrupt Patches - midi</title>
+    <meta name="description" content="MIDI System Exclusive (SysEx) messages allow synthesizers and software editors to transmit complex patch parameters, bank dumps, and firmware updates across standard MIDI connections. Because MIDI is an unacknowledged serial protocol historically transmit">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-sys-ex-checksums-prevent-corrupt-patches">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI SysEx Checksums Prevent Corrupt Patches - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-sys-ex-checksums-prevent-corrupt-patches" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI System Exclusive (SysEx) messages allow synthesizers and software editors to transmit complex patch parameters, bank dumps, and firmware updates across standard MIDI connections. Because MIDI is an unacknowledged serial protocol historically transmit" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-sysex-checksums-prevent-corrupt-patches">How MIDI SysEx
+Checksums Prevent Corrupt Patches</h1>
+<p>MIDI System Exclusive (SysEx) messages allow synthesizers and
+software editors to transmit complex patch parameters, bank dumps, and
+firmware updates across standard MIDI connections. Because MIDI is an
+unacknowledged serial protocol historically transmitted over analog
+cables, data streams are inherently vulnerable to line noise, dropped
+bytes, and buffer overflows. A SysEx checksum provides a deterministic
+mathematical safeguard embedded within the message, allowing the
+receiving hardware to evaluate data integrity before applying changes,
+thereby preventing system freezes, audio spikes, or permanent memory
+corruption.</p>
+<h3 id="the-vulnerability-of-midi-sysex-transfers">The Vulnerability of
+MIDI SysEx Transfers</h3>
+<p>Standard MIDI transmits data unidirectionally at 31.25 kbaud without
+native handshaking or automated resend requests. During a bulk patch
+dump, thousands of bytes represent precise synthesis parameters such as
+oscillator frequencies, filter routing, mod matrix assignments, and
+system memory pointers.</p>
+<p>If an electrical surge occurs, an optocoupler lags, or a MIDI
+interface suffers a buffer overrun, individual bytes within the data
+stream can flip or drop entirely. Without a verification layer, a
+receiving instrument would interpret the misaligned stream literally.
+This can cause severe parameter distortion, erratic volume output, or
+critical memory corruption that renders the synthesizer unbootable.</p>
+<h3 id="anatomy-of-a-sysex-string">Anatomy of a SysEx String</h3>
+<p>A typical patch transmission is encapsulated between two framing
+status bytes:</p>
+<ul>
+<li><strong>F0 (Status Byte):</strong> System Exclusive Start</li>
+<li><strong>Manufacturer ID:</strong> Identifies the synth maker (e.g.,
+41 for Roland, 43 for Yamaha)</li>
+<li><strong>Device / Model ID:</strong> Identifies the specific hardware
+target</li>
+<li><strong>Command / Address Bytes:</strong> Dictates where the data
+should be routed or stored</li>
+<li><strong>Payload Data:</strong> The actual parameter values
+(restricted to 7-bit bytes, values 00–7F)</li>
+<li><strong>Checksum Byte:</strong> The calculated verification
+value</li>
+<li><strong>F7 (Status Byte):</strong> End of Exclusive (EOX)</li>
+</ul>
+<h3 id="how-the-checksum-is-calculated">How the Checksum is
+Calculated</h3>
+<p>The sending device calculates the checksum in real time based on the
+contents of the payload (and typically the target address bytes).
+Because standard MIDI data bytes must not conflict with status bytes
+(values 80 through FF), the checksum calculation is constrained to a
+7-bit result (0 to 127).</p>
+<p>While implementations vary slightly across manufacturers, the
+industry standard (popularized by Roland) generally follows these
+steps:</p>
+<ol type="1">
+<li><strong>Accumulation:</strong> The sender sums the hexadecimal
+values of the base address and all data payload bytes.</li>
+<li><strong>Modulo Operation:</strong> The total sum is divided by 128
+(<code>Sum % 128</code>), extracting the remainder to fit the value into
+a 7-bit format.</li>
+<li><strong>Two's Complement (Inversion):</strong> The remainder is
+subtracted from 128 (<code>128 - Remainder</code>). If the result is
+128, it rolls over to 0.</li>
+</ol>
+<p>The resulting 7-bit byte is inserted immediately before the
+<code>F7</code> termination byte.</p>
+<h3 id="the-verification-and-protection-process">The Verification and
+Protection Process</h3>
+<p>When the SysEx string arrives at the receiving instrument, the
+incoming data is held in a temporary receive buffer rather than written
+directly to active memory.</p>
+<ol type="1">
+<li><strong>Local Recalculation:</strong> The receiver executes the
+exact same mathematical formula on the received address and data
+bytes.</li>
+<li><strong>Comparison:</strong> The receiver compares its locally
+calculated result with the checksum byte transmitted in the
+message.</li>
+<li><strong>Action on Match:</strong> If the calculated value matches
+the transmitted checksum, the data is verified as intact. The
+synthesizer flushes the data to the active edit buffer or target
+EEPROM/Flash patch location.</li>
+<li><strong>Rejection on Mismatch:</strong> If a single bit has flipped
+or a byte was dropped, the calculated sum will not match the checksum
+byte. The receiving synthesizer instantly discards the entire packet,
+halts the write sequence, and usually flags a "Checksum Error" or "SysEx
+Error" on its display.</li>
+</ol>
+<p>By enforcing this strict rejection policy, the checksum guarantees
+that partial, shifted, or electrically corrupted parameter sets never
+reach the synthesizer’s audio engine or internal storage.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

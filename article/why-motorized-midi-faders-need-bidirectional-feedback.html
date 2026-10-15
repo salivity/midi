@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Motorized MIDI Faders Need Bidirectional Feedback - midi</title>
+    <meta name="description" content="Motorized MIDI control surfaces rely on bidirectional feedback loops to maintain seamless synchronization between physical faders and digital audio workstation (DAW) parameters. Without continuous two-way communication, hardware and software quickly fall">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-motorized-midi-faders-need-bidirectional-feedback">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Motorized MIDI Faders Need Bidirectional Feedback - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-motorized-midi-faders-need-bidirectional-feedback" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Motorized MIDI control surfaces rely on bidirectional feedback loops to maintain seamless synchronization between physical faders and digital audio workstation (DAW) parameters. Without continuous two-way communication, hardware and software quickly fall" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-motorized-midi-faders-need-bidirectional-feedback">Why
+Motorized MIDI Faders Need Bidirectional Feedback</h1>
+<p>Motorized MIDI control surfaces rely on bidirectional feedback loops
+to maintain seamless synchronization between physical faders and digital
+audio workstation (DAW) parameters. Without continuous two-way
+communication, hardware and software quickly fall out of sync, leading
+to disruptive parameter jumping, inaccurate automation playback, and
+loss of tactile control. This article examines the mechanical and
+data-driven reasons why these closed-loop systems are essential for
+modern audio production workflows.</p>
+<h3 id="the-limitation-of-unidirectional-control">The Limitation of
+Unidirectional Control</h3>
+<p>Standard MIDI controllers typically operate in a unidirectional
+fashion: moving a physical knob or fader transmits control change (CC)
+data to the computer, updating the corresponding software value.
+However, the DAW does not report state changes back to the hardware.</p>
+<p>If a mix parameter changes within the software—whether through
+pre-recorded automation, mouse adjustments, or switching preset scenes—a
+static physical fader remains in its previous position. When moved
+again, the static hardware sends its current physical position to the
+DAW, causing the software parameter to instantly snap to the hardware's
+position. This "parameter jump" disrupts smooth mixing and can ruin
+active balance during a live session.</p>
+<h3 id="how-bidirectional-loops-maintain-parity">How Bidirectional Loops
+Maintain Parity</h3>
+<p>A bidirectional feedback loop turns the control surface into a
+real-time mirror of the DAW mixer by exchanging two distinct streams of
+data:</p>
+<ol type="1">
+<li><strong>Hardware-to-Software (Outbound):</strong> When a user moves
+a physical fader, the onboard sensor tracks the motion and sends
+standard MIDI or dedicated protocol messages (such as Mackie Control
+Universal or HUI) to adjust the track's digital volume.</li>
+<li><strong>Software-to-Hardware (Inbound):</strong> The DAW
+continuously broadcasts parameter updates back to the controller. The
+surface's internal microprocessor receives this data, calculates the
+difference between current physical positions and software values, and
+engages DC servo or stepper motors to physically reposition the
+faders.</li>
+</ol>
+<p>By constantly closing this loop, the physical position of the
+hardware always matches the software value, regardless of which end
+initiates the change.</p>
+<h3 id="handling-track-banking-and-multiplexing">Handling Track Banking
+and Multiplexing</h3>
+<p>Modern DAW sessions often contain dozens or hundreds of tracks, while
+physical control surfaces usually feature 8 to 16 motorized faders. To
+manage larger projects, surfaces rely on "banking," where a single bank
+of physical faders controls multiple sets of software channels (e.g.,
+tracks 1–8, then switching to tracks 9–16).</p>
+<p>Without a bidirectional feedback loop, switching banks would leave
+faders positioned according to the previous group of tracks.
+Bidirectional communication solves this instantly: the moment a user
+presses a bank button, the DAW sends the stored positions of the
+incoming tracks, and the motors drive the physical faders to match those
+exact values before the engineer touches them.</p>
+<h3 id="automation-playback-and-touch-sensitivity">Automation Playback
+and Touch-Sensitivity</h3>
+<p>Motorized surfaces require precise coordination during track
+automation playback. As a song plays, the DAW reads saved automation
+curves and streams position data to the control surface, causing the
+faders to ride the mix autonomously.</p>
+<p>To prevent the user's hand from fighting the active motor during live
+updates, professional motorized faders incorporate capacitive
+touch-sensitivity. When an engineer touches the fader cap:</p>
+<ul>
+<li>The surface sends a "fader touched" message to the DAW, which shifts
+the track into automation overwrite (write/latch/touch) mode.</li>
+<li>The bidirectional loop cuts power to the motor, allowing the user to
+guide the fader smoothly without mechanical resistance.</li>
+<li>Releasing the fader sends an "untouch" message, re-engaging the
+feedback loop to either resume motorized playback or park the fader at
+the newly written position.</li>
+</ul>
+<p>Without real-time bidirectional communication, hardware motors and
+software automation engines would operate in direct opposition, making
+tactile automation editing impossible.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

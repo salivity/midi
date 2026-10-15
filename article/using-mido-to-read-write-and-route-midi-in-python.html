@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Mido to Read, Write, and Route MIDI in Python - midi</title>
+    <meta name="description" content="Mido is an open-source Python library that simplifies working with Musical Instrument Digital Interface (MIDI) data. It provides an intuitive, Pythonic interface for creating, reading, processing, and streaming MIDI messages, making it an essential tool f">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/using-mido-to-read-write-and-route-midi-in-python">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using Mido to Read, Write, and Route MIDI in Python - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/using-mido-to-read-write-and-route-midi-in-python" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mido is an open-source Python library that simplifies working with Musical Instrument Digital Interface (MIDI) data. It provides an intuitive, Pythonic interface for creating, reading, processing, and streaming MIDI messages, making it an essential tool f" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="using-mido-to-read-write-and-route-midi-in-python">Using Mido to
+Read, Write, and Route MIDI in Python</h1>
+<p>Mido is an open-source Python library that simplifies working with
+Musical Instrument Digital Interface (MIDI) data. It provides an
+intuitive, Pythonic interface for creating, reading, processing, and
+streaming MIDI messages, making it an essential tool for music
+production software, algorithmic composition, and hardware controller
+integration. By abstracting the low-level binary specifications of the
+MIDI standard and wrapping native platform drivers, Mido allows
+developers to handle both real-time communication and static MIDI files
+with minimal setup.</p>
+<h3 id="understanding-mido-messages">Understanding Mido Messages</h3>
+<p>At the core of Mido is the <code>Message</code> object, which
+encapsulates individual MIDI events such as <code>note_on</code>,
+<code>note_off</code>, <code>control_change</code>, and pitch bends.
+Instead of requiring manual byte manipulation, Mido allows you to define
+parameters as keyword arguments:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mido</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Note On event (Middle C, velocity 64)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>msg <span class="op">=</span> mido.Message(<span class="st">&#39;note_on&#39;</span>, note<span class="op">=</span><span class="dv">60</span>, velocity<span class="op">=</span><span class="dv">64</span>, time<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect message attributes</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg.<span class="bu">type</span>)      <span class="co"># &#39;note_on&#39;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(msg.<span class="bu">bytes</span>())   <span class="co"># [144, 60, 64]</span></span></code></pre></div>
+<p>This abstraction ensures that data validation is performed
+automatically, preventing malformed MIDI packets from being
+generated.</p>
+<h3 id="reading-and-writing-midi-files">Reading and Writing MIDI
+Files</h3>
+<p>Mido handles static files using the <code>MidiFile</code> and
+<code>MidiTrack</code> classes, supporting standard Type 0 and Type 1
+files.</p>
+<p>To write a sequence of notes to a file, you append messages to a
+track and save the file:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mido <span class="im">import</span> Message, MidiFile, MidiTrack</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mid <span class="op">=</span> MidiFile()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>track <span class="op">=</span> MidiTrack()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>mid.tracks.append(track)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add events with delta times (in ticks)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>track.append(Message(<span class="st">&#39;note_on&#39;</span>, note<span class="op">=</span><span class="dv">64</span>, velocity<span class="op">=</span><span class="dv">100</span>, time<span class="op">=</span><span class="dv">0</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>track.append(Message(<span class="st">&#39;note_off&#39;</span>, note<span class="op">=</span><span class="dv">64</span>, velocity<span class="op">=</span><span class="dv">100</span>, time<span class="op">=</span><span class="dv">480</span>))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>mid.save(<span class="st">&#39;output.mid&#39;</span>)</span></code></pre></div>
+<p>Reading a MIDI file is equally direct. You can iterate through all
+events sequentially, while Mido handles track synchronization and
+timing:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> MidiFile(<span class="st">&#39;output.mid&#39;</span>).play():</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># .play() generates real-time playback delays automatically</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(msg)</span></code></pre></div>
+<h3 id="real-time-routing-and-hardware-io">Real-Time Routing and
+Hardware I/O</h3>
+<p>Mido interfaces with your operating system's audio subsystem through
+backends like <code>python-rtmidi</code> or <code>PortMidi</code>. This
+allows real-time sending and receiving of MIDI signals across external
+synthesizers, virtual ports, and DAWs.</p>
+<p>To list available physical and virtual ports:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mido.get_input_names())</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mido.get_output_names())</span></code></pre></div>
+<p>To read live input from a MIDI controller:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> mido.open_input(<span class="st">&#39;Keyboard Port Name&#39;</span>) <span class="im">as</span> inport:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> msg <span class="kw">in</span> inport:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Received: </span><span class="sc">{</span>msg<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<p>To route or modify messages dynamically, you can capture input from
+one port, alter its data (such as transposing pitch or scaling
+velocity), and forward it directly to an output port:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>inport <span class="op">=</span> mido.open_input(<span class="st">&#39;Keyboard&#39;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>outport <span class="op">=</span> mido.open_output(<span class="st">&#39;Synthesizer&#39;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> msg <span class="kw">in</span> inport:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> msg.<span class="bu">type</span> <span class="op">==</span> <span class="st">&#39;note_on&#39;</span>:</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        msg.note <span class="op">+=</span> <span class="dv">12</span>  <span class="co"># Transpose up one octave</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    outport.send(msg)</span></code></pre></div>
+<p>Through this unified API, Mido reduces complex MIDI protocol
+specifications into accessible, high-level Python code suitable for both
+standalone file processing and interactive audio applications.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Clock Divider: Half-Time and Triplet Sync - midi</title>
+    <meta name="description" content="This article explains how hardware MIDI clock dividers process standardized tempo pulses to produce modified rhythmic timings. It covers the baseline structure of MIDI clock signals, the internal counting and division mechanisms used by hardware units, an">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-clock-divider-half-time-and-triplet-sync">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Clock Divider: Half-Time and Triplet Sync - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-clock-divider-half-time-and-triplet-sync" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how hardware MIDI clock dividers process standardized tempo pulses to produce modified rhythmic timings. It covers the baseline structure of MIDI clock signals, the internal counting and division mechanisms used by hardware units, an" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-clock-divider-half-time-and-triplet-sync">MIDI Clock
+Divider: Half-Time and Triplet Sync</h1>
+<p>This article explains how hardware MIDI clock dividers process
+standardized tempo pulses to produce modified rhythmic timings. It
+covers the baseline structure of MIDI clock signals, the internal
+counting and division mechanisms used by hardware units, and the exact
+mathematical processes required to convert standard tempo data into
+half-time and triplet sync outputs for electronic instruments.</p>
+<h3 id="the-foundation-the-standard-midi-clock">The Foundation: The
+Standard MIDI Clock</h3>
+<p>Standard MIDI tempo synchronization is transmitted as a stream of
+real-time status bytes (<code>0xF8</code>). This stream operates at a
+fixed resolution of 24 Pulses Per Quarter Note (PPQN). Regardless of the
+tempo, a master MIDI device sends exactly 24 <code>0xF8</code> bytes to
+represent the duration of one quarter note.</p>
+<p>A hardware MIDI clock divider receives these bytes via a MIDI IN port
+through an optocoupler, routing the serial data into a microprocessor,
+microcontroller, or discrete logic circuit. The device does not alter
+the incoming tempo; instead, it uses internal counters to monitor the
+incoming 24 PPQN pulse stream and triggers secondary outputs only when
+specific pulse counts are reached.</p>
+<h3 id="how-half-time-sync-signals-are-generated">How Half-Time Sync
+Signals Are Generated</h3>
+<p>To create a half-time rhythm, the hardware must halve the frequency
+of the pulse triggers relative to the standard master tempo.</p>
+<ol type="1">
+<li><strong>Pulse Counting:</strong> In standard time, an output trigger
+representing a quarter note fires every 24 incoming clock ticks. To
+produce a half-time quarter note (effectively a half note in standard
+time), the hardware's internal counter is programmed to accumulate twice
+the standard count—48 pulses—before generating an output trigger.</li>
+<li><strong>Frequency Division:</strong> If the unit outputs an analog
+sync signal (such as a 5-volt gate pulse for modular synthesizers or
+drum machines), a digital flip-flop or software counter tracks the
+pulses. By setting the division factor to <span
+class="math inline">\(2\times\)</span>, the circuit delays every sync
+pulse by a factor of two, causing connected slave gear to step forward
+at half the master tempo.</li>
+<li><strong>MIDI Regeneration:</strong> If the divider outputs MIDI
+rather than analog pulses, it intercepts the 24 PPQN stream and
+transmits a filtered or reconstructed clock stream. It can either
+suppress every other <code>0xF8</code> byte to slow down devices that
+accept lower PPQN resolutions, or dynamically scale and re-emit a full
+24 PPQN stream stretched over twice the time period using an internal
+timer locked to the incoming rate.</li>
+</ol>
+<h3 id="how-triplet-sync-signals-are-generated">How Triplet Sync Signals
+Are Generated</h3>
+<p>The 24 PPQN standard was historically chosen because the number 24 is
+cleanly divisible by both 2 and 3, which allows hardware dividers to
+derive integer-based triplet values without introducing timing drift or
+phase jitter.</p>
+<p>To generate triplet divisions, the hardware divides standard note
+values into three equal parts by counting specific subsets of the
+24-pulse cycle:</p>
+<ul>
+<li><strong>Eighth-Note Triplets (1/8T):</strong> A standard quarter
+note equals 24 pulses. To fit three notes into the space of a quarter
+note, the divider calculates <span class="math inline">\(24 \div 3 =
+8\)</span>. The hardware counter resets and fires an output pulse every
+8 incoming clock ticks.</li>
+<li><strong>Quarter-Note Triplets (1/4T):</strong> A standard half note
+equals 48 pulses. To fit three notes into the space of two quarter
+notes, the divider calculates <span class="math inline">\(48 \div 3 =
+16\)</span>. The hardware fires an output pulse every 16 incoming
+ticks.</li>
+<li><strong>Sixteenth-Note Triplets (1/16T):</strong> A standard eighth
+note equals 12 pulses. Dividing this by three (<span
+class="math inline">\(12 \div 3 = 4\)</span>) means the hardware
+triggers a sync pulse every 4 incoming clock ticks.</li>
+</ul>
+<h3 id="output-formatting-and-pulse-shaping">Output Formatting and Pulse
+Shaping</h3>
+<p>Once the divider's internal logic calculates the target pulse
+threshold (e.g., 8 ticks for an eighth-note triplet, or 48 ticks for
+half-time), the hardware formats the output for downstream gear:</p>
+<ul>
+<li><strong>Analog Trigger/Gate Outputs:</strong> For Eurorack and
+semi-modular synthesizers, a digital output pin goes high for a fixed
+duration (typically 5 to 10 milliseconds) to generate a distinct analog
+pulse, then returns to 0V until the next counter threshold is met.</li>
+<li><strong>DIN Sync / Clock Outputs:</strong> Devices that output
+variable pulse-per-quarter-note signals (such as 2 PPQN, 24 PPQN, or 48
+PPQN) scale their counter algorithms so the outgoing pulses match the
+electrical requirements of the receiving hardware.</li>
+</ul>
+<p>By relying on simple integer division of the baseline 24 PPQN data
+stream, the hardware produces perfectly quantized half-time and triplet
+rhythmic intervals without latency or cumulative timing errors.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

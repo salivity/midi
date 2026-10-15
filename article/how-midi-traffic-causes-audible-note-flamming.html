@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Traffic Causes Audible Note Flamming - midi</title>
+    <meta name="description" content="Audible note flamming occurs when excessive MIDI data saturates the standard 31.25 kbaud serial connection, forcing simultaneous note commands into a sequential queue that stretches over tens of milliseconds. Because the legacy MIDI 1.0 protocol transmits">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-traffic-causes-audible-note-flamming">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Traffic Causes Audible Note Flamming - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-traffic-causes-audible-note-flamming" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Audible note flamming occurs when excessive MIDI data saturates the standard 31.25 kbaud serial connection, forcing simultaneous note commands into a sequential queue that stretches over tens of milliseconds. Because the legacy MIDI 1.0 protocol transmits" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-traffic-causes-audible-note-flamming">How MIDI Traffic
+Causes Audible Note Flamming</h1>
+<p>Audible note flamming occurs when excessive MIDI data saturates the
+standard 31.25 kbaud serial connection, forcing simultaneous note
+commands into a sequential queue that stretches over tens of
+milliseconds. Because the legacy MIDI 1.0 protocol transmits data
+serially at a fixed bit rate, dense bursts of controller messages, pitch
+bend, or polyphonic chords introduce serialization latency and jitter.
+This delay causes notes that were triggered at the exact same instant to
+reach sound modules at staggered intervals, transforming a tight, punchy
+transient into a loose, smeared "flam" effect.</p>
+<h3 id="the-3125-kbaud-hardware-limitation">The 31.25 kbaud Hardware
+Limitation</h3>
+<p>Standard 5-pin DIN MIDI operates at an asynchronous transmission rate
+of 31,250 baud (bits per second). Using standard serial framing, each
+MIDI byte consists of 10 bits: one start bit, eight data bits, and one
+stop bit. Consequently, a MIDI line can transmit a maximum of 3,125
+bytes per second. At this fixed speed, sending a single byte takes
+exactly 320 microseconds (0.32 milliseconds).</p>
+<p>A standard MIDI Note-On message requires three bytes:</p>
+<ol type="1">
+<li>Status byte (Note-On and channel)</li>
+<li>Data byte 1 (Pitch/Note number)</li>
+<li>Data byte 2 (Velocity)</li>
+</ol>
+<p>Transmitting one complete Note-On command requires 0.96 milliseconds.
+Even using "running status"—an optimization that omits the status byte
+for consecutive messages of the same type—each subsequent note still
+requires two bytes, or 0.64 milliseconds.</p>
+<h3 id="serial-serialization-and-chords">Serial Serialization and
+Chords</h3>
+<p>MIDI is strictly a serial communication channel, meaning it cannot
+transmit multiple messages in parallel. When a musician plays a dense
+ten-note chord or a sequencer triggers multiple layered tracks
+simultaneously, the messages must line up in a single-file queue.</p>
+<p>Under ideal conditions with running status applied, a ten-note chord
+takes roughly 6.72 milliseconds to transmit. While 6 to 7 milliseconds
+is generally considered acceptable and often imperceptible to the human
+ear, this baseline latency rapidly degrades when non-note data enters
+the stream.</p>
+<h3 id="the-impact-of-excessive-data-traffic">The Impact of Excessive
+Data Traffic</h3>
+<p>Modern digital audio workstations (DAWs), master keyboards, and
+controllers frequently generate continuous streams of non-note MIDI
+events. High-density data includes:</p>
+<ul>
+<li><strong>Continuous Controllers (CC):</strong> High-resolution
+automation curves for expression (CC11), modulation (CC1), filter cutoff
+(CC74), and volume (CC7).</li>
+<li><strong>Channel and Polyphonic Aftertouch:</strong> Constant
+pressure updates sent per key or per channel.</li>
+<li><strong>Pitch Bend:</strong> High-frequency, 14-bit data consisting
+of two data bytes per update.</li>
+<li><strong>MIDI Clock and Active Sensing:</strong> Real-time
+synchronization bytes interleaved directly into the data stream.</li>
+</ul>
+<p>Each standard CC or Pitch Bend update consumes two to three bytes.
+When a sequencer sweeps a filter while simultaneously modulating volume
+and playing chords, the interface can easily output hundreds of bytes
+within a fraction of a second. If 50 continuous controller bytes are
+queued right before a group of notes, those CC messages will block the
+serial line for 16 milliseconds before the first note even begins
+transmitting.</p>
+<h3 id="why-flamming-occurs">Why Flamming Occurs</h3>
+<p>Flamming is an acoustic phenomenon borrowed from percussion
+terminology, where two drum hits meant to sound together land with a
+slight gap, producing a "flam" sound rather than a single transient
+attack.</p>
+<p>The human auditory system is exceptionally sensitive to transient
+timing. While delays below 5 milliseconds are heard as phase shifts or
+unified hits, delays between 10 and 30 milliseconds are perceived as
+distinct, smeared attacks.</p>
+<p>When heavy data traffic forces Note-On messages to space out across
+15 to 40 milliseconds:</p>
+<ol type="1">
+<li><strong>Transient Smearing:</strong> The attack phases of layered
+instruments (such as a kick drum and a bass synth triggered on beat one)
+no longer align, stripping the mix of its impact.</li>
+<li><strong>Asymmetrical Arrival Times:</strong> The first note in the
+serial queue sounds immediately, while the final note in the queue plays
+noticeably late.</li>
+<li><strong>Phase Cancellation and Inconsistency:</strong> Because the
+volume of CC data fluctuates dynamically, the delay between notes
+changes from beat to beat. This timing variation (jitter) makes the
+flamming erratic and distracting during playback.</li>
+</ol>
+<h3 id="preventing-serial-bottlenecks">Preventing Serial
+Bottlenecks</h3>
+<p>To eliminate traffic-induced flamming on hardware MIDI setups,
+traffic must be actively managed:</p>
+<ul>
+<li><strong>Thinning MIDI CC Data:</strong> Most DAWs include a MIDI
+event filter or thinning function to reduce the density of continuous
+controller events without altering the audible curve.</li>
+<li><strong>Filtering Redundant Messages:</strong> Disabling unneeded
+data such as MIDI Time Code (MTC), Active Sensing, or polyphonic
+aftertouch preserves bandwidth.</li>
+<li><strong>Multiport Interfaces:</strong> Distributing complex
+arrangements across multiple physical MIDI Out ports bypasses the
+single-cable 31.25 kbaud limit by providing independent serial buses for
+different hardware synthesizers.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

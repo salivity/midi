@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Soft Takeover Prevents MIDI Value Snapping - midi</title>
+    <meta name="description" content="When controlling digital audio workstations (DAWs) or software synthesizers with hardware, switching between tracks or presets often creates a mismatch between the physical position of a non-motorized knob and the software parameter it controls. Without a">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-soft-takeover-prevents-midi-value-snapping">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Soft Takeover Prevents MIDI Value Snapping - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-soft-takeover-prevents-midi-value-snapping" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When controlling digital audio workstations (DAWs) or software synthesizers with hardware, switching between tracks or presets often creates a mismatch between the physical position of a non-motorized knob and the software parameter it controls. Without a" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-soft-takeover-prevents-midi-value-snapping">How Soft
+Takeover Prevents MIDI Value Snapping</h1>
+<p>When controlling digital audio workstations (DAWs) or software
+synthesizers with hardware, switching between tracks or presets often
+creates a mismatch between the physical position of a non-motorized knob
+and the software parameter it controls. Without an intervention method,
+moving the physical knob instantly forces the software value to jump to
+the knob's current position, causing disruptive audio glitches and
+sudden volume spikes. The "Soft Takeover"—also commonly referred to as
+"Pickup" mode—is an algorithmic solution that disables parameter updates
+until the physical control physically reaches and matches the current
+software value, ensuring smooth, predictable transitions.</p>
+<h3 id="the-problem-physical-to-digital-mismatch">The Problem:
+Physical-to-Digital Mismatch</h3>
+<p>Standard non-motorized MIDI hardware relies on potentiometers
+(absolute encoders) that output absolute values between 0 and 127. These
+physical knobs cannot move themselves. If a software filter cutoff is
+saved at a value of 30, but the physical knob on your hardware
+controller was left at position 100 from an earlier edit, an absolute
+tracking mode immediately forces the filter from 30 to 100 the instant
+the knob is touched. This sudden transition is known as "value snapping"
+or "value jumping."</p>
+<h3 id="how-the-soft-takeover-algorithm-works">How the Soft Takeover
+Algorithm Works</h3>
+<p>The Soft Takeover algorithm resolves this mismatch by acting as a
+conditional gatekeeper between the incoming MIDI Control Change (CC)
+messages and the target software parameter. It follows a distinct
+sequence of logical steps:</p>
+<ol type="1">
+<li><p><strong>State Detection and Interception:</strong> Upon loading a
+preset, track, or bank, the software records the internal value of the
+target parameter (<span
+class="math inline">\(V_{\text{target}}\)</span>). When you move the
+physical knob, it transmits an incoming MIDI value (<span
+class="math inline">\(V_{\text{incoming}}\)</span>). The algorithm
+intercepts this incoming signal before it alters the sound
+engine.</p></li>
+<li><p><strong>The Inactive (Muted) State:</strong> The algorithm
+evaluates whether <span
+class="math inline">\(V_{\text{incoming}}\)</span> matches <span
+class="math inline">\(V_{\text{target}}\)</span>. If the physical knob's
+position is different from the stored software value, the algorithm
+enters or remains in an inactive state. During this time, the software
+parameter remains completely unchanged, ignoring incoming CC messages
+from that specific knob.</p></li>
+<li><p><strong>Tracking Direction and Threshold:</strong> To account for
+human error and the coarse 7-bit resolution of standard MIDI (128
+discrete steps), the algorithm defines a small threshold or tolerance
+window (<span class="math inline">\(\pm \epsilon\)</span>) around <span
+class="math inline">\(V_{\text{target}}\)</span>, or it monitors the
+crossing direction:</p>
+<ul>
+<li>If the physical knob is lower than the software value, the algorithm
+waits for an ascending value that reaches or crosses <span
+class="math inline">\(V_{\text{target}}\)</span>.</li>
+<li>If the physical knob is higher than the software value, it waits for
+a descending value that reaches or crosses <span
+class="math inline">\(V_{\text{target}}\)</span>.</li>
+</ul></li>
+<li><p><strong>Pickup (Engagement):</strong> As you turn the knob toward
+the software setting, the incoming value eventually intersects with
+<span class="math inline">\(V_{\text{target}}\)</span> within the
+defined threshold. At the exact moment <span
+class="math inline">\(V_{\text{incoming}} \approx
+V_{\text{target}}\)</span>, the algorithm flips its internal state from
+inactive to active. The hardware has now successfully "picked up" the
+software control.</p></li>
+<li><p><strong>Direct 1:1 Control:</strong> Once engaged, the
+conditional check is bypassed for the remainder of the interaction. The
+incoming MIDI stream directly updates the parameter in real time without
+lag, latency, or audible jumps, behaving as a standard absolute
+controller until a new preset or mapping is loaded.</p></li>
+</ol>
+<h3 id="why-soft-takeover-is-essential">Why Soft Takeover Is
+Essential</h3>
+<p>Soft Takeover offers an efficient, purely software-based solution to
+hardware limitations. While endless rotary encoders (which send relative
+increment/decrement messages) and expensive motorized faders can also
+prevent parameter jumps, standard potentiometers remain the most common
+component on budget and mid-tier MIDI controllers. By decoupling the
+hardware's static position from the software's active state until they
+coincide, the Pickup algorithm guarantees artifact-free mixing, seamless
+live performance modulation, and safe parameter adjustments.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

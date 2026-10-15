@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Sinking in MIDI Transmitter Driver Circuits - midi</title>
+    <meta name="description" content="This article explains the mechanics and electrical role of current sinking within an authorized MIDI transmitter driver circuit. By utilizing a 5 mA switched current-loop architecture, standard MIDI transmitters do not supply driving voltage to register a">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/current-sinking-in-midi-transmitter-driver-circuits">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Current Sinking in MIDI Transmitter Driver Circuits - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/current-sinking-in-midi-transmitter-driver-circuits" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains the mechanics and electrical role of current sinking within an authorized MIDI transmitter driver circuit. By utilizing a 5 mA switched current-loop architecture, standard MIDI transmitters do not supply driving voltage to register a" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="current-sinking-in-midi-transmitter-driver-circuits">Current
+Sinking in MIDI Transmitter Driver Circuits</h1>
+<p>This article explains the mechanics and electrical role of current
+sinking within an authorized MIDI transmitter driver circuit. By
+utilizing a 5 mA switched current-loop architecture, standard MIDI
+transmitters do not supply driving voltage to register a signal;
+instead, they complete a path to ground to actuate an optocoupler at the
+receiving end. Below is a detailed breakdown of how the driver
+interfaces with the transmission loop, how the switching logic
+functions, and why this topology is specified in the official MIDI
+standard.</p>
+<h3 id="the-midi-current-loop-interface">The MIDI Current Loop
+Interface</h3>
+<p>The physical layer of the MIDI specification (MIDI 1.0 Electrical
+Specification) relies on a point-to-point, 5 mA current loop rather than
+a direct voltage-level signaling bus. In a standard 5-pin DIN MIDI Out
+port, connection is established through two signal pins:</p>
+<ul>
+<li><strong>Pin 4 (Current Source):</strong> Connected to the system
+supply voltage (traditionally +5V, or +3.3V in updated low-voltage
+specifications) via a current-limiting pull-up resistor.</li>
+<li><strong>Pin 5 (Current Sink):</strong> Connected to the output of an
+inverting logic buffer or open-collector driver through an identical
+current-limiting protection resistor.</li>
+<li><strong>Pin 2 (Shield):</strong> Connected to earth/chassis ground
+at the transmitter only, providing RF shielding without bridging device
+grounds.</li>
+</ul>
+<p>The circuit at the MIDI In receiver consists solely of a
+reverse-protection diode and the infrared LED of an optoisolator placed
+across Pin 4 and Pin 5.</p>
+<h3 id="the-operation-of-current-sinking">The Operation of Current
+Sinking</h3>
+<p>In electronic driver design, "current sinking" occurs when an active
+device (such as a bipolar junction transistor or MOSFET) provides a path
+to ground for current supplied by an external source. In an authorized
+MIDI transmitter, the sinking action is controlled by the Universal
+Asynchronous Receiver-Transmitter (UART) serial output.</p>
+<h4 id="1-logic-0-active--space-state">1. Logic 0 (Active / Space
+State)</h4>
+<p>Serial MIDI communication is active-low. When the UART outputs a
+logic <code>0</code> (such as during a start bit or data bit):</p>
+<ul>
+<li>The driver circuit—typically implemented using high-speed inverting
+gates (such as a 74HCT14) or an open-collector driver (such as a 7407 or
+discrete NPN/N-channel transistor)—switches its output on Pin 5 to a
+low-impedance state linked to ground.</li>
+<li>This drops the voltage on Pin 5 near 0V, establishing a completed
+circuit loop between Pin 4 (+Vcc) and Pin 5 (Ground).</li>
+<li>Current flows out of Pin 4, travels through the cable,
+forward-biases the receiver's optocoupler LED, returns through the cable
+into Pin 5, and sinks directly into ground via the transmitter’s active
+switching element.</li>
+<li>The glowing LED turns on the phototransistor inside the receiver,
+reconstructing the logic <code>0</code> at the receiving UART.</li>
+</ul>
+<h4 id="2-logic-1-idle--mark-state">2. Logic 1 (Idle / Mark State)</h4>
+<p>When the UART line is at idle, or transmitting a logic
+<code>1</code>:</p>
+<ul>
+<li>The driver gate or transistor switches off, presenting a high
+impedance (tri-state or high-voltage pull) on Pin 5.</li>
+<li>With no functional path to ground, current cannot flow through the
+loop (<span class="math inline">\(I = 0\text{ mA}\)</span>).</li>
+<li>The optocoupler LED at the receiver remains dark, keeping the
+receiver's input pulled high to its local power rail, which registers as
+a logic <code>1</code>.</li>
+</ul>
+<h3 id="symmetrical-resistance-and-impedance-matching">Symmetrical
+Resistance and Impedance Matching</h3>
+<p>Official MIDI hardware design guidelines mandate matching series
+resistors on both the source pin (Pin 4) and the sink pin (Pin 5). In a
+classic 5V circuit, both resistors are typically <span
+class="math inline">\(220\ \Omega\)</span>.</p>
+<p>When the driver sinks current, these resistors evenly distribute the
+voltage drop across the loop, accounting for the forward voltage drop of
+the receiver's optocoupler LED (roughly 1.2V to 1.7V) and ensuring that
+approximately 5 mA flows through the circuit. Sinking the current
+through a matched resistance on the return leg ensures symmetrical cable
+impedance, absorbs back-EMF, and prevents high-current short circuits if
+incorrect or faulty cables are connected to the DIN jack.</p>
+<h3 id="why-current-sinking-is-specified">Why Current Sinking Is
+Specified</h3>
+<ol type="1">
+<li><strong>Galvanic Isolation:</strong> Sinking the loop return through
+an isolated ground path inside the transmitter preserves the galvanic
+isolation boundary created by the receiver's optocoupler. Because the
+receiver does not connect to Pin 2, no ground loop is formed between the
+interconnected instruments, eliminating 50/60 Hz hum and
+interference.</li>
+<li><strong>Noise Immunity:</strong> Current-mode sinking significantly
+reduces vulnerability to electrostatic discharge and capacitive coupling
+over long cable runs. Interference that might corrupt high-impedance
+voltage states does not readily generate the 5 mA necessary to trigger
+the optocoupler.</li>
+<li><strong>Failsafe Disconnection:</strong> If a cable is unplugged,
+the broken sink path mimics an idle logic state (<code>1</code>),
+preventing the receiver from registering corrupted data or continuous
+false triggers.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

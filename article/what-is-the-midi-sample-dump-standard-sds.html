@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is the MIDI Sample Dump Standard (SDS)? - midi</title>
+    <meta name="description" content="The MIDI Sample Dump Standard (SDS) is an extension of the original MIDI 1.0 specification that enables the bidirectional transfer of raw digital audio waveform data between musical instruments, samplers, and computers. Introduced in the late 1980s, SDS e">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-the-midi-sample-dump-standard-sds">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is the MIDI Sample Dump Standard (SDS)? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-the-midi-sample-dump-standard-sds" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Sample Dump Standard (SDS) is an extension of the original MIDI 1.0 specification that enables the bidirectional transfer of raw digital audio waveform data between musical instruments, samplers, and computers. Introduced in the late 1980s, SDS e" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-the-midi-sample-dump-standard-sds">What Is the MIDI
+Sample Dump Standard (SDS)?</h1>
+<p>The MIDI Sample Dump Standard (SDS) is an extension of the original
+MIDI 1.0 specification that enables the bidirectional transfer of raw
+digital audio waveform data between musical instruments, samplers, and
+computers. Introduced in the late 1980s, SDS established a
+manufacturer-agnostic protocol for transmitting Pulse Code Modulation
+(PCM) samples over traditional 5-pin DIN MIDI serial cables. While
+inherently slow due to MIDI’s modest transmission rate, SDS solved
+interoperability challenges by defining standardized sample headers,
+data packetization, bit-depth adaptation, and closed-loop handshaking
+protocols.</p>
+<h3 id="the-underlying-transmission-bottleneck">The Underlying
+Transmission Bottleneck</h3>
+<p>Standard MIDI operates as an asynchronous serial connection running
+at a fixed rate of 31.25 kbaud (31,250 bits per second), utilizing 1
+start bit, 8 data bits, and 1 stop bit (10 bits total per frame). This
+yields an effective maximum throughput of 3,125 bytes per second.</p>
+<p>Because uncompressed PCM audio contains thousands of bytes per
+second—such as a 16-bit, 44.1 kHz mono sample requiring 88,200 bytes per
+second—transmitting audio over MIDI cannot happen in real time. Instead,
+SDS is an offline, non-real-time file transfer protocol designed purely
+for data fidelity rather than playback performance.</p>
+<h3 id="overcoming-the-7-bit-data-limitation">Overcoming the 7-Bit Data
+Limitation</h3>
+<p>A primary technical hurdle of transmitting raw PCM over MIDI is the
+MIDI byte architecture:</p>
+<ul>
+<li><strong>Status Bytes:</strong> Values from 128 to 255 (binary
+<code>10000000</code> to <code>11111111</code>) are reserved exclusively
+for MIDI command definitions.</li>
+<li><strong>Data Bytes:</strong> Values from 0 to 127 (binary
+<code>00000000</code> to <code>01111111</code>) are the only bytes
+permitted to carry payload data, meaning the most significant bit (MSB)
+must always be <code>0</code>.</li>
+</ul>
+<p>Raw binary PCM data frequently uses bytes exceeding value 127. If
+sent raw, the receiving instrument would misinterpret sample data as
+MIDI status messages (such as Note On or Clock ticks).</p>
+<p>To circumvent this, SDS encapsulates audio inside MIDI System
+Exclusive (SysEx) messages and repackages raw PCM samples into 7-bit
+streams. Depending on the original sample resolution (SDS supports
+depths from 8 to 28 bits):</p>
+<ul>
+<li>An 8-bit sample is split across two 7-bit MIDI bytes.</li>
+<li>A 16-bit sample is split across three 7-bit MIDI bytes.</li>
+<li>Higher-resolution samples are similarly encoded using left-justified
+bit packing.</li>
+</ul>
+<p>This bit-shifting adds roughly 14% to 50% data overhead, reducing the
+already limited throughput, but it guarantees that sample data never
+violates MIDI protocol rules.</p>
+<h3 id="the-sds-communication-architecture">The SDS Communication
+Architecture</h3>
+<p>The SDS protocol establishes transmission through two main packet
+types: the Dump Header and Dump Data Packets.</p>
+<h4 id="1-the-dump-header">1. The Dump Header</h4>
+<p>Before transmitting any waveform data, the sending device transmits a
+SysEx Header packet containing the metadata necessary for the receiver
+to allocate memory and configure playback:</p>
+<ul>
+<li><strong>Sample Number:</strong> Identifies which sample slot or
+patch is being written.</li>
+<li><strong>Sample Resolution:</strong> Specifies bit depth (8 to 28
+bits).</li>
+<li><strong>Sample Rate:</strong> Defined in nanoseconds per sample
+period to maintain absolute timing accuracy.</li>
+<li><strong>Sample Length:</strong> Total word count of the audio
+file.</li>
+<li><strong>Loop Points:</strong> Start and end markers for sustained
+playback loops, including loop type (forward or alternating).</li>
+</ul>
+<h4 id="2-dump-data-packets">2. Dump Data Packets</h4>
+<p>Once the header is accepted, the PCM audio is sent sequentially in
+discrete packets:</p>
+<ul>
+<li>Each packet contains an index counter (modulo 128) to track
+order.</li>
+<li>The audio data payload is fixed at 120 bytes per packet.</li>
+<li>Each packet concludes with an exclusive-OR (XOR) checksum
+calculation to evaluate data integrity across the serial line.</li>
+</ul>
+<h3 id="handshaking-and-error-correction">Handshaking and Error
+Correction</h3>
+<p>Because hardware buffers in early digital samplers were small and
+prone to overrun, SDS supports two operational modes: open-loop
+(simplex) and closed-loop (duplex).</p>
+<ul>
+<li><strong>Open-Loop Mode:</strong> Uses a single MIDI cable from the
+sender to the receiver. The sender transmits packets blindly, often with
+artificial pauses between packets to prevent buffer overflow. There is
+no error correction; dropped bytes result in corrupted audio.</li>
+<li><strong>Closed-Loop Mode:</strong> Uses two MIDI cables to form a
+bidirectional loop. This enables hardware handshaking via small SysEx
+command messages:
+<ul>
+<li><strong>ACK (Acknowledge):</strong> Confirms that a packet arrived
+without checksum errors and the receiver is ready for the next one.</li>
+<li><strong>NAK (Negative Acknowledge):</strong> Signals a checksum
+mismatch, prompting the sender to retransmit the corrupted packet.</li>
+<li><strong>CANCEL:</strong> Aborts the transfer entirely.</li>
+<li><strong>WAIT:</strong> Instructs the sender to pause while the
+receiver processes data, writes to flash memory, or clears internal
+buffers.</li>
+</ul></li>
+</ul>
+<p>Through this structured packetization, bit-level reformatting, and
+explicit verification, the MIDI Sample Dump Standard allowed early
+digital musicians and sound designers to reliably back up, edit, and
+interchange digital waveforms across disparate synthesizer
+platforms.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

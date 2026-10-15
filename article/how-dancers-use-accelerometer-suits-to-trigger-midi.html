@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Dancers Use Accelerometer Suits to Trigger MIDI - midi</title>
+    <meta name="description" content="Wearable accelerometer suits allow dance performers to transform physical choreography into live electronic music by translating physical gestures into spatialized MIDI data. Through a network of inertial sensors positioned along the performer&#39;s body, acc">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-dancers-use-accelerometer-suits-to-trigger-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Dancers Use Accelerometer Suits to Trigger MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-dancers-use-accelerometer-suits-to-trigger-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Wearable accelerometer suits allow dance performers to transform physical choreography into live electronic music by translating physical gestures into spatialized MIDI data. Through a network of inertial sensors positioned along the performer&#39;s body, acc" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-dancers-use-accelerometer-suits-to-trigger-midi">How Dancers
+Use Accelerometer Suits to Trigger MIDI</h1>
+<p>Wearable accelerometer suits allow dance performers to transform
+physical choreography into live electronic music by translating physical
+gestures into spatialized MIDI data. Through a network of inertial
+sensors positioned along the performer's body, acceleration and
+orientation metrics are converted into digital control values. These
+signals transmit wirelessly to a central audio workstation, where custom
+software interprets velocity, thresholds, and directional vectors to
+trigger discrete audio samples and pan them dynamically across a
+multichannel speaker array.</p>
+<h3 id="sensor-hardware-and-suit-integration">Sensor Hardware and Suit
+Integration</h3>
+<p>The physical foundation of an interactive motion-capture suit
+consists of multiple Inertial Measurement Units (IMUs) or tri-axial
+accelerometers embedded into form-fitting, flexible garments. Sensors
+are strategically placed at key points of articulation—typically the
+wrists, ankles, elbows, knees, and torso.</p>
+<p>These sensors connect to a central wearable microcontroller, such as
+an ESP32 or Teensy board, using flexible ribbon cables, conductive
+thread, or miniature localized wiring harnesses. The sensors measure
+changes in velocity along the X, Y, and Z axes, as well as rotational
+forces. To ensure uninterrupted movement, the microcontroller and a
+lightweight lithium-polymer battery pack are housed inside a low-profile
+pouch anchored firmly to the dancer's lower back or waist, preventing
+shift during high-impact routines.</p>
+<h3 id="data-processing-and-signal-transmission">Data Processing and
+Signal Transmission</h3>
+<p>As the dancer moves, the accelerometers generate raw analog or
+digital voltage readings representing gravitational pull and kinetic
+force. The on-body microcontroller reads these data streams at high
+sampling rates (typically between 50Hz and 100Hz) to ensure minimal
+latency.</p>
+<p>Before sending the data, the firmware filters out high-frequency
+noise caused by mechanical vibration or clothing rustle using algorithms
+like low-pass or Kalman filtering. Once cleaned, the motion data is
+packaged into lightweight protocols—most commonly Open Sound Control
+(OSC) or MIDI over Bluetooth Low Energy (BLE) or Wi-Fi (UDP). The
+wireless transceiver sends these packets instantly to a performance
+computer running digital audio software, keeping total end-to-end
+latency below 10 to 15 milliseconds to maintain an imperceptible delay
+between movement and sound.</p>
+<h3 id="translating-movement-to-midi-parameters">Translating Movement to
+MIDI Parameters</h3>
+<p>Upon arriving at the performance computer, mapping software—such as
+Cycling '74's Max/MSP, Pure Data, or specialized plugins inside digital
+audio workstations (DAWs) like Ableton Live—converts the incoming data
+stream into standard MIDI messages. This mapping operates on two
+distinct levels:</p>
+<ul>
+<li><strong>Trigger Events (Note On/Off):</strong> Sudden spikes in
+acceleration that exceed a predefined threshold are mapped to trigger
+specific samples. For example, a sharp downward snap of the wrist or a
+foot stomp produces an instantaneous acceleration peak that triggers a
+drum hit, synth stab, or vocal chop. The magnitude of the acceleration
+directly dictates the MIDI velocity value (0–127), allowing the dancer
+to control loudness and dynamic expression through the physical
+intensity of their movement.</li>
+<li><strong>Continuous Modulation (Control Change):</strong> Ongoing
+movements, such as the tilt of an arm or the sweeping rotation of the
+torso, generate continuous data streams mapped to MIDI Control Change
+(CC) parameters. These control values can manipulate audio effects in
+real time, such as opening a synthesizer filter cutoff, altering pitch,
+or adjusting reverb decay.</li>
+</ul>
+<h3 id="spatial-audio-control">Spatial Audio Control</h3>
+<p>To achieve spatialized sound, the mapping software binds the dancer’s
+directional vectors to spatial audio engines or multichannel panners. By
+analyzing the directional trajectory of an accelerometer—such as an arm
+extending from left to right—the software dynamically routes the
+triggered sound across a surround-sound setup, binaural audio feed, or
+Ambisonics system.</p>
+<p>If a dancer raises their arms while leaping, the system can route the
+triggered sample upward or expand its stereo spread across the room.
+Conversely, a rotational spin can sweep a continuous sound around the
+perimeter of the performance space in direct synchronization with the
+dancer's body rotation.</p>
+<h3 id="system-calibration-and-real-world-use">System Calibration and
+Real-World Use</h3>
+<p>Prior to a performance, the system requires a calibration phase to
+establish the performer's resting baseline and account for environmental
+drift. The performer executes a set routine of standard poses (such as a
+T-pose) and dynamic test movements. During this setup, sound designers
+establish safety buffers around the trigger thresholds to prevent
+unintended movements, like balancing adjustments, from misfiring
+samples. Once dialed in, the suit functions as an invisible, expressive
+instrument, seamlessly linking kinetic choreography with generative,
+spatialized sound.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

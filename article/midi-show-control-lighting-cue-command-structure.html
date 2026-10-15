@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Show Control Lighting Cue Command Structure - midi</title>
+    <meta name="description" content="MIDI Show Control (MSC) uses specialized MIDI System Exclusive (SysEx) messages to automate and synchronize entertainment control systems. In lighting environments, an MSC cue command provides a standardized communication protocol that instructs a lightin">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-show-control-lighting-cue-command-structure">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Show Control Lighting Cue Command Structure - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-show-control-lighting-cue-command-structure" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Show Control (MSC) uses specialized MIDI System Exclusive (SysEx) messages to automate and synchronize entertainment control systems. In lighting environments, an MSC cue command provides a standardized communication protocol that instructs a lightin" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-show-control-lighting-cue-command-structure">MIDI Show
+Control Lighting Cue Command Structure</h1>
+<p>MIDI Show Control (MSC) uses specialized MIDI System Exclusive
+(SysEx) messages to automate and synchronize entertainment control
+systems. In lighting environments, an MSC cue command provides a
+standardized communication protocol that instructs a lighting console to
+execute, stop, or modify cues. Understanding the structural parameters
+of an MSC lighting command requires examining the standard SysEx
+framing, the specific lighting command format designator, the control
+command type, and the optional cue payload parameters.</p>
+<h3 id="system-exclusive-framing">System Exclusive Framing</h3>
+<p>Every MSC lighting command is encapsulated inside a standard MIDI
+Universal Real-Time System Exclusive message. The initial bytes
+establish the message protocol and target device:</p>
+<ul>
+<li><strong>SysEx Start Byte (<code>F0</code>):</strong> Initiates the
+MIDI System Exclusive transmission.</li>
+<li><strong>Universal Real-Time Header (<code>7F</code>):</strong>
+Identifies the message as a Real-Time Universal System Exclusive
+transmission.</li>
+<li><strong>Device ID:</strong> A 7-bit value (<code>00</code> to
+<code>7F</code>) indicating the target receiver. A value of
+<code>7F</code> acts as an all-call or broadcast address, instructing
+all connected MSC-compatible devices to interpret the command.</li>
+<li><strong>MSC Sub-ID #1 (<code>02</code>):</strong> Defines the
+message specifically as a MIDI Show Control command.</li>
+</ul>
+<h3 id="command-format-device-category">Command Format (Device
+Category)</h3>
+<p>Following the MSC header is the Command Format byte, also known as
+MSC Sub-ID #2. This byte establishes the class of equipment being
+addressed.</p>
+<p>For lighting systems, the standard Command Format byte is
+<strong><code>01</code> (General Lighting)</strong>. This parameter
+ensures that sound, video, or pyrotechnic controllers ignore the
+instruction, routing the command strictly to designated lighting
+consoles or dimmer racks.</p>
+<h3 id="command-byte">Command Byte</h3>
+<p>The Command byte determines the action the lighting controller must
+take. Standard MSC command bytes include:</p>
+<ul>
+<li><strong><code>01</code> (GO):</strong> Starts a crossfade to the
+specified cue. If no cue parameters are supplied, it initiates the next
+sequential cue.</li>
+<li><strong><code>02</code> (STOP):</strong> Pauses or halts the current
+cue transition.</li>
+<li><strong><code>03</code> (RESUME):</strong> Resumes execution of a
+halted cue.</li>
+<li><strong><code>04</code> (TIMED_GO):</strong> Triggers a crossfade to
+a specific cue over a predetermined time duration provided within the
+command payload.</li>
+<li><strong><code>0B</code> (FIRE):</strong> Fires an assigned lighting
+macro.</li>
+</ul>
+<h3 id="data-field-parameters">Data Field Parameters</h3>
+<p>When a command targets a specific lighting state rather than
+triggering a generic action, an optional payload containing
+ASCII-encoded data follows the Command byte. The payload contains up to
+three delimited fields:</p>
+<ol type="1">
+<li><strong>Cue Number:</strong> The primary target cue, represented as
+an ASCII character string (e.g., ASCII characters for <code>"1"</code>,
+<code>"0"</code>, <code>"."</code>, <code>"5"</code> to specify Cue
+10.5).</li>
+<li><strong>Delimiter (<code>00</code>):</strong> A null byte separating
+the cue number from subsequent parameters.</li>
+<li><strong>Cue List:</strong> An optional ASCII string specifying which
+cue stack or fader contains the cue (e.g., Cue List
+<code>"2"</code>).</li>
+<li><strong>Delimiter (<code>00</code>):</strong> A null byte separating
+the cue list from the cue path.</li>
+<li><strong>Cue Path:</strong> An optional ASCII string indicating a
+specific memory path or directory structure from which the cue should be
+drawn.</li>
+</ol>
+<p>If a specific cue number is targeted without specifying a cue list or
+path, the message does not require trailing delimiters.</p>
+<h3 id="termination-byte">Termination Byte</h3>
+<ul>
+<li><strong>End of Exclusive (<code>F7</code>):</strong> Marks the
+formal completion of the System Exclusive data packet. Once received,
+the target lighting console processes and executes the framed
+command.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

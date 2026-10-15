@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Simplifies Music Theory Analysis Over Audio - midi</title>
+    <meta name="description" content="Analyzing music through raw audio waveforms requires translating complex, continuous acoustic vibrations back into discrete musical ideas, which poses significant computational and analytical challenges. In contrast, symbolic MIDI files simplify this proc">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-simplifies-music-theory-analysis-over-audio">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Simplifies Music Theory Analysis Over Audio - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-simplifies-music-theory-analysis-over-audio" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Analyzing music through raw audio waveforms requires translating complex, continuous acoustic vibrations back into discrete musical ideas, which poses significant computational and analytical challenges. In contrast, symbolic MIDI files simplify this proc" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-simplifies-music-theory-analysis-over-audio">Why MIDI
+Simplifies Music Theory Analysis Over Audio</h1>
+<p>Analyzing music through raw audio waveforms requires translating
+complex, continuous acoustic vibrations back into discrete musical
+ideas, which poses significant computational and analytical challenges.
+In contrast, symbolic MIDI files simplify this process by storing music
+directly as structured, discrete events—specifying exact pitch numbers,
+start times, durations, and velocities. By eliminating the need to
+decode frequencies, filter out timbral overtones, and detect note
+boundaries, MIDI allows music theorists and algorithms to immediately
+inspect harmony, voice leading, rhythm, and formal structure without the
+acoustic interference present in raw audio.</p>
+<h3 id="explicit-pitch-versus-spectral-decomposition">Explicit Pitch
+Versus Spectral Decomposition</h3>
+<p>A raw, un-annotated audio file records fluctuating air pressure over
+time at a high sampling rate (typically 44,100 samples per second or
+higher). In this format, a single musical note contains a fundamental
+frequency along with dozens of overtones and harmonics. To identify
+notes in an audio file, an analyst or system must apply algorithms like
+the Fast Fourier Transform (FFT) to convert time-domain data into
+frequency spectra, and then attempt to distinguish between true
+fundamental pitches and secondary overtones.</p>
+<p>MIDI completely bypasses this step. It does not record sound; it
+records performance instructions. A middle C is explicitly logged as
+<code>Note On: 60</code>. There is no ambiguity regarding which notes
+are sounding, eliminating pitch-detection errors entirely.</p>
+<h3 id="simplified-polyphonic-and-chord-analysis">Simplified Polyphonic
+and Chord Analysis</h3>
+<p>Detecting multiple simultaneous pitches—polyphonic transcription—is
+one of the most difficult problems in audio signal processing. When
+multiple instruments or voices play together, their harmonic spectra
+overlap and intermingle. Identifying whether an observed frequency
+belongs to an overtone of a lower note or the fundamental of a higher
+note requires complex statistical modeling and often results in
+transcription inaccuracies.</p>
+<p>Because MIDI organizes data into distinct channels and discrete note
+events, identifying harmony is mathematically straightforward:</p>
+<ul>
+<li><strong>Instant Chord Identification:</strong> Simultaneous
+<code>Note On</code> messages can be grouped directly into sets of pitch
+classes (e.g., notes 60, 64, and 67 instantly yield a C Major
+triad).</li>
+<li><strong>Multi-Voice Separation:</strong> Individual musical lines or
+polyphonic voices can be assigned distinct MIDI channels or tracks,
+making voice-leading and contrapuntal analysis immediate.</li>
+</ul>
+<h3 id="precise-temporal-structure-and-metric-grids">Precise Temporal
+Structure and Metric Grids</h3>
+<p>Raw audio waveforms do not inherently contain metric context.
+Locating note onsets requires transient detection, which struggles with
+instruments featuring soft attacks, such as bowed strings or ambient
+synth pads. Determining tempo and meter requires inferring beats from
+periodic amplitude peaks, which can be thrown off by syncopation or
+expressive tempo changes.</p>
+<p>MIDI files define time through pulses per quarter note (PPQ). Every
+event is tied to an exact tick count on a predefined metric grid. This
+provides immediate access to:</p>
+<ul>
+<li>Measure and beat locations</li>
+<li>Explicit tempo change markers</li>
+<li>Metric subdivisions and note durations calculated down to fractions
+of a millisecond</li>
+</ul>
+<p>This structural transparency enables instant analysis of syncopation,
+rhythmic density, and rhythmic motifs without requiring onset-detection
+heuristics.</p>
+<h3 id="isolation-of-composition-from-timbre-and-acoustics">Isolation of
+Composition from Timbre and Acoustics</h3>
+<p>Audio waveforms are an inseparable blend of musical composition,
+instrumental timbre, room acoustics, reverberation, and production
+artifacts. These variables introduce noise that can obscure theoretical
+relationships. For instance, a long reverb tail in an audio recording
+can visually and computationally appear as sustained harmonic content,
+obscuring chord transitions.</p>
+<p>MIDI strips away acoustic artifacts, isolating the core compositional
+data. Music theorists can analyze melodic contours, key modulations, and
+scale degrees based purely on the composer's structural decisions,
+ensuring that performance acoustics do not distort theoretical
+evaluation.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

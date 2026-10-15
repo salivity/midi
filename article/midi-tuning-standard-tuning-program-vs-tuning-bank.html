@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Tuning Standard: Tuning Program vs Tuning Bank - midi</title>
+    <meta name="description" content="The MIDI Tuning Standard (MTS) provides a standardized protocol for transmitting microtonal tuning data between synthesizers and software. Within this standard, pitch configurations are organized hierarchically: an individual musical tuning program contai">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-tuning-standard-tuning-program-vs-tuning-bank">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Tuning Standard: Tuning Program vs Tuning Bank - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-tuning-standard-tuning-program-vs-tuning-bank" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Tuning Standard (MTS) provides a standardized protocol for transmitting microtonal tuning data between synthesizers and software. Within this standard, pitch configurations are organized hierarchically: an individual musical tuning program contai" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-tuning-standard-tuning-program-vs-tuning-bank">MIDI Tuning
+Standard: Tuning Program vs Tuning Bank</h1>
+<p>The MIDI Tuning Standard (MTS) provides a standardized protocol for
+transmitting microtonal tuning data between synthesizers and software.
+Within this standard, pitch configurations are organized hierarchically:
+an individual musical tuning program contains the precise frequency
+definitions for individual notes, while a tuning bank acts as a
+container that groups up to 128 individual tuning programs together.
+Understanding this distinction is essential for implementing
+microtonality, alternate temperaments, and dynamic scale changes in
+MIDI-compatible instruments.</p>
+<h3 id="what-is-a-tuning-program">What Is a Tuning Program?</h3>
+<p>A tuning program in the MIDI Tuning Standard represents a single,
+complete tuning map or scale. It defines the exact pitch assignments for
+MIDI note numbers 0 through 127.</p>
+<p>Key attributes of an individual tuning program include:</p>
+<ul>
+<li><strong>Pitch Precision:</strong> Each note in the program is
+defined using a three-byte frequency format (semitone, fractional
+semitone MSB, and fractional semitone LSB), allowing for sub-cent
+microtonal accuracy (approximately 0.0061 cents).</li>
+<li><strong>Scope:</strong> A single tuning program maps all 128
+playable MIDI notes to specific frequencies. It can represent standard
+12-tone equal temperament, historical temperaments (such as Meantone or
+Just Intonation), non-octave scales, or custom microtonal scales.</li>
+<li><strong>Addressing:</strong> Tuning programs are indexed from 0 to
+127 within a given bank.</li>
+</ul>
+<h3 id="what-is-a-tuning-bank">What Is a Tuning Bank?</h3>
+<p>A tuning bank is a higher-level organizational structure designed to
+store and manage multiple tuning programs. The original MTS
+specification supported only 128 individual tuning programs. To expand
+storage capacity without exhausting available address space, the
+standard was updated to incorporate tuning banks.</p>
+<p>Key attributes of an individual tuning bank include:</p>
+<ul>
+<li><strong>Capacity:</strong> Each tuning bank holds exactly 128
+individual tuning programs (numbered 0–127).</li>
+<li><strong>Addressing Range:</strong> The standard supports up to 128
+tuning banks (numbered 0–127).</li>
+<li><strong>Total Capacity:</strong> Combined, the 128 banks and 128
+programs yield a total capacity of 16,384 unique tuning programs
+accessible across a MIDI system.</li>
+</ul>
+<h3 id="how-mts-distinguishes-between-the-two-in-practice">How MTS
+Distinguishes Between the Two in Practice</h3>
+<p>The MIDI Tuning Standard differentiates programs and banks through
+specific System Exclusive (SysEx) and controller messages:</p>
+<ul>
+<li><strong>Tuning Dump Messages:</strong> MTS uses bulk dump messages
+to transfer complete scale data. When dumping an entire tuning map, the
+message includes bytes specifying both the target bank number and the
+target program number, ensuring the frequency data is written to the
+correct location in memory.</li>
+<li><strong>Real-Time Switching:</strong> Musicians can switch tunings
+during a performance using MIDI messages. A standard MTS Bank Change
+message instructs the receiving instrument which of the 128 banks to
+reference, while an MTS Program Change message selects the active scale
+within that bank. Instruments can also assign distinct tuning bank and
+program combinations to specific MIDI channels, allowing multi-timbral
+setups with multiple simultaneous tunings.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

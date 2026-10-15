@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Show Control Identifies Stage Equipment - midi</title>
+    <meta name="description" content="MIDI Show Control (MSC) relies on a standardized Universal System Exclusive (SysEx) messaging structure to synchronize live entertainment technologies such as lighting, audio, and stage machinery. This article explains how an MSC command string pinpoints">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-show-control-identifies-stage-equipment">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Show Control Identifies Stage Equipment - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-show-control-identifies-stage-equipment" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Show Control (MSC) relies on a standardized Universal System Exclusive (SysEx) messaging structure to synchronize live entertainment technologies such as lighting, audio, and stage machinery. This article explains how an MSC command string pinpoints" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-show-control-identifies-stage-equipment">How MIDI Show
+Control Identifies Stage Equipment</h1>
+<p>MIDI Show Control (MSC) relies on a standardized Universal System
+Exclusive (SysEx) messaging structure to synchronize live entertainment
+technologies such as lighting, audio, and stage machinery. This article
+explains how an MSC command string pinpoints and isolates specific
+equipment categories using the dedicated Command Format byte, how these
+values map to different stage disciplines, and how receiving devices
+evaluate these identifiers to ensure cue commands execute reliably
+across complex network setups.</p>
+<h3 id="the-msc-message-structure">The MSC Message Structure</h3>
+<p>A standard MIDI Show Control command is embedded inside an open-loop
+Real Time Universal System Exclusive packet. The raw byte sequence
+follows a fixed order:</p>
+<p><code>F0 7F [Device ID] 02 [Command Format] [Command] [Data] F7</code></p>
+<ul>
+<li><code>F0</code>: System Exclusive start byte.</li>
+<li><code>7F</code>: Universal Real Time System Exclusive header.</li>
+<li><code>[Device ID]</code>: Identifies the targeted physical device or
+group.</li>
+<li><code>02</code>: The MSC sub-ID, signifying that the packet contains
+Show Control data.</li>
+<li><code>[Command Format]</code>: The byte specifying the category of
+equipment being instructed.</li>
+<li><code>[Command]</code>: The actual action (e.g., <code>GO</code>,
+<code>STOP</code>, <code>RESUME</code>).</li>
+<li><code>[Data]</code>: Optional cue numbers, cue lists, or times.</li>
+<li><code>F7</code>: End of System Exclusive byte.</li>
+</ul>
+<h3 id="the-command-format-byte">The Command Format Byte</h3>
+<p>The primary mechanism for distinguishing between different types of
+stage hardware is the <strong>Command Format</strong> byte
+(<code>cmd_fmt</code>). This single byte directly defines the discipline
+or function of the intended receiver.</p>
+<p>When a master show controller issues an MSC message, every device
+connected to the MIDI line reads the incoming stream. A target machine
+checks the Command Format byte against its internal profile. If the byte
+does not match the device's assigned operational category, the message
+is ignored.</p>
+<h3 id="standard-equipment-category-allocations">Standard Equipment
+Category Allocations</h3>
+<p>The MIDI Show Control specification organizes hardware into distinct
+functional ranges using hexadecimal values:</p>
+<ul>
+<li><strong>Lighting (<code>01</code>–<code>0F</code>):</strong>
+<code>01</code> denotes general lighting consoles; sub-allocations
+include values like <code>02</code> for moving lights and
+<code>03</code> for color changers.</li>
+<li><strong>Sound (<code>10</code>–<code>1F</code>):</strong>
+<code>10</code> addresses general sound hardware; sub-allocations
+designate playback systems (<code>11</code>), sound reinforcement
+(<code>12</code>), and spatial audio processors.</li>
+<li><strong>Machinery and Rigging
+(<code>20</code>–<code>2F</code>):</strong> <code>20</code> targets
+general stage automation, including fly systems, revolves, stage lifts,
+and winches.</li>
+<li><strong>Video (<code>30</code>–<code>3F</code>):</strong>
+<code>30</code> addresses media servers and video playback
+equipment.</li>
+<li><strong>Projection (<code>40</code>–<code>4F</code>):</strong>
+<code>40</code> specifies projection hardware, including shutters and
+display systems.</li>
+<li><strong>Process Control and Special Effects
+(<code>50</code>–<code>5F</code>):</strong> <code>50</code> controls
+physical effects, including pyrotechnics, atmospheric smoke, haze, and
+hydraulic actuators.</li>
+<li><strong>All-Types (<code>7F</code>):</strong> A universal broadcast
+category that instructs all connected equipment types to execute the
+command simultaneously, regardless of their discipline.</li>
+</ul>
+<h3 id="discrimination-via-device-id-and-command-format">Discrimination
+via Device ID and Command Format</h3>
+<p>The Command Format operates in tandem with the <strong>Device
+ID</strong> byte to establish a granular addressing hierarchy:</p>
+<ol type="1">
+<li><strong>Individual Device Match:</strong> A sound console set to
+Device ID <code>05</code> and format <code>10</code> (Sound) only reacts
+if both fields align.</li>
+<li><strong>Category Broadcast:</strong> If the Device ID is set to
+<code>7F</code> (all devices) but the Command Format is set to
+<code>01</code> (Lighting), every lighting desk on the network fires the
+cue, while all sound and automation hardware discard the packet.</li>
+<li><strong>Universal Broadcast:</strong> Setting both the Device ID and
+Command Format to <code>7F</code> forces an emergency global command
+(such as an all-stop) across every piece of stage gear listening to the
+chain.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

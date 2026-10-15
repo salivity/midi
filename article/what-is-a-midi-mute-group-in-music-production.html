@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Mute Group in Music Production? - midi</title>
+    <meta name="description" content="A MIDI mute group—commonly referred to as a choke group—is a configuration setting within digital samplers, drum machines, and virtual instruments that restricts a designated group of sounds to a single voice of polyphony. By assigning multiple samples or">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-mute-group-in-music-production">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Mute Group in Music Production? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-mute-group-in-music-production" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI mute group—commonly referred to as a choke group—is a configuration setting within digital samplers, drum machines, and virtual instruments that restricts a designated group of sounds to a single voice of polyphony. By assigning multiple samples or" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-mute-group-in-music-production">What Is a MIDI
+Mute Group in Music Production?</h1>
+<p>A MIDI mute group—commonly referred to as a choke group—is a
+configuration setting within digital samplers, drum machines, and
+virtual instruments that restricts a designated group of sounds to a
+single voice of polyphony. By assigning multiple samples or instruments
+to the same group, triggering any sound within that group instantly cuts
+off the audio of any other actively playing sound assigned to the same
+group. This article explores how mute groups operate in digital music
+production and the exact technical process by which triggering an open
+hi-hat voice prematurely silences an active closed hi-hat sample.</p>
+<h3 id="understanding-the-midi-mute-group">Understanding the MIDI Mute
+Group</h3>
+<p>In acoustic drumming, certain instruments are physically incapable of
+producing distinct sounds simultaneously. The hi-hat is the classic
+example: because it consists of two cymbals mounted on a single stand,
+an open cymbal cannot sustain its vibration once the drummer steps on
+the pedal to close it, nor can two distinct strikes sustain
+independently if the physical position of the cymbals changes.</p>
+<p>In a digital environment, standard MIDI notes play polyphonically.
+Without constraints, triggering an open hi-hat followed by a closed
+hi-hat would cause both samples to ring out over each other, creating an
+unnatural build-up of frequencies. A mute group establishes an exclusive
+channel between designated pads or MIDI note numbers to enforce acoustic
+realism or stylistic control. When two or more samples share a mute
+group ID, the playback engine restricts that specific group's polyphony
+to a single voice.</p>
+<h3 id="how-voice-stealing-and-choking-work">How Voice Stealing and
+Choking Work</h3>
+<p>When you trigger a closed hi-hat sample, the sampler creates an
+active audio voice. Even if a closed hi-hat sound is short, the sample
+typically includes a decay phase, room resonance, or a release tail that
+continues to process for hundreds of milliseconds.</p>
+<p>When you subsequently trigger an open hi-hat assigned to the same
+mute group, the following sequence occurs within the sampler's voice
+architecture:</p>
+<ol type="1">
+<li><strong>Group Detection:</strong> The instrument receives the
+incoming MIDI note-on message for the open hi-hat and cross-references
+its assigned mute group ID.</li>
+<li><strong>Active Voice Check:</strong> The engine scans for any active
+voices currently rendering audio within that identical mute group ID. It
+identifies the active closed hi-hat voice.</li>
+<li><strong>Voice Termination (Choking):</strong> To maintain the
+one-voice-per-group rule, the engine initiates a "voice-stealing"
+routine. Rather than allowing the closed hi-hat voice to finish its
+normal amplitude envelope (decay/release phase), the engine applies an
+ultra-fast release envelope—typically ranging from 1 to 10 milliseconds.
+This micro-fade prevents an audible click or digital pop that would
+otherwise occur if the waveform were truncated instantly at a non-zero
+crossing.</li>
+<li><strong>New Voice Initialization:</strong> Simultaneously, the open
+hi-hat voice initializes at sample index zero and begins playback
+according to its velocity and amplitude envelope settings.</li>
+</ol>
+<p>This bidirectional mutual exclusion ensures that whichever note is
+triggered last immediately claims priority, muting any currently
+decaying sample in that group and maintaining sonic clarity in the drum
+mix.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

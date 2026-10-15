@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How macOS CoreMIDI Enables Multi-App MIDI Sharing - midi</title>
+    <meta name="description" content="macOS CoreMIDI natively allows multiple applications to read from and write to the same MIDI hardware simultaneously through a centralized system daemon architecture. Rather than permitting individual applications to open exclusive, low-level handles to h">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-mac-os-core-midi-enables-multi-app-midi-sharing">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How macOS CoreMIDI Enables Multi-App MIDI Sharing - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-mac-os-core-midi-enables-multi-app-midi-sharing" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="macOS CoreMIDI natively allows multiple applications to read from and write to the same MIDI hardware simultaneously through a centralized system daemon architecture. Rather than permitting individual applications to open exclusive, low-level handles to h" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-macos-coremidi-enables-multi-app-midi-sharing">How macOS
+CoreMIDI Enables Multi-App MIDI Sharing</h1>
+<p>macOS CoreMIDI natively allows multiple applications to read from and
+write to the same MIDI hardware simultaneously through a centralized
+system daemon architecture. Rather than permitting individual
+applications to open exclusive, low-level handles to hardware devices,
+macOS abstracts all physical MIDI ports via the <code>MIDIServer</code>
+process. This article details the technical mechanisms—including driver
+isolation, event broadcasting, stream merging, and host-time
+synchronization—that enable seamless multi-client MIDI access on
+macOS.</p>
+<h3 id="the-centralized-midiserver-architecture">The Centralized
+<code>MIDIServer</code> Architecture</h3>
+<p>The core of macOS MIDI handling is a background system daemon called
+<code>MIDIServer</code>. In traditional or legacy audio operating
+systems, opening a connection to a hardware port often creates an
+exclusive lock on that peripheral, preventing any secondary process from
+accessing the device.</p>
+<p>CoreMIDI bypasses hardware locking by strictly decoupling
+applications from physical hardware drivers. Hardware vendors provide
+CoreMIDI driver bundles (typically working over standard USB-MIDI class
+drivers or proprietary I/O Kit drivers), but these drivers are loaded
+and managed exclusively by <code>MIDIServer</code>. The daemon acts as
+the sole owner of the physical hardware endpoints, operating as a
+centralized broker between physical interfaces and user-space
+applications.</p>
+<h3 id="input-distribution-broadcasting-to-multiple-clients">Input
+Distribution: Broadcasting to Multiple Clients</h3>
+<p>When physical MIDI hardware transmits data into a Mac:</p>
+<ol type="1">
+<li><strong>Hardware Capture:</strong> The physical interface receives
+the electrical or optical signals and sends the data over USB or
+Thunderbolt to the kernel.</li>
+<li><strong>Driver Processing:</strong> The device driver, hosted inside
+<code>MIDIServer</code>, receives the raw byte stream and packages it
+into CoreMIDI data structures (such as <code>MIDIPacketList</code> for
+MIDI 1.0 or <code>MIDIEventList</code> for Universal MIDI Packets in
+MIDI 2.0).</li>
+<li><strong>Inter-Process Communication (IPC):</strong> When an
+application launches and initializes a CoreMIDI client (using
+<code>MIDIClientCreate</code>), it registers interest in specific MIDI
+sources via <code>MIDIPortConnectSource</code>.</li>
+<li><strong>Publish-Subscribe Fan-Out:</strong> <code>MIDIServer</code>
+functions on a publish-subscribe model. Instead of passing the incoming
+packet list destructively to a single reader, it duplicates the event
+references across Mach messaging channels to every application
+subscribed to that hardware endpoint.</li>
+</ol>
+<p>Because the data is broadcast concurrently, a digital audio
+workstation (DAW), a standalone software synthesizer, and a MIDI monitor
+utility can all read identical, real-time incoming streams from a single
+keyboard controller with zero interference.</p>
+<h3 id="output-merging-multiplexing-streams-to-hardware">Output Merging:
+Multiplexing Streams to Hardware</h3>
+<p>When multiple applications send messages to the same external MIDI
+output destination simultaneously, CoreMIDI performs a dynamic
+multiplexing (fan-in) process:</p>
+<ol type="1">
+<li><strong>Application Transmission:</strong> Each application
+dispatches its MIDI events to a shared destination endpoint using
+functions like <code>MIDISend()</code>.</li>
+<li><strong>Buffer Ingestion:</strong> Rather than writing directly to
+the device registers, the application sends its packet list via IPC to
+<code>MIDIServer</code>.</li>
+<li><strong>Stream Aggregation:</strong> <code>MIDIServer</code>
+receives asynchronous packets from all transmitting processes. It merges
+these distinct streams into a unified queue destined for the hardware
+driver.</li>
+<li><strong>Hardware Delivery:</strong> The underlying device driver
+pulls from this consolidated buffer and serializes the messages onto the
+physical connection.</li>
+</ol>
+<h3 id="timing-and-synchronization-via-mach_absolute_time">Timing and
+Synchronization via <code>mach_absolute_time</code></h3>
+<p>Concurrent multi-client access risks data collisions and timing
+jitter if two applications send conflicting or simultaneous messages.
+CoreMIDI resolves this by requiring events to include high-resolution
+timestamps based on <code>mach_absolute_time()</code>.</p>
+<p>When an application schedules an event:</p>
+<ul>
+<li><strong>Immediate Playback:</strong> If an event has a timestamp of
+<code>0</code>, it is processed immediately by the server in the order
+received.</li>
+<li><strong>Scheduled Playback:</strong> If a DAW schedules an event in
+the future to compensate for audio buffer latency, the timestamp
+dictates the precise system clock tick at which <code>MIDIServer</code>
+must deliver the packet to the hardware driver.</li>
+</ul>
+<p>This timestamp-based scheduling allows <code>MIDIServer</code> to
+interleave events from multiple applications in chronologically accurate
+order, preventing stream corruption and ensuring reliable performance
+across all active clients.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

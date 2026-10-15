@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 2.0 Property Exchange and Studio Automation - midi</title>
+    <meta name="description" content="MIDI 2.0 transforms music production by replacing the legacy, one-way messaging of MIDI 1.0 with dynamic, bi-directional communication. Through a framework called MIDI Capability Inquiry (MIDI-CI) and specifically Property Exchange (PE), devices can now c">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-2-0-property-exchange-and-studio-automation">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 2.0 Property Exchange and Studio Automation - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-2-0-property-exchange-and-studio-automation" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI 2.0 transforms music production by replacing the legacy, one-way messaging of MIDI 1.0 with dynamic, bi-directional communication. Through a framework called MIDI Capability Inquiry (MIDI-CI) and specifically Property Exchange (PE), devices can now c" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-20-property-exchange-and-studio-automation">MIDI 2.0
+Property Exchange and Studio Automation</h1>
+<p>MIDI 2.0 transforms music production by replacing the legacy, one-way
+messaging of MIDI 1.0 with dynamic, bi-directional communication.
+Through a framework called MIDI Capability Inquiry (MIDI-CI) and
+specifically Property Exchange (PE), devices can now converse, query
+each other's capabilities, and automatically configure parameters,
+names, and states. This fundamental shift eliminates the tedious manual
+mapping, CC-number memorization, and static configuration long
+associated with complex multi-device studio environments.</p>
+<h3 id="the-shift-from-monologue-to-dialogue">The Shift from Monologue
+to Dialogue</h3>
+<p>MIDI 1.0 operated strictly as a unidirectional broadcast: a
+controller transmitted messages down a cable without knowing if the
+receiving synthesizer existed, supported the command, or was set to the
+correct patch.</p>
+<p>MIDI 2.0 establishes a true bi-directional handshake. When two MIDI
+2.0 devices connect, they initiate an automated discovery process using
+MIDI Capability Inquiry (MIDI-CI). This architecture allows devices to
+confirm compatibility, negotiate the highest available resolution, and
+exchange critical metadata before a single musical note is played.</p>
+<h3 id="understanding-midi-ci-and-property-exchange">Understanding
+MIDI-CI and Property Exchange</h3>
+<p>The engine behind this automation consists of three primary MIDI-CI
+mechanisms: Protocol Negotiation, Profile Configuration, and Property
+Exchange. While Protocol Negotiation upgrades connections to modern
+32-bit resolution and Profile Configuration establishes standardized
+instrument behaviors, <strong>Property Exchange (PE)</strong> handles
+the deep, device-specific intelligence.</p>
+<p>Property Exchange utilizes standard web technologies—primarily
+JSON-formatted data sent over MIDI—to retrieve and set detailed device
+information. Instead of relying solely on raw control change numbers (CC
+0–127), devices request and transmit:</p>
+<ul>
+<li><strong>Parameter Names and Value Ranges:</strong> A synth can tell
+a hardware controller that Controller 10 is "Cutoff" with a range of
+20Hz to 20kHz, rather than simply sending an arbitrary value between 0
+and 127.</li>
+<li><strong>Control Types and Formatting:</strong> Information regarding
+whether a parameter is a continuous knob, toggle switch, or stepped
+selector is transmitted automatically.</li>
+<li><strong>Patch and Bank Lists:</strong> Hardware units upload entire
+preset lists, categorization tags, and current patch names directly to
+the Digital Audio Workstation (DAW) or master controller.</li>
+<li><strong>Full Device State:</strong> Snapshots of an entire
+instrument's parameter architecture can be requested and transferred as
+a structured document.</li>
+</ul>
+<h3 id="automating-the-modern-studio-workflow">Automating the Modern
+Studio Workflow</h3>
+<p>Property Exchange changes how hardware and software integrate across
+several operational areas:</p>
+<h4 id="instantaneous-auto-mapping">Instantaneous Auto-Mapping</h4>
+<p>In a traditional setup, mapping a hardware controller to a soft synth
+or outboard effects unit requires manual MIDI Learn routines or custom
+third-party templates. With MIDI 2.0 Property Exchange, the controller
+queries the destination device upon connection. The destination sends
+back its parameter layout, enabling motorized faders, assignable
+encoders, and integrated displays to populate with exact parameter
+names, current values, and functional groupings instantly.</p>
+<h4 id="automated-project-recall">Automated Project Recall</h4>
+<p>Recalling external hardware settings in a DAW session historically
+required sysex dumps, manual photography, or external patch editors.
+Under MIDI 2.0, a DAW can query connected hardware via Property Exchange
+during project save routines. The hardware delivers its complete
+internal state, which the DAW embeds within the project file. When the
+project reopens, the DAW transmits the state back, seamlessly returning
+analog and digital hardware to the exact settings used during the
+original tracking session.</p>
+<h4 id="dynamic-visual-feedback">Dynamic Visual Feedback</h4>
+<p>Modern controllers with OLED displays or software-based companion
+apps no longer need static firmware tables to display accurate labels.
+Because the Property Exchange transfers textual labels, units of
+measurement (e.g., decibels, Hertz, milliseconds), and visual
+hierarchies directly, control surfaces immediately reflect the exact
+terminology and interface style of whichever device is currently
+selected.</p>
+<p>By turning MIDI from a passive control protocol into an active,
+self-describing network, MIDI 2.0 bi-directional property negotiation
+removes the administrative friction from studio management, allowing
+complex networks of hardware and software to behave as a single, unified
+system.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

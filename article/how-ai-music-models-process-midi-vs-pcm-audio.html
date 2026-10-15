@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How AI Music Models Process MIDI vs PCM Audio - midi</title>
+    <meta name="description" content="Artificial intelligence musical models process music in fundamentally different ways depending on whether the input is symbolic MIDI data or raw Pulse-Code Modulation (PCM) audio. While MIDI represents music as discrete, language-like instructions detaili">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-ai-music-models-process-midi-vs-pcm-audio">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How AI Music Models Process MIDI vs PCM Audio - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-ai-music-models-process-midi-vs-pcm-audio" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Artificial intelligence musical models process music in fundamentally different ways depending on whether the input is symbolic MIDI data or raw Pulse-Code Modulation (PCM) audio. While MIDI represents music as discrete, language-like instructions detaili" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-ai-music-models-process-midi-vs-pcm-audio">How AI Music
+Models Process MIDI vs PCM Audio</h1>
+<p>Artificial intelligence musical models process music in fundamentally
+different ways depending on whether the input is symbolic MIDI data or
+raw Pulse-Code Modulation (PCM) audio. While MIDI represents music as
+discrete, language-like instructions detailing pitch, timing, and
+velocity, raw PCM audio captures the continuous physical sound wave
+through tens of thousands of amplitude samples per second. This
+fundamental distinction dictates the model architectures used, the
+computational power required, and whether the system learns abstract
+compositional rules or complex acoustic phenomena.</p>
+<h3 id="symbolic-midi-tokenization-and-processing">Symbolic MIDI
+Tokenization and Processing</h3>
+<p>MIDI data does not contain actual sound; it acts as a digital score.
+To feed MIDI into an AI model, the data must first be serialized into a
+sequence of discrete tokens, conceptually identical to words in Natural
+Language Processing (NLP).</p>
+<ol type="1">
+<li><strong>Tokenization Schemes:</strong> Encodings such as MidiByte,
+REMI (Revamped MIDI), or MuMIDI parse the MIDI file into categorical
+events. A typical sequence includes tokens for <code>NOTE_ON</code>,
+<code>NOTE_OFF</code>, <code>PITCH_60</code> (Middle C),
+<code>VELOCITY_80</code>, and <code>TIME_SHIFT_120ms</code>.</li>
+<li><strong>Model Architectures:</strong> Because MIDI is converted into
+sequential tokens, standard autoregressive Transformer models (similar
+to GPT) are the standard choice. The model treats music generation as
+next-token prediction, learning melodic contours, harmonic intervals,
+and rhythmic cadence through self-attention mechanisms.</li>
+<li><strong>Computational Efficiency:</strong> A three-minute song
+encoded in MIDI can often be represented in just 2,000 to 5,000 tokens.
+This low data density allows models to process long-term musical
+structures, track themes across multiple instruments, and train rapidly
+with standard hardware. However, MIDI ignores timbre, vocal inflections,
+and acoustic production, relying on external synthesizers or SoundFonts
+to render actual audio.</li>
+</ol>
+<h3 id="raw-pcm-audio-file-processing">Raw PCM Audio File
+Processing</h3>
+<p>PCM audio is the direct digital capture of analog sound waves,
+measuring the amplitude of air pressure variations at fixed
+intervals—most commonly 44,100 times per second (44.1 kHz) in standard
+16-bit or 24-bit resolution.</p>
+<ol type="1">
+<li><strong>Data Density and Dimensionality:</strong> A three-minute
+stereo audio file contains nearly 16 million individual amplitude
+values. Processing this volume of raw numbers directly via standard
+sequence models is computationally intractable due to the quadratic
+memory scaling of attention mechanisms.</li>
+<li><strong>Intermediate Representations:</strong> To make PCM
+manageable, models typically consume the audio through one of two
+methods:
+<ul>
+<li><strong>Spectrograms:</strong> The continuous waveform is converted
+via Short-Time Fourier Transform (STFT) into a 2D time-frequency image
+(like a Mel-spectrogram). Convolutional Neural Networks (CNNs) or
+Diffusion models then learn to generate audio as visual spectral
+textures before an inverse algorithm or neural vocoder turns it back
+into PCM.</li>
+<li><strong>Neural Audio Codecs:</strong> Models like EnCodec or
+SoundStream compress raw PCM into low-bitrate discrete audio tokens
+using residual vector quantization (RVQ). A 44.1 kHz stream is reduced
+to a lower temporal rate (e.g., 50 Hz to 75 Hz), producing multiple
+codebooks of acoustic tokens that an autoregressive model can
+process.</li>
+</ul></li>
+<li><strong>Acoustic Realism:</strong> Processing PCM allows AI models
+to capture the total physical reality of sound: micro-tonal vocal
+styling, instrument resonance, reverberation, mixing choices, and
+complex transients. However, the model must simultaneously master
+compositional theory and physical acoustics, making training far more
+resource-intensive.</li>
+</ol>
+<h3 id="key-architectural-comparisons">Key Architectural
+Comparisons</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Symbolic MIDI Tokens</th>
+<th style="text-align: left;">Raw PCM Audio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Input Nature</strong></td>
+<td style="text-align: left;">Abstract structural commands (Score)</td>
+<td style="text-align: left;">Raw acoustic waveform (Sound)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Data Footprint</strong></td>
+<td style="text-align: left;">Extremely low (~kilobytes per song)</td>
+<td style="text-align: left;">Extremely high (~megabytes per song)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Primary Models</strong></td>
+<td style="text-align: left;">Causal Transformers, RNNs</td>
+<td style="text-align: left;">Diffusion, Autoencoders, Neural
+Vocoders</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Learning Domain</strong></td>
+<td style="text-align: left;">Composition, counterpoint, rhythm</td>
+<td style="text-align: left;">Timbre, acoustic space, mixing,
+timbre</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Audio Rendering</strong></td>
+<td style="text-align: left;">Requires external software
+synthesizer</td>
+<td style="text-align: left;">Native sound output ready for
+playback</td>
+</tr>
+</tbody>
+</table>
+<p>AI models consuming MIDI analyze music through a conceptual framework
+of notes and bars, yielding clean, editable arrangements with low
+computational overhead. Conversely, models consuming PCM must interpret
+high-frequency raw physics, granting them the ability to produce rich,
+production-ready audio at the expense of structural simplicity and
+computational efficiency.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

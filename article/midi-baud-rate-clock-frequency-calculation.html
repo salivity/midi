@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Baud Rate Clock Frequency Calculation - midi</title>
+    <meta name="description" content="The standard 31.25 kilobaud (kbps) transmission speed of serial MIDI is directly derived from integer division of common microcomputer system clock frequencies. When the MIDI specification was drafted in the early 1980s, synthesizer designers needed an as">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-baud-rate-clock-frequency-calculation">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Baud Rate Clock Frequency Calculation - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-baud-rate-clock-frequency-calculation" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The standard 31.25 kilobaud (kbps) transmission speed of serial MIDI is directly derived from integer division of common microcomputer system clock frequencies. When the MIDI specification was drafted in the early 1980s, synthesizer designers needed an as" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-baud-rate-clock-frequency-calculation">MIDI Baud Rate Clock
+Frequency Calculation</h1>
+<p>The standard 31.25 kilobaud (kbps) transmission speed of serial MIDI
+is directly derived from integer division of common microcomputer system
+clock frequencies. When the MIDI specification was drafted in the early
+1980s, synthesizer designers needed an asynchronous transmission rate
+that was fast enough to minimize musical latency while remaining cheap
+and simple to generate using standard microprocessors and Universal
+Asynchronous Receiver-Transmitters (UARTs). This article explains the
+exact hardware clock frequency formulas, the role of UART prescalers,
+and why 31,250 baud was chosen as the universal MIDI standard.</p>
+<h3 id="the-fundamental-frequency-formula">The Fundamental Frequency
+Formula</h3>
+<p>The transmission speed of a serial interface is determined by
+dividing a master clock frequency by an integer divisor using a counter
+or prescaler:</p>
+<p><span class="math display">\[\text{Baud Rate} =
+\frac{f_{\text{clock}}}{N}\]</span></p>
+<p>Where:</p>
+<ul>
+<li><strong><span class="math inline">\(\text{Baud
+Rate}\)</span></strong> is the target data rate in bits per second
+(<span class="math inline">\(31,250 \text{ bps}\)</span>).</li>
+<li><strong><span
+class="math inline">\(f_{\text{clock}}\)</span></strong> is the input
+oscillator or system clock frequency fed to the timer/divider.</li>
+<li><strong><span class="math inline">\(N\)</span></strong> is the total
+clock division ratio (integer).</li>
+</ul>
+<p>Rearranging the formula to calculate the required clock divider for a
+given system clock yields:</p>
+<p><span class="math display">\[N =
+\frac{f_{\text{clock}}}{31,250}\]</span></p>
+<h3 id="standard-hardware-implementations">Standard Hardware
+Implementations</h3>
+<p>In the early 1980s, microprocessors such as the Motorola 6800 series,
+MOS 6502, and Zilog Z80 commonly operated with master crystals operating
+at 1 MHz, 2 MHz, 4 MHz, or 8 MHz. The target rate of 31.25 kbps was
+specifically chosen because it divides into every standard megahertz
+clock rate as an exact power of two, eliminating timing jitter and
+baud-rate error without requiring an auxiliary crystal oscillator.</p>
+<ul>
+<li><p><strong>1.0 MHz Clock:</strong> <span class="math display">\[N =
+\frac{1,000,000 \text{ Hz}}{31,250 \text{ Hz}} = 32 =
+2^5\]</span></p></li>
+<li><p><strong>2.0 MHz Clock:</strong> <span class="math display">\[N =
+\frac{2,000,000 \text{ Hz}}{31,250 \text{ Hz}} = 64 =
+2^6\]</span></p></li>
+<li><p><strong>4.0 MHz Clock:</strong> <span class="math display">\[N =
+\frac{4,000,000 \text{ Hz}}{31,250 \text{ Hz}} = 128 =
+2^7\]</span></p></li>
+<li><p><strong>8.0 MHz Clock:</strong> <span class="math display">\[N =
+\frac{8,000,000 \text{ Hz}}{31,250 \text{ Hz}} = 256 =
+2^8\]</span></p></li>
+</ul>
+<p>Because each divider is an exact power of two (<span
+class="math inline">\(2^n\)</span>), engineers implemented these
+dividers using basic binary ripple counters (such as a 74LS393 or
+74LS161) without complex fractional baud-rate logic.</p>
+<h3 id="uart-clocking-and-the-16times-oversampling-factor">UART Clocking
+and the <span class="math inline">\(16\times\)</span> Oversampling
+Factor</h3>
+<p>Asynchronous serial communication relies on receiver oversampling to
+locate the falling edge of the start bit and sample data in the center
+of each bit period. Most classic UARTs (such as the Motorola 6850 ACIA
+commonly found in vintage synthesizers) require a receiver/transmitter
+clock (<span class="math inline">\(f_{\text{UART}}\)</span>) that is 16
+times higher than the actual baud rate:</p>
+<p><span class="math display">\[f_{\text{UART}} = \text{Baud Rate}
+\times 16\]</span></p>
+<p>For MIDI:</p>
+<p><span class="math display">\[f_{\text{UART}} = 31,250 \text{ Hz}
+\times 16 = 500,000 \text{ Hz} \text{ (500 kHz)}\]</span></p>
+<p>Under this configuration, generating the required UART clock from a
+standard 1 MHz or 2 MHz bus clock required minimal hardware:</p>
+<ul>
+<li><strong>From a 1 MHz clock:</strong> <span
+class="math inline">\(\frac{1,000,000 \text{ Hz}}{2} = 500 \text{
+kHz}\)</span> (a single flip-flop divider).</li>
+<li><strong>From a 2 MHz clock:</strong> <span
+class="math inline">\(\frac{2,000,000 \text{ Hz}}{4} = 500 \text{
+kHz}\)</span> (a dual flip-flop or <span class="math inline">\(\div
+4\)</span> counter).</li>
+</ul>
+<p>The internal UART logic then divided the 500 kHz clock by 16 to
+produce the precise 31,250 bits-per-second transmission rate.</p>
+<h3 id="transmission-timing-characteristics">Transmission Timing
+Characteristics</h3>
+<p>At 31.25 kbps, the duration of an individual bit period (<span
+class="math inline">\(T_{\text{bit}}\)</span>) is exactly:</p>
+<p><span class="math display">\[T_{\text{bit}} = \frac{1}{31,250 \text{
+Hz}} = 32 \times 10^{-6} \text{ seconds} = 32 \ \mu\text{s}\]</span></p>
+<p>Standard MIDI uses an asynchronous 10-bit framing format:</p>
+<ul>
+<li>1 Start bit (logic 0)</li>
+<li>8 Data bits (least significant bit first)</li>
+<li>1 Stop bit (logic 1)</li>
+<li>No parity bit</li>
+</ul>
+<p>Because each byte requires 10 serial bits, the time required to
+transmit a single byte is:</p>
+<p><span class="math display">\[T_{\text{byte}} = 10 \times 32 \
+\mu\text{s} = 320 \ \mu\text{s}\]</span></p>
+<p>This yields a maximum throughput of 3,125 bytes per second. A
+standard 3-byte MIDI channel message (such as a Note-On command
+consisting of a status byte, note number, and velocity) requires:</p>
+<p><span class="math display">\[T_{\text{message}} = 3 \times 320 \
+\mu\text{s} = 960 \ \mu\text{s} \text{ (0.96 ms)}\]</span></p>
+<p>By utilizing integer divisors of standard microcomputer clocks, the
+31.25 kbps specification provided sub-millisecond message delivery, zero
+percent baud-rate error, and low manufacturing costs.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

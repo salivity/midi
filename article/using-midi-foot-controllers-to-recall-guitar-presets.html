@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using MIDI Foot Controllers to Recall Guitar Presets - midi</title>
+    <meta name="description" content="Modern guitarists rely on MIDI foot controllers to instantly switch complex delay, reverb, and modulation settings across multiple pedals with a single stomp. Instead of physically turning knobs or tap-dancing across individual stompboxes between songs, p">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/using-midi-foot-controllers-to-recall-guitar-presets">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using MIDI Foot Controllers to Recall Guitar Presets - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/using-midi-foot-controllers-to-recall-guitar-presets" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern guitarists rely on MIDI foot controllers to instantly switch complex delay, reverb, and modulation settings across multiple pedals with a single stomp. Instead of physically turning knobs or tap-dancing across individual stompboxes between songs, p" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="using-midi-foot-controllers-to-recall-guitar-presets">Using MIDI
+Foot Controllers to Recall Guitar Presets</h1>
+<p>Modern guitarists rely on MIDI foot controllers to instantly switch
+complex delay, reverb, and modulation settings across multiple pedals
+with a single stomp. Instead of physically turning knobs or tap-dancing
+across individual stompboxes between songs, players use the MIDI
+communication protocol to transmit digital instructions from a
+centralized floor controller to their effect units. This article
+explains the exact mechanisms behind this setup, including MIDI
+connections, message types, tempo synchronization, and preset
+mapping.</p>
+<h3 id="hardware-connections-and-routing">Hardware Connections and
+Routing</h3>
+<p>To control multiple spatial effects, pedals are connected via
+standard 5-pin DIN MIDI cables or 1/4-inch TRS MIDI cables. The signal
+path originates at the MIDI foot controller's MIDI Out port and travels
+into the first pedal's MIDI In. Using the pedal's MIDI Thru port, the
+signal is daisy-chained to the next pedal. Each device on the board is
+assigned a unique MIDI channel (from 1 to 16) so it only responds to
+instructions meant specifically for it. For example, a multi-delay pedal
+might be assigned to MIDI Channel 1, while a digital reverb pedal
+listens on MIDI Channel 2.</p>
+<h3 id="program-change-pc-messages-for-preset-recall">Program Change
+(PC) Messages for Preset Recall</h3>
+<p>The primary tool for recalling stored algorithms is the Program
+Change (PC) message. Multi-effect pedals, such as modern digital delays
+and reverbs, feature internal memory banks where players store custom
+patches—ranging from subtle room reverbs to complex, rhythmic dual-delay
+patterns.</p>
+<p>When a guitarist steps on a single switch on the MIDI foot
+controller, the controller transmits pre-programmed PC messages down the
+line:</p>
+<ul>
+<li>It sends <strong>PC #5 on Channel 1</strong>, commanding the delay
+pedal to switch to a dotted-eighth-note tape delay.</li>
+<li>Simultaneously, it sends <strong>PC #12 on Channel 2</strong>,
+commanding the reverb pedal to switch to a massive shimmer reverb.</li>
+</ul>
+<p>Both units change their settings instantly and synchronously without
+interrupting the audio path.</p>
+<h3 id="control-change-cc-messages-for-real-time-tweaks">Control Change
+(CC) Messages for Real-Time Tweaks</h3>
+<p>While PC messages select entire presets, Control Change (CC) messages
+modify specific parameters or toggle effects on and off within an active
+preset. CC messages include a controller number and a value ranging from
+0 to 127.</p>
+<p>Guitarists program foot switches or connect external expression
+pedals to the MIDI controller to send CC messages that:</p>
+<ul>
+<li>Bypass or engage the delay or reverb trails.</li>
+<li>Instantly ramp up the reverb decay or delay feedback for ambient
+swells.</li>
+<li>Toggle the "infinite hold" or freeze functions found in ambient
+reverb pedals.</li>
+</ul>
+<h3 id="midi-clock-for-synchronized-tempos">MIDI Clock for Synchronized
+Tempos</h3>
+<p>Delay pedals require precise timing to match the tempo of a song.
+Advanced stage MIDI controllers generate or pass through MIDI Clock
+data. When a player selects a song preset on their controller, the
+device can automatically broadcast a predefined tempo (in beats per
+minute) to all connected delay and time-based reverb units. This
+eliminates the need to manually tap tempos for individual pedals,
+ensuring that repeats remain rhythmically locked to the performance.</p>
+<h3 id="controller-scenes-and-setlist-workflows">Controller Scenes and
+Setlist Workflows</h3>
+<p>On modern stage controllers, individual switches are programmed into
+"scenes" or "songs." A guitarist can organize their pedalboard by
+setlist: Bank 1 corresponds to Song 1, where Switch A recalls the verse
+preset (light analog delay, short plate reverb), Switch B recalls the
+chorus (rhythmic stereo delay, hall reverb), and Switch C triggers a
+solo boost (high-mix delay with extended decay). By consolidating
+multi-pedal commands into standardized switch layouts, guitarists
+achieve studio-grade sonic flexibility with minimal physical effort on
+stage.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

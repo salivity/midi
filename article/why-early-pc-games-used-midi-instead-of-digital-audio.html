@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Early PC Games Used MIDI Instead of Digital Audio - midi</title>
+    <meta name="description" content="During the 1980s and early 1990s, personal computer games predominantly relied on MIDI (Musical Instrument Digital Interface) instructions and sound driver emulation rather than streaming pre-recorded digital audio tracks. This technical choice was driven">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-early-pc-games-used-midi-instead-of-digital-audio">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Early PC Games Used MIDI Instead of Digital Audio - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-early-pc-games-used-midi-instead-of-digital-audio" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="During the 1980s and early 1990s, personal computer games predominantly relied on MIDI (Musical Instrument Digital Interface) instructions and sound driver emulation rather than streaming pre-recorded digital audio tracks. This technical choice was driven" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-early-pc-games-used-midi-instead-of-digital-audio">Why Early
+PC Games Used MIDI Instead of Digital Audio</h1>
+<p>During the 1980s and early 1990s, personal computer games
+predominantly relied on MIDI (Musical Instrument Digital Interface)
+instructions and sound driver emulation rather than streaming
+pre-recorded digital audio tracks. This technical choice was driven by
+severe hardware limitations of the era, specifically regarding storage
+capacity, system memory, processor overhead, and bus bandwidth. By
+transmitting compact performance instructions to dedicated synthesizer
+hardware instead of reading massive waveform files, developers delivered
+rich, multi-instrumental soundtracks within the extreme resource
+constraints of contemporary PC systems.</p>
+<h3 id="severe-storage-constraints">Severe Storage Constraints</h3>
+<p>The most significant barrier to pre-recorded digital audio was
+physical storage. In the era preceding the widespread adoption of the
+CD-ROM, PC games were distributed on 3.5-inch or 5.25-inch floppy disks,
+which held between 360 kilobytes and 1.44 megabytes of data.</p>
+<p>Uncompressed digital audio (PCM) sampled at CD quality (16-bit, 44.1
+kHz, stereo) requires roughly 10 megabytes of storage per minute of
+audio. Even at telephone-quality mono (8-bit, 11 kHz), a minute of sound
+demands more than 600 kilobytes. In contrast, a MIDI file does not
+contain actual sound waves; it contains event data such as note pitch,
+duration, velocity, and instrument selection. An entire game soundtrack
+composed in MIDI often consumed less than 100 kilobytes, allowing
+intricate musical arrangements to fit easily onto a single installation
+disk alongside game code, art, and logic.</p>
+<h3 id="memory-and-bandwidth-limits">Memory and Bandwidth Limits</h3>
+<p>Early MS-DOS environments operated under severe memory ceilings, most
+notably the 640-kilobyte conventional memory limit. System RAM was at a
+premium and needed to hold the game executable, graphics tables, and
+active game states. Loading seconds of digitized audio into RAM was
+impractical.</p>
+<p>Furthermore, reading digital audio in real-time from early mechanical
+hard drives or floppy drives saturated the system. The standard Industry
+Standard Architecture (ISA) bus had limited data throughput, and hard
+drive transfer speeds were slow. Streaming high-bitrate digitized audio
+continuously while simultaneously loading graphics, reading user input,
+and executing game logic introduced heavy input lag, frame-rate
+stutters, and audio dropouts.</p>
+<h3 id="cpu-overhead-and-the-absence-of-compression">CPU Overhead and
+the Absence of Compression</h3>
+<p>Modern streaming relies heavily on lossy digital compression
+algorithms such as MP3, Ogg Vorbis, and AAC. During the 1980s and early
+1990s, these compression formats did not exist for commercial software.
+When codecs did begin to emerge in the mid-1990s, the host central
+processing units—such as the Intel 80286, 80386, and 80486—lacked the
+floating-point performance and clock cycles required to decompress
+high-fidelity audio streams in real time while concurrently calculating
+game physics and rendering raster graphics.</p>
+<p>MIDI eliminated CPU burden entirely. The processor merely transmitted
+low-bandwidth serial instructions to the sound hardware, consuming a
+negligible fraction of clock cycles.</p>
+<h3 id="sound-card-architecture-and-hardware-synthesis">Sound Card
+Architecture and Hardware Synthesis</h3>
+<p>Instead of decoding audio via the main processor, the PC sound
+architecture relied on dedicated synthesis chips located on expansion
+cards. Game developers wrote their music to target these specific
+hardware decoders:</p>
+<ul>
+<li><strong>Frequency Modulation (FM) Synthesis:</strong> Cards like the
+AdLib and early Creative Sound Blaster used Yamaha chips (such as the
+YM3812/OPL2 and OPL3) to generate artificial instrument timbres through
+frequency modulation.</li>
+<li><strong>Wavetable Synthesis and External Modules:</strong>
+Higher-end hardware, such as the Roland MT-32 and Roland Sound Canvas,
+or wavetable cards like the Sound Blaster AWE32, stored pre-recorded
+instrument samples in onboard ROM chips.</li>
+</ul>
+<p>When a game sent a MIDI note to an OPL chip or a Roland module, the
+sound card’s dedicated hardware synthesized or played back the tone
+directly from its own hardware banks. The PC did not stream audio; it
+merely conducted an autonomous digital synthesizer.</p>
+<h3 id="dynamic-composition-flexibility">Dynamic Composition
+Flexibility</h3>
+<p>MIDI provided an interactive advantage that pre-recorded streaming
+audio could not easily match with early hardware. Because the music was
+generated live from data instructions, composers could alter tempos,
+loop sections indefinitely without audible seams, change instrument
+voices, or mute specific tracks based on player actions. These dynamic
+audio transitions required minimal code adjustments and zero buffer
+latency.</p>
+<p>The shift toward recorded digital audio only became viable in the
+mid-1990s with the standardization of CD-ROM drives (enabling Red Book
+CD audio playback directly from the disc) and faster 32-bit processors
+capable of handling compressed digital sound formats. Until those
+hardware milestones were achieved, MIDI emulation remained the only
+viable technology for PC game music.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

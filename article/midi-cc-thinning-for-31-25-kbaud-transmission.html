@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI CC Thinning for 31.25 kbaud Transmission - midi</title>
+    <meta name="description" content="Continuous controller (CC) thinning is the process of filtering out redundant control change data points from a MIDI sequence to reduce data density. When preparing MIDI tracks for hardware using traditional 5-pin DIN connections, thinning is critical to">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cc-thinning-for-31-25-kbaud-transmission">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI CC Thinning for 31.25 kbaud Transmission - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cc-thinning-for-31-25-kbaud-transmission" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Continuous controller (CC) thinning is the process of filtering out redundant control change data points from a MIDI sequence to reduce data density. When preparing MIDI tracks for hardware using traditional 5-pin DIN connections, thinning is critical to" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-cc-thinning-for-3125-kbaud-transmission">MIDI CC Thinning
+for 31.25 kbaud Transmission</h1>
+<p>Continuous controller (CC) thinning is the process of filtering out
+redundant control change data points from a MIDI sequence to reduce data
+density. When preparing MIDI tracks for hardware using traditional 5-pin
+DIN connections, thinning is critical to prevent bandwidth saturation,
+note delays, clock jitter, and hardware buffer overflows caused by the
+strict 31.25 kbaud transmission limit.</p>
+<h3 id="the-3125-kbaud-bandwidth-bottleneck">The 31.25 kbaud Bandwidth
+Bottleneck</h3>
+<p>The original MIDI specification defines an asynchronous serial
+protocol operating at a fixed rate of 31,250 baud (bits per second).
+Because each byte requires a start bit, eight data bits, and a stop bit,
+transmitting a single byte requires 10 bits. Consequently, the absolute
+maximum theoretical throughput of a standard MIDI line is 3,125 bytes
+per second.</p>
+<p>A standard MIDI Control Change message consists of three bytes: the
+status byte (declaring the CC message and channel), the controller
+number, and the controller value. Transmitting just one CC message
+consumes three bytes and takes approximately 0.96 milliseconds. At
+maximum capacity, a standard MIDI cable can only transmit roughly 1,041
+CC messages per second across all 16 channels combined, leaving zero
+bandwidth for anything else.</p>
+<h3 id="the-impact-of-modern-cc-density">The Impact of Modern CC
+Density</h3>
+<p>Modern Digital Audio Workstations (DAWs) and high-resolution
+controllers capture automation—such as pitch bend, expression (CC11),
+modulation (CC1), and filter cutoff (CC74)—at rates often tied to sample
+rates or high internal tick resolutions. A single sweeping filter
+movement or volume swell drawn in a DAW can easily generate hundreds of
+discrete CC events per second.</p>
+<p>When multiple channels output dense automation simultaneously, the
+data stream quickly exceeds the 3,125-byte-per-second limit.</p>
+<h3 id="consequences-of-data-saturation">Consequences of Data
+Saturation</h3>
+<p>Because MIDI is a single-stream, serial protocol, data must queue
+sequentially. When dense continuous controller data overwhelms the line,
+several problems occur:</p>
+<ul>
+<li><strong>Note-On Delay and Jitter:</strong> Musical timing suffers
+immediately. Critical Note-On, Note-Off, and MIDI Clock messages get
+stuck in the transmission queue behind hundreds of fractional CC value
+changes. This introduces variable latency (jitter), destroying the
+rhythmic feel of the performance.</li>
+<li><strong>Buffer Overruns:</strong> Vintage synthesizers, samplers,
+and sequencers rely on low-power microprocessors and limited input FIFO
+(First In, First Out) buffers. If the incoming MIDI stream arrives
+faster than the receiver's CPU can parse it, the buffer overflows. This
+leads to dropped notes, stuck "hanging" notes, corrupted parameters, or
+complete system lockups.</li>
+<li><strong>MIDI Clock Drift:</strong> Master clock pulses (0xF8) must
+arrive at precise intervals to keep sequencers and drum machines in
+sync. Large blocks of CC data interrupt this steady pulse train, causing
+tempo fluctuations and slave devices to drift out of sync.</li>
+</ul>
+<h3 id="why-cc-thinning-is-the-solution">Why CC Thinning Is the
+Solution</h3>
+<p>Continuous controller thinning algorithms evaluate sequential CC
+events and delete data points that are musically or perceptually
+redundant. For example, if a filter opens steadily from 0 to 127 over
+two seconds, a modern DAW might generate 800 events; thinning can reduce
+this to 50 or 60 evenly spaced events without any perceptible change in
+sound quality.</p>
+<p>By reducing the data footprint of modulation curves, CC thinning
+frees up the 31.25 kbaud pipeline. This ensures that time-critical
+performance data—such as note triggers, velocity, and clock
+signals—transmits instantly and vintage hardware operates reliably
+within its processing limits.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

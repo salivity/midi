@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preventing Motorized Fader Jitter in MIDI Loops - midi</title>
+    <meta name="description" content="Motorized fader jitter occurs when high-frequency digital automation data conflicts with the physical limitations and feedback loops of mechanical control surfaces. To prevent faders from chattering, hunting, or oscillating, modern DAWs and control surfac">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/preventing-motorized-fader-jitter-in-midi-loops">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Preventing Motorized Fader Jitter in MIDI Loops - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/preventing-motorized-fader-jitter-in-midi-loops" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Motorized fader jitter occurs when high-frequency digital automation data conflicts with the physical limitations and feedback loops of mechanical control surfaces. To prevent faders from chattering, hunting, or oscillating, modern DAWs and control surfac" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="preventing-motorized-fader-jitter-in-midi-loops">Preventing
+Motorized Fader Jitter in MIDI Loops</h1>
+<p>Motorized fader jitter occurs when high-frequency digital automation
+data conflicts with the physical limitations and feedback loops of
+mechanical control surfaces. To prevent faders from chattering, hunting,
+or oscillating, modern DAWs and control surfaces rely on a combination
+of hardware capacitive touch sensing, firmware-level deadbands,
+rate-limiting decimation algorithms, and low-pass PID motor filtering.
+Together, these systems smooth out high-speed floating-point
+calculations into stable mechanical movements while avoiding destructive
+MIDI feedback loops.</p>
+<h3 id="capacitive-touch-sensing-and-loop-interruption">Capacitive Touch
+Sensing and Loop Interruption</h3>
+<p>The primary defense against MIDI loop oscillation is the fader's
+capacitive touch circuit. When an engineer touches the conductive
+plastic or metal fader cap, the hardware instantly grounds a low-voltage
+circuit that signals the fader's onboard microcontroller. The controller
+immediately cuts power to the motor and flags the DAW that the fader is
+in "write" or "touch" mode.</p>
+<p>During this state, the DAW stops echoing incoming volume automation
+back to the motorized fader. Without this physical touch interruption,
+the fader would attempt to mechanically move toward incoming automation
+while the user's hand forces it elsewhere, resulting in high-frequency
+motor fighting and endless MIDI echo loops.</p>
+<h3 id="value-quantization-and-data-decimation">Value Quantization and
+Data Decimation</h3>
+<p>DAWs calculate volume automation internally using 32-bit or 64-bit
+floating-point math, updating at the audio buffer rate (often thousands
+of times per second). Physical motors and standard MIDI protocols cannot
+operate at this frequency.</p>
+<p>Before sending automation over a control protocol (such as Mackie
+Control Universal, HUI, or standard MIDI), the DAW quantizes and
+decimates the stream:</p>
+<ul>
+<li><strong>Quantization:</strong> The floating-point curve is scaled to
+a lower resolution, typically 10-bit (1,024 steps) via pitch bend
+messages or 14-bit (16,384 steps) via NRPNs.</li>
+<li><strong>Decimation:</strong> The DAW’s transmission engine filters
+out intermediate values and caps the update rate, usually between 50 Hz
+and 100 Hz, preventing MIDI buffer saturation and motor overload.</li>
+</ul>
+<h3 id="deadbands-and-hysteresis-windows">Deadbands and Hysteresis
+Windows</h3>
+<p>Physical potentiometers and optical encoders inside motorized faders
+inherently suffer from minor electrical noise and mechanical tolerance
+limits. To prevent "hunting"—where a motor constantly micro-adjusts back
+and forth across a boundary—the fader firmware implements hysteresis via
+a software deadband.</p>
+<p>When the DAW sends a target position, the microcontroller computes
+the difference (error) between the fader’s current analog position and
+the target value:</p>
+<ul>
+<li>If the absolute difference is smaller than a predetermined threshold
+(the deadband), the motor remains de-energized.</li>
+<li>The motor only receives drive current if the incoming automation
+data exceeds this window.</li>
+</ul>
+<p>This prevents micro-fluctuations in the floating-point automation
+stream from triggering physical mechanical motion.</p>
+<h3 id="firmware-pid-control-and-slew-rate-limiting">Firmware PID
+Control and Slew-Rate Limiting</h3>
+<p>Once a target position clears the deadband, onboard microcontrollers
+translate the discrete MIDI stream into smooth analog drive voltages
+using a Proportional-Integral-Derivative (PID) algorithm with slew-rate
+limiting.</p>
+<p>Because automation arrives as discrete steps rather than a continuous
+curve, a raw step input would cause the motor to jerk violently and
+overshoot. The PID controller continuously profiles the motor's
+velocity, dampening movement as the wiper approaches the target value.
+Slew-rate limiting rounds off sharp, abrupt changes in automation,
+effectively acting as a low-pass mechanical filter that produces quiet,
+jitter-free fader travel.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

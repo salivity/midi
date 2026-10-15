@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Digital Mixers Map MIDI to Faders and Mutes - midi</title>
+    <meta name="description" content="This article explains how digital audio consoles translate incoming MIDI Control Change (CC) messages into physical motorized fader movements and instantaneous channel mutes. It covers the end-to-end path: receiving serial MIDI data, parsing the bytes, ma">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-digital-mixers-map-midi-to-faders-and-mutes">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Digital Mixers Map MIDI to Faders and Mutes - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-digital-mixers-map-midi-to-faders-and-mutes" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how digital audio consoles translate incoming MIDI Control Change (CC) messages into physical motorized fader movements and instantaneous channel mutes. It covers the end-to-end path: receiving serial MIDI data, parsing the bytes, ma" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-digital-mixers-map-midi-to-faders-and-mutes">How Digital
+Mixers Map MIDI to Faders and Mutes</h1>
+<p>This article explains how digital audio consoles translate incoming
+MIDI Control Change (CC) messages into physical motorized fader
+movements and instantaneous channel mutes. It covers the end-to-end
+path: receiving serial MIDI data, parsing the bytes, matching the
+controller parameters to internal mixer channels, and driving both
+digital signal processors (DSP) and hardware servos to synchronize
+physical controls with external automation.</p>
+<hr />
+<h3 id="1-receiving-and-parsing-the-midi-stream">1. Receiving and
+Parsing the MIDI Stream</h3>
+<p>Digital mixers accept MIDI via traditional 5-pin DIN connections,
+USB-B/USB-A ports, or MIDI over Ethernet (RTP-MIDI). When external
+hardware or a Digital Audio Workstation (DAW) sends automation, it
+transmits standardized 3-byte MIDI Control Change messages:</p>
+<ul>
+<li><strong>Status Byte (<code>0xBn</code>):</strong> Identifies the
+message as a Control Change on MIDI channel <span
+class="math inline">\(n\)</span> (channels 1 through 16).</li>
+<li><strong>Data Byte 1 (Controller Number):</strong> Specifies the CC
+address (from 0 to 127), which identifies the targeted parameter.</li>
+<li><strong>Data Byte 2 (Controller Value):</strong> Carries the
+parameter state, generally ranging from 0 to 127.</li>
+</ul>
+<p>The mixer’s central processing unit or microcontroller continuously
+polls its serial MIDI buffers, stripping away formatting overhead and
+passing the parsed triplets (Channel, CC Number, Value) to the internal
+control routing engine.</p>
+<hr />
+<h3 id="2-parameter-mapping-architecture">2. Parameter Mapping
+Architecture</h3>
+<p>The mixer’s operating system relies on an internal look-up table or
+dynamic mapping template to determine what parameter a specific MIDI
+message represents. Mixers typically operate in one of two modes:</p>
+<ul>
+<li><strong>Direct MIDI CC Mapping:</strong> The mixer exposes a matrix
+where specific CC numbers link directly to channel attributes (e.g., CC
+7 on MIDI Channel 1 = Channel 1 Volume; CC 9 = Channel 1 Mute).</li>
+<li><strong>Emulation Protocols (MCU / HUI):</strong> Many modern
+digital consoles emulate Mackie Control Universal (MCU) or HUI
+protocols. Instead of standard 7-bit CCs, MCU uses Pitch Bend messages
+(offering 14-bit resolution, or 16,384 discrete steps) to achieve smooth
+fader tracking, while channel mutes are mapped to MIDI Note On/Off
+messages or dedicated switch CCs.</li>
+</ul>
+<hr />
+<h3 id="3-motorized-fader-automation">3. Motorized Fader Automation</h3>
+<p>When a parsed MIDI message targets a fader, the console must update
+both its digital audio engine and its mechanical hardware.</p>
+<h4 id="step-a-gain-curve-interpolation">Step A: Gain Curve
+Interpolation</h4>
+<p>The incoming 7-bit value (0–127) or 14-bit value (0–16,383) is
+non-linear relative to human hearing. The console’s firmware maps this
+linear integer value to an internal logarithmic decibel scale (e.g.,
+<span class="math inline">\(-\infty\text{ dB}\)</span> to <span
+class="math inline">\(+10\text{ dB}\)</span>). The DSP immediately
+applies this coefficient to its gain blocks, adjusting audio level with
+micro-crossfades to prevent audible stepping or zippering.</p>
+<h4 id="step-b-closed-loop-servo-actuation">Step B: Closed-Loop Servo
+Actuation</h4>
+<p>Simultaneously, the target value is converted to a target physical
+fader coordinate. Motorized faders operate as closed-loop servo
+mechanisms:</p>
+<ol type="1">
+<li><strong>Position Sensing:</strong> A track on the fader’s
+potentiometer (or an optical wiper) outputs an analog voltage to an
+analog-to-digital converter (ADC), indicating the fader’s current
+physical location.</li>
+<li><strong>Error Calculation:</strong> A dedicated motor controller
+chip compares the current position against the incoming target position
+from the MIDI message.</li>
+<li><strong>Motor Driver Activation:</strong> An H-bridge circuit drives
+a miniature DC motor connected to the fader carriage via a toothed belt.
+The motor drives the fader toward the target position.</li>
+<li><strong>Settling:</strong> As the error margin drops below a defined
+dead-band threshold, the motor driver cuts power, preventing overshoot
+and mechanical jitter.</li>
+</ol>
+<h4 id="step-c-capacitive-touch-feedback">Step C: Capacitive Touch
+Feedback</h4>
+<p>Most motorized faders include conductive plastic caps wired to
+capacitive touch sensors. If an operator physically touches the fader
+while a MIDI automation command arrives, the touch-sense circuit
+temporarily disengages the servo motor. This prevents the motor from
+fighting the engineer's hand and allows live manual overriding of
+automation.</p>
+<hr />
+<h3 id="4-channel-mute-automation">4. Channel Mute Automation</h3>
+<p>Channel mute automation involves a state transition rather than a
+continuous motor sweep.</p>
+<h4 id="step-a-threshold-detection">Step A: Threshold Detection</h4>
+<p>Standard MIDI CC values represent mutes using a threshold:</p>
+<ul>
+<li><strong>Values 0–63:</strong> Unmuted (Channel Active)</li>
+<li><strong>Values 64–127:</strong> Muted (Channel Silenced)</li>
+</ul>
+<p>In toggle configurations, any CC value above 0 alternates the current
+mute state.</p>
+<h4 id="step-b-dsp-and-indicator-execution">Step B: DSP and Indicator
+Execution</h4>
+<p>When a mute state change triggers:</p>
+<ol type="1">
+<li><strong>DSP Attenuation:</strong> The audio processor applies a
+steep, fast envelope reduction (typically 2 to 10 milliseconds) to zero
+out the channel’s audio stream. This ramp prevents clicks or pops that
+would occur if audio were cut instantaneously at a non-zero waveform
+crossing.</li>
+<li><strong>LED and Screen Updates:</strong> The microcontroller toggles
+the physical LED backlight for that channel’s mute button and updates
+the channel strip status on the mixer’s graphical display.</li>
+</ol>
+<hr />
+<h3 id="5-loop-prevention-midi-feedback-protection">5. Loop Prevention
+(MIDI Feedback Protection)</h3>
+<p>A critical component of this architecture is feedback suppression.
+When the mixer's motorized fader moves as a result of an
+<em>incoming</em> MIDI message, the mixer suppresses the generation of
+an <em>outgoing</em> MIDI message for that movement. Outgoing MIDI CCs
+are only transmitted when the physical control is moved by an external
+mechanical force—specifically, an operator touching the fader
+cap—preventing recursive MIDI loops between the mixer and the host
+DAW.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

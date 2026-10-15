@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Optocouplers Work in MIDI Hardware - midi</title>
+    <meta name="description" content="An optocoupler serves as a vital electrical barrier in MIDI devices, preventing ground loops and hum by converting incoming electrical signals into light and then back into an electrical voltage. Used on the MIDI IN port, this optical isolation ensures th">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-optocouplers-work-in-midi-hardware">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Optocouplers Work in MIDI Hardware - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-optocouplers-work-in-midi-hardware" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An optocoupler serves as a vital electrical barrier in MIDI devices, preventing ground loops and hum by converting incoming electrical signals into light and then back into an electrical voltage. Used on the MIDI IN port, this optical isolation ensures th" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-optocouplers-work-in-midi-hardware">How Optocouplers Work in
+MIDI Hardware</h1>
+<p>An optocoupler serves as a vital electrical barrier in MIDI devices,
+preventing ground loops and hum by converting incoming electrical
+signals into light and then back into an electrical voltage. Used on the
+MIDI IN port, this optical isolation ensures that connected instruments
+share musical data without sharing a direct electrical ground. The
+process relies on a closed-circuit interaction between an internal light
+source and a light-sensitive sensor, allowing high-speed digital
+communication across a physical, non-conductive gap.</p>
+<h3 id="1-electrical-current-to-light-the-input-stage">1. Electrical
+Current to Light (The Input Stage)</h3>
+<p>Standard MIDI hardware communicates using a 5-milliampere (mA)
+current loop running at a baud rate of 31,250 bits per second. When a
+transmitting device sends a digital signal through a 5-pin DIN or TRS
+cable, it alternates between flowing current and halting current to
+represent binary zeros and ones:</p>
+<ul>
+<li><strong>The Internal LED:</strong> Inside the optocoupler (commonly
+a high-speed component like the 6N138 or PC900), the incoming current
+enters through MIDI IN pins 4 and 5, passing directly through an
+internal infrared light-emitting diode (LED).</li>
+<li><strong>Current Flow (Logic 0):</strong> When current flows through
+the loop, the LED illuminates.</li>
+<li><strong>No Current (Logic 1):</strong> When the current loop is
+broken by the transmitter, the LED turns off.</li>
+</ul>
+<p>Because the LED is powered solely by the current loop originating
+from the sending device, the input stage remains completely isolated
+from the receiving device's internal power supply.</p>
+<h3 id="2-crossing-the-dielectric-gap">2. Crossing the Dielectric
+Gap</h3>
+<p>Between the LED and the receiving photosensor lies a microscopic
+transparent barrier, typically made of clear silicone or glass-filled
+plastic. This gap acts as an insulator (galvanic isolation),
+withstanding hundreds or even thousands of volts of electrical
+potential. Photons emitted by the LED cross this physical divide in
+nanoseconds, carrying the MIDI data across the gap without any
+metal-to-metal contact.</p>
+<h3 id="3-light-to-electrical-pulses-the-output-stage">3. Light to
+Electrical Pulses (The Output Stage)</h3>
+<p>On the opposite side of the internal optical barrier sits a
+light-sensitive semiconductor, typically a photodiode paired with an
+amplification transistor (such as a Darlington pair) or an integrated
+logic gate:</p>
+<ul>
+<li><strong>Photon Detection:</strong> When light from the LED strikes
+the photodiode, the absorbed photons create electron-hole pairs within
+the semiconductor material. This generates a tiny internal current.</li>
+<li><strong>Amplification:</strong> This photodiode current is fed into
+the base of an internal output transistor, driving it into a conductive
+(saturated) state.</li>
+<li><strong>Voltage Pulses:</strong> The output transistor is tied to
+the receiving instrument’s local power supply (typically +5V or +3.3V)
+via a pull-up resistor. When the transistor conducts, it pulls the
+output line down to 0V (ground). When the light turns off, the
+transistor stops conducting, and the pull-up resistor pulls the output
+line back up to the supply voltage.</li>
+</ul>
+<h3 id="4-handoff-to-the-microcontroller">4. Handoff to the
+Microcontroller</h3>
+<p>The resulting electrical pulses match the original timing and logic
+of the MIDI data stream. This newly generated signal is routed directly
+to the receiving device's Universal Asynchronous Receiver-Transmitter
+(UART) RX pin. The instrument’s microprocessor then reads these clean 5V
+or 3.3V square waves as standard binary MIDI messages—such as Note On,
+Note Off, and Control Change—completely free from the electrical noise,
+ground hum, and voltage differentials of the originating hardware.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

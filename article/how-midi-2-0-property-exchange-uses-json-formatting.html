@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI 2.0 Property Exchange Uses JSON Formatting - midi</title>
+    <meta name="description" content="MIDI 2.0 Property Exchange (PE) provides a standardized framework that allows musical instruments and software to negotiate, discover, and configure device settings dynamically over standard MIDI connections. By leveraging JavaScript Object Notation (JSON">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-2-0-property-exchange-uses-json-formatting">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI 2.0 Property Exchange Uses JSON Formatting - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-2-0-property-exchange-uses-json-formatting" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI 2.0 Property Exchange (PE) provides a standardized framework that allows musical instruments and software to negotiate, discover, and configure device settings dynamically over standard MIDI connections. By leveraging JavaScript Object Notation (JSON" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-20-property-exchange-uses-json-formatting">How MIDI 2.0
+Property Exchange Uses JSON Formatting</h1>
+<p>MIDI 2.0 Property Exchange (PE) provides a standardized framework
+that allows musical instruments and software to negotiate, discover, and
+configure device settings dynamically over standard MIDI connections. By
+leveraging JavaScript Object Notation (JSON) inside MIDI-CI (Capability
+Inquiry) System Exclusive messages, devices can request and interpret
+complex data structures without proprietary drivers. This article
+explains how Property Exchange implements JSON schemas to discover
+device capabilities, inspect parameter names, and retrieve complete
+patch and preset lists.</p>
+<h3 id="the-mechanism-of-property-exchange">The Mechanism of Property
+Exchange</h3>
+<p>Property Exchange operates as a core service of MIDI-CI. It functions
+on a request-and-response model using Universal System Exclusive
+messages to carry text-based payloads.</p>
+<p>Each Property Exchange transaction divides information into two
+segments:</p>
+<ol type="1">
+<li><strong>Header Data:</strong> A compact JSON object defining the
+command type (e.g., <code>GetData</code>, <code>SetData</code>,
+<code>Subscribe</code>), a resource identifier, transaction IDs, status
+codes, and optional pagination parameters.</li>
+<li><strong>Body Data:</strong> The payload containing the actual
+resource content, which for parameter and patch queries is formatted as
+a structured JSON object or array.</li>
+</ol>
+<p>This architecture enables controllers and Digital Audio Workstations
+(DAWs) to query unknown hardware and automatically configure controls,
+display screens, and preset browsers.</p>
+<h3 id="querying-parameter-names-and-attributes">Querying Parameter
+Names and Attributes</h3>
+<p>In traditional MIDI workflows, mapping a controller to a synthesizer
+required static definition files or manual MIDI CC mapping. MIDI 2.0
+eliminates this through automated parameter discovery:</p>
+<ol type="1">
+<li><strong>Resource Discovery:</strong> The controller initiates a
+<code>GetData</code> request for the <code>ResourceList</code> resource
+to determine which property endpoints the target device supports.</li>
+<li><strong>Parameter List Request:</strong> The controller issues a
+<code>GetData</code> command targeting parameters, typically addressing
+the <code>PropertyList</code> or a custom resource path such as
+<code>/ch1/parameters</code>.</li>
+<li><strong>JSON Response:</strong> The responder returns a JSON array
+detailing every available parameter. A parameter definition in the JSON
+payload typically includes:
+<ul>
+<li><code>id</code> or <code>property</code>: The unique identifier
+corresponding to a MIDI 2.0 Registered Controller (RC), Assignable
+Controller (AC), or specific parameter address.</li>
+<li><code>title</code>: The human-readable name of the parameter (e.g.,
+"Cutoff Frequency", "Resonance").</li>
+<li><code>type</code>: Data type specifications (e.g., integer, boolean,
+float, string).</li>
+<li><code>min</code>, <code>max</code>, and <code>default</code>: The
+valid value boundaries and default positions.</li>
+<li><code>units</code>: Measurement units for contextual display (e.g.,
+"Hz", "dB", "ms").</li>
+</ul></li>
+</ol>
+<p>Because the descriptor is delivered as standard JSON, a controller
+can immediately parse the schema and dynamically construct a user
+interface with accurate labels and appropriate control ranges.</p>
+<h3 id="retrieving-patch-and-preset-lists">Retrieving Patch and Preset
+Lists</h3>
+<p>Querying patch, bank, and program lists follows the same structured
+JSON exchange, replacing legacy binary dump protocols with
+human-readable hierarchies:</p>
+<ol type="1">
+<li><strong>Inquiry:</strong> The client device transmits a
+<code>GetData</code> message targeting the <code>ProgramList</code>
+resource.</li>
+<li><strong>Pagination (Optional):</strong> For devices containing
+thousands of presets, the JSON header can supply pagination keys, such
+as <code>offset</code> and <code>limit</code>, preventing buffer
+overruns on resource-constrained hardware.</li>
+<li><strong>Structured Response:</strong> The target instrument responds
+with a JSON body representing the hierarchy of banks and presets. A
+standard entry inside the program list contains:
+<ul>
+<li><code>bank</code>: The Bank Select MSB and LSB values required to
+address the preset.</li>
+<li><code>program</code>: The Program Change number (0–127).</li>
+<li><code>name</code>: The displayed preset name (e.g., "Warm Analog
+Pad").</li>
+<li><code>category</code>: Optional classification metadata (e.g.,
+"Lead", "Bass", "Strings").</li>
+</ul></li>
+</ol>
+<h3 id="advantages-of-json-in-midi-20">Advantages of JSON in MIDI
+2.0</h3>
+<p>Using JSON within Property Exchange standardizes communication
+between disparate platforms and architectures. Because JSON natively
+supports nested trees, key-value mappings, and text encoding,
+instruments can communicate complex state representations cleanly.
+Software DAWs, hardware controllers, and synthesizers can reliably
+auto-populate menus, map encoders, and display active patch
+configurations without relying on manual setup or vendor-specific
+software editors.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

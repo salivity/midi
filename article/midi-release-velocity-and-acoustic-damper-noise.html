@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Release Velocity and Acoustic Damper Noise - midi</title>
+    <meta name="description" content="MIDI release velocity is a specialized performance parameter that measures how fast a key returns to its resting position after being played. While standard MIDI velocity dictates how hard a note is struck, release velocity captures the nuance of the note">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-release-velocity-and-acoustic-damper-noise">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Release Velocity and Acoustic Damper Noise - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-release-velocity-and-acoustic-damper-noise" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI release velocity is a specialized performance parameter that measures how fast a key returns to its resting position after being played. While standard MIDI velocity dictates how hard a note is struck, release velocity captures the nuance of the note" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-release-velocity-and-acoustic-damper-noise">MIDI Release
+Velocity and Acoustic Damper Noise</h1>
+<p>MIDI release velocity is a specialized performance parameter that
+measures how fast a key returns to its resting position after being
+played. While standard MIDI velocity dictates how hard a note is struck,
+release velocity captures the nuance of the note's end, allowing virtual
+instruments to recreate the complex mechanical interactions of acoustic
+instruments. In acoustic pianos, the speed of key release directly
+affects how the felt dampers contact the vibrating strings, creating
+distinct acoustic artifacts. This article explores what MIDI release
+velocity is, how physical dampers interact with strings, and how modern
+virtual instruments utilize this data to dynamically synthesize
+authentic damper noise and release resonance.</p>
+<h2 id="understanding-midi-release-velocity">Understanding MIDI Release
+Velocity</h2>
+<p>In the standard MIDI specification, every note event consists of a
+"Note On" message and a "Note Off" message. While almost all MIDI
+controllers transmit a "Note On" velocity value (ranging from 1 to 127)
+to indicate attack speed, many advanced controllers also transmit a
+velocity value with the "Note Off" message. This is known as
+<strong>MIDI Release Velocity</strong> or <strong>Note Off
+Velocity</strong>.</p>
+<p>Release velocity measures the physical speed at which a key is
+released:</p>
+<ul>
+<li><strong>High release velocity (e.g., 90–127):</strong> The key is
+snapped or released abruptly.</li>
+<li><strong>Low release velocity (e.g., 1–40):</strong> The key is
+lifted slowly and gently.</li>
+</ul>
+<p>Without release velocity support, virtual instruments must assume a
+static release speed (often fixed at a default value of 64), resulting
+in identical release artifacts regardless of the player's touch.</p>
+<h2 id="the-physical-mechanics-of-acoustic-piano-dampers">The Physical
+Mechanics of Acoustic Piano Dampers</h2>
+<p>To understand why release velocity matters in digital modeling, one
+must look at the mechanics of an acoustic piano.</p>
+<p>Resting on top of—or alongside—the strings of an acoustic piano are
+felt-covered wooden wedges known as dampers. When a pianist presses a
+key, the corresponding damper lifts off the string, allowing it to
+vibrate freely. When the key is released, gravity (in a grand piano) or
+spring tension (in an upright) forces the damper back down onto the
+string to stop the vibration.</p>
+<p>The speed of the key release fundamentally alters the sound of this
+termination:</p>
+<ol type="1">
+<li><strong>Fast Key Release:</strong> When a key is released quickly,
+the damper strikes the vibrating string with sudden force. This produces
+an audible, low-frequency mechanical "thud" as the felt hits the metal,
+along with the sound of the key mechanism and action parts settling into
+their resting positions. The sound terminates immediately with an abrupt
+acoustic cutoff.</li>
+<li><strong>Slow Key Release:</strong> When a key is released slowly,
+the felt grazes the vibrating string before fully choking it. This
+creates a subtle friction noise—often heard as a brief, high-frequency
+buzzing or harmonic scrape—as the string’s energy is gradually
+dissipated. The mechanical noise of the action is virtually silent, and
+the tone dies out smoothly rather than cutting off sharply.</li>
+</ol>
+<h2 id="how-virtual-instruments-modulate-damper-noise">How Virtual
+Instruments Modulate Damper Noise</h2>
+<p>Modern virtual piano instruments and sample libraries use MIDI
+release velocity to replicate these acoustic nuances through dynamic
+sample selection and real-time DSP adjustments.</p>
+<h3 id="dynamic-release-sample-triggering">Dynamic Release Sample
+Triggering</h3>
+<p>High-end virtual pianos contain dedicated libraries of release
+samples recorded at multiple velocities. When a Note Off message is
+received:</p>
+<ul>
+<li><strong>A fast release</strong> triggers a sample with pronounced
+mechanical action noise, an audible damper-to-string thud, and prominent
+soundboard resonance caused by the sudden energy transfer.</li>
+<li><strong>A slow release</strong> triggers a quieter, softer sample
+that captures the gentle friction of felt touching wire with minimal
+action noise.</li>
+</ul>
+<h3 id="release-envelope-scaling">Release Envelope Scaling</h3>
+<p>In addition to triggering specific samples, synthesis engines and
+samplers use release velocity to scale the release stage of the
+amplitude envelope (ADSR):</p>
+<ul>
+<li><strong>High release velocity:</strong> Shortens the release time
+(<span class="math inline">\(T_{rel}\)</span>), cutting the sustained
+note off instantaneously.</li>
+<li><strong>Low release velocity:</strong> Lengthens the release time,
+simulating the gradual decay caused by a softly descending damper.</li>
+</ul>
+<h3 id="high-frequency-damping-filters">High-Frequency Damping
+Filters</h3>
+<p>Some physically modeled instruments adjust cutoff filters dynamically
+upon key release. A slow key lift momentarily opens a bandpass or
+high-shelf filter to synthesize the characteristic string sizzle as the
+damper lightly touches the top of the string waveform before full
+closure.</p>
+<h2 id="musical-importance-of-release-velocity">Musical Importance of
+Release Velocity</h2>
+<p>Implementing release velocity removes the sterile, uniform sound
+common to basic digital keyboards. Legato phrasing, staccato passages,
+and expressive ballad playing rely heavily on release nuances. By
+translating key release speed into appropriate acoustic damper noise and
+release duration, digital instruments achieve the dynamic authenticity
+and physical presence required for realistic piano simulation.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

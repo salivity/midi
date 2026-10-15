@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Sample Pads Use Velocity Layers with MIDI Hits - midi</title>
+    <meta name="description" content="Contemporary sample pad instruments bridge the gap between digital precision and acoustic expressiveness by mapping multiple audio recordings across the dynamic spectrum of incoming MIDI data. This article examines how modern pad systems interpret MIDI ve">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-sample-pads-use-velocity-layers-with-midi-hits">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Sample Pads Use Velocity Layers with MIDI Hits - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-sample-pads-use-velocity-layers-with-midi-hits" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Contemporary sample pad instruments bridge the gap between digital precision and acoustic expressiveness by mapping multiple audio recordings across the dynamic spectrum of incoming MIDI data. This article examines how modern pad systems interpret MIDI ve" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-sample-pads-use-velocity-layers-with-midi-hits">How Sample
+Pads Use Velocity Layers with MIDI Hits</h1>
+<p>Contemporary sample pad instruments bridge the gap between digital
+precision and acoustic expressiveness by mapping multiple audio
+recordings across the dynamic spectrum of incoming MIDI data. This
+article examines how modern pad systems interpret MIDI velocity values,
+trigger designated multi-sampled layers, and apply secondary
+modulation—such as dynamic filtering and crossfading—to transform static
+electronic triggers into nuanced, responsive musical performances.</p>
+<h3 id="translating-kinetic-force-into-midi-velocity">Translating
+Kinetic Force into MIDI Velocity</h3>
+<p>When a player strikes a physical pad, onboard sensors—typically
+force-sensitive resistors (FSRs) or piezoelectric transducers—capture
+the kinetic energy and convert the impact into an electrical voltage.
+The pad's internal analog-to-digital converter processes this analog
+spike and outputs a MIDI velocity value ranging on a standard scale from
+1 (the softest detectable touch) to 127 (the hardest strike). This
+incoming number acts as the dynamic address for the internal sound
+engine.</p>
+<h3 id="velocity-layer-architecture-and-multi-sampling">Velocity Layer
+Architecture and Multi-Sampling</h3>
+<p>Rather than relying on a single audio recording scaled up or down in
+volume, modern sample pad instruments employ multi-sampling. Acoustic
+instruments change in timbre, harmonic content, and resonance depending
+on how hard they are struck; a softly tapped snare drum sounds
+fundamentally different from a hard rimshot, not just quieter.</p>
+<p>To replicate this, developers record an instrument at varying dynamic
+intensities and assign these distinct recordings to specific velocity
+ranges, known as velocity layers. A typical 4-layer snare setup might
+divide the 127-value spectrum as follows:</p>
+<ul>
+<li><strong>Layer 1 (Velocity 1–31):</strong> Light ghost note with
+pronounced snare-wire buzz.</li>
+<li><strong>Layer 2 (Velocity 32–75):</strong> Mid-intensity standard
+strike with balanced tone.</li>
+<li><strong>Layer 3 (Velocity 76–110):</strong> Forceful hit with heavy
+shell resonance.</li>
+<li><strong>Layer 4 (Velocity 111–127):</strong> Aggressive rimshot rich
+in upper-mid harmonics.</li>
+</ul>
+<p>When an incoming MIDI note arrives, the sound engine cross-references
+the assigned velocity value against this internal matrix and instantly
+triggers only the audio file allocated to that specific bracket.</p>
+<h3 id="velocity-crossfading-and-layer-smoothing">Velocity Crossfading
+and Layer Smoothing</h3>
+<p>Abrupt transitions between distinct audio samples can result in an
+unnatural stepping effect when moving through dynamic swells or rolls.
+Modern sample pads counteract this using velocity crossfading. When a
+hit falls near the threshold boundary between two layers, the engine
+triggers both samples simultaneously, dynamically blending their
+amplitudes based on where the strike landed. This ensures a seamless
+tonal transition from quiet taps to explosive accents.</p>
+<h3 id="dynamic-filtering-and-envelope-scaling">Dynamic Filtering and
+Envelope Scaling</h3>
+<p>To maximize responsiveness—especially in instruments with limited
+memory or fewer sample layers—contemporary pads layer real-time digital
+signal processing (DSP) over the sample playback:</p>
+<ul>
+<li><strong>Dynamic Low-Pass Filtering:</strong> A low-pass filter's
+cutoff frequency is linked to MIDI velocity. Lower velocities attenuate
+high frequencies, mimicking the darker tone of soft acoustic impacts,
+while higher velocities open the filter fully to let high-end attack
+transients cut through.</li>
+<li><strong>Amplitude and Pitch Envelopes:</strong> Velocity values can
+alter envelope parameters. Harder hits may trigger sharper attack times
+and longer decay periods, while extremely high velocities can introduce
+a slight, instantaneous pitch rise at the transient to simulate the
+head-stretch of a hard-hit acoustic drum.</li>
+</ul>
+<h3 id="round-robin-cycling-within-velocity-ranges">Round-Robin Cycling
+Within Velocity Ranges</h3>
+<p>To eliminate the unnatural "machine-gun effect" during rapid dynamic
+repetition, modern engines often embed round-robin alternation within
+each velocity layer. When receiving repeated MIDI hits within the same
+velocity range, the instrument alternates between multiple distinct
+recordings of that exact dynamic level. Combining multi-layer velocity
+mapping with round-robin cycling guarantees that every strike yields a
+unique, dynamically precise acoustic response.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

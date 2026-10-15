@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microtonal Chord Glissandos in MIDI 2.0 Explained - midi</title>
+    <meta name="description" content="MIDI 2.0 fundamentally transforms electronic music expression by introducing native per-note pitch bend capabilities, allowing musicians to execute polyphonic microtonal glissandos with unprecedented ease. Previously restricted by global channel architect">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/microtonal-chord-glissandos-in-midi-2-0-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Microtonal Chord Glissandos in MIDI 2.0 Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/microtonal-chord-glissandos-in-midi-2-0-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI 2.0 fundamentally transforms electronic music expression by introducing native per-note pitch bend capabilities, allowing musicians to execute polyphonic microtonal glissandos with unprecedented ease. Previously restricted by global channel architect" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="microtonal-chord-glissandos-in-midi-20-explained">Microtonal
+Chord Glissandos in MIDI 2.0 Explained</h1>
+<p>MIDI 2.0 fundamentally transforms electronic music expression by
+introducing native per-note pitch bend capabilities, allowing musicians
+to execute polyphonic microtonal glissandos with unprecedented ease.
+Previously restricted by global channel architectures, composers and
+performers can now glide individual voices within a chord in opposite
+directions, across micro-intervals, and at varying speeds on a single
+MIDI channel. This article examines how the protocol removes legacy
+routing workarounds, enhances pitch resolution, and streamlines the
+performance of complex polyphonic microtonality.</p>
+<h3 id="the-limitation-of-midi-10">The Limitation of MIDI 1.0</h3>
+<p>In the original MIDI 1.0 specification, pitch bend is a channel-wide
+control change message. When a pitch wheel or ribbon controller is
+moved, every active note on that channel shifts uniformly.</p>
+<p>To perform a polyphonic glissando—such as bending one note of a triad
+while the other two stay static, or sliding voices in contrary
+motion—users had to adopt complex workarounds:</p>
+<ul>
+<li><strong>Multichannel Splitting:</strong> Assigning each note of a
+chord to a separate MIDI channel.</li>
+<li><strong>Track Duplication:</strong> Creating multiple DAW tracks
+hosting identical synthesizer patches.</li>
+<li><strong>MIDI Polyphonic Expression (MPE):</strong> A legacy
+adaptation that dynamically distributes individual notes across 15
+separate MIDI channels to isolate pitch messages.</li>
+</ul>
+<p>While MPE made per-note expression playable, it remained an indirect
+patch on an outdated framework, introducing setup friction,
+voice-allocation bottlenecks, and cumbersome DAW editing.</p>
+<h3 id="native-per-note-control-in-midi-20">Native Per-Note Control in
+MIDI 2.0</h3>
+<p>MIDI 2.0 addresses this limitation at the architectural level through
+the Universal MIDI Packet (UMP). Within UMP, pitch bend is no longer
+confined to the channel level. The protocol provides dedicated
+<strong>Per-Note Pitch Bend</strong> messages directly addressed to a
+specific note number and its unique note-attribute identity.</p>
+<p>Because the pitch data is tied to the individual note event rather
+than the transport channel, an entire polyphonic cluster can exist on a
+single channel without crosstalk:</p>
+<ul>
+<li><strong>Voice Independence:</strong> Note C4 can glide down 50
+cents, E4 can remain fixed, and G4 can glide up a quarter-tone
+simultaneously.</li>
+<li><strong>Contrary Motion:</strong> Chordal lines can converge,
+diverge, or execute complex microtonal clusters without colliding
+control data.</li>
+<li><strong>No Channel Cycling:</strong> There is no need to cycle
+through 16 channels to keep notes isolated, preventing voice-stealing
+bugs common in dense arrangements.</li>
+</ul>
+<h3 id="32-bit-microtonal-precision">32-Bit Microtonal Precision</h3>
+<p>Beyond voice routing, microtonal glissandos require extreme pitch
+precision to prevent audible "stepping" or zipper noise. MIDI 1.0 pitch
+bend uses a 14-bit integer, providing 16,384 discrete steps. When
+stretched over wide bend ranges or extremely slow microtonal glides,
+these steps can become perceptually audible.</p>
+<p>MIDI 2.0 upgrades pitch bend to <strong>32-bit resolution</strong>,
+providing over 4 billion discrete values. This yields functionally
+continuous pitch variation:</p>
+<ul>
+<li>Smooth, imperceptible transitions across unconventional microtonal
+tuning systems (such as 19-EDO, 24-EDO, or 31-EDO).</li>
+<li>Ultra-slow portamento inside chord structures that retains an
+organic, acoustic-like continuity.</li>
+<li>Direct support for tuning units where pitch can be addressed in
+precise fractions of a semitone or specific frequency ratios.</li>
+</ul>
+<h3 id="streamlined-daw-editing-and-performance">Streamlined DAW Editing
+and Performance</h3>
+<p>By centralizing multi-voice expression into single-track events, MIDI
+2.0 dramatically simplifies the workflow for producers and
+performers:</p>
+<ol type="1">
+<li><strong>Clean Piano Roll Display:</strong> Instead of scattering a
+three-note chord across three separate tracks or viewing fractured
+multichannel lane automation, modern DAWs display chordal pitch
+envelopes directly over their respective note bars within a single
+view.</li>
+<li><strong>Simplified Sound Engines:</strong> Software synthesizers
+receive pitch instructions mapped directly to the designated synth voice
+instance, reducing the processing overhead associated with hosting
+multiple multitimbral sound generators.</li>
+<li><strong>Controller Ergonomics:</strong> Modern polyphonic aftertouch
+and continuous-pitch controllers communicate directly with synths using
+bidirectional MIDI-CI (Capability Inquiry), automatically configuring
+the instrument for per-note pitch response without manual
+CC-mapping.</li>
+</ol>
+<p>Through dedicated per-note addressing and ultra-high resolution, MIDI
+2.0 turns microtonal chord glissandos from a technical engineering
+hurdle into a natural, intuitive performance technique.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

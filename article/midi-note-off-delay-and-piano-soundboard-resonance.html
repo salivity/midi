@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Note-Off Delay and Piano Soundboard Resonance - midi</title>
+    <meta name="description" content="This article examines how applying a MIDI note-off delay effect can artificially replicate the acoustic decay and sympathetic resonance of an open grand piano soundboard. By holding virtual dampers open longer than physical key releases dictate, this tech">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-note-off-delay-and-piano-soundboard-resonance">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Note-Off Delay and Piano Soundboard Resonance - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-note-off-delay-and-piano-soundboard-resonance" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how applying a MIDI note-off delay effect can artificially replicate the acoustic decay and sympathetic resonance of an open grand piano soundboard. By holding virtual dampers open longer than physical key releases dictate, this tech" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-note-off-delay-and-piano-soundboard-resonance">MIDI
+Note-Off Delay and Piano Soundboard Resonance</h1>
+<p>This article examines how applying a MIDI note-off delay effect can
+artificially replicate the acoustic decay and sympathetic resonance of
+an open grand piano soundboard. By holding virtual dampers open longer
+than physical key releases dictate, this technique enables digital
+instruments to mimic the natural transfer of vibrational energy across
+un-damped strings and the wooden soundboard, creating a richer, more
+authentic acoustic piano performance.</p>
+<h2 id="the-acoustics-of-the-grand-piano-soundboard">The Acoustics of
+the Grand Piano Soundboard</h2>
+<p>In an acoustic grand piano, striking a key causes a felt-tipped
+hammer to strike matched steel strings. When the key is released, a
+damper drops onto the vibrating string, extinguishing the sound.
+However, the piano's soundboard—a large, thin wooden diaphragm typically
+made of spruce—does not instantly cease vibrating.</p>
+<p>When the sustain pedal is engaged, or when multiple notes are held,
+all or part of the damper system remains lifted. Vibrations from active
+strings transfer through the wooden bridge into the soundboard, which in
+turn excites neighboring, un-damped strings at their harmonic
+frequencies. This phenomenon, known as sympathetic resonance, produces a
+complex, blooming decay where acoustic energy lingers and intermingles
+rather than abruptly vanishing.</p>
+<h2 id="the-function-of-the-midi-note-off-message">The Function of the
+MIDI Note-Off Message</h2>
+<p>Standard MIDI keyboards send two primary event messages for every
+played note: <code>Note-On</code> (with an associated velocity) when the
+key is pressed, and <code>Note-Off</code> (or <code>Note-On</code> with
+a velocity of zero) when the key is released.</p>
+<p>In a digital audio workstation (DAW) or virtual instrument (VST), the
+arrival of a <code>Note-Off</code> message instantly triggers the
+sample's release phase or engages the digital damper algorithm. In basic
+digital instruments or rigid MIDI programming, this results in an
+unnatural, sterile cutoff that fails to represent the physical weight,
+momentum, and acoustic bleed of a physical grand piano.</p>
+<h2 id="how-note-off-delay-simulates-open-damper-resonance">How Note-Off
+Delay Simulates Open-Damper Resonance</h2>
+<p>A MIDI note-off delay effect intercepts the release message sent from
+the controller and postpones its delivery to the sound engine by a
+defined duration (measured in milliseconds or musical subdivisions).
+This simple latency mechanically mimics soundboard resonance in several
+specific ways:</p>
+<h3 id="1-extending-the-damper-lift">1. Extending the Damper Lift</h3>
+<p>By postponing the <code>Note-Off</code> command, the virtual
+instrument is forced to treat the note as physically held down. The
+underlying sample or physical modeling engine continues to play through
+its sustain cycle rather than entering an immediate release stage. This
+captures the micro-duration during which an acoustic damper travels
+toward the string and settles, during which high frequencies continue to
+spill into the soundboard.</p>
+<h3 id="2-facilitating-sympathetic-bleed">2. Facilitating Sympathetic
+Bleed</h3>
+<p>When subsequent notes are played while the previous notes'
+<code>Note-Off</code> commands are delayed, both sets of notes sound
+simultaneously inside the virtual instrument. For modern sample
+libraries with built-in sympathetic resonance modeling, overlapping
+active notes trigger algorithmic or sample-based cross-string resonance.
+The delayed note acts as an open string capable of catching and
+amplifying harmonic overtones from the newly struck note, precisely
+emulating an open soundboard.</p>
+<h3 id="3-emulating-acoustic-energy-dissipation">3. Emulating Acoustic
+Energy Dissipation</h3>
+<p>Soundboard resonance does not decay uniformly; low frequencies retain
+kinetic energy longer than high frequencies. Advanced MIDI note-off
+processors can scale the delay time based on pitch and velocity:</p>
+<ul>
+<li><strong>Pitch Tracking:</strong> Lower register notes receive longer
+note-off delays to mirror the large mass and slow decay of bass strings
+and the lower soundboard.</li>
+<li><strong>Velocity Tracking:</strong> Harder-struck keys (higher
+velocities) receive longer delays, replicating the physical reality that
+high-energy hammer impacts send more vibrating energy into the wooden
+frame, requiring more time to dissipate.</li>
+</ul>
+<h2 id="sonic-result">Sonic Result</h2>
+<p>Applying a subtle, calibrated note-off delay transforms dry, isolated
+MIDI notes into an interconnected acoustic canvas. It prevents rapid
+arpeggios and dense chord voicings from feeling detached, introducing
+the natural blur, warmth, and ambient wash characteristic of a concert
+grand piano vibrating within an open acoustic space.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

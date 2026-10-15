@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Synthesizers and MIDI Buffer Overload - midi</title>
+    <meta name="description" content="Early MIDI-equipped hardware synthesizers rely on modest 8-bit or early 16-bit microprocessors that simultaneously manage voice allocation, front-panel controls, internal modulation, and serial communications. When bombarded by dense streams of incoming M">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/vintage-synthesizers-and-midi-buffer-overload">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Vintage Synthesizers and MIDI Buffer Overload - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/vintage-synthesizers-and-midi-buffer-overload" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Early MIDI-equipped hardware synthesizers rely on modest 8-bit or early 16-bit microprocessors that simultaneously manage voice allocation, front-panel controls, internal modulation, and serial communications. When bombarded by dense streams of incoming M" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="vintage-synthesizers-and-midi-buffer-overload">Vintage
+Synthesizers and MIDI Buffer Overload</h1>
+<p>Early MIDI-equipped hardware synthesizers rely on modest 8-bit or
+early 16-bit microprocessors that simultaneously manage voice
+allocation, front-panel controls, internal modulation, and serial
+communications. When bombarded by dense streams of incoming MIDI
+data—such as continuous controller sweeps, polyphonic aftertouch, or
+rapid sys-ex dumps—these processing units frequently exhaust their
+limited memory buffers and compute cycles. The resulting behavior ranges
+from subtle timing instability to complete system lockups, creating
+distinctive failure modes that define the era of vintage electronic
+music production.</p>
+<h3 id="midi-jitter-and-note-latency">MIDI Jitter and Note Latency</h3>
+<p>Vintage synth processors (such as the Zilog Z80, Motorola 6809, or
+Intel 8051) typically run at clock speeds between 1 MHz and 8 MHz.
+Incoming MIDI data arrives at a fixed serial rate of 31.25 kbaud, which
+triggers hardware interrupts on the synthesizer's UART chip.</p>
+<p>When hundreds of continuous controller (CC) messages arrive in quick
+succession, the CPU spends virtually all its operating cycles serving
+incoming serial interrupts instead of executing voice allocation or
+calculating software-generated envelopes. This causes high MIDI jitter:
+incoming Note-On commands are delayed by unpredictable intervals,
+ruining the tight rhythmic feel of sequences and creating an elastic,
+sluggish response.</p>
+<h3 id="the-stuck-note-phenomenon">The "Stuck Note" Phenomenon</h3>
+<p>The most common audible symptom of an overloaded synth CPU is the
+stuck note. A synthesizer's incoming MIDI buffer is typically a small
+ring buffer holding only a few dozen to a few hundred bytes.</p>
+<p>If this buffer overflows, newly arriving bytes are discarded. If a
+<code>Note-Off</code> message (or a <code>Note-On</code> message with a
+velocity of 0) is dropped while the preceding <code>Note-On</code> was
+already processed, the synthesizer never receives the instruction to
+enter the release stage of its envelope. The voice continues to sound
+indefinitely until the user sends an "All Notes Off" command, changes
+the patch, or manually triggers the voice again.</p>
+<h3 id="dropped-data-and-glitched-continuous-modulation">Dropped Data
+and Glitched Continuous Modulation</h3>
+<p>When high-density modulation data—like pitch bend, modulation wheel,
+or filter sweeps—overfills the buffer, synths generally prioritize
+maintaining the basic operating state over processing every single data
+packet. This leads to:</p>
+<ul>
+<li><strong>Stepped or quantized sweeps:</strong> Instead of smooth
+analogue-style sweeps, filter cutoffs or pitch modulation jump in
+noticeable, audible increments as intermediate data bytes are
+dropped.</li>
+<li><strong>Corrupted parameters:</strong> If half of a multi-byte
+message is received before the buffer drops the subsequent data bytes,
+running status or value assignments can become desynchronized, setting
+parameters to incorrect or extreme values.</li>
+</ul>
+<h3 id="front-panel-unresponsiveness">Front Panel Unresponsiveness</h3>
+<p>In many architectures, panel scanning (reading potentiometers, rotary
+encoders, and button matrices) and LED/LCD refreshes are assigned lower
+priority than MIDI interrupt routines.</p>
+<p>During an intense MIDI barrage, the user interface may stop
+responding entirely. Twisting physical knobs produces no effect on the
+sound, buttons do not register, and displays can freeze on a single
+readout until the flood of incoming serial data stops.</p>
+<h3 id="system-lockups-and-watchdog-resets">System Lockups and Watchdog
+Resets</h3>
+<p>Under extreme conditions—such as dense polyphonic SysEx parameter
+automations or severe MIDI feedback loops—the synthesizer's
+microprocessor can encounter an unrecoverable stack overflow or memory
+collision.</p>
+<p>Depending on the firmware implementation, the synth will react in one
+of two ways:</p>
+<ol type="1">
+<li><strong>Hard Freeze:</strong> The CPU locks into an unhandled
+interrupt loop. The synth completely stops responding to sound
+generation and user input, sustaining the last active notes indefinitely
+until the unit is physically power-cycled.</li>
+<li><strong>Watchdog Reboot:</strong> Some instruments contain watchdog
+timers designed to reset the CPU if the main loop hangs for a specified
+duration. In these units, an overload will cause the instrument to
+reboot mid-performance, cutting off all audio and resetting to the
+default startup state.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

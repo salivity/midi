@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is MIDI Chord Memory and How Does It Work? - midi</title>
+    <meta name="description" content="A MIDI chord memory function is a performance and sequencing feature found in synthesizers, MIDI controllers, and digital audio workstations that maps an entire chord to a single key press. This article explains how chord memory operates, detailing the wa">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-midi-chord-memory-and-how-does-it-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is MIDI Chord Memory and How Does It Work? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-midi-chord-memory-and-how-does-it-work" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI chord memory function is a performance and sequencing feature found in synthesizers, MIDI controllers, and digital audio workstations that maps an entire chord to a single key press. This article explains how chord memory operates, detailing the wa" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-midi-chord-memory-and-how-does-it-work">What Is MIDI
+Chord Memory and How Does It Work?</h1>
+<p>A MIDI chord memory function is a performance and sequencing feature
+found in synthesizers, MIDI controllers, and digital audio workstations
+that maps an entire chord to a single key press. This article explains
+how chord memory operates, detailing the way internal processors store
+musical intervals as mathematical offsets from a root note and instantly
+calculate multi-interval harmonic transpositions in real time.</p>
+<h3 id="the-core-concept-of-chord-memory">The Core Concept of Chord
+Memory</h3>
+<p>In standard MIDI performance, each key or pad transmits a single
+<code>Note On</code> event corresponding to a specific pitch value
+between 0 and 127. Chord memory alters this one-to-one behavior by
+converting a single trigger into a polyphonic output. When you enter a
+chord into the device’s "learn" or "memorize" mode, the system captures
+all simultaneously held notes and analyzes their relationship to one
+another rather than locking them to absolute pitches.</p>
+<h3 id="how-harmonic-intervals-are-stored">How Harmonic Intervals Are
+Stored</h3>
+<p>Instead of saving fixed note numbers, chord memory systems store
+relative pitch offsets measured in semitones relative to a designated
+root note (typically the lowest note pressed).</p>
+<p>For example, if you input a C major triad consisting of C3 (MIDI note
+48), E3 (MIDI note 52), and G3 (MIDI note 55):</p>
+<ul>
+<li>The system designates note 48 as the reference root (<span
+class="math inline">\(0\)</span>).</li>
+<li>It calculates the interval distance for the third: <span
+class="math inline">\(52 - 48 = +4\)</span> semitones.</li>
+<li>It calculates the interval distance for the fifth: <span
+class="math inline">\(55 - 48 = +7\)</span> semitones.</li>
+</ul>
+<p>The internal memory array stores this chord structure as a template
+of numeric offsets: <code>[0, +4, +7]</code>. Velocity values and note
+durations may also be normalized or stored proportionally, depending on
+the implementation.</p>
+<h3 id="single-key-real-time-transposition">Single-Key Real-Time
+Transposition</h3>
+<p>Once the interval template is stored, the MIDI device acts as a
+real-time event generator. When you trigger any key on the keyboard, the
+internal microprocessor executes the following process:</p>
+<ol type="1">
+<li><strong>Incoming Signal:</strong> The processor reads the incoming
+<code>Note On</code> message, identifying the base pitch (e.g., F3, MIDI
+note 53) and its velocity.</li>
+<li><strong>Offset Calculation:</strong> The engine applies the stored
+offset array to the incoming pitch:
+<ul>
+<li><span class="math inline">\(53 + 0 = 53\)</span> (F3)</li>
+<li><span class="math inline">\(53 + 4 = 57\)</span> (A3)</li>
+<li><span class="math inline">\(53 + 7 = 60\)</span> (C4)</li>
+</ul></li>
+<li><strong>Message Generation:</strong> The MIDI interface outputs
+three distinct <code>Note On</code> commands simultaneously down the
+MIDI stream or to the internal sound engine.</li>
+<li><strong>Voice Tracking and Release:</strong> When the key is
+released, the processor references the active voice table and transmits
+corresponding <code>Note Off</code> messages for notes 53, 57, and 60 to
+prevent hanging notes.</li>
+</ol>
+<h3 id="chromatic-vs-diatonic-implementations">Chromatic vs. Diatonic
+Implementations</h3>
+<p>Standard chord memory operates chromatically, preserving the exact
+semitone relationships across every key. Playing a major triad template
+across consecutive white keys produces parallel harmony (e.g., C major,
+D major, E major), a defining characteristic of classic house, techno,
+and synth-pop.</p>
+<p>Modern implementations often include scale-aware or diatonic modes.
+In these systems, the processor evaluates the base key against a
+user-defined musical scale (such as A minor or G Dorian). Instead of
+applying rigid semitone intervals, the algorithm shifts the intervals to
+the nearest diatonic steps, dynamically alternating between major,
+minor, and diminished chords to ensure the output remains strictly
+within the chosen musical key.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

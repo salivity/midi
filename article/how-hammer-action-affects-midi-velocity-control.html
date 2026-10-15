@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Hammer Action Affects MIDI Velocity Control - midi</title>
+    <meta name="description" content="Mechanical keybed weight and graded hammer action play a critical role in how accurately a pianist can access and manipulate the standard 0–127 MIDI velocity range. By simulating the physical resistance, inertia, and mechanical response of an acoustic gra">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-hammer-action-affects-midi-velocity-control">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Hammer Action Affects MIDI Velocity Control - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-hammer-action-affects-midi-velocity-control" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mechanical keybed weight and graded hammer action play a critical role in how accurately a pianist can access and manipulate the standard 0–127 MIDI velocity range. By simulating the physical resistance, inertia, and mechanical response of an acoustic gra" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-hammer-action-affects-midi-velocity-control">How Hammer
+Action Affects MIDI Velocity Control</h1>
+<p>Mechanical keybed weight and graded hammer action play a critical
+role in how accurately a pianist can access and manipulate the standard
+0–127 MIDI velocity range. By simulating the physical resistance,
+inertia, and mechanical response of an acoustic grand piano, these
+keybeds provide the tactile feedback required for fine motor control.
+Without this physical resistance, pianists struggle to execute
+expressive dynamics, often resulting in compressed velocity ranges,
+accidental dynamic spikes, and an inability to perform reliable
+pianissimo passages.</p>
+<h3 id="mechanical-resistance-and-velocity-calculation">Mechanical
+Resistance and Velocity Calculation</h3>
+<p>MIDI keyboards do not measure striking force directly; instead, they
+calculate velocity based on the travel time between two or three
+physical or optical sensors beneath each key. The faster a key travels
+downward, the higher the registered MIDI velocity value.</p>
+<p>On an unweighted or semi-weighted synthesizer keybed, the only
+resistance comes from simple springs. Springs push back with linear
+force, meaning minimal effort is required to accelerate the key to its
+dynamic maximum. This lack of inertia makes it difficult for a trained
+pianist to control the acceleration phase of a keystroke. A weighted
+hammer action introduces mass that must be overcome, requiring
+intentional muscle engagement. This physical inertia slows down finger
+acceleration, allowing the player to micro-adjust downforce during the
+stroke and consistently target specific MIDI velocity numbers.</p>
+<h3 id="the-role-of-graded-hammer-action">The Role of Graded Hammer
+Action</h3>
+<p>Acoustic pianos naturally feature heavier hammers in the lower
+registers (where the strings are thicker) and lighter hammers in the
+upper registers. Graded (or progressive) hammer action keybeds replicate
+this mechanical variance across the 88 keys.</p>
+<p>For MIDI performance, this design aligns with the natural physiology
+of the human hand:</p>
+<ul>
+<li><strong>Bass Registers:</strong> The heavier action accommodates the
+greater mass of the arm and outer hand, preventing low-frequency notes
+from unintentionally triggering high MIDI values (such as 110–127).</li>
+<li><strong>Treble Registers:</strong> The lighter action reduces
+physical fatigue during intricate melodic runs and allows for rapid
+acceleration, making it easier to achieve bright, high-velocity accents
+without excessive strain.</li>
+</ul>
+<p>Without grading, a uniform keybed can cause uneven dynamic output.
+Players often generate disproportionately high velocities in the bass
+and struggle to produce sufficient dynamic contrast in the higher
+octaves.</p>
+<h3
+id="dynamic-control-at-the-extremes-pianissimo-to-fortissimo">Dynamic
+Control at the Extremes: Pianissimo to Fortissimo</h3>
+<p>The presence of weighted hammers dramatically expands the usable
+dynamic range at both extremes of the MIDI scale:</p>
+<ul>
+<li><strong>Low Velocities (1–40):</strong> Playing softly requires
+depressing the key slowly without stopping before the final sensor
+triggers. Weighted hammers provide an initial resistance that "catches"
+the finger, allowing the pianist to ride the momentum through the strike
+without bottoming out abruptly. On unweighted keys, attempting to play
+softly often leads to "dropped notes" (where velocity drops below
+minimum trigger thresholds) or sudden jumps to mid-range velocities
+(50–70).</li>
+<li><strong>High Velocities (100–127):</strong> Reaching maximum
+velocity on a fully weighted keybed requires deliberate kinetic input.
+This creates a natural dynamic "ceiling." On unweighted keys, players
+frequently hit the maximum velocity of 127 by accident simply because
+the keys offer no physical pushback against the natural weight of the
+hand.</li>
+</ul>
+<h3 id="triple-sensor-systems-and-rapid-repetition">Triple-Sensor
+Systems and Rapid Repetition</h3>
+<p>Modern graded hammer keybeds often incorporate triple-sensor
+mechanisms. In a standard two-sensor design, the key must return to its
+resting position before it can be triggered again, resetting the
+velocity timer.</p>
+<p>A third sensor positioned between the top and bottom of the key
+travel allows the hammer to reset mid-stroke. This enables the pianist
+to restrike a key from midway down its travel path while maintaining
+precise control over the subsequent MIDI velocity. For rapid trills,
+tremolos, and repeated notes, this mechanical capability ensures that
+repeated strikes generate realistic, finely graduated velocity curves
+rather than static or missing data points.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/midi'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
