@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Motorized Potentiometers vs Optical Encoders - midi</title>
+    <meta name="description" content="This article examines the design and operation of MIDI motorized potentiometers alongside endless optical rotary encoders, detailing how each technology functions within hardware controllers. While both components allow digital audio workstations (DAWs) a">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-motorized-potentiometers-vs-optical-encoders">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Motorized Potentiometers vs Optical Encoders - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-motorized-potentiometers-vs-optical-encoders" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines the design and operation of MIDI motorized potentiometers alongside endless optical rotary encoders, detailing how each technology functions within hardware controllers. While both components allow digital audio workstations (DAWs) a" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-motorized-potentiometers-vs-optical-encoders">MIDI
+Motorized Potentiometers vs Optical Encoders</h1>
+<p>This article examines the design and operation of MIDI motorized
+potentiometers alongside endless optical rotary encoders, detailing how
+each technology functions within hardware controllers. While both
+components allow digital audio workstations (DAWs) and hardware
+synthesizers to synchronize physical controls with digital parameters,
+they achieve this through fundamentally different mechanical
+architectures. Understanding these mechanical distinctions—specifically
+regarding physical limits, drive mechanisms, sensing methods, and
+component wear—clarifies why each is chosen for specific music
+production workflows.</p>
+<h2 id="what-is-a-midi-motorized-potentiometer">What is a MIDI Motorized
+Potentiometer?</h2>
+<p>A MIDI motorized potentiometer is an electromechanical component
+combining a standard variable resistor (potentiometer) with a small
+electric motor, typically a miniature DC servo or stepper motor,
+connected via a belt or gear drive.</p>
+<p>When a user turns the knob or moves the fader manually, it functions
+like a traditional potentiometer, changing electrical resistance across
+a conductive track to output an analog voltage that an analog-to-digital
+converter (ADC) translates into MIDI data (such as Control Change
+messages). Conversely, when parameter data changes within a DAW or
+software instrument, the host sends MIDI data back to the hardware
+controller. An onboard microprocessor processes this signal and drives
+the internal motor, physically moving the knob or fader to reflect the
+software's current value in real time.</p>
+<p>Because it is built on a traditional potentiometer assembly, it has
+fixed physical endpoints (hard stops), typically limiting rotary motion
+to roughly 270 to 300 degrees of travel.</p>
+<h2 id="what-is-an-endless-optical-rotary-encoder">What is an Endless
+Optical Rotary Encoder?</h2>
+<p>An endless optical rotary encoder is a digital electro-optical sensor
+that translates rotational movement into digital pulses without fixed
+physical boundaries.</p>
+<p>Mechanically, it consists of a freely spinning shaft attached to an
+internal code disc patterned with transparent and opaque radial lines.
+As the shaft rotates, the disc passes between an infrared light-emitting
+diode (LED) and photodetector sensors. The interrupted light beams
+generate two square-wave output signals in quadrature (Channels A and
+B).</p>
+<p>By analyzing the phase relationship between these two channels, the
+controller's microprocessor determines both the direction and speed of
+rotation, incrementing or decrementing MIDI parameter values
+accordingly. Because there is no internal barrier, the shaft can spin
+continuously in either direction for an infinite number of
+rotations.</p>
+<h2 id="key-mechanical-differences">Key Mechanical Differences</h2>
+<h3 id="1-physical-travel-and-stops">1. Physical Travel and Stops</h3>
+<ul>
+<li><strong>Motorized Potentiometer:</strong> Features rigid, mechanical
+hard stops at the minimum (0) and maximum (127 in standard MIDI)
+positions. It cannot spin continuously.</li>
+<li><strong>Optical Encoder:</strong> Features no mechanical stops. It
+rotates endlessly through a full 360 degrees, allowing it to control any
+parameter regardless of that parameter's current value upon loading a
+project.</li>
+</ul>
+<h3 id="2-physical-feedback-vs-visual-representation">2. Physical
+Feedback vs. Visual Representation</h3>
+<ul>
+<li><strong>Motorized Potentiometer:</strong> Relies on physical
+mechanical feedback. The physical position of the knob or fader cap
+explicitly represents the parameter's state, driven into position by
+mechanical actuators to prevent parameter "jumping" when switching
+tracks.</li>
+<li><strong>Optical Encoder:</strong> Has no designated physical
+position. To show parameter state, it relies entirely on secondary
+visual feedback, such as an adjacent ring of LEDs or an on-screen
+display, because the knob's orientation does not correlate to an
+absolute value.</li>
+</ul>
+<h3 id="3-contact-friction-and-wear-mechanics">3. Contact Friction and
+Wear Mechanics</h3>
+<ul>
+<li><strong>Motorized Potentiometer:</strong> Relies on mechanical
+contact. A metal wiper continuously slides across a resistive carbon or
+conductive plastic track. Over time, this contact causes physical wear,
+dust accumulation, and electrical noise. It also contains mechanical
+drive belts, gears, and clutches subject to mechanical fatigue.</li>
+<li><strong>Optical Encoder:</strong> Operates almost entirely
+friction-free, excluding the shaft bearing. Because the sensing
+mechanism is optical (light passing through a slotted disc), there are
+no wipers or tracks to wear down, making it mechanically more durable
+and immune to contact-based static or wear-related drift.</li>
+</ul>
+<h3 id="4-absolute-vs-relative-position-sensing">4. Absolute vs.
+Relative Position Sensing</h3>
+<ul>
+<li><strong>Motorized Potentiometer:</strong> Mechanically absolute. The
+physical position of the wiper directly dictates the resistance value;
+its position is always fixed relative to its internal track.</li>
+<li><strong>Optical Encoder:</strong> Mechanically relative. The optical
+mechanism detects only displacement and direction from its last resting
+state, providing pulse counts rather than an inherent, absolute
+position.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-motorized-potentiometers-vs-optical-encoders';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

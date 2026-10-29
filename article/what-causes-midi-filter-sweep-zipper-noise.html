@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Causes MIDI Filter Sweep Zipper Noise? - midi</title>
+    <meta name="description" content="Zipper noise occurs when sweeping an audio parameter, such as a filter&#39;s cutoff frequency, because standard 7-bit MIDI Control Change (CC) messages lack the resolution needed for smooth, continuous adjustments. Instead of a fluid transition, the parameter">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-causes-midi-filter-sweep-zipper-noise">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Causes MIDI Filter Sweep Zipper Noise? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-causes-midi-filter-sweep-zipper-noise" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Zipper noise occurs when sweeping an audio parameter, such as a filter&#39;s cutoff frequency, because standard 7-bit MIDI Control Change (CC) messages lack the resolution needed for smooth, continuous adjustments. Instead of a fluid transition, the parameter" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-causes-midi-filter-sweep-zipper-noise">What Causes MIDI
+Filter Sweep Zipper Noise?</h1>
+<p>Zipper noise occurs when sweeping an audio parameter, such as a
+filter's cutoff frequency, because standard 7-bit MIDI Control Change
+(CC) messages lack the resolution needed for smooth, continuous
+adjustments. Instead of a fluid transition, the parameter jumps between
+a limited number of discrete values. These sudden, stepped updates
+create rapid micro-transients in the audio signal that sound distinctly
+like a zipper being pulled.</p>
+<h3 id="low-value-resolution-7-bit-quantization">Low Value Resolution
+(7-Bit Quantization)</h3>
+<p>The primary driver of zipper noise is the mathematical limitation of
+standard MIDI. A standard MIDI CC message uses a 7-bit data byte, which
+allows for only 128 distinct values (from 0 to 127).</p>
+<p>When you map these 128 values across a wide parameter range—such as a
+low-pass filter sweeping from 20 Hz to 20,000 Hz—each single increment
+represents a substantial leap in frequency. Even when mapped
+logarithmically to match human hearing, jumping from one value to the
+next causes an instantaneous step change in the filter's coefficients
+rather than a continuous slide.</p>
+<h3 id="waveform-discontinuities">Waveform Discontinuities</h3>
+<p>Digital filters process audio sample by sample. When a filter's
+cutoff frequency abruptly updates mid-stream, the filter's internal
+state variables and response characteristics instantly change.</p>
+<p>This instantaneous recalculation creates a tiny discontinuity, or
+sudden jump in amplitude and phase, in the audio signal passing through
+the filter. When the control knob is turned quickly, the parameter steps
+through several values in rapid succession. The resulting sequence of
+clicks and pops blends together into a buzzing, high-frequency artifact
+known as zipper noise.</p>
+<h3 id="temporal-density-and-update-rate">Temporal Density and Update
+Rate</h3>
+<p>Standard MIDI hardware runs at a baud rate of 31,250 bits per second.
+Even via modern USB connections, standard MIDI CC events are transmitted
+as distinct, isolated packets rather than a continuous control
+voltage.</p>
+<p>If a synthesizer or digital audio workstation (DAW) applies each
+incoming MIDI value instantly upon arrival without internal smoothing,
+the parameter stays flat between messages and then jumps sharply when
+the next message arrives. This creates a staircase-shaped modulation
+signal.</p>
+<h3 id="why-modern-systems-mitigate-this">Why Modern Systems Mitigate
+This</h3>
+<p>Zipper noise is primarily a symptom of unsmoothed control logic.
+Modern synthesizers and audio plugins prevent this artifact by applying
+parameter interpolation (slew limiting or low-pass filtering) directly
+to incoming MIDI CC data. Smoothing rounds off the harsh corners of the
+staircase waveform, creating a continuous ramp between the 128 discrete
+steps. Additionally, newer protocols like 14-bit MIDI (which provides
+16,384 values) and MIDI 2.0 (with 32-bit resolution) virtually eliminate
+the issue at the protocol level.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/what-causes-midi-filter-sweep-zipper-noise';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

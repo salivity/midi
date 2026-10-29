@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI CC 67 Soft Pedal Alters Piano Sound - midi</title>
+    <meta name="description" content="MIDI Continuous Controller 67 (CC 67) controls the soft pedal—historically known as the una corda pedal—in digital and virtual acoustic pianos. When engaged, this message does not merely turn down the volume of an instrument; it commands the sound engine">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-cc-67-soft-pedal-alters-piano-sound">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI CC 67 Soft Pedal Alters Piano Sound - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-cc-67-soft-pedal-alters-piano-sound" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Continuous Controller 67 (CC 67) controls the soft pedal—historically known as the una corda pedal—in digital and virtual acoustic pianos. When engaged, this message does not merely turn down the volume of an instrument; it commands the sound engine" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-cc-67-soft-pedal-alters-piano-sound">How MIDI CC 67
+Soft Pedal Alters Piano Sound</h1>
+<p>MIDI Continuous Controller 67 (CC 67) controls the soft
+pedal—historically known as the <em>una corda</em> pedal—in digital and
+virtual acoustic pianos. When engaged, this message does not merely turn
+down the volume of an instrument; it commands the sound engine to
+reproduce the complex physical, tonal, and harmonic transformations that
+occur inside an acoustic piano when the soft pedal mechanism is
+physically depressed. Modern sampled and physically modeled pianos
+interpret CC 67 values to attenuate high frequencies, soften the attack
+transient, alter sympathetic resonance, and shift the overall dynamic
+response.</p>
+<h3 id="the-acoustic-mechanism-simulated-by-cc-67">The Acoustic
+Mechanism Simulated by CC 67</h3>
+<p>To understand what CC 67 accomplishes digitally, it is essential to
+observe the physical behavior of acoustic pianos:</p>
+<ul>
+<li><strong>Grand Pianos (<em>Una Corda</em>):</strong> Depressing the
+pedal shifts the entire mechanical action (keys, levers, and hammers)
+slightly to the right. As a result, the hammers strike only two of the
+three strings in the middle and upper registers (or one string instead
+of two in the bichord range). Furthermore, the strings are struck by a
+softer, less compacted portion of the hammer felt that does not align
+with the standard string grooves.</li>
+<li><strong>Upright Pianos (Half-Blow):</strong> The pedal raises the
+hammer rail, moving the hammers closer to the strings before they are
+struck. This reduces the hammer's travel distance and kinetic energy,
+resulting primarily in a decrease in volume and slight softening of
+attack.</li>
+</ul>
+<p>Advanced virtual instruments use CC 67 primarily to emulate the grand
+piano’s <em>una corda</em> mechanism, which causes far more dramatic
+tonal evolution than an upright's half-blow mechanism.</p>
+<h3 id="sonic-alterations-generated-by-cc-67">Sonic Alterations
+Generated by CC 67</h3>
+<p>When a MIDI instrument receives a CC 67 value (traditionally a switch
+where 0–63 is off and 64–127 is on, though modern instruments support
+continuous variable values), it introduces several distinct acoustic
+phenomena:</p>
+<h4 id="1-attenuation-of-high-frequency-harmonics">1. Attenuation of
+High-Frequency Harmonics</h4>
+<p>Because the hammer strikes the strings using softer, uncompressed
+felt, the collision transfers energy more slowly. This dampens the
+generation of high-order overtones. The resulting sound is fundamentally
+darker, rounder, and less metallic, stripping away the harshness of
+fortissimo notes and giving pianissimo passages a veiled, warm
+quality.</p>
+<h4 id="2-modified-attack-transient">2. Modified Attack Transient</h4>
+<p>The initial "knock" or percussive transient of the hammer impacting
+the string is substantially weakened. In standard playing, compacted
+felt creates a sharp, immediate impulse. The soft pedal causes a slower
+mechanical compression on impact, lengthening the attack envelope and
+smoothing the initial strike sound.</p>
+<h4 id="3-shift-in-sympathetic-resonance">3. Shift in Sympathetic
+Resonance</h4>
+<p>On a grand piano, the string left untouched by the shifted hammer is
+not muted by a damper; it remains open to oscillate sympathetically with
+the struck strings and the soundboard. Digital engines emulate this by
+introducing distinct sympathetic resonance algorithms or routing. The
+unstruck string vibrates slightly out of phase with the struck strings,
+creating subtle phase interactions, longer sustains in certain
+frequencies, and a wider, more ethereal spatial image.</p>
+<h4 id="4-dynamic-mapping-modification">4. Dynamic Mapping
+Modification</h4>
+<p>CC 67 alters the instrument's velocity curve. The same incoming MIDI
+Note-On velocity produces a lower amplitude and a gentler timbre than it
+would with the pedal disengaged. This allows the performer finer control
+over micro-dynamics at the lower end of the dynamic range.</p>
+<h3 id="digital-implementation-sampling-vs-physical-modeling">Digital
+Implementation: Sampling vs. Physical Modeling</h3>
+<p>Virtual instruments interpret CC 67 through two primary
+sound-generation paradigms:</p>
+<ul>
+<li><strong>Dedicated Sample Switching:</strong> High-end sample
+libraries (such as those running in Kontakt, UVI, or proprietary
+engines) record a completely distinct set of sample layers specifically
+with the <em>una corda</em> pedal depressed. When CC 67 is received, the
+engine remaps the incoming MIDI notes to these dedicated sample pools,
+capturing the real-world acoustic response directly.</li>
+<li><strong>Physical Modeling and Real-Time DSP:</strong> Modeled
+instruments (such as Modartt Pianoteq) physically simulate the strike
+position and hammer hardness parameters in real time. CC 67 dynamically
+shifts the virtual strike point relative to string spacing, decreases
+virtual hammer felt stiffness, and reconfigures the inter-string
+resonance matrix. Continuous CC 67 input in these systems enables
+seamless "half-pedaling," smoothly interpolating between the standard
+strike and the full <em>una corda</em> position.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-cc-67-soft-pedal-alters-piano-sound';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

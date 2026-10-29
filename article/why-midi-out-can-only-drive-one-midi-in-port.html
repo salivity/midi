@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Out Can Only Drive One MIDI In Port - midi</title>
+    <meta name="description" content="The MIDI 1.0 specification mandates that a single MIDI Out port must connect to only one MIDI In port because of the electrical design of the interface, specifically its use of a dedicated 5mA current loop and optoisolators. Unlike voltage-based protocols">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-out-can-only-drive-one-midi-in-port">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Out Can Only Drive One MIDI In Port - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-out-can-only-drive-one-midi-in-port" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI 1.0 specification mandates that a single MIDI Out port must connect to only one MIDI In port because of the electrical design of the interface, specifically its use of a dedicated 5mA current loop and optoisolators. Unlike voltage-based protocols" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-out-can-only-drive-one-midi-in-port">Why MIDI Out Can
+Only Drive One MIDI In Port</h1>
+<p>The MIDI 1.0 specification mandates that a single MIDI Out port must
+connect to only one MIDI In port because of the electrical design of the
+interface, specifically its use of a dedicated 5mA current loop and
+optoisolators. Unlike voltage-based protocols that can support multiple
+receivers in parallel, MIDI relies on a precisely budgeted electrical
+current to trigger an optical switch inside the receiver. Splitting a
+single output passively starves the circuit of necessary current,
+degrading the digital signal and causing data corruption, timing errors,
+and stuck notes.</p>
+<h3 id="the-5ma-current-loop-standard">The 5mA Current Loop
+Standard</h3>
+<p>Standard MIDI hardware does not transmit signals using traditional
+logic-level voltages. Instead, it uses a 5-milliamp (mA) current loop.
+The transmitter (MIDI Out) acts as a current source, passing current
+through the cable when transmitting a logical "0" (space) and cutting
+the current when transmitting a logical "1" (mark).</p>
+<p>This current-driven approach was chosen in the early 1980s to
+prioritize noise immunity and eliminate ground loops over long cable
+runs in stage and studio environments. The standard specifies 220-ohm
+resistors at both the transmitter and receiver ends, strictly calculated
+to establish the required current under a standard 5-volt supply.</p>
+<h3 id="optocoupler-activation-requirements">Optocoupler Activation
+Requirements</h3>
+<p>Every compliant MIDI In port contains an optocoupler—an internal
+infrared LED paired with a phototransistor. This design guarantees
+galvanic isolation between connected devices, preventing ground hum and
+electrical interference.</p>
+<p>For the receiver to detect an incoming signal, the current loop must
+deliver enough power to illuminate the optocoupler's internal LED
+quickly and completely. The component values specified by the MIDI
+Manufacturers Association are tuned to deliver approximately 5mA through
+that single LED.</p>
+<h3 id="why-passive-splitting-fails">Why Passive Splitting Fails</h3>
+<p>If a passive "Y-cable" is used to send one MIDI Out into two MIDI
+Ins, the electrical loads are placed in parallel or series:</p>
+<ul>
+<li><strong>Current Starvation:</strong> In a parallel split, the
+available current is divided between the two receiving optocouplers.
+Rather than receiving 5mA, each receiver receives roughly 2.5mA or less,
+which is frequently insufficient to saturate the optocoupler's internal
+phototransistor.</li>
+<li><strong>Rise and Fall Time Degradation:</strong> Reduced current
+severely slows the switching speed of the optocoupler. MIDI transmits
+serial data at a fixed baud rate of 31.25 kbps. Slow transitions warp
+the square-wave digital signal, resulting in jitter, framing errors, and
+missing bytes.</li>
+<li><strong>Voltage Drop:</strong> In series configurations, the forward
+voltage drop across multiple optocoupler LEDs exceeds the voltage
+headroom provided by the 5V transmitter, preventing the circuit from
+functioning at all.</li>
+</ul>
+<h3 id="the-active-alternative-midi-thru">The Active Alternative: MIDI
+Thru</h3>
+<p>To drive multiple instruments from a single data source without
+violating electrical constraints, the specification defines the MIDI
+Thru port.</p>
+<p>A MIDI Thru port is not a passive tap; it is an active, buffered
+repeater. It takes the digital signal received at the MIDI In port,
+processes it through internal logic buffers, and drives a brand-new 5mA
+current loop transmitter dedicated to the next device. For setups
+requiring star topologies rather than daisy chains, dedicated, powered
+MIDI Thru boxes (active splitters) must be used to ensure each receiving
+device gets its own fully powered, isolated current loop.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-midi-out-can-only-drive-one-midi-in-port';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

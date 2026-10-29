@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Probability Gates Trigger Drum Notes - midi</title>
+    <meta name="description" content="An algorithmic MIDI probability gate determines whether a sequenced drum note sounds during a loop iteration by comparing a user-defined threshold against a dynamically generated pseudo-random number. Instead of playing every programmed hit deterministica">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-probability-gates-trigger-drum-notes">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Probability Gates Trigger Drum Notes - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-probability-gates-trigger-drum-notes" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An algorithmic MIDI probability gate determines whether a sequenced drum note sounds during a loop iteration by comparing a user-defined threshold against a dynamically generated pseudo-random number. Instead of playing every programmed hit deterministica" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-probability-gates-trigger-drum-notes">How MIDI
+Probability Gates Trigger Drum Notes</h1>
+<p>An algorithmic MIDI probability gate determines whether a sequenced
+drum note sounds during a loop iteration by comparing a user-defined
+threshold against a dynamically generated pseudo-random number. Instead
+of playing every programmed hit deterministically, the sequencer
+evaluates this condition in real time on each pass of the playhead. This
+computational check decides whether to transmit the MIDI Note-On message
+or discard it, introducing organic variation, syncopation, and
+generative behavior into repetitive drum patterns.</p>
+<h3 id="the-trigger-mechanism">The Trigger Mechanism</h3>
+<p>When a drum sequencer reaches a step containing a note event with an
+assigned probability, the playback engine intercepts the standard
+execution flow. Rather than immediately passing the MIDI data directly
+to the output buffer, it routes the event through a logical conditional
+check.</p>
+<p>This process follows a standardized sequence on every iteration of
+the loop:</p>
+<ol type="1">
+<li><strong>Parameter Readout:</strong> The sequencer identifies the
+target probability value assigned to the drum hit (commonly expressed as
+a percentage from 0% to 100%, or a normalized float from 0.0 to
+1.0).</li>
+<li><strong>Value Generation:</strong> The internal processing engine
+calls a Pseudo-Random Number Generator (PRNG) to generate an
+instantaneous value within the same operational range (e.g., 0.0 to
+1.0).</li>
+<li><strong>Threshold Comparison:</strong> The logic gate executes a
+simple relational comparison:
+<ul>
+<li>If <code>Random Value &lt; Probability Threshold</code>, the gate
+<strong>opens</strong>.</li>
+<li>If <code>Random Value ≥ Probability Threshold</code>, the gate
+<strong>remains closed</strong>.</li>
+</ul></li>
+<li><strong>Message Transmission:</strong> If the gate opens, the engine
+transmits the MIDI Note-On message (complete with its defined pitch,
+velocity, and channel) to the synthesizer or sampler. If the gate
+remains closed, the Note-On message is dropped for that specific
+cycle.</li>
+</ol>
+<h3 id="loop-independence-and-seeding">Loop Independence and
+Seeding</h3>
+<p>On each repeat of the loop, the sequencer clock triggers the
+calculation anew. Because standard PRNG algorithms use high-resolution
+system timers or shifting mathematical seeds to generate numbers, the
+value generated for Step 4 on Loop Iteration 1 will be entirely
+independent of the value generated for Step 4 on Loop Iteration 2. A
+hi-hat set to a 75% probability has the exact same 3-in-4 chance of
+firing every time the playhead arrives at that step, regardless of
+whether it triggered during the previous pass.</p>
+<p>Some modern sequencers offer "locked" or "seeded" probability modes.
+In these implementations, the PRNG uses a fixed seed value or a
+repeating pseudo-random sequence (such as a linear-feedback shift
+register). This forces the probability gate to make identical pass/fail
+decisions across successive loop cycles, creating a complex, evolving
+pattern that loops predictably rather than firing with pure
+randomness.</p>
+<h3 id="voice-management-and-midi-cleanliness">Voice Management and MIDI
+Cleanliness</h3>
+<p>To prevent MIDI errors, probability gates evaluate strictly on the
+Note-On phase. If the condition evaluates to true and a Note-On event is
+transmitted, the sequencer automatically schedules the corresponding
+Note-Off event to ensure the voice terminates correctly. If the
+probability gate drops the Note-On event, it also suppresses the
+corresponding Note-Off command, preventing orphaned messages, voice
+allocation errors, or stuck notes in downstream instruments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-probability-gates-trigger-drum-notes';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

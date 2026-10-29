@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI 2.0 Implements Per-Note Pitch Bend - midi</title>
+    <meta name="description" content="MIDI 2.0 fundamentally transforms expressive digital music performance by introducing native per-note pitch bend, entirely eliminating the complex multi-channel workarounds required by MIDI Polyphonic Expression (MPE). In legacy MIDI 1.0, pitch bend is in">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-2-0-implements-per-note-pitch-bend">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI 2.0 Implements Per-Note Pitch Bend - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-2-0-implements-per-note-pitch-bend" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI 2.0 fundamentally transforms expressive digital music performance by introducing native per-note pitch bend, entirely eliminating the complex multi-channel workarounds required by MIDI Polyphonic Expression (MPE). In legacy MIDI 1.0, pitch bend is in" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-20-implements-per-note-pitch-bend">How MIDI 2.0
+Implements Per-Note Pitch Bend</h1>
+<p>MIDI 2.0 fundamentally transforms expressive digital music
+performance by introducing native per-note pitch bend, entirely
+eliminating the complex multi-channel workarounds required by MIDI
+Polyphonic Expression (MPE). In legacy MIDI 1.0, pitch bend is
+inherently a channel-wide message, requiring MPE to distribute
+individual notes across separate channels to achieve independent pitch
+manipulation. MIDI 2.0 resolves this architectural limitation by
+restructuring message protocols through the Universal MIDI Packet (UMP)
+format, allowing per-note pitch modifications directly addressed to
+specific note numbers on a single channel.</p>
+<h3 id="the-problem-with-legacy-midi-and-the-mpe-workaround">The Problem
+with Legacy MIDI and the MPE Workaround</h3>
+<p>Under the original MIDI 1.0 specification, the Pitch Bend Change
+message is a Channel Voice message. When a pitch bend command is sent
+over Channel 1, every note currently sounding on Channel 1 is bent by
+the same relative interval.</p>
+<p>To overcome this limitation for expressive polyphony, MPE was
+developed as an official extension to MIDI 1.0. MPE operates by
+assigning each polyphonic voice to its own dedicated MIDI channel,
+rotating through up to 15 member channels while reserving Channel 1 for
+global parameters. While MPE successfully delivered per-note expression,
+it imposed severe technical constraints:</p>
+<ul>
+<li>Synthesizers and digital audio workstations (DAWs) must maintain
+complex voice-allocation logic to track which voice resides on which
+channel.</li>
+<li>Polyphony is artificially capped by the 16-channel limit.</li>
+<li>Managing parameter automation becomes fractured across multiple
+tracks and channels.</li>
+</ul>
+<h3 id="the-universal-midi-packet-and-direct-note-addressing">The
+Universal MIDI Packet and Direct Note Addressing</h3>
+<p>MIDI 2.0 solves this issue at the protocol level through the
+Universal MIDI Packet (UMP), a standardized 32-bit packet architecture
+that can scale to 64-bit, 96-bit, or 128-bit messages. In MIDI 2.0,
+Channel Voice Messages are encapsulated in 64-bit packets (Message Type
+<code>4</code>).</p>
+<p>Instead of treating pitch bend strictly as a global channel property,
+MIDI 2.0 introduces a dedicated <strong>Per-Note Pitch Bend</strong>
+message format. The structure of this 64-bit packet natively couples the
+pitch adjustment to a targeted note:</p>
+<ol type="1">
+<li><strong>Message Type and Channel:</strong> The first nibbles define
+the message as a MIDI 2.0 Channel Voice message, along with the
+designated Group and Channel.</li>
+<li><strong>Status Byte:</strong> A dedicated status code
+(<code>0x60</code>) explicitly identifies the message as a Per-Note
+Pitch Bend command.</li>
+<li><strong>Target Note Number:</strong> The packet includes a specific
+7-bit field designating the exact MIDI Note Number (0–127) that the
+pitch bend applies to.</li>
+<li><strong>Data Payload:</strong> The final 32 bits carry the pitch
+bend data value.</li>
+</ol>
+<p>Because the individual note number is explicitly encoded into the
+payload of the message, a receiving synthesizer knows precisely which
+sounding pitch to modify without referencing external channel
+assignments. A musician can play a ten-note chord entirely on Channel 1
+and modulate the pitch of a single finger independently; the receiving
+synth simply matches the Per-Note Pitch Bend message to the active voice
+holding that note number.</p>
+<h3 id="32-bit-high-resolution-pitch-control">32-Bit High-Resolution
+Pitch Control</h3>
+<p>Beyond eliminating channel rotation, MIDI 2.0 drastically improves
+the precision of the pitch bend itself. MIDI 1.0 pitch bend uses a
+14-bit integer, yielding 16,384 distinct values. While adequate for
+standard performance, this resolution can exhibit audible stepping
+("zipper noise") during slow, wide pitch sweeps or microtonal
+adjustments.</p>
+<p>MIDI 2.0 per-note pitch bend utilizes a full <strong>32-bit data
+field</strong>, yielding over 4.29 billion values:</p>
+<ul>
+<li>Center (no bend) is represented by <code>0x80000000</code>.</li>
+<li>The minimum negative bend is <code>0x00000000</code>.</li>
+<li>The maximum positive bend is <code>0xFFFFFFFF</code>.</li>
+</ul>
+<p>This 32-bit resolution provides mathematically continuous pitch
+adjustments across any user-defined pitch-bend range, allowing smooth
+glissandos, vibrato, and microtonal intonations without audible
+stepping.</p>
+<h3 id="streamlined-system-architecture">Streamlined System
+Architecture</h3>
+<p>By moving from channel-based routing to message-level addressing,
+MIDI 2.0 streamlines polyphonic expression:</p>
+<ul>
+<li><strong>Single-Channel Polyphony:</strong> DAWs no longer need to
+split polyphonic tracks into multi-channel lane configurations. A single
+MIDI track routing on a single channel can transmit simultaneous,
+independent pitch curves for every polyphonic voice.</li>
+<li><strong>Preserved Channel Capacity:</strong> Channels are no longer
+consumed simply to achieve expressive performance, freeing routing
+capacity across the 256 channels available in MIDI 2.0 (16 channels
+across 16 groups).</li>
+<li><strong>Simplified Voice Management:</strong> Hardware and software
+synthesizers no longer need complex MPE voice managers to parse
+channel-hopping note data. The engine merely maps the incoming note
+number to the active synthesis voice, directly applying the 32-bit pitch
+delta natively.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-2-0-implements-per-note-pitch-bend';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

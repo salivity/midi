@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Capability Inquiry Message Format Explained - midi</title>
+    <meta name="description" content="This article explores the MIDI Capability Inquiry (MIDI-CI) message format, detailing its core architecture, operational functions, and role in modern music technology. Serving as the primary bridge between legacy MIDI 1.0 devices and the modern MIDI 2.0">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-capability-inquiry-message-format-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Capability Inquiry Message Format Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-capability-inquiry-message-format-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the MIDI Capability Inquiry (MIDI-CI) message format, detailing its core architecture, operational functions, and role in modern music technology. Serving as the primary bridge between legacy MIDI 1.0 devices and the modern MIDI 2.0" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-capability-inquiry-message-format-explained">MIDI
+Capability Inquiry Message Format Explained</h1>
+<p>This article explores the MIDI Capability Inquiry (MIDI-CI) message
+format, detailing its core architecture, operational functions, and role
+in modern music technology. Serving as the primary bridge between legacy
+MIDI 1.0 devices and the modern MIDI 2.0 specification, MIDI-CI defines
+a standardized mechanism for digital musical instruments to
+automatically query each other, negotiate capabilities, and configure
+advanced data streams without requiring manual configuration.</p>
+<h2 id="the-core-purpose-of-midi-ci">The Core Purpose of MIDI-CI</h2>
+<p>Historically, the original MIDI 1.0 specification functioned strictly
+as a one-way communication protocol. A transmitting device sent control
+signals without knowing if the receiving device was capable of
+interpreting them.</p>
+<p>MIDI-CI transforms this paradigm by establishing a standardized,
+bidirectional discovery and negotiation protocol. Before sending
+high-resolution performance data or custom configurations, devices use
+the MIDI-CI message format to ask:</p>
+<ul>
+<li>Who are you?</li>
+<li>What features do you support?</li>
+<li>Can we communicate using MIDI 2.0?</li>
+</ul>
+<p>By enabling devices to discover mutual capabilities, MIDI-CI ensures
+seamless backward compatibility while unlocking advanced features
+whenever supported hardware or software is detected.</p>
+<h2 id="the-three-core-functions-of-midi-ci">The Three Core Functions of
+MIDI-CI</h2>
+<p>The MIDI-CI message format operates across three specialized
+functional areas:</p>
+<h3 id="1-protocol-negotiation">1. Protocol Negotiation</h3>
+<p>Protocol Negotiation is the mechanism that allows devices to
+transition from standard MIDI 1.0 to modern MIDI 2.0 protocols. Through
+CI messages, a device requests whether the connected instrument can
+support the Universal MIDI Packet (UMP) format and MIDI 2.0
+high-resolution velocity, articulation, and timing. If both devices
+agree, the connection upgrades automatically; if either device declines,
+communication safely defaults to standard MIDI 1.0.</p>
+<h3 id="2-profile-configuration">2. Profile Configuration</h3>
+<p>Profiles are pre-defined sets of rules and controller behaviors for
+specific instrument types (such as drawbar organs, analog synthesizers,
+or orchestral sample libraries). The MIDI-CI Profile Configuration
+format allows devices to query supported profiles, turn specific
+profiles on or off, and map hardware controls to matching parameters
+systematically, minimizing the need for manual MIDI mapping.</p>
+<h3 id="3-property-exchange">3. Property Exchange</h3>
+<p>Property Exchange allows devices to transfer rich metadata,
+configuration parameters, and state information using standard web
+formats like JSON. Via MIDI-CI Property Exchange messages, a synthesizer
+can transmit patch names, parameter names, controller assignments, and
+visual editor data directly to a digital audio workstation (DAW) or
+hardware controller.</p>
+<h2 id="anatomy-of-the-midi-ci-message-format">Anatomy of the MIDI-CI
+Message Format</h2>
+<p>MIDI-CI messages are constructed using Universal System Exclusive
+(SysEx) structures, ensuring they can travel over legacy MIDI 1.0 DIN
+cables, USB connections, and network interfaces without corrupting
+non-compatible devices.</p>
+<p>A standard MIDI-CI message includes the following structural
+components:</p>
+<ul>
+<li><strong>SysEx Header:</strong> Standard MIDI framing
+(<code>F0</code> start and <code>F7</code> termination).</li>
+<li><strong>Universal System Exclusive Sub-ID:</strong> Identifies the
+packet as a MIDI-CI message (Sub-ID 1: <code>0x0D</code>).</li>
+<li><strong>Sub-ID 2 (CI Message Category):</strong> Denotes the exact
+CI function, such as Discovery, Profile Configuration, Property
+Exchange, or Protocol Negotiation.</li>
+<li><strong>CI Message Version:</strong> Identifies the version of the
+MIDI-CI specification being used.</li>
+<li><strong>Source and Destination MUIDs:</strong> MIDI-CI introduces
+28-bit Device Unique Identifiers (MUIDs). Every device randomly
+generates an MUID upon connection, allowing multiple devices sharing a
+single bus to target messages accurately to specific endpoints.</li>
+<li><strong>Payload:</strong> The specific request or response data
+corresponding to the selected CI category.</li>
+</ul>
+<p>Through this structured inquiry-and-response architecture, the
+MIDI-CI format guarantees that modern musical hardware and software
+remain auto-configuring, communicative, and universally compatible.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-capability-inquiry-message-format-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

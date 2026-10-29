@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Piano Apps Parse USB-MIDI to Evaluate Errors - midi</title>
+    <meta name="description" content="Interactive piano learning applications evaluate student performance by establishing a real-time data pipeline between a digital keyboard and the software engine. When a student plays, the keyboard sends raw USB-MIDI packets that the app captures, decodes">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-piano-apps-parse-usb-midi-to-evaluate-errors">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Piano Apps Parse USB-MIDI to Evaluate Errors - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-piano-apps-parse-usb-midi-to-evaluate-errors" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interactive piano learning applications evaluate student performance by establishing a real-time data pipeline between a digital keyboard and the software engine. When a student plays, the keyboard sends raw USB-MIDI packets that the app captures, decodes" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-piano-apps-parse-usb-midi-to-evaluate-errors">How Piano Apps
+Parse USB-MIDI to Evaluate Errors</h1>
+<p>Interactive piano learning applications evaluate student performance
+by establishing a real-time data pipeline between a digital keyboard and
+the software engine. When a student plays, the keyboard sends raw
+USB-MIDI packets that the app captures, decodes into musical events, and
+compares against a reference score. By utilizing score-following
+algorithms and configurable temporal tolerance windows, the system
+isolates errors in pitch, timing, rhythm, and articulation to provide
+immediate visual feedback.</p>
+<h3 id="1-ingesting-and-parsing-the-usb-midi-stream">1. Ingesting and
+Parsing the USB-MIDI Stream</h3>
+<p>The process begins when a physical key strike triggers a sensor
+inside the digital piano. The instrument packages this action into
+standard MIDI message bytes and transmits them through a USB cable using
+the USB-MIDI class specification.</p>
+<p>At the software layer, the application accesses these packets using
+platform-level interfaces, such as the Web MIDI API in web browsers,
+CoreMIDI on Apple platforms, or Android's MIDI API. The app continuously
+listens for standard 3-byte channel voice messages:</p>
+<ul>
+<li><strong>Status Byte:</strong> Indicates the action and MIDI channel
+(e.g., <code>0x90</code> for "Note On", <code>0x80</code> for "Note
+Off").</li>
+<li><strong>Data Byte 1:</strong> Identifies the pitch as a MIDI note
+number ranging from 0 to 127 (where 60 represents Middle C).</li>
+<li><strong>Data Byte 2:</strong> Represents the velocity (0 to 127),
+indicating how hard or fast the key was struck. A "Note On" message with
+a velocity of 0 is functionally equivalent to a "Note Off".</li>
+</ul>
+<p>The application's parser extracts these bytes, attaches a
+high-resolution performance timestamp to each event, and pushes the
+parsed event into an evaluation queue.</p>
+<h3 id="2-temporal-window-matching-and-score-alignment">2. Temporal
+Window Matching and Score Alignment</h3>
+<p>To determine whether an incoming note is correct, the application
+matches the parsed input against a structured representation of the song
+(often stored as MusicXML or a target MIDI sequence).</p>
+<p>Human performers rarely play with mechanical mathematical precision.
+Consequently, the app cannot rely on exact millisecond timestamp
+matching. Instead, it creates a dynamic "temporal window" (typically
+±50ms to ±150ms) around each scheduled note in the target score:</p>
+<ul>
+<li><strong>Hit Window:</strong> If a note matching the target pitch
+falls within this tolerance threshold, it is classified as correct.</li>
+<li><strong>Dynamic Time Warping (DTW) &amp; Score Following:</strong>
+For continuous play modes where the tempo can fluctuate, learning apps
+use score-following algorithms based on Hidden Markov Models (HMM) or
+Dynamic Time Warping. These algorithms track the player's current
+position within the musical piece, dynamically expanding or contracting
+the tolerance window to match tempo accelerations or decelerations.</li>
+</ul>
+<h3 id="3-error-classification">3. Error Classification</h3>
+<p>Once the system maps the parsed MIDI events to the score, it
+categorizes errors using discrete conditional logic:</p>
+<ul>
+<li><strong>Pitch Errors (Wrong Notes):</strong> The incoming event's
+pitch byte does not match the expected pitch byte within the active time
+window.</li>
+<li><strong>Timing Errors (Rhythm Inaccuracies):</strong> The pitch byte
+is correct, but the event timestamp falls outside the center of the hit
+window, labeling the note as "early" or "late."</li>
+<li><strong>Omission Errors (Missed Notes):</strong> The playback cursor
+moves past a scheduled note's time window without a matching Note On
+message ever entering the processing queue.</li>
+<li><strong>Extraneous Notes:</strong> Unscheduled Note On events that
+occur during rests or in addition to correct chord structures.</li>
+<li><strong>Duration Errors:</strong> The interval between an incoming
+Note On and its corresponding Note Off message is significantly shorter
+or longer than the note value prescribed by the sheet music.</li>
+</ul>
+<h3 id="4-polyphony-and-chord-handling">4. Polyphony and Chord
+Handling</h3>
+<p>When the piece demands chords or multi-voice counterpoint, evaluation
+becomes multidimensional. The app opens a single time frame that expects
+multiple distinct pitch bytes simultaneously.</p>
+<p>The evaluation engine aggregates incoming Note On events occurring
+within a narrow clustering window (usually 20ms to 40ms) and compares
+the resulting set of incoming pitches to the expected set of target
+pitches. Partial matches trigger specialized chord-feedback states,
+informing the student which specific fingerings or chord components were
+missing or incorrectly voiced.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-piano-apps-parse-usb-midi-to-evaluate-errors';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

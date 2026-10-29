@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Ring Controllers Track Hand Gestures - midi</title>
+    <meta name="description" content="Expressive MIDI ring controllers track hand motion and transmit continuous modulation data primarily through integrated Inertial Measurement Units (IMUs) and capacitive sensors. By measuring spatial movement, rotation, and touch, these wearable devices tr">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-ring-controllers-track-hand-gestures">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Ring Controllers Track Hand Gestures - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-ring-controllers-track-hand-gestures" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Expressive MIDI ring controllers track hand motion and transmit continuous modulation data primarily through integrated Inertial Measurement Units (IMUs) and capacitive sensors. By measuring spatial movement, rotation, and touch, these wearable devices tr" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-ring-controllers-track-hand-gestures">How MIDI Ring
+Controllers Track Hand Gestures</h1>
+<p>Expressive MIDI ring controllers track hand motion and transmit
+continuous modulation data primarily through integrated Inertial
+Measurement Units (IMUs) and capacitive sensors. By measuring spatial
+movement, rotation, and touch, these wearable devices translate physical
+gestures into continuous control change (CC) or pitch bend values. A
+combination of micro-electro-mechanical systems (MEMS), onboard sensor
+fusion algorithms, and low-latency wireless transmission enables
+musicians to manipulate pitch, cutoff filters, and effects dynamically
+in real time.</p>
+<h3 id="the-inertial-measurement-unit-imu">The Inertial Measurement Unit
+(IMU)</h3>
+<p>The primary physical mechanism inside a MIDI ring is a MEMS-based
+Inertial Measurement Unit. An IMU typically packages two critical
+sensors onto a single microscopic silicon chip:</p>
+<ul>
+<li><strong>3-Axis Accelerometer:</strong> Measures linear acceleration
+and gravitational pull. When the hand tilts forward, backward, or
+sideways, the accelerometer registers the direction of Earth's gravity
+relative to the ring, capturing tilt angles (pitch and roll).</li>
+<li><strong>3-Axis Gyroscope:</strong> Detects angular velocity, or the
+rate of rotation around the X, Y, and Z axes. This allows the ring to
+capture rapid rotational wrist gestures, such as twisting the forearm
+(vibrato) or waving the hand.</li>
+</ul>
+<p>Some advanced controllers also integrate a <strong>3-axis
+magnetometer</strong>, turning the unit into a 9-axis sensor. The
+magnetometer acts as a digital compass, tracking the ring's absolute
+orientation relative to the Earth's magnetic field to eliminate
+rotational drift along the vertical (yaw) axis.</p>
+<h3 id="sensor-fusion-and-microcontroller-processing">Sensor Fusion and
+Microcontroller Processing</h3>
+<p>Raw IMU data is prone to noise and physical drift. To convert erratic
+raw values into smooth, usable continuous MIDI streams, an onboard
+microcontroller runs sensor fusion algorithms, such as a Kalman filter
+or Complementary filter.</p>
+<p>These algorithms synthesize data from both the accelerometer and
+gyroscope to determine the exact orientation of the hand in 3D
+space:</p>
+<ol type="1">
+<li>The system calculates roll (wrist tilt), pitch (finger lift), and
+yaw (side-to-side panning).</li>
+<li>The microcontroller scales these continuous spatial angles to the
+standard MIDI range of 0 to 127 (or high-resolution 14-bit MIDI values
+up to 16,383).</li>
+<li>The mapped value is assigned to a designated parameter, such as MIDI
+CC1 (Modulation), CC11 (Expression), CC74 (Brightness/Filter Cutoff), or
+Pitch Bend.</li>
+</ol>
+<h3 id="capacitive-touch-and-proximity-sensors">Capacitive Touch and
+Proximity Sensors</h3>
+<p>To prevent accidental parameter modulation when performing normal
+movements, rings incorporate secondary input mechanisms:</p>
+<ul>
+<li><strong>Capacitive Touch Strips:</strong> Electrodes placed on the
+exterior housing detect finger contact via electrical capacitance
+changes. Musicians can use these surfaces to momentarily activate a
+gesture, engage an effect bypass, or lock a filter frequency in
+place.</li>
+<li><strong>Optical or Infrared Sensors:</strong> Some designs feature
+miniature optical sensors facing the adjacent finger or skin to measure
+micro-gestures, tapping, or the distance between fingers.</li>
+</ul>
+<h3 id="low-latency-wireless-transmission">Low-Latency Wireless
+Transmission</h3>
+<p>Once processed, continuous gestures are transmitted to a host
+computer, synthesizer, or mobile device using Bluetooth Low Energy (BLE
+MIDI) or dedicated 2.4 GHz radio frequency (RF) protocols. This wireless
+pipeline delivers data packets at intervals as low as 5 to 10
+milliseconds, ensuring that physical hand movements translate into
+immediate, continuous auditory feedback without perceptible lag.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-ring-controllers-track-hand-gestures';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

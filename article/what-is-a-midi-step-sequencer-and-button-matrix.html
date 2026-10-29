@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Step Sequencer and Button Matrix? - midi</title>
+    <meta name="description" content="A MIDI step sequencer is a composition tool that organizes musical events into discrete, sequential time intervals to trigger electronic instruments. In modern hardware sequencers, illuminated mechanical button matrices serve as the primary user interface">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-step-sequencer-and-button-matrix">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Step Sequencer and Button Matrix? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-step-sequencer-and-button-matrix" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI step sequencer is a composition tool that organizes musical events into discrete, sequential time intervals to trigger electronic instruments. In modern hardware sequencers, illuminated mechanical button matrices serve as the primary user interface" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-step-sequencer-and-button-matrix">What Is a MIDI
+Step Sequencer and Button Matrix?</h1>
+<p>A MIDI step sequencer is a composition tool that organizes musical
+events into discrete, sequential time intervals to trigger electronic
+instruments. In modern hardware sequencers, illuminated mechanical
+button matrices serve as the primary user interface, combining tactile
+switches with embedded LEDs to provide real-time, visual confirmation of
+active note triggers, playhead position, and musical patterns.</p>
+<h3 id="what-is-a-midi-step-sequencer">What Is a MIDI Step
+Sequencer?</h3>
+<p>A MIDI step sequencer is a hardware device or software program that
+divides a musical timeline into equal segments called "steps"—commonly
+8, 16, or 32 steps per pattern. Rather than capturing a freeform,
+continuous performance, a step sequencer requires the user to assign
+specific musical parameters to each individual step.</p>
+<p>These parameters include:</p>
+<ul>
+<li><strong>Note Value (Pitch):</strong> The frequency or musical pitch
+to be played.</li>
+<li><strong>Velocity:</strong> How hard or loud the note is
+triggered.</li>
+<li><strong>Gate Length:</strong> The duration of time the note is held
+before a "Note Off" command is sent.</li>
+<li><strong>Control Change (CC):</strong> Automation data used to
+modulate synth parameters like filter cutoff or resonance.</li>
+</ul>
+<p>As the sequencer runs, an internal or external clock advances the
+timeline from one step to the next. When the playhead encounters an
+active step, the sequencer sends standard MIDI messages (such as "Note
+On") over a 5-pin DIN, TRS, or USB connection to connected synthesizers,
+drum machines, or Digital Audio Workstations (DAWs) to produce
+sound.</p>
+<h3
+id="how-an-illuminated-mechanical-button-matrix-visualizes-triggers">How
+an Illuminated Mechanical Button Matrix Visualizes Triggers</h3>
+<p>An illuminated mechanical button matrix is a physical grid of
+mechanical key switches—similar to those found on mechanical computer
+keyboards—integrated with per-key light-emitting diodes (LEDs) beneath
+translucent or light-diffusing keycaps. This interface translates the
+digital state of the sequencer into clear visual information through
+coordinated hardware and firmware processes:</p>
+<h4 id="1-hardware-multiplexing-and-scanning">1. Hardware Multiplexing
+and Scanning</h4>
+<p>The buttons and LEDs are wired in a grid of rows and columns. An
+onboard microcontroller continuously scans this matrix to detect user
+button presses (to activate or deactivate a step) while simultaneously
+controlling the individual LEDs via LED driver integrated circuits (ICs)
+using Pulse Width Modulation (PWM).</p>
+<h4 id="2-the-playhead-tracker">2. The Playhead Tracker</h4>
+<p>To display the passage of time, the firmware illuminates the LED
+corresponding to the current step being read by the sequencer's clock.
+As the sequence plays, this light moves rapidly across the matrix from
+left to right, creating a visible "sweep" or running cursor that shows
+the exact playback position in real time.</p>
+<h4 id="3-state-based-color-and-brightness-coding">3. State-Based Color
+and Brightness Coding</h4>
+<p>The matrix uses color-coded or brightness-differentiated visual
+feedback to distinguish between inactive steps, active steps, and active
+triggers:</p>
+<ul>
+<li><strong>Inactive Steps:</strong> The LED is turned off or glows at a
+very low ambient brightness to delineate the grid layout.</li>
+<li><strong>Armed/Active Steps:</strong> Steps programmed with a note
+trigger illuminate with a steady color (e.g., solid amber or green),
+showing the overall programmed pattern across the measure.</li>
+<li><strong>Active Note Trigger:</strong> When the moving playhead
+reaches an armed step, the microcontroller instantly pulses the LED to a
+higher brightness level or flashes a secondary color (e.g., flashing
+white). This flash occurs simultaneously with the transmission of the
+MIDI "Note On" message.</li>
+<li><strong>Velocity and Parameter Indication:</strong> Multi-color
+(RGB) mechanical matrices can represent note velocity through brightness
+intensity or varying color hues, indicating accent notes or modulated
+steps without requiring an external screen.</li>
+</ul>
+<p>By pairing the tactile response of mechanical switches with real-time
+optical feedback from the LED matrix, musicians can quickly identify
+which steps will trigger, see the rhythm visually, and make precise
+adjustments during live performance or studio production.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/what-is-a-midi-step-sequencer-and-button-matrix';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

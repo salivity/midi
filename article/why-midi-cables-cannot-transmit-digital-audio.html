@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Cables Cannot Transmit Digital Audio - midi</title>
+    <meta name="description" content="Standard MIDI 1.0 cables cannot transmit digital audio waveforms because the MIDI standard was designed exclusively as an event-based control protocol, not an audio streaming medium. While audio cables carry the actual sound vibrations or digitized acoust">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-cables-cannot-transmit-digital-audio">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Cables Cannot Transmit Digital Audio - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-cables-cannot-transmit-digital-audio" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard MIDI 1.0 cables cannot transmit digital audio waveforms because the MIDI standard was designed exclusively as an event-based control protocol, not an audio streaming medium. While audio cables carry the actual sound vibrations or digitized acoust" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-cables-cannot-transmit-digital-audio">Why MIDI Cables
+Cannot Transmit Digital Audio</h1>
+<p>Standard MIDI 1.0 cables cannot transmit digital audio waveforms
+because the MIDI standard was designed exclusively as an event-based
+control protocol, not an audio streaming medium. While audio cables
+carry the actual sound vibrations or digitized acoustic waveforms, MIDI
+cables carry only numerical instructions detailing how a musical
+performance is executed. Due to extreme limitations in data transmission
+speed, specialized optoisolated hardware, and the absence of a
+continuous audio framing protocol, standard MIDI 1.0 hardware cannot
+support the heavy bandwidth demands of real-time digital audio.</p>
+<h3 id="event-data-vs-audio-waveforms">Event Data vs. Audio
+Waveforms</h3>
+<p>Digital audio is a continuous representation of acoustic sound
+pressure waves. To capture and stream digital audio accurately using
+standard Pulse Code Modulation (PCM), an analog signal must be sampled
+tens of thousands of times per second. For example, standard CD-quality
+audio requires 44,100 samples per second per channel, with each sample
+represented by 16 or 24 bits of data.</p>
+<p>In contrast, MIDI (Musical Instrument Digital Interface) transmits
+symbolic performance instructions rather than sound. When a key is
+struck on a MIDI controller, the instrument sends a tiny packet of
+binary data containing three pieces of information: a command byte (such
+as "Note On"), a data byte indicating pitch, and a data byte indicating
+velocity (how hard the key was hit). The MIDI cable functions like
+digital sheet music, relaying the instructions to an external sound
+module, synthesizer, or computer, which then generates the sound
+independently.</p>
+<h3 id="the-bandwidth-bottleneck">The Bandwidth Bottleneck</h3>
+<p>The physical specification of MIDI 1.0 defines a fixed transmission
+rate of exactly 31.25 kilobits per second (kbps). This transmission
+speed was established in 1983 to provide reliable, low-latency
+communication over budget-friendly hardware without overloading
+microprocessors of the era.</p>
+<p>To understand why this bandwidth makes digital audio impossible:</p>
+<ul>
+<li><strong>Uncompressed Stereo Digital Audio (16-bit, 44.1
+kHz):</strong> Requires approximately 1,411 kbps of continuous
+throughput.</li>
+<li><strong>Standard MIDI 1.0 Connection:</strong> Caps out at an
+absolute maximum of 31.25 kbps.</li>
+</ul>
+<p>Standard uncompressed stereo digital audio requires roughly 45 times
+more bandwidth than a standard MIDI 1.0 line can physically supply. Even
+highly compressed, low-fidelity audio formats demand far more sustained
+bandwidth than a 31.25 kbps connection can maintain in real time.</p>
+<h3 id="hardware-and-electrical-constraints">Hardware and Electrical
+Constraints</h3>
+<p>The physical design of standard 5-pin DIN MIDI hardware is
+electrically incapable of sustaining high-speed digital audio signals.
+The standard specifies a 5-milliamp current loop driven through an
+optocoupler at the receiving end (the MIDI IN port).</p>
+<p>Optocouplers convert electrical signals into light pulses and back
+into electrical signals. This design creates galvanic isolation, which
+deliberately breaks electrical ground connections to prevent ground
+loops, hum, and noise between different mains-powered instruments.
+However, the legacy optocouplers specified for standard MIDI 1.0 are
+slow, narrow-bandwidth components. Attempting to force high-frequency
+megabit data streams through these components results in immediate
+signal rounding, rise-time degradation, and total data corruption.</p>
+<h3 id="absence-of-clocking-and-streaming-protocols">Absence of Clocking
+and Streaming Protocols</h3>
+<p>Digital audio requires strict, jitter-free timing synchronization,
+usually provided by word clocks or embedded clock signals (such as those
+used in S/PDIF, AES/EBU, or ADAT connections), to convert incoming
+digital numbers back into continuous analog voltages without
+distortion.</p>
+<p>MIDI 1.0 is an asynchronous serial protocol. It transmits individual
+8-bit bytes surrounded by start and stop bits whenever an action occurs.
+It possesses no packet structures, data buffers, sample headers, or
+continuous clock synchronization designed to reconstruct sequential
+audio waveforms. Because the architecture lacks both the physical
+bandwidth and the software protocols required for digital audio,
+standard MIDI 1.0 remains strictly limited to transmitting symbolic
+control information.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-midi-cables-cannot-transmit-digital-audio';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Tone Generator MIDI System Reset Behavior - midi</title>
+    <meta name="description" content="This article examines how hardware tone generators respond when receiving an unexpected MIDI System Reset message (0xFF). It covers the immediate audio implications, such as voice termination and audible artifacts, the restoration of control parameters an">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/hardware-tone-generator-midi-system-reset-behavior">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hardware Tone Generator MIDI System Reset Behavior - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/hardware-tone-generator-midi-system-reset-behavior" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how hardware tone generators respond when receiving an unexpected MIDI System Reset message (0xFF). It covers the immediate audio implications, such as voice termination and audible artifacts, the restoration of control parameters an" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="hardware-tone-generator-midi-system-reset-behavior">Hardware
+Tone Generator MIDI System Reset Behavior</h1>
+<p>This article examines how hardware tone generators respond when
+receiving an unexpected MIDI System Reset message (<code>0xFF</code>).
+It covers the immediate audio implications, such as voice termination
+and audible artifacts, the restoration of control parameters and program
+assignments to their power-on states, the flushing of internal data
+buffers, and the practical reasons why this command is generally avoided
+during live playback.</p>
+<p>In the MIDI 1.0 specification, the System Reset message is a
+single-byte Real-Time message defined as <code>0xFF</code>. It is
+designed to instruct all receiving devices on a MIDI line to return to
+their initial power-up condition. Because it is a Real-Time message, it
+has the highest transmission priority and can be injected into the data
+stream at any point—even between the bytes of other multi-byte MIDI
+commands.</p>
+<p>When a hardware tone generator unexpectedly receives this byte, its
+primary and most immediate action is to silence all sounding voices.
+Unlike standard MIDI channel mode messages such as "All Notes Off"
+(Control Change 123) or "All Sound Off" (Control Change 120), which
+allow note release phases or cleanly ramp down amplitude, a System Reset
+forcibly and immediately cuts off voice generation at the digital signal
+processor (DSP) or analog voice level. Because the waveform cycle is
+interrupted mid-phase rather than at a zero-crossing, this sudden cutoff
+often produces an audible pop or click through the audio outputs.</p>
+<p>Simultaneously, the tone generator resets all continuous and switch
+controllers across all MIDI channels to their factory boot defaults.
+Pitch bend wheels are reset to their center position, modulation wheels
+and aftertouch are reduced to zero, expression values revert to maximum
+or default, and sustain or hold pedals are disengaged. Any ongoing
+portamento or pitch-glide calculations are halted instantly.</p>
+<p>Internal memory and operational modes also return to their power-on
+states. If the tone generator was set to a multi-timbral performance
+mode, custom MIDI channel mapping, or specific split and layer
+configurations, the hardware may reset to its default single-patch or
+base omni/poly mode. Program changes are frequently reverted to the
+default patch (typically Program 1 or Bank 0/Program 0) for each
+channel, discarding unsaved real-time parameter tweaks.</p>
+<p>At the processor level, the incoming MIDI FIFO (first-in, first-out)
+receive buffer and any active System Exclusive (SysEx) transfer buffers
+are purged. Any SysEx data being written to temporary edit buffers is
+aborted, preventing corrupted parameter writes. On older or less
+powerful microcontrollers, processing the System Reset sequence may
+cause a brief processing pause—ranging from a few milliseconds to over a
+second—during which the hardware ignores subsequent incoming MIDI data
+while it completes its internal boot routines.</p>
+<p>Because of this disruptive and non-recoverable behavior, modern
+sequencers and MIDI interfaces rarely transmit the <code>0xFF</code>
+System Reset message during standard operation. To clear stuck notes or
+reset expressive parameters without crashing an ongoing performance,
+systems rely instead on standard channel-specific controllers like
+"Reset All Controllers" (Control Change 121) and "All Notes Off"
+commands.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/hardware-tone-generator-midi-system-reset-behavior';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

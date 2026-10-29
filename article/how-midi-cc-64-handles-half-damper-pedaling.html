@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI CC 64 Handles Half-Damper Pedaling - midi</title>
+    <meta name="description" content="This article explains how MIDI Continuous Controller 64 (CC 64) manages half-damper pedaling by utilizing continuous data values from 0 to 127. While traditional sustain pedals operate as binary switches (on or off), continuous sustain pedals transmit a g">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-cc-64-handles-half-damper-pedaling">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI CC 64 Handles Half-Damper Pedaling - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-cc-64-handles-half-damper-pedaling" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how MIDI Continuous Controller 64 (CC 64) manages half-damper pedaling by utilizing continuous data values from 0 to 127. While traditional sustain pedals operate as binary switches (on or off), continuous sustain pedals transmit a g" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-cc-64-handles-half-damper-pedaling">How MIDI CC 64
+Handles Half-Damper Pedaling</h1>
+<p>This article explains how MIDI Continuous Controller 64 (CC 64)
+manages half-damper pedaling by utilizing continuous data values from 0
+to 127. While traditional sustain pedals operate as binary switches (on
+or off), continuous sustain pedals transmit a gradient of values that
+allow virtual instruments and digital pianos to emulate the physical
+behavior of an acoustic piano’s damper felts. Readers will learn how the
+continuous data stream modulates release envelope times, affects
+acoustic resonance modeling, and enables advanced playing techniques
+like repedaling.</p>
+<h3 id="binary-switching-vs-continuous-cc-64">Binary Switching vs.
+Continuous CC 64</h3>
+<p>In standard MIDI implementations, CC 64 operates as a binary switch.
+Values from 0 to 63 represent "Damper Off" (pedal up), while values from
+64 to 127 represent "Damper On" (pedal down). When a Note Off event is
+received while CC 64 is at 64 or above, the sound engine prevents the
+note from stopping, sustaining it indefinitely until the value drops
+below 64.</p>
+<p>Half-damper processing eliminates this single threshold. Instead of
+toggling between on and off, the receiving sound engine treats CC 64 as
+a continuous control variable, mapping the full 0 to 127 range to the
+physical position of the damper felts relative to the strings.</p>
+<h3 id="hardware-mechanics-transmitting-the-range">Hardware Mechanics:
+Transmitting the Range</h3>
+<p>To generate continuous values, the hardware pedal must contain a
+potentiometer or an optical sensor rather than a simple momentary
+switch.</p>
+<ul>
+<li><strong>0:</strong> The pedal is fully released; dampers are resting
+firmly on the strings.</li>
+<li><strong>1–126:</strong> The pedal is in a state of partial
+depression; dampers are lightly touching the strings with varying
+degrees of pressure.</li>
+<li><strong>127:</strong> The pedal is fully depressed; dampers are
+completely lifted off the strings.</li>
+</ul>
+<p>As the pianist depresses or releases the pedal, the keyboard
+controller sends a high-frequency stream of CC 64 messages reflecting
+the pedal's exact physical trajectory.</p>
+<h3 id="release-envelope-modulation">Release Envelope Modulation</h3>
+<p>In sample libraries and digital synthesis engines, half-damper
+behavior is primarily processed by dynamically altering the Amplitude
+Envelope Release Time.</p>
+<p>When a key is released, the engine generates a Note Off event. The
+engine evaluates the current CC 64 value to determine how quickly the
+sound should decay:</p>
+<ul>
+<li><strong>Low Values (e.g., 0–30):</strong> The engine applies
+standard, rapid release times (typically 100ms to 300ms depending on the
+register) to represent full damping.</li>
+<li><strong>Mid-Range Values (e.g., 31–90):</strong> The engine scales
+the release time proportionally. A value of 64 might set the release
+time to 1.5 seconds, simulating dampers resting lightly against the
+strings, which absorbs energy gradually rather than muting it
+immediately.</li>
+<li><strong>High Values (e.g., 91–127):</strong> The engine ignores the
+Note Off command or sets the release envelope to infinity (or the
+maximum natural decay of the sample), allowing the string to ring
+freely.</li>
+</ul>
+<p>Many advanced engines apply non-linear curves to CC 64. Because
+physical dampers affect vibrating strings exponentially rather than
+linearly, the release time mapping often utilizes logarithmic or custom
+response curves to mirror authentic acoustic friction.</p>
+<h3 id="spectral-filtering-and-harmonic-damping">Spectral Filtering and
+Harmonic Damping</h3>
+<p>Physical piano dampers do not mute all frequencies equally when
+lightly touching a string; they attenuate higher harmonics much faster
+than fundamental frequencies.</p>
+<p>Advanced engines process continuous CC 64 data by linking it to
+low-pass filters alongside release envelopes:</p>
+<ul>
+<li>As CC 64 drops from 127 toward 0, a dynamic low-pass filter's cutoff
+frequency lowers.</li>
+<li>High-frequency overtones decay almost instantly, while lower
+fundamentals ring out slightly longer.</li>
+<li>This creates the characteristic "muffled" or "choked" tone of an
+acoustic half-pedal.</li>
+</ul>
+<h3 id="sympathetic-resonance-processing">Sympathetic Resonance
+Processing</h3>
+<p>Continuous CC 64 values also scale sympathetic and soundboard
+resonance algorithms. Modern physical modeling engines and multi-mic
+sample instruments adjust the volume and open-string response of
+unfretted strings based on the pedal depth:</p>
+<ul>
+<li>At CC 64 = 127, full sympathetic resonance is active; playing one
+note excites all other virtual strings.</li>
+<li>At intermediate values, the resonance model reduces the amplitude
+and Q-factor (bandwidth) of the sympathetic vibrations to reflect the
+dampening presence of the felt.</li>
+</ul>
+<h3 id="repedaling-and-catching-notes">Repedaling and "Catching"
+Notes</h3>
+<p>Continuous CC 64 processing is essential for repedaling (or dynamic
+recatching). This technique occurs when a pianist releases a key, lets
+the note begin its acoustic decay, and then depresses the pedal quickly
+enough to "catch" the remaining vibration before it completely dies
+out.</p>
+<p>When processing continuous data, if the sound engine detects a rising
+CC 64 value (e.g., moving rapidly from 20 to 110) while a voice is in
+its release phase:</p>
+<ol type="1">
+<li>The engine checks if the voice's amplitude is still above a
+designated threshold (such as -60 dB).</li>
+<li>If audible energy remains, the engine halts the fast release
+envelope and shifts the voice to the sustain state, matching the volume
+level at the exact moment the pedal was repressed.</li>
+<li>If the pedal is only partially pressed (e.g., catching at CC 64 =
+70), the voice transitions to a partially lengthened decay instead of a
+full hold.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-cc-64-handles-half-damper-pedaling';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

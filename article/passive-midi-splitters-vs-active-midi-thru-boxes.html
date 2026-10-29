@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive MIDI Splitters vs Active MIDI Thru Boxes - midi</title>
+    <meta name="description" content="This article examines why passive hardware MIDI splitters degrade signal integrity through electrical attenuation and impedance loading, and contrasts this with active, powered MIDI Thru boxes. While passive splitters simply divide existing electrical cur">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/passive-midi-splitters-vs-active-midi-thru-boxes">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Passive MIDI Splitters vs Active MIDI Thru Boxes - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/passive-midi-splitters-vs-active-midi-thru-boxes" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines why passive hardware MIDI splitters degrade signal integrity through electrical attenuation and impedance loading, and contrasts this with active, powered MIDI Thru boxes. While passive splitters simply divide existing electrical cur" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="passive-midi-splitters-vs-active-midi-thru-boxes">Passive MIDI
+Splitters vs Active MIDI Thru Boxes</h1>
+<p>This article examines why passive hardware MIDI splitters degrade
+signal integrity through electrical attenuation and impedance loading,
+and contrasts this with active, powered MIDI Thru boxes. While passive
+splitters simply divide existing electrical current across multiple
+paths, active units read, buffer, and regenerate clean, full-voltage
+digital square waves. Understanding these mechanisms clarifies why
+passive splitters often cause dropped notes, latency, and communication
+failures in complex hardware setups.</p>
+<h3 id="the-midi-10-electrical-specification">The MIDI 1.0 Electrical
+Specification</h3>
+<p>To understand signal attenuation, one must first look at the MIDI 1.0
+hardware standard. MIDI does not transmit data as a simple open-circuit
+voltage level; it operates as a 5-milliamp (mA) current loop running at
+31.25 kilobaud.</p>
+<p>In a standard MIDI connection:</p>
+<ul>
+<li>The transmitter supplies a 5-volt (or 3.3-volt in modern low-voltage
+specifications) source through current-limiting resistors.</li>
+<li>The receiver terminates the loop with an optocoupler—an internal LED
+optically paired with a phototransistor.</li>
+<li>Data is transmitted serially: turning the current on indicates a
+logical <code>0</code> (space), and turning it off indicates a logical
+<code>1</code> (mark).</li>
+</ul>
+<p>The optocoupler at the receiving end requires a specific forward
+current (typically 2 to 5 mA) to reliably illuminate the internal LED
+and switch the phototransistor.</p>
+<h3 id="how-passive-splitters-cause-signal-attenuation">How Passive
+Splitters Cause Signal Attenuation</h3>
+<p>A passive splitter (often wired as a "Y-cable" or unpowered junction
+box) attempts to duplicate a MIDI signal by physically wiring one input
+port directly to two or more output ports in parallel. This
+configuration introduces significant electrical problems:</p>
+<ol type="1">
+<li><strong>Current Division:</strong> According to Kirchhoff’s Current
+Law, wiring multiple receiving optocouplers in parallel forces the
+available current from the single transmitter to split among all
+connected receivers. If a single transmitter outputs 5 mA, splitting it
+across two receivers drops the current to roughly 2.5 mA per port
+(assuming identical load impedances). As more devices are connected, the
+current drops below the minimum forward current required to saturate the
+receiving optocouplers.</li>
+<li><strong>Impedance Mismatch and Loading:</strong> Modern receivers
+have specific internal input impedances determined by their optocouplers
+and series pull-up resistors. Placing loads in parallel halves the total
+load impedance seen by the transmitter, overloading the sending stage
+and pulling down the operating voltage.</li>
+<li><strong>Slew Rate Degradation and Capacitance:</strong> Every MIDI
+cable adds parasitic capacitance. When a passive splitter distributes a
+weak signal over multiple cables, the RC time constant (resistance ×
+capacitance) increases significantly. Instead of a sharp, vertical
+digital transition, the edges of the square waves become rounded. This
+slow rise and fall time leads to timing jitter, bit errors, framing
+errors, and missing MIDI messages such as stuck notes or corrupted SysEx
+dumps.</li>
+</ol>
+<h3 id="how-active-midi-thru-boxes-maintain-signal-integrity">How Active
+MIDI Thru Boxes Maintain Signal Integrity</h3>
+<p>An active, powered MIDI Thru box prevents attenuation entirely by
+acting as an active repeater rather than a passive divider.</p>
+<p>Instead of routing the raw electrical path to multiple jacks, an
+active Thru box features:</p>
+<ul>
+<li><strong>Optoisolated Reception:</strong> The incoming signal goes
+through an industry-standard optocoupler powered solely by the sender,
+fully isolating grounds and maintaining loop compliance.</li>
+<li><strong>Active Logic Buffering:</strong> The optocoupler feeds the
+digital stream into dedicated active logic circuits, such as Schmitt
+triggers and inverter buffers, powered by an external power supply. The
+Schmitt trigger cleans up rounded wave edges, restoring crisp
+transitions.</li>
+<li><strong>Discrete Drivers for Each Port:</strong> Each output port is
+driven by its own independent logic driver and current-limiting resistor
+network.</li>
+</ul>
+<p>Because each output on an active Thru box has its own dedicated
+5-volt, 5-milliamp current loop, connecting additional devices does not
+load the original transmitter or deplete the current going to other
+receiving devices. Every connected instrument receives a standardized,
+full-strength signal regardless of cable length or total port count.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/passive-midi-splitters-vs-active-midi-thru-boxes';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

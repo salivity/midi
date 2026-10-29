@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optical Isolators in MIDI Receiver Circuits - midi</title>
+    <meta name="description" content="An optical isolator—commonly referred to as an optocoupler—is a semiconductor device that transfers electrical signals between two isolated circuits using light. In musical equipment, it forms an essential component of the standard MIDI (Musical Instrumen">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/optical-isolators-in-midi-receiver-circuits">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Optical Isolators in MIDI Receiver Circuits - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/optical-isolators-in-midi-receiver-circuits" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An optical isolator—commonly referred to as an optocoupler—is a semiconductor device that transfers electrical signals between two isolated circuits using light. In musical equipment, it forms an essential component of the standard MIDI (Musical Instrumen" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="optical-isolators-in-midi-receiver-circuits">Optical Isolators
+in MIDI Receiver Circuits</h1>
+<p>An optical isolator—commonly referred to as an optocoupler—is a
+semiconductor device that transfers electrical signals between two
+isolated circuits using light. In musical equipment, it forms an
+essential component of the standard MIDI (Musical Instrument Digital
+Interface) specification. Within a MIDI receiver circuit, the internal
+infrared light-emitting diode (LED) converts incoming electrical current
+loops into light pulses, allowing data transmission while maintaining
+complete galvanic isolation to prevent ground loops, electrical hum, and
+equipment damage.</p>
+<h3 id="what-is-an-optical-isolator">What Is an Optical Isolator?</h3>
+<p>An optical isolator is a compact electronic package containing two
+primary elements separated by a transparent dielectric barrier: a light
+emitter (typically an infrared LED) on the input side, and a
+light-sensitive detector (such as a phototransistor or photodiode with
+an integrated logic gate) on the output side.</p>
+<p>Because there is no physical electrical connection between the input
+and output pins, the optical isolator allows signals to cross between
+separate circuits operating at different voltage levels or ground
+references. Electrical energy enters the device, is converted into
+photons, travels across the internal insulating gap, and is converted
+back into an electrical signal on the receiving side.</p>
+<h3 id="the-role-of-the-infrared-led-in-a-midi-receiver">The Role of the
+Infrared LED in a MIDI Receiver</h3>
+<p>The MIDI specification utilizes a 5-milliamp (mA) current loop
+configuration running at a baud rate of 31.25 kbps. The standard
+requires that the MIDI IN port of any receiving device be optically
+isolated from the sending device. The internal infrared LED of the
+optocoupler serves as the front-end transducer in this
+configuration.</p>
+<ul>
+<li><strong>Signal Conversion:</strong> When the transmitting device
+sends a digital low ("0"), current flows through the MIDI cable into the
+MIDI IN port, forward-biasing the internal infrared LED. The LED lights
+up, emitting infrared light inside the chip. When the transmitter sends
+a digital high ("1"), current ceases to flow, turning the LED off. In
+this way, serial digital data is directly converted into binary flashes
+of light.</li>
+<li><strong>Ground Loop Prevention:</strong> Audio setups frequently
+suffer from ground loops—unwanted current flowing through ground
+conductors between devices plugged into different power outlets. By
+driving the internal IR LED purely through a floating current loop
+without tying into the receiver's local ground, the optocoupler breaks
+any potential path for stray ground currents, eliminating mains hum and
+noise from the audio path.</li>
+<li><strong>Hardware Protection:</strong> The infrared LED acts as a
+physical barrier against voltage spikes, static electricity, and
+miswired cables. If a fault or transient surge occurs at the
+transmitting device or across the cable, the surge cannot bridge the
+optical gap to damage the sensitive microcontrollers or digital
+sound-processing circuitry in the receiving device.</li>
+</ul>
+<p>Through this optical conversion process, the internal infrared LED
+ensures that MIDI data is received reliably, cleanly, and safely across
+distinct pieces of musical hardware.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/optical-isolators-in-midi-receiver-circuits';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

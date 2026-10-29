@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Infrared Sensors Convert Gestures to MIDI CC - midi</title>
+    <meta name="description" content="Infrared hand-gesture sensors bridge physical movement and electronic music production by transforming the proximity of a performer&#39;s hand into continuous digital modulation. This process relies on a multi-stage pipeline: an infrared transceiver measures">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-infrared-sensors-convert-gestures-to-midi-cc">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Infrared Sensors Convert Gestures to MIDI CC - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-infrared-sensors-convert-gestures-to-midi-cc" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Infrared hand-gesture sensors bridge physical movement and electronic music production by transforming the proximity of a performer&#39;s hand into continuous digital modulation. This process relies on a multi-stage pipeline: an infrared transceiver measures" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-infrared-sensors-convert-gestures-to-midi-cc">How Infrared
+Sensors Convert Gestures to MIDI CC</h1>
+<p>Infrared hand-gesture sensors bridge physical movement and electronic
+music production by transforming the proximity of a performer's hand
+into continuous digital modulation. This process relies on a multi-stage
+pipeline: an infrared transceiver measures physical distance via light
+reflection or photon timing, an onboard microcontroller digitizes and
+filters the raw signal, a mapping algorithm translates those values into
+the standard MIDI protocol range, and a serial interface transmits the
+final Continuous Controller (MIDI CC) messages with low latency.</p>
+<h3 id="optical-distance-detection">Optical Distance Detection</h3>
+<p>The conversion process begins with optical physics using either
+intensity-based triangulation sensors (such as Sharp GP-series sensors)
+or modern Time-of-Flight (ToF) sensors (such as the VL53L1X).</p>
+<p>Intensity-based sensors project a beam of infrared light (typically
+around 850 to 940 nanometers) using an IR LED. When a performer places a
+hand in the beam's path, the light reflects back onto an integrated
+position-sensitive photodiode (PSD). The physical angle at which the
+light returns shifts depending on the hand's distance from the emitter,
+altering the resistance and output voltage across the PSD.</p>
+<p>ToF sensors, in contrast, emit pulses from a microscopic
+vertical-cavity surface-emitting laser (VCSEL) and calculate the precise
+time in picoseconds that photons take to bounce off the hand and return
+to a Single-Photon Avalanche Diode (SPAD) array. This provides an
+absolute millimeter measurement that is immune to variations in skin
+tone or fabric reflectivity.</p>
+<h3 id="signal-digitization-and-conditioning">Signal Digitization and
+Conditioning</h3>
+<p>Once the optical sensor captures distance, the physical measurement
+must be converted into digital data. In analog sensors, the output
+voltage passes into the Analog-to-Digital Converter (ADC) of a
+microcontroller (such as an ARM Cortex or ATmega). The ADC samples the
+voltage into a discrete numerical value, typically at a resolution of
+10-bit (0–1023) or 12-bit (0–4095). Digital ToF sensors perform this
+conversion internally and stream raw distance metrics directly via an
+I2C or SPI communication bus.</p>
+<p>Raw infrared signals inherently contain noise caused by ambient
+lighting, electrical fluctuations, and slight hand tremors.
+Microcontroller firmware applies digital signal processing (DSP) to
+stabilize the input before it generates control data:</p>
+<ul>
+<li><strong>Hysteresis and Deadbands:</strong> Ignores micro-movements
+beneath a set threshold to prevent unintended modulation when the hand
+is held still.</li>
+<li><strong>Low-Pass Filtering:</strong> Implements algorithms such as
+Exponential Moving Averages (EMA) or Kalman filters to smooth rapid
+fluctuations while retaining transient speed.</li>
+<li><strong>Boundary Clamping:</strong> Defines minimum and maximum
+operational ranges (for example, 5 cm to 40 cm). Distance readings
+beyond these limits are clipped to avoid sending erratic values when a
+hand enters or exits the sensor's field of view.</li>
+</ul>
+<h3 id="scaling-and-musical-curve-mapping">Scaling and Musical Curve
+Mapping</h3>
+<p>Standard MIDI Continuous Controller parameters require a 7-bit
+resolution, defining a range of integers between 0 and 127 (or 14-bit
+high-resolution values between 0 and 16383).</p>
+<p>The microcontroller scales the filtered distance metric through
+mathematical transformation. Because human perception of musical
+parameters (such as filter cutoffs or volume) is non-linear, firmware
+often applies logarithmic or exponential transfer functions rather than
+simple linear interpolation. For example, moving a hand closer to the
+sensor can be set to exponentially open an audio filter from CC value 0
+to 127, providing finer control at closer distances and broader sweeps
+further away.</p>
+<h3 id="midi-packet-encoding-and-transmission">MIDI Packet Encoding and
+Transmission</h3>
+<p>After calculating the target CC value, the processor packages the
+integer into a standard asynchronous MIDI byte stream. A standard MIDI
+CC message requires a three-byte packet:</p>
+<ol type="1">
+<li><strong>Status Byte (<code>0xBn</code>):</strong> Indicates a
+Control Change message, where <code>n</code> represents the designated
+MIDI channel (0–15).</li>
+<li><strong>Controller Number
+(<code>0x00</code>–<code>0x77</code>):</strong> Identifies the target
+parameter (such as CC 1 for Modulation Wheel, CC 7 for Volume, or CC 74
+for Filter Brightness).</li>
+<li><strong>Data Byte (<code>0x00</code>–<code>0x7F</code>):</strong>
+Represents the mapped distance value from 0 to 127.</li>
+</ol>
+<p>To prevent clogging the MIDI bus, the firmware employs
+change-detection algorithms that transmit packets only when the newly
+calculated CC value differs from the previously sent value.</p>
+<p>Finally, the packet is sent downstream. In traditional hardware
+setups, it is transmitted through a UART serial line at 31,250 baud over
+standard 5-pin DIN or TRS cables. In modern setups, the microcontroller
+operates as a class-compliant USB-MIDI peripheral, sending packets
+inside high-speed USB endpoints directly to digital audio workstations
+(DAWs) or synthesizers with sub-millisecond latency.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-infrared-sensors-convert-gestures-to-midi-cc';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

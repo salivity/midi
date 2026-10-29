@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standard 1983 MIDI 5-Pin DIN Pinout - midi</title>
+    <meta name="description" content="This article details the standard pinout configuration of the 180-degree five-pin DIN connector defined in the original 1983 Musical Instrument Digital Interface (MIDI 1.0) specification. It breaks down the functional assignments of each pin, explains the">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/standard-1983-midi-5-pin-din-pinout">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Standard 1983 MIDI 5-Pin DIN Pinout - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/standard-1983-midi-5-pin-din-pinout" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article details the standard pinout configuration of the 180-degree five-pin DIN connector defined in the original 1983 Musical Instrument Digital Interface (MIDI 1.0) specification. It breaks down the functional assignments of each pin, explains the" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="standard-1983-midi-5-pin-din-pinout">Standard 1983 MIDI 5-Pin
+DIN Pinout</h1>
+<p>This article details the standard pinout configuration of the
+180-degree five-pin DIN connector defined in the original 1983 Musical
+Instrument Digital Interface (MIDI 1.0) specification. It breaks down
+the functional assignments of each pin, explains the electrical
+architecture of the 5 mA current loop system, and highlights the
+hardware differences between MIDI In, MIDI Out, and MIDI Thru ports.</p>
+<h3 id="the-connector-and-physical-arrangement">The Connector and
+Physical Arrangement</h3>
+<p>The original 1983 MIDI specification utilizes a standard 180-degree
+5-pin DIN connector (DIN 41524). Viewed from the mating face of a
+standard female panel-mount socket, the pins are arranged in a
+semicircle numbered sequentially in a non-linear DIN convention:</p>
+<ul>
+<li><strong>Pin 1:</strong> 45 degrees (lower left)</li>
+<li><strong>Pin 4:</strong> 90 degrees (upper left)</li>
+<li><strong>Pin 2:</strong> 135 degrees (top center)</li>
+<li><strong>Pin 5:</strong> 180 degrees (upper right)</li>
+<li><strong>Pin 3:</strong> 225 degrees (lower right)</li>
+</ul>
+<h3 id="pinout-configuration">Pinout Configuration</h3>
+<p>The 1983 MIDI standard deliberately utilizes only three of the five
+available pins for signal transmission, leaving two pins unconnected to
+prevent cross-compatibility issues with other audio DIN standards.</p>
+<ul>
+<li><strong>Pin 1 — Not Connected:</strong> Unassigned and left
+floating.</li>
+<li><strong>Pin 2 — Shield / Ground:</strong> Connected to the cable
+shield. In a MIDI Out or MIDI Thru port, Pin 2 is connected directly to
+the transmitting device's chassis/circuit ground. In a MIDI In port, Pin
+2 is left unconnected to eliminate ground loops between networked
+equipment.</li>
+<li><strong>Pin 3 — Not Connected:</strong> Unassigned and left
+floating.</li>
+<li><strong>Pin 4 — Current Source (+5V / Data +):</strong> Supplies
+positive reference voltage. On MIDI Out, it is connected to a +5V rail
+through a 220-ohm current-limiting resistor. On MIDI In, it connects
+directly to the anode of the receiver's optocoupler LED.</li>
+<li><strong>Pin 5 — Current Sink (Data / Data -):</strong> Carries the
+inverted digital data stream. On MIDI Out, it connects through a 220-ohm
+resistor to the output of an open-collector inverter/buffer. On MIDI In,
+it connects directly to the cathode of the receiver's optocoupler
+LED.</li>
+</ul>
+<h3 id="electrical-characteristics-and-operation">Electrical
+Characteristics and Operation</h3>
+<p>The 1983 MIDI standard operates as a unidirectional, 5 mA current
+loop interface running at an asynchronous baud rate of 31.25 kbaud
+(±1%).</p>
+<ul>
+<li><strong>Logic "0" (Space / Active State):</strong> The transmitter
+pulls Pin 5 low, completing the electrical circuit from Pin 4 (+5V)
+through the external cable and into the receiver. Current flows through
+the optocoupler's LED on the MIDI In side, lighting the LED and pulling
+the receiving system's logic line low.</li>
+<li><strong>Logic "1" (Mark / Idle State):</strong> The transmitter
+leaves Pin 5 high (open/floating), preventing current from flowing. The
+optocoupler LED turns off, and a pull-up resistor on the receiver pulls
+the system's logic line high.</li>
+</ul>
+<h3 id="optoisolation-design">Optoisolation Design</h3>
+<p>A critical requirement of the 1983 specification is galvanic
+isolation at every MIDI In port using an optoisolator (such as the Sharp
+PC900 or HP 6N138). Because MIDI In relies entirely on the closed
+current loop across Pin 4 and Pin 5, no electrical connection exists
+between the grounds of the transmitter and receiver. This electrical
+decoupling prevents hum, audio interference, and destructive ground
+potential differences across connected musical hardware.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/standard-1983-midi-5-pin-din-pinout';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 2.0 Jitter Reduction Timestamps Explained - midi</title>
+    <meta name="description" content="This article explores the native Jitter Reduction (JR) timestamp mechanism defined in the MIDI 2.0 specification, explaining how it eliminates timing inconsistencies caused by operating system latency and digital transport buffers. By examining the Univer">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-2-0-jitter-reduction-timestamps-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 2.0 Jitter Reduction Timestamps Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-2-0-jitter-reduction-timestamps-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the native Jitter Reduction (JR) timestamp mechanism defined in the MIDI 2.0 specification, explaining how it eliminates timing inconsistencies caused by operating system latency and digital transport buffers. By examining the Univer" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-20-jitter-reduction-timestamps-explained">MIDI 2.0 Jitter
+Reduction Timestamps Explained</h1>
+<p>This article explores the native Jitter Reduction (JR) timestamp
+mechanism defined in the MIDI 2.0 specification, explaining how it
+eliminates timing inconsistencies caused by operating system latency and
+digital transport buffers. By examining the Universal MIDI Packet (UMP)
+structure, the role of JR Clock and JR Timestamp messages, and the
+function of receiver-side playback buffers, this guide provides a clear
+technical breakdown of how MIDI 2.0 achieves sample-accurate musical
+timing.</p>
+<h3 id="the-problem-of-jitter-in-digital-transports">The Problem of
+Jitter in Digital Transports</h3>
+<p>In the original MIDI 1.0 protocol, timing was inextricably linked to
+transmission time. A device played an event the moment the corresponding
+bytes arrived at its input port. While this worked adequately over
+dedicated 31.25 kbaud serial DIN cables, modern transport layers like
+USB, Ethernet, and operating system software stacks introduce
+packetization delays, buffer cycles, and thread-scheduling
+interruptions. These delays vary continuously from packet to packet,
+creating timing jitter that human ears perceive as uneven musical rhythm
+or sloppy groove.</p>
+<h3 id="the-universal-midi-packet-and-jitter-reduction-architecture">The
+Universal MIDI Packet and Jitter Reduction Architecture</h3>
+<p>MIDI 2.0 eliminates transport-induced timing errors by decoupling
+message transmission time from event execution time. This is implemented
+natively through the Universal MIDI Packet (UMP) architecture, which
+supports dedicated Jitter Reduction (JR) messages.</p>
+<p>Instead of assuming immediate playback upon arrival, MIDI 2.0 allows
+transmitting devices to prepend high-resolution timing data to MIDI
+commands. The receiver buffers incoming packets and schedules their
+playback according to the timestamps, neutralizing any latency or
+transmission jitter introduced across the connection.</p>
+<h3 id="how-jr-clock-and-jr-timestamp-messages-work">How JR Clock and JR
+Timestamp Messages Work</h3>
+<p>The MIDI 2.0 Jitter Reduction scheme operates using two complementary
+32-bit UMP system messages:</p>
+<ol type="1">
+<li><strong>JR Clock Message:</strong> The sender transmits this message
+periodically to establish or mark a reference point in time. It carries
+a 16-bit time value that marks the sender's internal local clock at the
+exact instant the packet is generated.</li>
+<li><strong>JR Timestamp Message:</strong> This message directly
+precedes one or more MIDI event packets (such as Note On or Controller
+messages). It contains a 16-bit offset value that indicates the precise
+moment the associated event occurred—or is intended to be
+executed—relative to the most recent JR Clock.</li>
+</ol>
+<p>Both the JR Clock and JR Timestamp messages measure time in units of
+1/31,250 of a second (32 microseconds). This resolution matches the
+standard 31.25 kbaud transmission rate of legacy MIDI while providing
+sub-millisecond precision far beyond human perception thresholds.</p>
+<h3 id="the-receiver-buffer-and-reconstruction-process">The Receiver
+Buffer and Reconstruction Process</h3>
+<p>For jitter reduction to function, the receiving device implements a
+small lookahead or playout buffer:</p>
+<ol type="1">
+<li><strong>Reception:</strong> When a burst of UMP packets
+arrives—potentially bundled irregularly due to USB host-controller
+polling intervals—the receiver reads the JR Clock and JR Timestamp
+values.</li>
+<li><strong>Alignment:</strong> The receiver calculates the intended
+relative spacing of each musical event based on the 32-microsecond
+time-tick offsets encoded by the sender.</li>
+<li><strong>Timed Release:</strong> The receiver holds the events in its
+local buffer for a predetermined, minimal window (typically a few
+milliseconds) to account for worst-case transport latency. It then
+dispatches the MIDI events to the sound engine or hardware outputs at
+the precise times originally intended by the performer or
+sequencer.</li>
+</ol>
+<p>By trading an imperceptible, fixed amount of latency for complete
+timing stability, native MIDI 2.0 jitter reduction ensures tight,
+deterministic synchronization across any compatible digital
+transport.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-2-0-jitter-reduction-timestamps-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

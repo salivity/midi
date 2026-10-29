@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI-Controlled Analog EQs Work - midi</title>
+    <meta name="description" content="Modern hybrid studio setups increasingly rely on digitally controlled analog equalizers to combine genuine analog harmonic saturation and phase behavior with the seamless automation and recall of digital audio workstations (DAWs). This article breaks down">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-controlled-analog-e-qs-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI-Controlled Analog EQs Work - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-controlled-analog-e-qs-work" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern hybrid studio setups increasingly rely on digitally controlled analog equalizers to combine genuine analog harmonic saturation and phase behavior with the seamless automation and recall of digital audio workstations (DAWs). This article breaks down" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-controlled-analog-eqs-work">How MIDI-Controlled Analog
+EQs Work</h1>
+<p>Modern hybrid studio setups increasingly rely on digitally controlled
+analog equalizers to combine genuine analog harmonic saturation and
+phase behavior with the seamless automation and recall of digital audio
+workstations (DAWs). This article breaks down the engineering behind
+these units, detailing how incoming digital MIDI messages are converted
+into precise physical circuit changes—ranging from electromechanical
+motorized potentiometers to precision relay-switched resistor
+ladders—without ever digitizing or degrading the core analog audio
+path.</p>
+<h3 id="the-separation-of-signal-and-control-paths">The Separation of
+Signal and Control Paths</h3>
+<p>To understand how digital commands affect an analog circuit, it is
+essential to realize that a MIDI-controlled analog equalizer contains
+two completely isolated domains: the audio path and the control
+path.</p>
+<p>The audio path is purely analog, consisting of operational
+amplifiers, discrete transistors, inductors, capacitors, and resistors.
+The control path is entirely digital, housing a dedicated
+microcontroller, MIDI/USB interfaces, and digital logic drivers. The
+audio signal never passes through an analog-to-digital converter (ADC)
+or digital signal processor (DSP). Instead, the digital subsystem acts
+solely as an automated operator that replaces manual knob adjustments
+with automated circuit reconfiguration.</p>
+<h3 id="translating-midi-into-hardware-commands">Translating MIDI into
+Hardware Commands</h3>
+<p>When an engineer draws automation curves in a DAW, the software
+transmits standard MIDI Control Change (CC) or System Exclusive (SysEx)
+data packets via USB or standard 5-pin DIN cables. These packets define
+three essential parameters:</p>
+<ol type="1">
+<li><strong>Target Parameter:</strong> The specific band, frequency
+cutoff, gain, or Q (bandwidth).</li>
+<li><strong>Value:</strong> The degree of adjustment, typically
+quantized into 128 discrete steps (standard MIDI) or 16,384 steps
+(high-resolution 14-bit MIDI).</li>
+<li><strong>Channel/ID:</strong> The designated hardware unit receiving
+the message.</li>
+</ol>
+<p>The internal microcontroller receives these packets, decodes the
+values, and translates them into physical control voltages, switching
+signals, or motor drive commands.</p>
+<h3
+id="electromechanical-adjustment-motorized-potentiometers">Electromechanical
+Adjustment: Motorized Potentiometers</h3>
+<p>When an equalizer physically turns its knobs on the front panel in
+response to DAW automation, it uses motorized potentiometers or rotary
+encoders driven by miniature motors.</p>
+<p>Inside these assemblies, a small DC motor or stepper motor connects
+to the resistive wiper shaft of a standard analog potentiometer via a
+miniature clutch mechanism. When a MIDI CC command arrives:</p>
+<ul>
+<li>The microcontroller commands an H-bridge motor driver to send
+current to the motor.</li>
+<li>The motor physically rotates the wiper across the internal resistive
+carbon or conductive plastic track.</li>
+<li>An optical encoder or internal feedback wiper measures the shaft's
+physical position, sending a signal back to the microcontroller to stop
+the motor once the target position matches the incoming MIDI value.</li>
+</ul>
+<p>The physical wiper's position directly sets the resistance within the
+analog filter's RC (resistor-capacitor) network, altering the filter’s
+cutoff frequency, Q factor, or gain level.</p>
+<h3
+id="electromechanical-switching-relay-switched-resistor-networks">Electromechanical
+Switching: Relay-Switched Resistor Networks</h3>
+<p>Many mastering-grade analog equalizers do not use continuously
+variable potentiometers. Instead, they use stepped attenuators for
+superior stereo matching, lower noise, and exact repeatability. In
+MIDI-controlled versions, these mechanical rotary switches are replaced
+by banks of miniature electromechanical relays (often sealed reed or
+gold-contact relays).</p>
+<p>In this architecture:</p>
+<ul>
+<li>The equalizer topology uses fixed networks of ultra-precise,
+low-tolerance resistors configured around passive or active filter
+circuits (such as gyrator or state-variable filters).</li>
+<li>The microcontroller sends binary data to shift registers and relay
+driver ICs (such as Darlington transistor arrays).</li>
+<li>The driver chips energize the coils of specific miniature relays,
+physically pulling tiny internal magnetic contacts closed.</li>
+<li>By opening and closing specific combinations of contacts, the unit
+physically routes the analog signal through different resistor values,
+adjusting the filter frequency or gain in precise increments.</li>
+</ul>
+<p>The distinct "clicking" sound heard when automating high-end analog
+equalizers is the physical sound of these internal relays engaging in
+real time.</p>
+<h3
+id="solid-state-digital-control-multiplying-dacs-and-cmos-switches">Solid-State
+Digital Control: Multiplying DACs and CMOS Switches</h3>
+<p>In designs optimized for rapid, silent parameter sweeps without the
+acoustic clicking of relays or the mechanical latency of motors,
+manufacturers deploy solid-state analog switches or Multiplying
+Digital-to-Analog Converters (MDACs).</p>
+<ul>
+<li><strong>Multiplying DACs (MDACs):</strong> In an MDAC, the incoming
+analog audio signal serves as the reference voltage input to an internal
+R-2R ladder network. Digital logic signals from the microcontroller
+directly open or close integrated CMOS switches within the ladder,
+changing the effective resistance that the audio encounters. This
+behaves exactly like an analog potentiometer with zero mechanical wear
+and microsecond response times.</li>
+<li><strong>CMOS Analog Switches:</strong> Integrated circuits such as
+bilateral switches act as electronic relays. They introduce virtually no
+physical resistance and can instantly route the audio through discrete
+capacitor or inductor banks to change filter slopes or resonance modes
+based on digital control bits.</li>
+</ul>
+<p>Through these combined electromechanical and solid-state mechanisms,
+modern MIDI-controlled equalizers completely decouple user control from
+the audio domain, providing the workflow efficiency of a digital plug-in
+alongside the uncompromised physics of analog circuitry.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-controlled-analog-e-qs-work';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

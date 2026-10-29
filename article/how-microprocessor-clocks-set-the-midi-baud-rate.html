@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Microprocessor Clocks Set the MIDI Baud Rate - midi</title>
+    <meta name="description" content="When the Musical Instrument Digital Interface (MIDI) specification was finalized in 1983, it established an unusual transmission speed of 31,250 bits per second (31.25 kbaud). This speed was neither arbitrary nor chosen to align with standard telecommunic">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-microprocessor-clocks-set-the-midi-baud-rate">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Microprocessor Clocks Set the MIDI Baud Rate - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-microprocessor-clocks-set-the-midi-baud-rate" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When the Musical Instrument Digital Interface (MIDI) specification was finalized in 1983, it established an unusual transmission speed of 31,250 bits per second (31.25 kbaud). This speed was neither arbitrary nor chosen to align with standard telecommunic" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-microprocessor-clocks-set-the-midi-baud-rate">How
+Microprocessor Clocks Set the MIDI Baud Rate</h1>
+<p>When the Musical Instrument Digital Interface (MIDI) specification
+was finalized in 1983, it established an unusual transmission speed of
+31,250 bits per second (31.25 kbaud). This speed was neither arbitrary
+nor chosen to align with standard telecommunications rates. Instead, it
+was directly dictated by the division of standard microprocessor crystal
+clock frequencies using inexpensive, off-the-shelf Universal
+Asynchronous Receiver-Transmitter (UART) chips. Utilizing simple binary
+division of existing system clocks allowed instrument manufacturers to
+implement digital serial communication with minimal cost and zero
+auxiliary timing hardware.</p>
+<p>In the early 1980s, microprocessors such as the Motorola 6800 family,
+the Intel 8085/8088, and the Zilog Z80 commonly operated with master
+crystal oscillators running at clean integer frequencies such as 1 MHz,
+2 MHz, 4 MHz, or 8 MHz. Microprocessor peripheral buses and internal
+clocks typically operated on powers-of-two divisions of these base
+frequencies.</p>
+<p>Standard serial communication speeds of the era—such as 9,600,
+19,200, or 38,400 baud—required specialized timing crystals, such as
+1.8432 MHz or 3.6864 MHz. These non-integer frequencies were
+mathematically divisible by the standard UART prescalers to hit standard
+serial telecommunication rates. However, synthesizers were built to
+tight consumer price points. Adding a dedicated baud-rate generator
+integrated circuit and a second quartz crystal solely for serial
+communication added unnecessary cost, consumed circuit board real
+estate, and increased power consumption.</p>
+<p>Synthesizer engineers, notably Dave Smith of Sequential Circuits
+during the design of the Prophet-600, solved this by designing the
+transmission rate around standard microcomputer clocks and standard UART
+architecture.</p>
+<p>The Motorola MC6850 Asynchronous Communications Interface Adapter
+(ACIA), a widely adopted UART of that era, offered hardware-configurable
+clock division ratios typically set to <span class="math inline">\(\div
+1\)</span>, <span class="math inline">\(\div 16\)</span>, or <span
+class="math inline">\(\div 64\)</span>. When a designer routed a
+standard 2 MHz clock into the MC6850 and selected the hardware <span
+class="math inline">\(\div 64\)</span> clock divider, the resulting bit
+rate calculated precisely to:</p>
+<p><span class="math display">\[2,000,000 \text{ Hz} \div 64 = 31,250
+\text{ bits per second}\]</span></p>
+<p>Similarly, an instrument driven by a 1 MHz sub-clock could produce
+this exact frequency using a <span class="math inline">\(\div
+32\)</span> prescaler, or an 8 MHz master clock could be passed through
+a binary counter dividing by 256. Because 31,250 is equal to <span
+class="math inline">\(1,000,000 \div 32\)</span>, any system running an
+even megahertz crystal could generate the clock using simple logic
+flip-flops or native UART division.</p>
+<p>This mathematical shortcut yielded substantial performance benefits.
+At 31.25 kbaud, MIDI was significantly faster than the 1,200 to 9,600
+baud speeds common in personal computer communications of the era. A
+standard three-byte MIDI message (consisting of a status byte and two
+data bytes, each packaged with one start bit and one stop bit for a
+total of 30 bits) could be transmitted in roughly 0.96 milliseconds.
+This low transmission latency kept musical event delay imperceptible to
+performers while relying on the cheapest, most ubiquitous microprocessor
+clocks available.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-microprocessor-clocks-set-the-midi-baud-rate';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

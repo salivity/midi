@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optical Encoder vs Potentiometer for Relative MIDI - midi</title>
+    <meta name="description" content="Optical rotary encoders and standard potentiometers handle parameter manipulation in fundamentally different ways, primarily due to their mechanical construction and the data types they transmit. While a standard potentiometer is a bounded, analog compone">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/optical-encoder-vs-potentiometer-for-relative-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Optical Encoder vs Potentiometer for Relative MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/optical-encoder-vs-potentiometer-for-relative-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Optical rotary encoders and standard potentiometers handle parameter manipulation in fundamentally different ways, primarily due to their mechanical construction and the data types they transmit. While a standard potentiometer is a bounded, analog compone" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="optical-encoder-vs-potentiometer-for-relative-midi">Optical
+Encoder vs Potentiometer for Relative MIDI</h1>
+<p>Optical rotary encoders and standard potentiometers handle parameter
+manipulation in fundamentally different ways, primarily due to their
+mechanical construction and the data types they transmit. While a
+standard potentiometer is a bounded, analog component designed for
+absolute positioning, an optical rotary encoder is an endless digital
+sensor built for relative control. This distinction fundamentally
+changes how MIDI hardware interacts with digital audio workstations
+(DAWs) and virtual instruments, eliminating issues like parameter
+jumping and enabling seamless bidirectional workflow integration.</p>
+<h3 id="mechanical-design-and-rotation-limits">Mechanical Design and
+Rotation Limits</h3>
+<p>A standard potentiometer utilizes a physical wiper that sweeps across
+a resistive carbon track. This design inherently features mechanical
+stops, typically restricting physical rotation to approximately 270 to
+300 degrees. Because it has fixed start and end points, it cannot rotate
+infinitely.</p>
+<p>In contrast, an optical rotary encoder has no mechanical stops and
+can rotate 360 degrees infinitely in either direction. Instead of a
+contact wiper, it uses an internal disc with transparent and opaque
+segments positioned between an infrared LED and photodetectors. As the
+shaft spins, the light beam is interrupted, producing digital pulses
+across two channels (quadrature encoding) to indicate direction and
+rotation speed without any physical contact or wear.</p>
+<h3 id="absolute-vs-relative-midi-control">Absolute vs. Relative MIDI
+Control</h3>
+<p>The most significant operational difference lies in the type of MIDI
+messages each device generates:</p>
+<ul>
+<li><strong>Standard Potentiometer (Absolute MIDI):</strong> A
+potentiometer outputs a varying analog voltage converted by a
+microcontroller into a fixed MIDI Continuous Controller (CC) value
+ranging strictly from 0 to 127. The physical position of the knob
+directly corresponds to an absolute digital value. If a software synth
+parameter is currently set to 100, but a physical potentiometer is
+resting at a position corresponding to 20, turning the knob immediately
+forces the software parameter to snap to 20. While software techniques
+like "pickup" or "soft takeover" can mitigate this, they require the
+user to sweep past the stored value before control engages.</li>
+<li><strong>Optical Rotary Encoder (Relative MIDI):</strong> Because an
+encoder has no fixed starting or ending point, it does not send absolute
+values. Instead, it sends "relative" increment (+1) or decrement (-1)
+commands. Common relative MIDI encoding methods (such as Twos
+Complement, Signed Bit, or Binary Offset) tell the receiving software
+merely to increase or decrease the target parameter from its current
+state, regardless of where the physical knob stopped previously.</li>
+</ul>
+<h3 id="seamless-bank-and-preset-switching">Seamless Bank and Preset
+Switching</h3>
+<p>Relative MIDI encoding solves the synchronization problem inherent in
+multi-track mixing and preset switching. When a user switches between
+different tracks, plugins, or parameter banks, a software value may
+change automatically. Because an optical encoder transmits only delta
+changes rather than fixed positions, adjusting the knob immediately
+modifies the parameter smoothly from its existing software value. There
+is never a value jump, and there is no need for motorized hardware to
+reposition the knob physically.</p>
+<h3 id="resolution-speed-and-longevity">Resolution, Speed, and
+Longevity</h3>
+<p>Standard mechanical potentiometers suffer from friction, wiper noise,
+and eventual component degradation over time. Mechanical rotary encoders
+also use metal contacts that cause contact bounce, requiring software
+debouncing that can limit responsiveness.</p>
+<p>Optical rotary encoders eliminate physical contact points within the
+sensing mechanism. This provides three major performance advantages:</p>
+<ol type="1">
+<li><strong>Zero Contact Bounce:</strong> Optical sensing produces clean
+digital edges instantly, enabling higher precision and ultra-low latency
+response.</li>
+<li><strong>Acceleration Support:</strong> High-resolution optical discs
+allow hardware firmware to detect turning velocity. Turning the knob
+slowly results in fine, single-step increments, while spinning it
+quickly accelerates the value change across the entire software
+range.</li>
+<li><strong>Extended Lifespan:</strong> With no carbon tracks to wear
+down or wipers to bend, optical encoders maintain their response profile
+over millions of rotations in professional production environments.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/optical-encoder-vs-potentiometer-for-relative-midi';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Real-Time Messages Preserve Running Status - midi</title>
+    <meta name="description" content="In the MIDI 1.0 specification, System Real-Time messages are uniquely engineered to interleave into active data streams without corrupting ongoing message structures or resetting the active status state. This article explains the technical mechanics behin">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-real-time-messages-preserve-running-status">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Real-Time Messages Preserve Running Status - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-real-time-messages-preserve-running-status" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the MIDI 1.0 specification, System Real-Time messages are uniquely engineered to interleave into active data streams without corrupting ongoing message structures or resetting the active status state. This article explains the technical mechanics behin" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-real-time-messages-preserve-running-status">How MIDI
+Real-Time Messages Preserve Running Status</h1>
+<p>In the MIDI 1.0 specification, System Real-Time messages are uniquely
+engineered to interleave into active data streams without corrupting
+ongoing message structures or resetting the active status state. This
+article explains the technical mechanics behind MIDI running status, the
+defining characteristics of real-time messages, and how receiving
+hardware and parsers process these interleaved bytes on the fly without
+losing musical data.</p>
+<h3 id="the-mechanics-of-midi-running-status">The Mechanics of MIDI
+Running Status</h3>
+<p>Standard MIDI channel messages (such as Note On, Note Off, and
+Control Change) consist of a single status byte (with the most
+significant bit set to <code>1</code>, ranging from <code>0x80</code> to
+<code>0xEF</code>) followed by one or two data bytes (with the most
+significant bit set to <code>0</code>, ranging from <code>0x00</code> to
+<code>0x7F</code>).</p>
+<p>To save bandwidth over the 31.25 kbaud serial connection, MIDI
+implements <strong>running status</strong>. When multiple consecutive
+messages share the same status byte (e.g., a flurry of Note On events),
+the sender transmits the status byte once and then sends only the
+subsequent data byte pairs. The receiver maintains a running status
+buffer that stores this active status, automatically applying it to any
+incoming stream of data bytes.</p>
+<p>Under normal circumstances, receiving any new status byte between
+<code>0x80</code> and <code>0xF7</code> will overwrite or clear the
+receiver’s running status buffer.</p>
+<h3 id="the-nature-of-real-time-system-messages">The Nature of Real-Time
+System Messages</h3>
+<p>System Real-Time messages—which include Timing Clock
+(<code>0xF8</code>), Start (<code>0xFA</code>), Continue
+(<code>0xFB</code>), Stop (<code>0xFC</code>), Active Sensing
+(<code>0xFE</code>), and Reset (<code>0xFF</code>)—must maintain strict
+temporal accuracy. For example, a Timing Clock signal must fire every
+24th of a quarter note regardless of whether the physical MIDI line is
+currently transmitting a pitch bend or a chord.</p>
+<p>To achieve this, the MIDI specification defines System Real-Time
+messages with two critical structural rules:</p>
+<ol type="1">
+<li><strong>Single-Byte Footprint:</strong> They consist of exactly one
+byte (ranging from <code>0xF8</code> to <code>0xFF</code>) and never
+carry accompanying data bytes.</li>
+<li><strong>Immediate Execution:</strong> They can be transmitted at any
+time, even directly between the bytes of another MIDI message.</li>
+</ol>
+<h3 id="how-real-time-messages-interleave-without-resetting-status">How
+Real-Time Messages Interleave Without Resetting Status</h3>
+<p>The ability of a real-time message to break into a running status
+stream relies on how a compliant MIDI parser handles byte decoding and
+internal state management:</p>
+<h4 id="1-independent-state-tracking">1. Independent State Tracking</h4>
+<p>A MIDI parser typically maintains two discrete variables in
+memory:</p>
+<ul>
+<li><strong>Current Running Status Register:</strong> Holds the last
+received channel status byte (<code>0x80</code> to
+<code>0xEF</code>).</li>
+<li><strong>Message Assembly Buffer / Pointer:</strong> Tracks the
+progress of the message currently being collected (e.g., expecting Data
+Byte 1 vs. Data Byte 2).</li>
+</ul>
+<p>When a receiver encounters a byte between <code>0xF8</code> and
+<code>0xFF</code>, the parser’s conditional logic branches immediately
+to a dedicated real-time handler. This handler processes the event (such
+as incrementing an internal clock tick or starting playback) without
+writing to the Running Status Register.</p>
+<h4 id="2-byte-pointer-preservation">2. Byte Pointer Preservation</h4>
+<p>Because real-time messages never contain data bytes, they do not
+advance or alter the message assembly state machine.</p>
+<p>Consider an example where a Note On event is being transmitted under
+running status, but a Timing Clock byte interrupts the stream:</p>
+<ul>
+<li><strong>Sent Byte 1 (<code>0x3C</code>):</strong> Note Number
+(Middle C). The receiver associates this with the existing running
+status and sets its internal pointer to expect the Velocity byte.</li>
+<li><strong>Sent Byte 2 (<code>0xF8</code>):</strong> Timing Clock. The
+receiver detects that the byte is <span
+class="math inline">\(\ge\)</span> <code>0xF8</code>. It immediately
+routes <code>0xF8</code> to the clock handler. The internal pointer
+expecting the Velocity byte remains untouched, and the Running Status
+Register remains unchanged.</li>
+<li><strong>Sent Byte 3 (<code>0x64</code>):</strong> Velocity (100).
+The receiver treats this byte as the missing piece of the interrupted
+Note On event, pairing it with the previously received <code>0x3C</code>
+and applying the active running status.</li>
+</ul>
+<p>By strictly isolating real-time byte identification from the data
+assembly pipeline, the MIDI protocol allows time-critical
+synchronization data to bypass queuing delays without corrupting
+standard musical performance streams.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-real-time-messages-preserve-running-status';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

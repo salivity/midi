@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequential Circuits vs Roland: Serial vs Parallel MIDI - midi</title>
+    <meta name="description" content="In the early 1980s, the development of the Musical Instrument Digital Interface (MIDI) was shaped by a critical technical debate between American manufacturer Sequential Circuits and Japanese titan Roland. At the center of the discussion was whether the n">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/sequential-circuits-vs-roland-serial-vs-parallel-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sequential Circuits vs Roland: Serial vs Parallel MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/sequential-circuits-vs-roland-serial-vs-parallel-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the early 1980s, the development of the Musical Instrument Digital Interface (MIDI) was shaped by a critical technical debate between American manufacturer Sequential Circuits and Japanese titan Roland. At the center of the discussion was whether the n" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="sequential-circuits-vs-roland-serial-vs-parallel-midi">Sequential
+Circuits vs Roland: Serial vs Parallel MIDI</h1>
+<p>In the early 1980s, the development of the Musical Instrument Digital
+Interface (MIDI) was shaped by a critical technical debate between
+American manufacturer Sequential Circuits and Japanese titan Roland. At
+the center of the discussion was whether the new universal standard
+should utilize parallel or serial data transmission. While parallel
+communication offered the raw bandwidth and instantaneous data transfer
+favored for complex polyphonic performance, Sequential Circuits
+championed a low-cost serial alternative to ensure broad adoption. This
+article details the engineering debate between both companies, examining
+how concerns over transmission speed, cable design, latency, and
+hardware costs ultimately forged the modern MIDI specification.</p>
+<h2 id="the-push-for-parallel-communication">The Push for Parallel
+Communication</h2>
+<p>Before a universal standard was established, manufacturers relied on
+proprietary, often analog, voltage control systems or early digital
+solutions. Roland had already implemented its Digital Communication Bus
+(DCB), a semi-parallel interface used to link devices like the Juno-60
+and Jupiter-8 to sequencers.</p>
+<p>Parallel transmission transfers multiple bits of data simultaneously
+across separate physical conductors. Proponents of a parallel standard
+argued that:</p>
+<ul>
+<li><strong>Bandwidth and Latency:</strong> Transmitting full 8-bit data
+bytes simultaneously meant minimal transmission delay. Multiple notes
+played as a chord could be sent virtually at the exact same moment.</li>
+<li><strong>Elimination of "Flamming":</strong> In a slow digital
+stream, chords played together can suffer from audible staggering
+(flamming), where notes trigger sequentially rather than simultaneously.
+Parallel connections effectively bypassed this bottleneck.</li>
+<li><strong>Processing Simplicity:</strong> Synthesizer microprocessors
+could feed data directly from their internal parallel buses to the
+external port without needing UART (Universal Asynchronous
+Receiver-Transmitter) chips to serialize the data.</li>
+</ul>
+<p>Because of these benefits, several engineers initially favored
+parallel buses similar to IEEE-488 or multi-pin computer printer
+cables.</p>
+<h2
+id="sequential-circuits-and-the-case-for-serial-transmission">Sequential
+Circuits and the Case for Serial Transmission</h2>
+<p>Dave Smith and Chet Wood of Sequential Circuits presented the
+preliminary concept of the Universal Synthesizer Interface (USI) at the
+Audio Engineering Society (AES) convention in late 1981. Sequential
+pushed aggressively for an asynchronous serial design, where data bits
+travel sequentially over a single pair of conductors.</p>
+<p>Sequential’s technical rationale centered on practicality and
+cost:</p>
+<ul>
+<li><strong>Cable and Connector Costs:</strong> Parallel systems
+required bulky, shielded multi-conductor ribbon cables and expensive
+multi-pin connectors. Sequential argued that adding costly parallel
+ports would prevent smaller manufacturers and budget synthesizers from
+adopting the protocol.</li>
+<li><strong>Interference and Distance:</strong> Parallel lines are
+susceptible to crosstalk and signal degradation over longer runs,
+requiring rigid shielding and short cable limits. Serial data could be
+transmitted reliably over longer, more flexible, and cheaper
+cables.</li>
+<li><strong>Physical Footprint:</strong> A serial port required only a
+small, standard connector, keeping synthesizer rear panels uncluttered
+and simplifying physical production.</li>
+</ul>
+<h2 id="the-technical-compromise">The Technical Compromise</h2>
+<p>Roland did not object to serial transmission in principle—having seen
+the manufacturing expenses and logistical limitations of their own
+multi-pin DCB cables—but Roland’s engineers, led by Tadao Kikumoto and
+company founder Ikutaro Kakehashi, raised major technical concerns about
+Sequential's original serial proposal.</p>
+<p>Sequential had initially suggested a modest transfer rate of 19.2
+kbaud (kilobaud) utilizing standard quarter-inch audio jacks. Roland
+argued that 19.2 kbaud was too slow to handle polyphonic performance
+data, pitch bend, and real-time control changes without noticeable
+latency. Additionally, quarter-inch jacks could cause brief electrical
+shorts when plugged in while powered on, risking damage to internal
+circuitry and producing ground loops that introduced audio hum.</p>
+<p>To resolve the debate and ensure a serial protocol could
+realistically replace the performance advantages of a parallel bus,
+Roland proposed key modifications:</p>
+<ol type="1">
+<li><strong>Increased Transmission Speed:</strong> The speed was raised
+to 31.25 kbaud. This precise rate was selected because it divided evenly
+into the standard 1 MHz, 2 MHz, and 4 MHz clock rates of the
+microprocessors used in Japanese and American synthesizers, allowing
+hardware to process serial data without dedicated, expensive baud-rate
+generators.</li>
+<li><strong>Opto-Isolation:</strong> To prevent ground hum and
+electrical feedback over serial cables, Roland mandated galvanic
+isolation using optocouplers on the receiver side.</li>
+<li><strong>Connector Choice:</strong> The standard adopted a robust
+5-pin DIN connector, utilizing a 5-milliamp current loop system to
+prevent accidental shorts and eliminate interference over moderate cable
+distances.</li>
+</ol>
+<h2 id="the-conclusion-of-the-debate">The Conclusion of the Debate</h2>
+<p>Sequential Circuits conceded to Roland's engineering revisions
+regarding speed, connector type, and opto-isolation, while Roland and
+other Japanese manufacturers (Yamaha, Korg, and Kawai) fully endorsed
+Sequential's serial architecture over a parallel one.</p>
+<p>By raising the serial baud rate to 31.25 kbaud, the protocol proved
+fast enough to render chord latency imperceptible to human ears,
+neutralizing the core argument for a parallel bus. The resulting
+specification was unveiled to the public as the Musical Instrument
+Digital Interface (MIDI) in 1983, successfully balancing low
+manufacturing costs with the performance reliability required for
+professional music production.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/sequential-circuits-vs-roland-serial-vs-parallel-midi';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

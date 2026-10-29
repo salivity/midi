@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSC vs MIDI: Primary Technical Differences - midi</title>
+    <meta name="description" content="Open Sound Control (OSC) and Musical Instrument Digital Interface (MIDI) are both communication protocols used to connect electronic musical instruments, computers, and performance hardware. While standard MIDI 1.0 has served as the hardware-centric indus">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/osc-vs-midi-primary-technical-differences">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="OSC vs MIDI: Primary Technical Differences - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/osc-vs-midi-primary-technical-differences" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Open Sound Control (OSC) and Musical Instrument Digital Interface (MIDI) are both communication protocols used to connect electronic musical instruments, computers, and performance hardware. While standard MIDI 1.0 has served as the hardware-centric indus" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="osc-vs-midi-primary-technical-differences">OSC vs MIDI: Primary
+Technical Differences</h1>
+<p>Open Sound Control (OSC) and Musical Instrument Digital Interface
+(MIDI) are both communication protocols used to connect electronic
+musical instruments, computers, and performance hardware. While standard
+MIDI 1.0 has served as the hardware-centric industry baseline since
+1983, OSC was introduced in 2002 to address MIDI's architectural
+constraints. The primary technical differences between the two protocols
+lie in their transmission methods, message syntax, numerical resolution,
+data flexibility, and timing mechanisms.</p>
+<h3 id="transmission-and-networking">Transmission and Networking</h3>
+<p>Standard MIDI was originally engineered for low-speed, unidirectional
+serial transmission over 5-pin DIN cables operating at 31.25 kbaud,
+though modern implementations often wrap MIDI over USB. In contrast, OSC
+is natively a network-based protocol designed to run over standard local
+area networks and the internet using transport layers such as UDP/IP and
+TCP/IP. This allows OSC to operate across high-bandwidth Ethernet and
+Wi-Fi connections, enabling communication across vast physical distances
+and between distributed systems without requiring specialized hardware
+interfaces.</p>
+<h3 id="data-resolution-and-precision">Data Resolution and
+Precision</h3>
+<p>Standard MIDI relies heavily on 7-bit integers, which restrict values
+to a range between 0 and 127. While techniques like combining Control
+Change (CC) pairs allow for 14-bit resolution, 7-bit remains the
+default, often resulting in audible stepping artifacts ("zipper noise")
+when modulating parameters like filter cutoffs. OSC natively supports
+32-bit and 64-bit integers and floating-point values. This provides
+virtually continuous resolution, enabling precise microtonal
+adjustments, continuous parameter sweeps, and scientific-grade sensor
+integration without quantization distortion.</p>
+<h3 id="message-architecture-and-addressing">Message Architecture and
+Addressing</h3>
+<p>MIDI uses a compact, fixed binary format consisting of status bytes
+followed by data bytes. Communication is restricted to 16 discrete
+channels, with parameters hardcoded to specific functions or generic CC
+numbers (e.g., CC 7 for volume). OSC employs an open, human-readable,
+hierarchical addressing scheme modeled after URL structures, such as
+<code>/instrument1/filter/frequency</code>. This dynamic namespace is
+self-documenting and eliminates the need to map arbitrary CC numbers to
+specific software controls. OSC also supports pattern matching and
+wildcards (e.g., <code>/instrument*/filter/cutoff</code>), allowing a
+single message to address multiple parameters simultaneously.</p>
+<h3 id="timing-and-synchronization">Timing and Synchronization</h3>
+<p>MIDI achieves synchronization primarily through real-time clock
+pulses and status messages sent sequentially over the wire. Because
+serial transmission introduces latency as data volume increases, MIDI
+pipelines can suffer from transmission jitter. OSC solves this using
+"bundles" containing Network Time Protocol (NTP) timestamps with
+microsecond precision. These timestamps allow a sender to schedule
+events to execute at an exact absolute future time, ensuring
+sample-accurate synchronization across multiple network nodes regardless
+of network latency or packet transmission delays.</p>
+<h3 id="data-types-and-payload-flexibility">Data Types and Payload
+Flexibility</h3>
+<p>Standard MIDI payloads are limited to specific musical events such as
+note-on, note-off, velocity, pitch bend, aftertouch, and vendor-specific
+System Exclusive (SysEx) dumps. OSC features an extensible type-tag
+system capable of transmitting diverse data types within the same
+message, including 32-bit floats, strings, booleans, RGBA colors,
+arrays, and arbitrary binary blobs. This makes OSC suitable not just for
+audio, but also for controlling complex multimedia systems, lighting,
+robotics, and interactive visual installations.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/osc-vs-midi-primary-technical-differences';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

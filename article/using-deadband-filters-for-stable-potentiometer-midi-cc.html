@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Deadband Filters for Stable Potentiometer MIDI CC - midi</title>
+    <meta name="description" content="Converting continuous analog potentiometer signals into digital MIDI Control Change (CC) messages often introduces electrical noise and unintended value fluctuations. An analog deadband filter is an algorithmic thresholding technique that suppresses this">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/using-deadband-filters-for-stable-potentiometer-midi-cc">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using Deadband Filters for Stable Potentiometer MIDI CC - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/using-deadband-filters-for-stable-potentiometer-midi-cc" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Converting continuous analog potentiometer signals into digital MIDI Control Change (CC) messages often introduces electrical noise and unintended value fluctuations. An analog deadband filter is an algorithmic thresholding technique that suppresses this" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="using-deadband-filters-for-stable-potentiometer-midi-cc">Using
+Deadband Filters for Stable Potentiometer MIDI CC</h1>
+<p>Converting continuous analog potentiometer signals into digital MIDI
+Control Change (CC) messages often introduces electrical noise and
+unintended value fluctuations. An analog deadband filter is an
+algorithmic thresholding technique that suppresses this noise by
+ignoring minor voltage micro-variations. Implementing a deadband filter
+is essential for creating stable, jitter-free MIDI controllers, as it
+prevents phantom MIDI messages, reduces bandwidth saturation, and
+ensures parameters remain steady until the user deliberately turns a
+knob.</p>
+<h3 id="the-problem-adc-noise-and-boundary-oscillation">The Problem: ADC
+Noise and Boundary Oscillation</h3>
+<p>Analog-to-digital converters (ADCs) in microcontrollers typically
+sample potentiometer voltage at 10-bit (0–1023) or 12-bit (0–4095)
+resolution. In real-world circuits, analog voltages are subject to
+thermal noise, power supply ripple, and mechanical imperfections.
+Consequently, an untouched potentiometer rarely outputs a completely
+static ADC value; it naturally fluctuates up and down by a few
+units.</p>
+<p>Standard MIDI CC values operate on a 7-bit scale, ranging from 0 to
+127. To convert a 10-bit ADC reading into MIDI, the system divides the
+reading by 8. If the potentiometer sits on a numerical boundary—such as
+an ADC value oscillating between 511 and 512—this downscaled value
+repeatedly flips between MIDI values 63 and 64.</p>
+<p>Without filtering, this boundary oscillation causes three major
+problems:</p>
+<ul>
+<li><strong>MIDI Flooding:</strong> The microcontroller sends a
+continuous stream of redundant MIDI messages, consuming serial bandwidth
+and introducing latency into the system.</li>
+<li><strong>Audible Artifacts:</strong> Connected software synths or
+digital audio workstations (DAWs) constantly modulate the assigned
+parameter, causing audible clicks, zipper noise, or unintended
+automation writes.</li>
+<li><strong>CPU Overhead:</strong> Receiving hardware or software must
+process thousands of unnecessary messages per second.</li>
+</ul>
+<h3 id="what-is-a-deadband-filter">What Is a Deadband Filter?</h3>
+<p>A deadband filter—closely related to hysteresis—is a software logic
+mechanism that creates an inactive zone (the "deadband") around the
+current measurement. Under this rule, a change in the input signal is
+discarded unless the magnitude of that change exceeds a predefined
+threshold.</p>
+<p>Instead of sending every minor change detected by the ADC, the
+algorithm compares the current sensor reading to the last registered
+value. If the difference is smaller than the deadband threshold, the
+system treats the input as noise and takes no action. Only when the user
+intentionally turns the potentiometer past this threshold does the
+filter accept the new value, transmit the updated MIDI CC, and reset the
+reference point.</p>
+<h3 id="how-the-filter-operates">How the Filter Operates</h3>
+<p>In a typical potentiometer-to-MIDI pipeline, the deadband filter
+works as follows:</p>
+<ol type="1">
+<li><strong>Read Analog Input:</strong> The ADC reads the instantaneous
+potentiometer voltage.</li>
+<li><strong>Calculate Delta:</strong> The algorithm computes the
+absolute difference between the new ADC reading and the last accepted
+reading (<code>abs(current_reading - last_reading)</code>).</li>
+<li><strong>Threshold Check:</strong>
+<ul>
+<li>If the delta is less than the deadband size (typically 2 to 4 steps
+for a 10-bit ADC), the reading is ignored.</li>
+<li>If the delta meets or exceeds the deadband, the change is recognized
+as intentional user input.</li>
+</ul></li>
+<li><strong>Update and Map:</strong> The algorithm updates the stored
+reference value and maps the new value to the 0–127 MIDI CC range.</li>
+<li><strong>Transmit:</strong> The microcontroller sends the MIDI CC
+message out over USB or standard 5-pin DIN.</li>
+</ol>
+<h3 id="why-deadband-filtering-is-essential-for-midi">Why Deadband
+Filtering Is Essential for MIDI</h3>
+<p>Standard smoothing filters, such as moving averages or low-pass
+exponential filters, reduce high-frequency noise but introduce latency
+and do not completely resolve boundary jitter. An averaged value can
+still drift slowly across a MIDI boundary, causing delayed, ghost
+messages to transmit long after the user has released the knob.</p>
+<p>A deadband filter provides definitive stability. Once a user stops
+moving a control, the output locks instantly. It achieves absolute
+stillness without introducing sluggish control lag, making the physical
+hardware feel responsive, accurate, and professional.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/using-deadband-filters-for-stable-potentiometer-midi-cc';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

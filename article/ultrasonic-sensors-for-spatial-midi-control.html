@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultrasonic Sensors for Spatial MIDI Control - midi</title>
+    <meta name="description" content="Interactive sound artists frequently use ultrasonic distance sensors to bridge physical space and digital music production, turning physical movement into expressive musical data. By emitting high-frequency sound waves and calculating their time-of-flight">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/ultrasonic-sensors-for-spatial-midi-control">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ultrasonic Sensors for Spatial MIDI Control - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/ultrasonic-sensors-for-spatial-midi-control" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interactive sound artists frequently use ultrasonic distance sensors to bridge physical space and digital music production, turning physical movement into expressive musical data. By emitting high-frequency sound waves and calculating their time-of-flight" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="ultrasonic-sensors-for-spatial-midi-control">Ultrasonic Sensors
+for Spatial MIDI Control</h1>
+<p>Interactive sound artists frequently use ultrasonic distance sensors
+to bridge physical space and digital music production, turning physical
+movement into expressive musical data. By emitting high-frequency sound
+waves and calculating their time-of-flight, these sensors track the
+proximity of a performer’s hands or an audience member's body.
+Microcontrollers process these distance measurements and translate them
+into standard MIDI messages—most commonly Continuous Controller (CC)
+data—allowing physical gestures to modulate musical parameters like
+filter cutoffs, spatial panning, volume, and effects in real time.</p>
+<h3 id="the-physics-of-distance-detection">The Physics of Distance
+Detection</h3>
+<p>At the hardware level, artists typically deploy sensors such as the
+HC-SR04. The sensor consists of an ultrasonic transmitter and receiver.
+The transmitter emits a burst of sound at approximately 40 kHz, well
+above human hearing. The sound wave travels through the air, reflects
+off a solid object (such as a hand or a person), and bounces back to the
+receiver.</p>
+<p>The sensor measures the time elapsed between the transmission and the
+reception of the echo. A microcontroller—such as an Arduino, Teensy, or
+ESP32—calculates the physical distance using the speed of sound via the
+formula:</p>
+<p><span class="math display">\[\text{Distance} = \frac{\text{Time}
+\times \text{Speed of Sound}}{2}\]</span></p>
+<h3 id="signal-conditioning-and-data-smoothing">Signal Conditioning and
+Data Smoothing</h3>
+<p>Raw ultrasonic readings can be noisy due to atmospheric conditions,
+sensor latency, or imperfect reflective surfaces. Before converting
+distance data to musical control signals, the microcontroller must
+condition the input.</p>
+<p>Artists implement software smoothing algorithms, such as:</p>
+<ul>
+<li><strong>Moving Averages:</strong> Averaging the last few readings to
+eliminate sudden erratic jumps.</li>
+<li><strong>Low-Pass Filtering:</strong> Smoothing the output trajectory
+so rapid, unintentional twitches do not cause audible artifacts in the
+sound engine.</li>
+<li><strong>Boundary Clamping:</strong> Setting minimum and maximum
+physical thresholds (for example, 5 cm to 100 cm) to define an active
+interaction zone.</li>
+</ul>
+<h3 id="mapping-distance-to-midi-messages">Mapping Distance to MIDI
+Messages</h3>
+<p>Once a stable distance metric is calculated, it must be normalized
+and mapped to the MIDI protocol. Standard MIDI Continuous Controller
+(CC) messages use a 7-bit resolution, requiring values between 0 and
+127.</p>
+<p>The microcontroller runs a mapping function that scales the
+calibrated physical range to this 0–127 integer scale. For example, a
+hand positioned at 5 cm might output a CC value of 0, while moving the
+hand to 100 cm scales up to 127. The microcontroller then transmits this
+data over USB-MIDI or traditional 5-pin DIN connections directly to a
+Digital Audio Workstation (DAW) or hardware synthesizer.</p>
+<h3 id="generating-multi-dimensional-spatial-sound">Generating
+Multi-Dimensional Spatial Sound</h3>
+<p>While a single sensor measures one-dimensional depth (the Z-axis),
+artists frequently combine multiple ultrasonic sensors to construct
+multi-dimensional spatial systems:</p>
+<ul>
+<li><strong>Two-Axis Control (X/Y):</strong> Placing two sensors
+orthogonally allows an artist to control two parameters simultaneously,
+such as stereo panning along the X-axis and filter resonance along the
+Y-axis.</li>
+<li><strong>3D Audio Panning:</strong> In ambisonic or surround sound
+environments, distance values can be mapped to 3D spatial coordinates
+(azimuth, elevation, and distance). Moving closer to a specific sensor
+pulls an audio source toward that speaker's physical position in the
+room.</li>
+<li><strong>Proximity-Based Wet/Dry Control:</strong> Artists often map
+distance directly to spatial depth effects. Moving away from a sensor
+can increase the wet/dry mix of a large reverb and reduce high
+frequencies, psychoacoustically simulating an object moving into the
+distance.</li>
+</ul>
+<p>By converting the physics of acoustic reflection into digital control
+streams, ultrasonic sensors provide an intuitive, touchless interface
+that allows artists to sculpt sound directly through spatial
+choreography.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/ultrasonic-sensors-for-spatial-midi-control';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

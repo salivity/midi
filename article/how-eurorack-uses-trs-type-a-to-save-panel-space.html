@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Eurorack Uses TRS Type A to Save Panel Space - midi</title>
+    <meta name="description" content="Modern Eurorack modular synthesizers increasingly rely on 3.5mm TRS Type A connections to transmit MIDI data while occupying minimal front panel real estate. By replacing bulky legacy 5-pin DIN jacks with compact 3.5mm stereo jacks wired to the official M">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-eurorack-uses-trs-type-a-to-save-panel-space">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Eurorack Uses TRS Type A to Save Panel Space - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-eurorack-uses-trs-type-a-to-save-panel-space" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern Eurorack modular synthesizers increasingly rely on 3.5mm TRS Type A connections to transmit MIDI data while occupying minimal front panel real estate. By replacing bulky legacy 5-pin DIN jacks with compact 3.5mm stereo jacks wired to the official M" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-eurorack-uses-trs-type-a-to-save-panel-space">How Eurorack
+Uses TRS Type A to Save Panel Space</h1>
+<p>Modern Eurorack modular synthesizers increasingly rely on 3.5mm TRS
+Type A connections to transmit MIDI data while occupying minimal front
+panel real estate. By replacing bulky legacy 5-pin DIN jacks with
+compact 3.5mm stereo jacks wired to the official MIDI Association
+standard, manufacturers can build feature-dense modules in narrow widths
+such as 2HP to 6HP without compromising on modern digital
+connectivity.</p>
+<p>In Eurorack systems, front panel space is measured in Horizontal
+Pitch (HP), where 1HP equals exactly 5.08 mm (0.2 inches). A traditional
+5-pin DIN MIDI connector requires roughly 16 mm to 20 mm of front-panel
+diameter plus substantial depth behind the panel. This physical
+footprint makes it impossible to include a 5-pin DIN port on any module
+narrower than 4HP to 6HP without mounting the port sideways or
+dedicating the entire panel to that single connector. Because Eurorack
+systems already use 3.5mm jacks for control voltage (CV), gate, and
+audio signals, adopting the same jack footprint for MIDI allows hardware
+designers to pack multiple inputs, outputs, and controls into compact
+formats.</p>
+<p>The standard MIDI over TRS specification was officially standardized
+by the MIDI Manufacturers Association (MMA) as TRS Type A. The MIDI
+specification only requires three physical lines to operate: MIDI Pin 4
+(Source), MIDI Pin 5 (Sink), and MIDI Pin 2 (Ground). The Type A
+standard maps these connections directly to the conductors of a standard
+3.5mm TRS (Tip-Ring-Sleeve) jack:</p>
+<ul>
+<li><strong>Tip:</strong> MIDI Pin 4 (Current Source)</li>
+<li><strong>Ring:</strong> MIDI Pin 5 (Current Sink)</li>
+<li><strong>Sleeve:</strong> MIDI Pin 2 (Shield / Ground)</li>
+</ul>
+<p>Adopting TRS Type A preserves internal circuit board space and front
+panel layout. Designers can place 3.5mm MIDI input and output ports
+inline with existing rows of standard patch jacks, keeping front panels
+uniform and clean. This density enables complex digital devices—such as
+multi-channel MIDI-to-CV converters, polyphonic sequencers, and effect
+processors—to exist in compact modules without consuming excessive rack
+space.</p>
+<p>In daily operation, TRS Type A jacks allow users to patch MIDI
+directly between compatible modules using regular 3.5mm stereo audio
+cables. When connecting to external synthesizers or controllers that
+still use 5-pin DIN connectors, users simply connect an inexpensive
+TRS-to-DIN Type A dongle or adapter cable. This architecture maintains
+backward compatibility with legacy studio gear while maximizing
+usability in narrow, travel-friendly Eurorack cases.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-eurorack-uses-trs-type-a-to-save-panel-space';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

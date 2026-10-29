@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Voice Allocation Architecture Explained - midi</title>
+    <meta name="description" content="This article explores MIDI voice allocation architecture, detailing how synthesizers manage finite polyphony when handling musical performance data. It explains the role of the central microprocessor in tracking available audio channels, parsing incoming">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-voice-allocation-architecture-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Voice Allocation Architecture Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-voice-allocation-architecture-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores MIDI voice allocation architecture, detailing how synthesizers manage finite polyphony when handling musical performance data. It explains the role of the central microprocessor in tracking available audio channels, parsing incoming" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-voice-allocation-architecture-explained">MIDI Voice
+Allocation Architecture Explained</h1>
+<p>This article explores MIDI voice allocation architecture, detailing
+how synthesizers manage finite polyphony when handling musical
+performance data. It explains the role of the central microprocessor in
+tracking available audio channels, parsing incoming MIDI messages, and
+executing dynamic voice assignment and voice-stealing algorithms to
+ensure optimal acoustic performance without dropouts.</p>
+<h3 id="the-purpose-of-voice-allocation-architecture">The Purpose of
+Voice Allocation Architecture</h3>
+<p>In hardware and software synthesizers, polyphony represents the
+maximum number of individual notes that can sound simultaneously. Each
+simultaneous note requires a distinct signal path or computational block
+known as a "voice," comprising oscillators, filters, amplifiers, and
+envelope generators. Because physical hardware components or digital
+processing cycles are limited, an instrument cannot dedicate an infinite
+number of voices to performance inputs.</p>
+<p>A MIDI voice allocation architecture is the supervisory system that
+manages these finite sound-generating resources. It bridges incoming
+serial or USB MIDI data with the synthesizer’s sound engine, dynamically
+assigning, maintaining, and terminating voice circuits to recreate the
+musician's performance accurately within the constraints of the system's
+polyphonic capacity.</p>
+<h3 id="the-dynamic-assignment-process">The Dynamic Assignment
+Process</h3>
+<p>The dynamic assignment of voices relies on an onboard microprocessor
+or microcontroller running a low-latency real-time operating system or
+event loop. The microprocessor continuously executes a sequence of
+operations:</p>
+<ol type="1">
+<li><strong>MIDI Message Parsing:</strong> The microprocessor reads
+incoming serial data packets. When it detects a <code>Note On</code>
+status byte (with a velocity greater than zero), it extracts the note
+number, velocity, and MIDI channel.</li>
+<li><strong>State Table Lookup:</strong> The processor maintains a
+dynamic voice state table in RAM. This table tracks every physical or
+virtual voice, logging its current status (idle, attack, sustain, or
+release), the MIDI note number assigned to it, the timestamp of when it
+was triggered, and its current amplitude level.</li>
+<li><strong>Free Voice Detection:</strong> The processor queries the
+state table for an unassigned, idle voice. If an idle voice is located,
+the processor assigns the note parameters to that voice generator,
+triggers the envelope generator's attack phase, and marks the voice
+status as active.</li>
+<li><strong>Release and Reclamation (<code>Note Off</code>):</strong>
+When a corresponding <code>Note Off</code> message (or a
+<code>Note On</code> with velocity zero) arrives, the processor
+cross-references the note number with the state table to identify which
+voice is currently playing that pitch. The processor instructs that
+specific voice to enter its release phase. Once the envelope decay drops
+below an audible threshold, the voice's status updates to idle,
+returning it to the pool of available resources.</li>
+</ol>
+<h3 id="voice-stealing-algorithms">Voice Stealing Algorithms</h3>
+<p>When the number of simultaneously requested notes exceeds the
+instrument's total polyphony, all voices are flagged as active. In this
+scenario, the microprocessor must execute a voice-stealing algorithm to
+terminate an active sound and reallocate the voice hardware to the newly
+received note. Common reallocation strategies include:</p>
+<ul>
+<li><strong>Oldest Note Priority (FIFO):</strong> The processor searches
+the state table for the voice that was triggered earliest in time and
+terminates it to service the incoming note. This strategy works well for
+continuous melodic playing where older, decaying notes are musically
+less important.</li>
+<li><strong>Quiet-Note Priority:</strong> The microprocessor queries the
+envelope levels to determine which voice is currently outputting the
+lowest amplitude, often a note deep into its release phase. Stealing the
+quietest voice minimizes audible clicking or noticeable performance
+interruptions.</li>
+<li><strong>Same-Note Stealing (Retriggering):</strong> If an incoming
+note matches the pitch of a note that is already sounding or sustaining,
+the processor steals that exact voice. This avoids voice accumulation
+caused by rapid repetition of the same key.</li>
+<li><strong>Lowest/Highest Note Priority:</strong> Used frequently in
+monophonic or split-keyboard modes, the processor evaluates pitch data
+to ensure specific bass or lead lines are retained regardless of chord
+density.</li>
+</ul>
+<h3 id="dynamic-allocation-modes">Dynamic Allocation Modes</h3>
+<p>Microprocessors often implement different allocation modes depending
+on the intended musical behavior:</p>
+<ul>
+<li><strong>Cyclic (Round-Robin) Allocation:</strong> The microprocessor
+cycles through voices sequentially (Voice 1, Voice 2, Voice 3, etc.) for
+each new note. This prevents the immediate truncation of natural release
+tails, allowing previous notes to ring out as long as possible across
+different channels.</li>
+<li><strong>Reset (Lowest-Index) Allocation:</strong> The processor
+always checks for the first free voice starting from Voice 1. This keeps
+voice usage concentrated on lower-numbered voices, which can simplify
+power management in modular hardware setups.</li>
+<li><strong>Unison Allocation:</strong> The processor links multiple
+physical voices to a single incoming note, detuning them slightly to
+create a richer acoustic texture while proportionately reducing the
+overall polyphonic ceiling.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-voice-allocation-architecture-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

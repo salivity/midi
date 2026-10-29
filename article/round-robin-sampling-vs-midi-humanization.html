@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round-Robin Sampling vs MIDI Humanization - midi</title>
+    <meta name="description" content="Achieving a realistic performance from virtual instruments requires avoiding the robotic repetition known as the &quot;machine-gun effect.&quot; While both sampled round-robin scripting and randomized humanized MIDI velocity are designed to make digital instruments">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/round-robin-sampling-vs-midi-humanization">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Round-Robin Sampling vs MIDI Humanization - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/round-robin-sampling-vs-midi-humanization" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Achieving a realistic performance from virtual instruments requires avoiding the robotic repetition known as the &quot;machine-gun effect.&quot; While both sampled round-robin scripting and randomized humanized MIDI velocity are designed to make digital instruments" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="round-robin-sampling-vs-midi-humanization">Round-Robin Sampling
+vs MIDI Humanization</h1>
+<p>Achieving a realistic performance from virtual instruments requires
+avoiding the robotic repetition known as the "machine-gun effect." While
+both sampled round-robin scripting and randomized humanized MIDI
+velocity are designed to make digital instruments sound more organic,
+they operate at completely different stages of the music production
+chain. Round-robin scripting rotates through multiple distinct audio
+recordings of the exact same note and dynamic, whereas MIDI velocity
+humanization alters the numerical performance data sent to an instrument
+to simulate natural human playing inconsistency.</p>
+<h3 id="what-is-a-sampled-round-robin-script">What is a Sampled
+Round-Robin Script?</h3>
+<p>A round-robin script is an internal feature of a software sampler
+(such as Native Instruments Kontakt or Spitfire Audio's player). When
+recording an acoustic instrument for a sample library, developers record
+the exact same note at the exact same dynamic level multiple times.</p>
+<p>When you play that note repeatedly, the round-robin script alternates
+between these separate audio takes, either in a fixed cycle (Take 1,
+Take 2, Take 3) or at random. Because no human musician strikes a drum
+or bows a violin string in the exact same physical way twice, subtle
+differences in resonance, attack, and phase naturally occur between
+takes. Round-robin ensures that the listener never hears the identical
+audio waveform back-to-back, even if the incoming MIDI notes are
+completely identical in velocity and timing.</p>
+<h3 id="what-is-randomized-humanized-midi-velocity-playback">What is
+Randomized Humanized MIDI Velocity Playback?</h3>
+<p>Randomized MIDI velocity playback is an algorithmic process typically
+handled by a Digital Audio Workstation (DAW) or a MIDI plugin before the
+information ever reaches the sound generator.</p>
+<p>Human performers cannot hit a key or drum pad with mathematical
+precision; their strike force varies slightly with every note. Velocity
+humanization takes a track's existing MIDI velocity values (ranging from
+0 to 127) and applies a small, randomized deviation—for instance, +/- 5
+values. This changes the intensity instruction delivered to the virtual
+instrument, telling it to play slightly louder or softer on each
+trigger.</p>
+<h3 id="key-differences-between-the-two-techniques">Key Differences
+Between the Two Techniques</h3>
+<ul>
+<li><strong>Data vs. Audio:</strong> MIDI velocity randomization
+modifies the performance data before synthesis or playback occurs.
+Round-robin scripting takes place inside the sampler engine, selecting
+different underlying audio files based on instructions received.</li>
+<li><strong>Timbral Change vs. Dynamic Intent:</strong> Velocity
+randomization changes the <em>intended force</em> of the hit. In a
+multi-sampled instrument, this might trigger a completely different
+velocity layer (moving from a soft strike to a medium strike), which
+noticeably changes the volume and timbre. Round-robin changes the
+<em>variation of the same hit</em>, preserving the intended dynamic
+level while introducing natural micro-variations.</li>
+<li><strong>The "Machine-Gun" Risk:</strong> Using MIDI velocity
+randomization alone will not solve repetition issues if an instrument
+lacks round-robin samples or has broad velocity layers. If notes
+fluctuate between a velocity of 70 and 74, but the instrument maps a
+single audio file across velocities 60 through 80, the exact same audio
+file will still play repeatedly.</li>
+</ul>
+<h3 id="combining-both-for-realism">Combining Both for Realism</h3>
+<p>Neither technique is a replacement for the other; rather, they serve
+complementary purposes. Randomized MIDI velocity simulates the natural
+physical imperfections of a musician's hands, while round-robin scripts
+recreate the acoustic physics of the instrument itself. Using a library
+equipped with round-robin scripting while applying subtle velocity
+humanization in your sequencer yields the highest level of realism in
+digital mockups.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/round-robin-sampling-vs-midi-humanization';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

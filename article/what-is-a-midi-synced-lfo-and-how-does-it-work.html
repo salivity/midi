@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI-Synced LFO and How Does It Work? - midi</title>
+    <meta name="description" content="A MIDI-synced LFO (Low-Frequency Oscillator) is a modulation source whose rate is locked to the tempo and meter of a digital audio workstation (DAW) or hardware sequencer rather than running at an arbitrary frequency measured in Hertz. By receiving timing">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-synced-lfo-and-how-does-it-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI-Synced LFO and How Does It Work? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-synced-lfo-and-how-does-it-work" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI-synced LFO (Low-Frequency Oscillator) is a modulation source whose rate is locked to the tempo and meter of a digital audio workstation (DAW) or hardware sequencer rather than running at an arbitrary frequency measured in Hertz. By receiving timing" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-synced-lfo-and-how-does-it-work">What Is a
+MIDI-Synced LFO and How Does It Work?</h1>
+<p>A MIDI-synced LFO (Low-Frequency Oscillator) is a modulation source
+whose rate is locked to the tempo and meter of a digital audio
+workstation (DAW) or hardware sequencer rather than running at an
+arbitrary frequency measured in Hertz. By receiving timing data through
+MIDI clock signals or internal host synchronization, it recalculates its
+cycle lengths into musical beat divisions such as quarter notes, eighth
+notes, or triplets. This ensures that cyclic modulation sweeps—such as
+filter cutoff changes, volume tremolo, or pitch vibrato—align perfectly
+with the grid of a musical project without drifting out of time.</p>
+<h3 id="how-a-standard-lfo-differs-from-a-synced-lfo">How a Standard LFO
+Differs from a Synced LFO</h3>
+<p>A traditional analog or free-running digital LFO operates
+independently of project tempo. Its speed is defined in Hertz (Hz),
+representing cycles per second. For example, an LFO running at 2 Hz
+completes two full cycles every second, regardless of whether a song is
+at 90 BPM or 140 BPM. While this is useful for organic, unpredictable
+modulations, it causes periodic effects like filter sweeps or rhythmic
+gating to drift against the drum pattern or musical groove.</p>
+<p>A MIDI-synced LFO replaces Hertz values with metric time divisions.
+Instead of selecting a frequency like 1.5 Hz, the producer selects
+musical intervals, such as 1/2, 1/4, 1/8, or 1/16 notes, along with
+dotted and triplet variations.</p>
+<h3 id="the-mechanism-behind-tempo-locking">The Mechanism Behind Tempo
+Locking</h3>
+<p>The synchronization process relies on continuous timing communication
+between the host DAW and the synthesizer or effect plugin:</p>
+<ol type="1">
+<li><strong>BPM and Clock Information:</strong> The host environment
+continuously broadcasts tempo data. In external setups, this is handled
+by the standard MIDI Clock protocol, which transmits 24 "ticks" or
+Pulses Per Quarter Note (PPQN). In software plugins (VST, AU, AAX), the
+DAW provides direct internal timing and sample-position data to the
+plugin engine.</li>
+<li><strong>Frequency Calculation:</strong> The LFO translates the
+current tempo (BPM) and selected metric division into the required cycle
+length in samples or milliseconds. If the project tempo changes—either
+abruptly or via a tempo ramp—the LFO automatically recalculates its
+frequency in real time, stretching or compressing the modulation
+waveform to preserve its exact rhythmic value.</li>
+<li><strong>Phase Synchronization and Retriggering:</strong> To ensure
+that sweeps occur at the right musical moment, MIDI-synced LFOs often
+feature phase-alignment modes:
+<ul>
+<li><strong>Free / Song Sync:</strong> The LFO phase is tied directly to
+the DAW timeline. Bar 1, Beat 1 corresponds to phase zero (the start of
+the waveform), keeping the modulation locked to the arrangement even
+when starting playback mid-song.</li>
+<li><strong>Note Retrigger:</strong> Each incoming MIDI Note-On message
+resets the LFO cycle back to its starting phase, ensuring every played
+chord or note receives identical modulation from the very beginning of
+its envelope.</li>
+</ul></li>
+</ol>
+<h3 id="rhythmic-impact-on-modulation-sweeps">Rhythmic Impact on
+Modulation Sweeps</h3>
+<p>When an LFO is synced to the tempo, modulation sweeps hit their
+peaks, troughs, and zero-crossings on exact beats and subdivisions.</p>
+<p>In synthesis, routing a tempo-synced LFO to a low-pass filter cutoff
+produces rhythmic filter sweeps—a staple of electronic music genres,
+such as the synchronized "wobble" in dubstep or the driving 1/8-note
+filter pulses in synthwave. When routed to an amplifier, it generates
+precise sidechain-style ducking or stutter effects. Because the
+modulation mathematically mirrors the project's time signature and
+tempo, the sound remains cohesive with the rhythm section without
+requiring manual automation or micro-adjustments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/what-is-a-midi-synced-lfo-and-how-does-it-work';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

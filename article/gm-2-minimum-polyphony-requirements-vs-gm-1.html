@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GM2 Minimum Polyphony Requirements vs GM1 - midi</title>
+    <meta name="description" content="This article examines how the General MIDI 2 (GM2) specification upgrades the baseline polyphony standards set by the original General MIDI 1 (GM1) standard. It details the specific voice count increase from 24 to 32 notes, the shift toward fully dynamic">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/gm-2-minimum-polyphony-requirements-vs-gm-1">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GM2 Minimum Polyphony Requirements vs GM1 - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/gm-2-minimum-polyphony-requirements-vs-gm-1" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how the General MIDI 2 (GM2) specification upgrades the baseline polyphony standards set by the original General MIDI 1 (GM1) standard. It details the specific voice count increase from 24 to 32 notes, the shift toward fully dynamic" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="gm2-minimum-polyphony-requirements-vs-gm1">GM2 Minimum Polyphony
+Requirements vs GM1</h1>
+<p>This article examines how the General MIDI 2 (GM2) specification
+upgrades the baseline polyphony standards set by the original General
+MIDI 1 (GM1) standard. It details the specific voice count increase from
+24 to 32 notes, the shift toward fully dynamic voice allocation, and the
+practical musical benefits this expansion provides for modern MIDI
+playback devices and complex arrangements.</p>
+<h3 id="the-gm1-polyphony-baseline">The GM1 Polyphony Baseline</h3>
+<p>Introduced in 1991, the original General MIDI 1 specification defined
+a strict minimum polyphony to ensure standard MIDI files sounded
+consistent across different hardware sound modules and synthesizers.
+Under GM1, compliant sound generators were required to support a minimum
+of 24 voices. Manufacturers could implement this in one of two
+configurations:</p>
+<ul>
+<li><strong>Dynamic allocation:</strong> A pool of 24 voices shared
+dynamically between melodic instruments and percussion.</li>
+<li><strong>Static allocation:</strong> A fixed split providing a
+minimum of 16 voices for melodic instruments and 8 distinct voices
+reserved for percussion on MIDI Channel 10.</li>
+</ul>
+<p>While 24 voices represented a practical compromise for
+sound-generating hardware in the early 1990s, it frequently led to
+"voice stealing." When a musical arrangement exceeded 24 active
+notes—often caused by sustained piano chords, overlapping cymbal decays,
+or multitimbral layering—the device was forced to prematurely cut off
+older notes to play new ones.</p>
+<h3 id="the-gm2-expansion-to-32-voices">The GM2 Expansion to 32
+Voices</h3>
+<p>Adopted in 1999 by the MIDI Manufacturers Association (MMA) and the
+Association of Musical Electronics Industry (AMEI), General MIDI 2
+addressed these performance bottlenecks by increasing the mandatory
+minimum polyphony requirement from 24 to 32 simultaneous voices.</p>
+<p>Unlike the optional split configuration permitted in GM1, GM2
+mandates that all 32 voices must be allocated dynamically across all
+active channels. This voice pool services both melodic tracks and
+percussion seamlessly, adapting in real time to the demands of the
+arrangement.</p>
+<h3 id="enhanced-channel-capabilities-and-polyphony-demands">Enhanced
+Channel Capabilities and Polyphony Demands</h3>
+<p>The increase to 32 voices directly complements other architectural
+expansions introduced in GM2:</p>
+<ul>
+<li><strong>Dual Percussion Channels:</strong> While GM1 restricted drum
+kits exclusively to Channel 10, GM2 allows percussion on both Channel 10
+and Channel 11 simultaneously. A higher voice ceiling is necessary to
+support two independent drum kits or a combined drum and auxiliary
+percussion setup without starving melodic channels of available
+notes.</li>
+<li><strong>Increased Sound Layering:</strong> GM2 expanded the total
+sound library from GM1’s standard 128 programs to 256 programs by
+utilizing Bank Select messages (CC 0 and CC 32). With greater sonic
+variety and multi-layered patches, higher polyphony ensures that richer,
+dual-voice instrument sounds can decay naturally.</li>
+<li><strong>Envelope and Controller Handling:</strong> GM2 standardizes
+additional continuous controllers such as filter resonance, attack, and
+release times. Sounds with longer release phases naturally overlap for
+longer durations, making the 32-voice requirement vital for preventing
+abrupt voice truncation.</li>
+</ul>
+<p>By mandating a dynamic 32-voice baseline, GM2 ensures that MIDI
+compositions featuring dense orchestration, sustained harmonies, and
+layered percussion can be accurately reproduced without the audible
+dropouts common to the earlier GM1 specification.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/gm-2-minimum-polyphony-requirements-vs-gm-1';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
