@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple-Sensor Key Actions in MIDI Controllers Explained - midi</title>
+    <meta name="description" content="Triple-sensor key actions solve a fundamental limitation found in conventional digital keyboards by adding an intermediate detection point between the key’s resting and fully depressed positions. This design closely mimics the mechanical repetition mechan">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/triple-sensor-key-actions-in-midi-controllers-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Triple-Sensor Key Actions in MIDI Controllers Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/triple-sensor-key-actions-in-midi-controllers-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Triple-sensor key actions solve a fundamental limitation found in conventional digital keyboards by adding an intermediate detection point between the key’s resting and fully depressed positions. This design closely mimics the mechanical repetition mechan" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="triple-sensor-key-actions-in-midi-controllers-explained">Triple-Sensor
+Key Actions in MIDI Controllers Explained</h1>
+<p>Triple-sensor key actions solve a fundamental limitation found in
+conventional digital keyboards by adding an intermediate detection point
+between the key’s resting and fully depressed positions. This design
+closely mimics the mechanical repetition mechanics of an acoustic grand
+piano, allowing performers to rapidly restrike the same note without
+waiting for the key to return to the top of its stroke. Consequently,
+professional piano controllers equipped with triple sensors achieve
+authentic velocity tracking, prevent unwanted note dropouts, and deliver
+the tactile precision required for complex classical passages and
+rapid-fire MIDI performances.</p>
+<p>In a traditional dual-sensor digital keybed, each key relies on only
+two switches: a top sensor (at rest) and a bottom sensor (fully
+depressed). When a pianist presses a key, the system calculates MIDI
+note velocity based on the transit time between the top and bottom
+switches. To play the same note again, the key must return completely to
+its resting position to reset the cycle. If a player attempts a fast
+repetition or trill without letting the key fully rise, the bottom
+sensor cannot register a new strike, resulting in dropped notes,
+inconsistent velocity values, or sudden, unnatural cutoffs.</p>
+<p>The integration of a third, centrally located sensor alters this
+dynamic entirely. Situated just above the actuation point, this middle
+sensor serves as a reset trigger. When the pianist releases the key
+slightly—just enough for it to pass the middle sensor—the controller
+recognizes that the key is ready to be struck again, even while the
+sound from the previous strike is still ringing. The distance between
+the middle sensor and the bottom sensor acts as the new timing window
+for velocity calculation, enabling immediate re-triggering from a
+partially depressed state.</p>
+<p>This mechanical advantage is essential for replicating the
+double-escapement mechanism of acoustic grand pianos. Acoustic grands
+allow the hammer to be reset while the damper remains lifted off the
+string, making rapid repetitions, tremolos, and light trills effortless.
+In a triple-sensor MIDI controller, this acoustic behavior is accurately
+mapped into digital data. Pianists can "play off the jack," generating
+nuanced, rapid-fire strikes at the bottom of the key travel without
+triggering premature MIDI Note Off messages.</p>
+<p>Beyond sheer speed, triple-sensor systems drastically improve dynamic
+expression when driving modern, highly detailed virtual instruments
+(VSTs). High-end sample libraries feature complex round-robin samples
+and multi-layered velocity curves. Because triple sensors measure
+partial-stroke transit times accurately, the controller transmits
+realistic MIDI velocities during fast sequences rather than defaulting
+to erratic or artificially flattened values. For studio professionals
+and concert pianists, this provides the physical responsiveness,
+articulation accuracy, and dynamic nuance required for demanding
+repertoire.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/triple-sensor-key-actions-in-midi-controllers-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

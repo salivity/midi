@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools to Inspect, Filter, and Modify CoreMIDI - midi</title>
+    <meta name="description" content="Developing audio and MIDI software on Apple operating systems requires deep visibility into the CoreMIDI subsystem to diagnose latency, verify data integrity, and manipulate message payloads. This guide outlines the premier standalone applications, visual">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/tools-to-inspect-filter-and-modify-core-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tools to Inspect, Filter, and Modify CoreMIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/tools-to-inspect-filter-and-modify-core-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Developing audio and MIDI software on Apple operating systems requires deep visibility into the CoreMIDI subsystem to diagnose latency, verify data integrity, and manipulate message payloads. This guide outlines the premier standalone applications, visual" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="tools-to-inspect-filter-and-modify-coremidi">Tools to Inspect,
+Filter, and Modify CoreMIDI</h1>
+<p>Developing audio and MIDI software on Apple operating systems
+requires deep visibility into the CoreMIDI subsystem to diagnose
+latency, verify data integrity, and manipulate message payloads. This
+guide outlines the premier standalone applications, visual programming
+environments, and programmatic APIs used to inspect, filter, and modify
+real-time CoreMIDI packets on macOS and iOS.</p>
+<h3 id="snoize-midi-monitor">Snoize MIDI Monitor</h3>
+<p>For real-time inspection, Snoize MIDI Monitor is the standard
+diagnostic utility on macOS. It acts as an open-source passive listener
+that intercepts incoming and outgoing CoreMIDI communication across
+physical hardware, network sessions, and virtual endpoints. Developers
+can view incoming messages chronologically with microsecond-level
+timestamps, examine raw hexadecimal values alongside human-readable
+decodes (such as Note On, Control Change, and System Exclusive data),
+and apply source-level filters to isolate specific endpoints during
+active debugging sessions.</p>
+<h3 id="bome-midi-translator-pro">Bome MIDI Translator Pro</h3>
+<p>When bidirectional manipulation and packet modification are required,
+Bome MIDI Translator Pro operates as an inline processing hub. The tool
+captures incoming CoreMIDI streams, runs them through user-defined
+routing logic, and outputs transformed packets to secondary virtual
+ports. Developers can remap Control Change numbers, scale velocity
+values, split incoming data across multiple MIDI channels, and translate
+incoming CoreMIDI events into completely different protocols, such as
+keystrokes, mouse actions, or custom SysEx strings.</p>
+<h3 id="native-coremidi-services-and-virtual-endpoints">Native CoreMIDI
+Services and Virtual Endpoints</h3>
+<p>For developers building internal testing harnesses or custom routing
+tools, Apple's native CoreMIDI framework provides the lowest-latency
+access to the packet stream. Using
+<code>MIDIDestinationCreateWithBlock</code> or
+<code>MIDISourceCreate</code>, developers can create virtual endpoints
+that act as native loopback devices. In modern macOS and iOS versions,
+CoreMIDI processes Universal MIDI Packets (UMP) and MIDI 2.0 data via
+<code>MIDIEventList</code> structures alongside legacy
+<code>MIDIPacketList</code> structures. By implementing a read block in
+Swift or Objective-C, a developer can inspect raw packet headers,
+discard messages that match specific filter predicates, alter byte
+payloads in memory, and retransmit the stream using
+<code>MIDISend</code>.</p>
+<h3 id="maxmsp-and-pure-data">Max/MSP and Pure Data</h3>
+<p>Visual programming environments like Cycling '74 Max and Pure Data
+(Pd) provide flexible testbeds for prototyping CoreMIDI manipulation
+logic without compiling full applications. Using built-in objects such
+as <code>midiin</code>, <code>midiselect</code>,
+<code>midiformat</code>, and <code>midiout</code>, developers can break
+real-time CoreMIDI packets down to their raw status and data bytes.
+Arithmetic operations, conditional logic, and clock-sync routines can be
+applied visually in real time to filter noise, modify event timing, or
+adjust control parameter curves before routing the stream back to
+software instruments or DAWs.</p>
+<h3 id="audiokit">AudioKit</h3>
+<p>AudioKit is an open-source Swift framework that abstracts the
+low-level C-based CoreMIDI API on iOS, iPadOS, and macOS. It provides
+built-in listener protocols and event handlers—such as
+<code>MIDIListener</code>—allowing developers to inspect incoming
+packets using clean Swift syntax. AudioKit simplifies the creation of
+real-time filters by exposing callbacks for notes, continuous
+controllers, and pitch bend changes, making it straightforward to
+transform packet data on the fly within native Apple ecosystem
+applications.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/tools-to-inspect-filter-and-modify-core-midi';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

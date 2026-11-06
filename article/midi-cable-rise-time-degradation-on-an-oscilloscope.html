@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Cable Rise-Time Degradation on an Oscilloscope - midi</title>
+    <meta name="description" content="This article examines how connecting an oscilloscope across a 5-pin DIN MIDI transmission line visualizes signal deterioration caused by excessive cable length and inadequate shielding. By comparing an ideal digital pulse with an impaired signal, you will">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cable-rise-time-degradation-on-an-oscilloscope">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Cable Rise-Time Degradation on an Oscilloscope - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cable-rise-time-degradation-on-an-oscilloscope" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how connecting an oscilloscope across a 5-pin DIN MIDI transmission line visualizes signal deterioration caused by excessive cable length and inadequate shielding. By comparing an ideal digital pulse with an impaired signal, you will" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-cable-rise-time-degradation-on-an-oscilloscope">MIDI Cable
+Rise-Time Degradation on an Oscilloscope</h1>
+<p>This article examines how connecting an oscilloscope across a 5-pin
+DIN MIDI transmission line visualizes signal deterioration caused by
+excessive cable length and inadequate shielding. By comparing an ideal
+digital pulse with an impaired signal, you will learn to identify
+parasitic capacitance, increased rise times, edge rounding, and
+high-frequency noise that threaten MIDI data integrity.</p>
+<h2 id="the-baseline-midi-specification-and-waveform">The Baseline MIDI
+Specification and Waveform</h2>
+<p>Standard MIDI operates as a 5-volt, 31.25 kbaud asynchronous serial
+current loop. Under ideal conditions, a single bit lasts exactly 32
+microseconds. When measured with an oscilloscope across the signal lines
+(pins 4 and 5) or directly at the receiver optoisolator's pull-up
+resistor, a healthy MIDI transmission appears as a sharp, clean square
+wave.</p>
+<p>In this baseline state, the rising and falling edges of each bit
+transition near-instantaneously, typically exhibiting rise times well
+under one microsecond. This steep vertical transition ensures that the
+receiver's optoisolator switches states predictably at precise threshold
+crossings.</p>
+<h2 id="how-cable-physics-distort-the-signal">How Cable Physics Distort
+the Signal</h2>
+<p>As a MIDI cable exceeds recommended length limits (typically 15
+meters or 50 feet) and lacks adequate conductor shielding, two parasitic
+properties dominate the transmission line:</p>
+<ul>
+<li><strong>Series Resistance (<span
+class="math inline">\(R\)</span>):</strong> The length of narrow-gauge
+conductor wire increases continuous resistance.</li>
+<li><strong>Mutual and Shunt Capacitance (<span
+class="math inline">\(C\)</span>):</strong> Poor dielectric materials,
+tightly packed conductors, and missing or broken shielding increase
+capacitance between data lines and to ground.</li>
+</ul>
+<p>Together, these distributed characteristics form a distributed
+low-pass <span class="math inline">\(RC\)</span> filter across the cable
+run. High-frequency harmonics—the exact components that give digital
+square waves their vertical, crisp edges—are progressively filtered out
+before the signal reaches the receiving device.</p>
+<h2 id="visual-indicators-on-the-oscilloscope-display">Visual Indicators
+on the Oscilloscope Display</h2>
+<p>Connecting an oscilloscope probe to the receiver side of an
+out-of-spec MIDI run visually exposes this filtering effect through
+several distinct anomalies:</p>
+<h3 id="1-rounded-edges-and-shark-fin-waveforms">1. Rounded Edges and
+"Shark Fin" Waveforms</h3>
+<p>The most prominent visual cue is the loss of perpendicular corners on
+the square wave. Instead of an immediate vertical transition from low (0
+V) to high (5 V), the leading edge transforms into an exponential curve
+defined by the <span class="math inline">\(RC\)</span> time constant
+(<span class="math inline">\(V(t) = V_0(1 - e^{-t/RC})\)</span>). The
+waveform takes on a curved, "shark fin" profile.</p>
+<h3 id="2-measurable-rise-time-expansion">2. Measurable Rise-Time
+Expansion</h3>
+<p>Using the oscilloscope’s automated measurement tools or manual
+cursors set to the standard 10% and 90% voltage thresholds reveals a
+significant increase in rise time (<span
+class="math inline">\(t_r\)</span>). On a severely degraded run, a rise
+time that should measure under 1 µs can stretch to 10 µs, 15 µs, or
+more. Because the entire bit duration is only 32 µs, a rise time taking
+up a substantial fraction of the bit window leaves almost no flat
+plateau at the nominal voltage level.</p>
+<h3 id="3-asymmetric-duty-cycles-and-pulse-width-distortion">3.
+Asymmetric Duty Cycles and Pulse-Width Distortion</h3>
+<p>While the cable's passive capacitance slows down both edges, the
+active pull-up or pull-down characteristics of the MIDI current-loop
+circuit often discharge and charge at different rates. On the display,
+this produces duty-cycle distortion: high states narrow while low states
+widen (or vice versa), visibly altering the width of alternating bit
+pulses.</p>
+<h3 id="4-noise-ingress-on-the-transitions">4. Noise Ingress on the
+Transitions</h3>
+<p>Inadequate shielding allows ambient electromagnetic interference
+(EMI) and radio frequency interference (RFI)—from nearby power cables,
+lighting ballasts, or switching power supplies—to couple into the signal
+line. On an oscilloscope, this appears as high-frequency ripple,
+ringing, or fuzz riding on top of the already rounded edges. When noise
+intersects a slowly rising edge, it creates voltage jitter, causing the
+waveform to fluctuate across logic switching thresholds multiple
+times.</p>
+<h2 id="operational-consequences-of-degraded-rise-times">Operational
+Consequences of Degraded Rise Times</h2>
+<p>When the oscilloscope shows a rise time approaching or exceeding half
+the 32 µs bit duration, the hardware receiver fails to decode serial
+frames accurately. The internal LED of the receiver’s optoisolator will
+turn on or off late relative to the UART clock, leading to frame errors,
+dropped status bytes, corrupt velocity values, or stuck notes. Observing
+these degraded rise times on a scope provides definitive proof of
+physical-layer transmission failure before blaming software or connected
+synthesizer hardware.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-cable-rise-time-degradation-on-an-oscilloscope';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

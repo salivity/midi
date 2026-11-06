@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calibrate Expression Pedal on MIDI Keyboard - midi</title>
+    <meta name="description" content="Expression pedal calibration is an onboard firmware routine in a MIDI keyboard that maps the physical travel limits of an external pedal to the standard 0–127 MIDI control change (CC) value range. Because different pedal manufacturers use varying potentio">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/calibrate-expression-pedal-on-midi-keyboard">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Calibrate Expression Pedal on MIDI Keyboard - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/calibrate-expression-pedal-on-midi-keyboard" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Expression pedal calibration is an onboard firmware routine in a MIDI keyboard that maps the physical travel limits of an external pedal to the standard 0–127 MIDI control change (CC) value range. Because different pedal manufacturers use varying potentio" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="calibrate-expression-pedal-on-midi-keyboard">Calibrate
+Expression Pedal on MIDI Keyboard</h1>
+<p>Expression pedal calibration is an onboard firmware routine in a MIDI
+keyboard that maps the physical travel limits of an external pedal to
+the standard 0–127 MIDI control change (CC) value range. Because
+different pedal manufacturers use varying potentiometer resistances and
+mechanical sweep angles, keyboards rely on this procedure to establish
+precise heel-down (minimum) and toe-down (maximum) thresholds. The
+following guide explains how this internal calibration process functions
+and how to execute it on your controller.</p>
+<h3 id="the-internal-calibration-procedure-adc-mapping">The Internal
+Calibration Procedure: ADC Mapping</h3>
+<p>Inside the MIDI keyboard, the calibration process is technically
+known as <strong>Analog-to-Digital Converter (ADC) Range
+Calibration</strong> or simply <strong>Pedal Calibration</strong>.</p>
+<p>Expression pedals operate as passive voltage dividers using a
+potentiometer. The keyboard supplies a small reference voltage
+(typically 3.3V or 5V) through the Tip-Ring-Sleeve (TRS) jack. As the
+pedal moves, the potentiometer varies the returned voltage read by the
+keyboard's internal ADC.</p>
+<p>Because mechanical gears and pedal housings rarely utilize the entire
+electrical sweep of a potentiometer, the returned voltage rarely reaches
+absolute zero or absolute maximum. The calibration procedure solves this
+by:</p>
+<ol type="1">
+<li><strong>Sampling the Minimum Voltage:</strong> Registering the
+electrical output when the pedal is physically rested fully backward
+(heel-down) and setting this baseline voltage as MIDI CC value
+<code>0</code>.</li>
+<li><strong>Sampling the Maximum Voltage:</strong> Registering the
+electrical output when the pedal is pressed fully forward (toe-down) and
+setting this upper voltage limit as MIDI CC value <code>127</code>.</li>
+<li><strong>Establishing the Scaling Curve:</strong> Rescaling the ADC
+readings between these two defined extremes linearly (or
+logarithmically, depending on configuration), preventing dead zones at
+the start or end of the pedal's physical travel.</li>
+</ol>
+<h3 id="how-to-perform-the-calibration">How to Perform the
+Calibration</h3>
+<p>While specific menu navigation varies by manufacturer, the standard
+procedure follows these steps:</p>
+<ol type="1">
+<li><strong>Connect the Pedal:</strong> Plug the TRS expression pedal
+into the designated <code>EXPR</code> or <code>PEDAL</code> input while
+the keyboard is powered on.</li>
+<li><strong>Access System Setup:</strong> Navigate to the keyboard’s
+<code>Global</code>, <code>System</code>, or <code>Pedal Setup</code>
+menu via the onboard screen or dedicated control software.</li>
+<li><strong>Select Pedal Calibration:</strong> Locate the parameter
+labeled <code>Pedal Calibrate</code>, <code>Pedal Range</code>, or
+<code>Auto-Detect</code>.</li>
+<li><strong>Capture the Extremes:</strong>
+<ul>
+<li>When prompted, pull the pedal all the way back to the heel-down
+position and confirm the setting (stores the minimum value).</li>
+<li>Push the pedal completely forward to the toe-down position and
+confirm the setting (stores the maximum value).</li>
+<li>Some modern controllers only require you to sweep the pedal fully
+forward and backward once while the routine is active to auto-sense the
+voltage extremes.</li>
+</ul></li>
+<li><strong>Set Polarity (If Necessary):</strong> If moving the pedal
+forward decreases the MIDI value instead of increasing it, toggle the
+pedal polarity setting within the same menu to invert the voltage
+sweep.</li>
+<li><strong>Save to Memory:</strong> Save the global settings to persist
+the calibration data across power cycles.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/calibrate-expression-pedal-on-midi-keyboard';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

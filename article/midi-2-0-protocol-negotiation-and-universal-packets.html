@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 2.0 Protocol Negotiation and Universal Packets - midi</title>
+    <meta name="description" content="The transition from legacy MIDI 1.0 to MIDI 2.0 relies on an automated, bi-directional handshake known as Protocol Negotiation. This article explains how connected devices use MIDI Capability Inquiry (MIDI-CI) to discover hardware capabilities, negotiate">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-2-0-protocol-negotiation-and-universal-packets">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 2.0 Protocol Negotiation and Universal Packets - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-2-0-protocol-negotiation-and-universal-packets" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The transition from legacy MIDI 1.0 to MIDI 2.0 relies on an automated, bi-directional handshake known as Protocol Negotiation. This article explains how connected devices use MIDI Capability Inquiry (MIDI-CI) to discover hardware capabilities, negotiate" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-20-protocol-negotiation-and-universal-packets">MIDI 2.0
+Protocol Negotiation and Universal Packets</h1>
+<p>The transition from legacy MIDI 1.0 to MIDI 2.0 relies on an
+automated, bi-directional handshake known as Protocol Negotiation. This
+article explains how connected devices use MIDI Capability Inquiry
+(MIDI-CI) to discover hardware capabilities, negotiate protocol
+upgrades, and smoothly transition from legacy byte-stream transmissions
+to the high-resolution Universal MIDI Packet (UMP) architecture while
+maintaining full backward compatibility.</p>
+<h3 id="default-state-and-backward-compatibility">Default State and
+Backward Compatibility</h3>
+<p>Every MIDI 2.0 connection begins by defaulting to standard MIDI 1.0.
+When two devices connect over a transport layer—whether USB, standard
+5-pin DIN, Ethernet, or wireless—they initially treat the link as a
+legacy serial byte-stream connection. This fail-safe approach guarantees
+that a MIDI 2.0-ready device connected to a legacy MIDI 1.0 device
+functions immediately without communication errors or corrupted
+data.</p>
+<h3 id="the-role-of-midi-ci">The Role of MIDI-CI</h3>
+<p>Protocol Negotiation is governed by MIDI Capability Inquiry
+(MIDI-CI), a standardized framework that operates via specialized System
+Exclusive (SysEx) messages. MIDI-CI enables bi-directional communication
+to query three primary areas: Protocol Negotiation, Profile
+Configuration, and Property Exchange.</p>
+<p>Because MIDI-CI uses valid MIDI 1.0 SysEx framing, legacy devices
+safely ignore these inquiry packets, while MIDI 2.0 devices parse them
+to coordinate advanced features.</p>
+<h3 id="the-protocol-negotiation-handshake">The Protocol Negotiation
+Handshake</h3>
+<p>The switch from legacy communication to Universal MIDI Packets
+follows a defined four-step transaction between the Initiator and the
+Responder:</p>
+<ol type="1">
+<li><strong>Discovery and Inquiry:</strong> The Initiator transmits an
+inquiry message asking the Responder for a list of supported
+protocols.</li>
+<li><strong>Protocol Reply:</strong> The Responder replies with a list
+indicating its capabilities. The response specifies whether it supports:
+<ul>
+<li>MIDI 1.0 (Byte Stream)</li>
+<li>MIDI 1.0 Protocol transported inside Universal MIDI Packets (32-bit
+words)</li>
+<li>MIDI 2.0 Protocol transported inside Universal MIDI Packets (64-bit
+and 128-bit words)</li>
+</ul></li>
+<li><strong>Set Protocol Request:</strong> If both devices support a
+newer protocol, the Initiator transmits a "Set New Protocol" message
+specifying the highest mutually compatible standard—typically full MIDI
+2.0.</li>
+<li><strong>Acknowledgment and Switch:</strong> Once the Responder
+receives and acknowledges the request, both endpoints simultaneously
+reconfigure their communication pipelines.</li>
+</ol>
+<p>If an inquiry receives no response or times out, the Initiator
+assumes the connected gear is legacy hardware and remains strictly in
+MIDI 1.0 mode.</p>
+<h3 id="transitioning-to-universal-midi-packets-ump">Transitioning to
+Universal MIDI Packets (UMP)</h3>
+<p>Upon successful negotiation, the physical transport shifts from
+sending discrete, variable-length bytes to structured 32-bit Universal
+MIDI Packets.</p>
+<p>In UMP format, data is transmitted in chunks of 32, 64, 96, or 128
+bits. The first four bits of every packet designate the Message Type
+(MT), which defines the packet's length and purpose. This packetized
+structure introduces:</p>
+<ul>
+<li><strong>Grouping:</strong> Up to 16 distinct Groups per connection,
+effectively yielding 256 individual MIDI channels (16 groups × 16
+channels) over a single physical link.</li>
+<li><strong>Higher Resolution:</strong> Velocity, controller data, and
+pitch bend expand from standard 7-bit or 14-bit resolutions up to 32-bit
+precision.</li>
+<li><strong>Per-Note Expression:</strong> Direct articulation and
+expressive control targeted at individual notes rather than across an
+entire channel.</li>
+<li><strong>Integrated Timestamps:</strong> Synchronous packet delivery
+with high-accuracy jitter reduction.</li>
+</ul>
+<p>By encapsulating both upgraded MIDI 2.0 data and translated MIDI 1.0
+messages inside UMP containers, Protocol Negotiation allows modern
+hardware to leverage maximum performance while preserving compatibility
+across diverse studio setups.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-2-0-protocol-negotiation-and-universal-packets';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

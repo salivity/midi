@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal MIDI Packet Word Count in MIDI 2.0 - midi</title>
+    <meta name="description" content="The Universal MIDI Packet (UMP) is the core data format introduced in the MIDI 2.0 specification, designed to support both legacy MIDI 1.0 messages and modern, high-resolution MIDI 2.0 protocols. An individual Universal MIDI Packet does not have a single">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/universal-midi-packet-word-count-in-midi-2-0">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Universal MIDI Packet Word Count in MIDI 2.0 - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/universal-midi-packet-word-count-in-midi-2-0" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Universal MIDI Packet (UMP) is the core data format introduced in the MIDI 2.0 specification, designed to support both legacy MIDI 1.0 messages and modern, high-resolution MIDI 2.0 protocols. An individual Universal MIDI Packet does not have a single" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="universal-midi-packet-word-count-in-midi-20">Universal MIDI
+Packet Word Count in MIDI 2.0</h1>
+<p>The Universal MIDI Packet (UMP) is the core data format introduced in
+the MIDI 2.0 specification, designed to support both legacy MIDI 1.0
+messages and modern, high-resolution MIDI 2.0 protocols. An individual
+Universal MIDI Packet does not have a single fixed size; instead, it
+consists of one to four 32-bit words (ranging from 32 bits to 128 bits
+in total length). The exact word count is determined dynamically by the
+packet's Message Type, allowing devices to optimize bandwidth and
+process messages efficiently across modern digital interfaces.</p>
+<h3 id="determining-packet-length-via-the-message-type">Determining
+Packet Length via the Message Type</h3>
+<p>Every Universal MIDI Packet begins with a 32-bit header word. The
+most significant four bits (bits 28 to 31) of this initial word define
+the Message Type (MT). The receiving device inspects these four bits to
+immediately determine the exact length of the incoming packet, ensuring
+proper framing and stream synchronization.</p>
+<p>Depending on the Message Type, a UMP contains one of four possible
+lengths:</p>
+<ul>
+<li><strong>1 Word (32 bits):</strong> Message Types <code>0x0</code>,
+<code>0x1</code>, and <code>0x2</code></li>
+<li><strong>2 Words (64 bits):</strong> Message Types <code>0x3</code>
+and <code>0x4</code></li>
+<li><strong>3 Words (96 bits):</strong> Reserved for future standardized
+definitions</li>
+<li><strong>4 Words (128 bits):</strong> Message Types <code>0x5</code>,
+<code>0xD</code>, and <code>0xF</code></li>
+</ul>
+<h3 id="word-counts-by-message-category">Word Counts by Message
+Category</h3>
+<h4 id="1-word-packets-32-bits">1-Word Packets (32 bits)</h4>
+<p>Single-word packets are used for low-bandwidth, high-frequency, or
+legacy control operations:</p>
+<ul>
+<li><strong>Utility Messages (MT <code>0x0</code>):</strong> Includes
+functions such as timestamps and clock pacing.</li>
+<li><strong>System Real-Time and System Common (MT
+<code>0x1</code>):</strong> Transports standard transport and
+synchronization commands like Start, Stop, Continue, Active Sensing, and
+Song Position Pointer.</li>
+<li><strong>MIDI 1.0 Channel Voice (MT <code>0x2</code>):</strong>
+Carries traditional MIDI 1.0 Channel Voice messages (Note On, Note Off,
+Control Change, Pitch Bend) framed within the UMP architecture.</li>
+</ul>
+<h4 id="2-word-packets-64-bits">2-Word Packets (64 bits)</h4>
+<p>Two-word packets provide the expanded bit depth required for
+expressive real-time performance and legacy data blocks:</p>
+<ul>
+<li><strong>Data Messages / 64-bit SysEx (MT <code>0x3</code>):</strong>
+Transports traditional MIDI System Exclusive 7-bit data across multiple
+sequential 64-bit packets.</li>
+<li><strong>MIDI 2.0 Channel Voice (MT <code>0x4</code>):</strong>
+Carries native MIDI 2.0 commands, enabling 32-bit high-resolution
+velocity, 32-bit control change values, per-note pitch bend, and
+individual note management.</li>
+</ul>
+<h4 id="3-word-packets-96-bits">3-Word Packets (96 bits)</h4>
+<p>The 96-bit format is recognized by the framing specification to
+accommodate future expansion where 64 bits is insufficient and 128 bits
+produces unnecessary overhead.</p>
+<h4 id="4-word-packets-128-bits">4-Word Packets (128 bits)</h4>
+<p>Four-word packets are used for complex payloads, extended
+configuration, and streaming metadata:</p>
+<ul>
+<li><strong>Extended Data / 128-bit SysEx (MT
+<code>0x5</code>):</strong> Supports mixed-data sets and 8-bit System
+Exclusive streams.</li>
+<li><strong>Flex Data Messages (MT <code>0xD</code>):</strong>
+Transports non-performance text, metadata, lyrics, and configuration
+data alongside performance streams.</li>
+<li><strong>Stream Messages (MT <code>0xF</code>):</strong> Handles
+endpoint discovery, stream configuration, function blocks, and protocol
+negotiation between connected endpoints.</li>
+</ul>
+<h3 id="summary">Summary</h3>
+<p>An individual Universal MIDI Packet in MIDI 2.0 comprises <strong>1,
+2, 3, or 4 32-bit words</strong> (32, 64, 96, or 128 bits). By
+standardizing all communication into multiples of 32-bit boundaries, the
+MIDI 2.0 specification enables fast memory alignment for modern 32-bit
+and 64-bit processors while preserving backward compatibility with
+legacy MIDI architectures.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/universal-midi-packet-word-count-in-midi-2-0';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

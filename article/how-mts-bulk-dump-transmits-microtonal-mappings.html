@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MTS Bulk Dump Transmits Microtonal Mappings - midi</title>
+    <meta name="description" content="The MIDI Tuning Standard (MTS) provides a standardized protocol for digital instruments to bypass standard twelve-tone equal temperament by transmitting precise pitch alterations via System Exclusive (SysEx) messages. This article explains how MTS bulk du">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-mts-bulk-dump-transmits-microtonal-mappings">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MTS Bulk Dump Transmits Microtonal Mappings - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-mts-bulk-dump-transmits-microtonal-mappings" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI Tuning Standard (MTS) provides a standardized protocol for digital instruments to bypass standard twelve-tone equal temperament by transmitting precise pitch alterations via System Exclusive (SysEx) messages. This article explains how MTS bulk du" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-mts-bulk-dump-transmits-microtonal-mappings">How MTS Bulk
+Dump Transmits Microtonal Mappings</h1>
+<p>The MIDI Tuning Standard (MTS) provides a standardized protocol for
+digital instruments to bypass standard twelve-tone equal temperament by
+transmitting precise pitch alterations via System Exclusive (SysEx)
+messages. This article explains how MTS bulk dumps transmit twelve-byte
+microtonal tuning mappings to compatible synthesizers, breaking down the
+underlying SysEx architecture, the structure of single-byte scale
+offsets, and how receiving hardware parses this data into playable
+microtonal scales.</p>
+<h3 id="sysex-architecture-and-mts-protocol">SysEx Architecture and MTS
+Protocol</h3>
+<p>MIDI transmits non-standard control data, including custom microtonal
+scales, using System Exclusive (SysEx) messages. MTS defines both
+real-time and non-real-time universal SysEx formats. When a master
+controller, software sequencer, or patch editor sends a microtonal
+tuning mapping, it wraps the data in an MTS command structure.</p>
+<p>The transmission begins with the standard universal SysEx header,
+which includes:</p>
+<ul>
+<li><strong>F0</strong>: SysEx start byte</li>
+<li><strong>7E</strong> (or <strong>7F</strong>): Universal
+Non-Real-Time or Real-Time identifier</li>
+<li><strong>Device ID</strong>: Specifies the target synthesizer (or
+<code>7F</code> for a broadcast to all connected devices)</li>
+<li><strong>08</strong>: Sub-ID #1, designating the message as a MIDI
+Tuning Standard command</li>
+<li><strong>Sub-ID #2</strong>: Defines the specific MTS dump
+format</li>
+</ul>
+<h3 id="the-twelve-byte-scaleoctave-dump-format">The Twelve-Byte
+Scale/Octave Dump Format</h3>
+<p>While a full 128-note MTS bulk dump transmits 384 bytes of tuning
+data (allocating three bytes per MIDI note across the entire keyboard),
+MTS specifies an optimized format known as the <strong>Scale/Octave
+Tuning 1-Byte Dump</strong> (sub-ID <code>08</code>).</p>
+<p>Instead of mapping all 128 notes individually, this format defines a
+microtonal scale across a repeating twelve-tone octave. The core payload
+consists of exactly twelve data bytes, where each byte corresponds
+sequentially to a degree of the chromatic scale from C through B:</p>
+<ol type="1">
+<li>Byte 1: C offset</li>
+<li>Byte 2: C# offset</li>
+<li>Byte 3: D offset</li>
+<li>Byte 4: D# offset</li>
+<li>Byte 5: E offset</li>
+<li>Byte 6: F offset</li>
+<li>Byte 7: F# offset</li>
+<li>Byte 8: G offset</li>
+<li>Byte 9: G# offset</li>
+<li>Byte 10: A offset</li>
+<li>Byte 11: A# offset</li>
+<li>Byte 12: B offset</li>
+</ol>
+<h3 id="pitch-offset-encoding">Pitch Offset Encoding</h3>
+<p>Because standard MIDI data bytes are constrained to a 7-bit range
+(<code>00</code> to <code>7F</code> hexadecimal, or 0 to 127 decimal),
+each byte encodes relative pitch deviation rather than an absolute
+frequency.</p>
+<p>In the single-byte octave format:</p>
+<ul>
+<li>The value <code>40h</code> (64 decimal) represents zero detune
+(equal temperament).</li>
+<li>Values from <code>00h</code> to <code>3Fh</code> (0 to 63 decimal)
+represent negative detuning down to -64 cents.</li>
+<li>Values from <code>41h</code> to <code>7Fh</code> (65 to 127 decimal)
+represent positive detuning up to +63 cents.</li>
+<li>The resolution is exactly 1 cent per step, offering a ±64 cent
+modification range for each pitch class.</li>
+</ul>
+<h3 id="channel-masking-and-checksum-verification">Channel Masking and
+Checksum Verification</h3>
+<p>Preceding the twelve-byte tuning block, the message includes three
+channel mask bytes. These bytes indicate which of the 16 MIDI channels
+should apply the microtonal mapping, allowing multitimbral synthesizers
+to maintain microtonal scales on specific channels while keeping others
+in standard tuning.</p>
+<p>Following the twelve-byte tuning payload, the transmitting device
+appends:</p>
+<ul>
+<li><strong>Checksum Byte</strong>: A 7-bit XOR checksum of the entire
+SysEx data stream (excluding headers and terminators) used to detect
+transmission errors.</li>
+<li><strong>F7</strong>: The End of Exclusive (EOX) byte.</li>
+</ul>
+<h3 id="synthesizer-parsing-and-implementation">Synthesizer Parsing and
+Implementation</h3>
+<p>When a compatible synthesizer receives the MTS dump, it validates the
+SysEx header and calculates the checksum. Once verified, the synthesizer
+stores the twelve microtonal offsets in its local memory buffer.</p>
+<p>When a standard MIDI Note-On message is received, the synthesizer
+determines the note's pitch class using a modulo-12 calculation
+(<code>MIDI Note Number mod 12</code>). It matches the result to the
+corresponding byte among the twelve stored offsets, calculates the final
+frequency by adding the designated cent deviation to the base pitch, and
+instructs its internal oscillators to sound the custom microtonal
+frequency.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-mts-bulk-dump-transmits-microtonal-mappings';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

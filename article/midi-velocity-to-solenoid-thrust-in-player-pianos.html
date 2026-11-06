@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Velocity to Solenoid Thrust in Player Pianos - midi</title>
+    <meta name="description" content="Modern automated player piano systems, such as the Yamaha Disklavier, translate digital MIDI velocity values into expressive acoustic performances by converting numeric data into precise electromagnetic force. This process relies on a combination of veloc">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-velocity-to-solenoid-thrust-in-player-pianos">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Velocity to Solenoid Thrust in Player Pianos - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-velocity-to-solenoid-thrust-in-player-pianos" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern automated player piano systems, such as the Yamaha Disklavier, translate digital MIDI velocity values into expressive acoustic performances by converting numeric data into precise electromagnetic force. This process relies on a combination of veloc" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-velocity-to-solenoid-thrust-in-player-pianos">MIDI Velocity
+to Solenoid Thrust in Player Pianos</h1>
+<p>Modern automated player piano systems, such as the Yamaha Disklavier,
+translate digital MIDI velocity values into expressive acoustic
+performances by converting numeric data into precise electromagnetic
+force. This process relies on a combination of velocity-curve mapping,
+pulse-width modulation (PWM) driver circuits, specialized solenoids, and
+real-time optical sensor feedback. By continuously measuring and
+adjusting the physical movement of individual keys and hammers, these
+systems bridge the gap between standard MIDI data and the complex,
+non-linear mechanical physics of an acoustic piano action.</p>
+<h3 id="1-velocity-parsing-and-dynamic-mapping">1. Velocity Parsing and
+Dynamic Mapping</h3>
+<p>When a MIDI file or live stream sends a "Note On" message, it
+includes a velocity value ranging from 0 to 127 (or up to 1,023 in
+high-resolution MIDI formats). In digital audio, velocity typically
+controls volume, but in an acoustic piano, volume is purely a function
+of final hammer speed when striking the string.</p>
+<p>Because each key on a piano has a different physical weight, inertia,
+and friction profile—from heavy bass keys to lighter treble keys—a raw
+MIDI velocity cannot simply apply a uniform electrical charge. The
+internal CPU uses instrument-specific calibration curves and lookup
+tables (LUTs) to calculate the precise target hammer velocity required
+for that specific key to produce the intended dynamic level, whether
+<em>pianissimo</em> or <em>fortissimo</em>.</p>
+<h3 id="2-converting-velocity-into-solenoid-current">2. Converting
+Velocity into Solenoid Current</h3>
+<p>The mechanical actuator beneath each key is a linear solenoid
+consisting of a wire coil and a movable ferromagnetic plunger. To propel
+the plunger upward against the piano key (or wippen), the system must
+generate a magnetic field.</p>
+<p>The magnetic force (<span class="math inline">\(F\)</span>) exerted
+on the plunger is proportional to the electric current flowing through
+the coil and the number of turns in the wire:</p>
+<ul>
+<li><strong>Pulse-Width Modulation (PWM):</strong> Microcontrollers
+drive high-speed MOSFET switches using high-frequency PWM. By altering
+the duty cycle, the system controls the average voltage and effective
+current delivered to the coil.</li>
+<li><strong>Current Profiling:</strong> Rather than supplying a single
+continuous jolt, the driver sends a precisely profiled pulse. A high
+initial current overcomes the static inertia and friction of the key
+mechanism, followed by an adjusted hold-and-decay phase to let the
+hammer travel naturally under momentum toward the string.</li>
+</ul>
+<h3 id="3-closed-loop-optical-feedback">3. Closed-Loop Optical
+Feedback</h3>
+<p>An open-loop solenoid system cannot guarantee dynamic accuracy due to
+environmental changes, temperature shifts, action wear, and
+repetitive-strike heating in the coils. Systems like the Yamaha
+Disklavier overcome this through closed-loop servo control utilizing
+continuous optical sensors:</p>
+<ul>
+<li><strong>Hammer and Key Sensors:</strong> Optical shutter sensors
+monitor key position and measure the exact speed of the hammer shank
+just before it strikes the string.</li>
+<li><strong>Real-Time Corrections:</strong> The system compares the
+actual measured hammer velocity against the target velocity demanded by
+the MIDI input. If the hammer is moving too slowly or too quickly, the
+controller dynamically fine-tunes the pulse width or corrects the
+calibration profile in real time for subsequent strikes.</li>
+</ul>
+<h3 id="4-plunger-trajectory-and-release">4. Plunger Trajectory and
+Release</h3>
+<p>To preserve natural acoustic tone, the solenoid plunger must never
+push the hammer directly into the string; it must replicate a human
+finger by accelerating the key just enough to let the hammer
+"escapement" mechanism release the hammer into free flight.</p>
+<p>Immediately before the hammer strikes the string, the solenoid cuts
+power, allowing the plunger to drop out of the way. Damping pads and
+reverse-voltage suppression circuits (flyback diodes or active
+quenching) eliminate residual magnetic flux, preventing the plunger from
+bouncing or interfering with the key's return stroke during rapid
+musical repetitions.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-velocity-to-solenoid-thrust-in-player-pianos';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

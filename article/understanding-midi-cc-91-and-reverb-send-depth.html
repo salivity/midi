@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding MIDI CC 91 and Reverb Send Depth - midi</title>
+    <meta name="description" content="MIDI CC 91 is the standardized MIDI continuous controller designated for Effects 1 Depth, which functions universally across audio production hardware and software as the Reverb Send Level. This article explores the specific operational parameters altered">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/understanding-midi-cc-91-and-reverb-send-depth">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding MIDI CC 91 and Reverb Send Depth - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/understanding-midi-cc-91-and-reverb-send-depth" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI CC 91 is the standardized MIDI continuous controller designated for Effects 1 Depth, which functions universally across audio production hardware and software as the Reverb Send Level. This article explores the specific operational parameters altered" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="understanding-midi-cc-91-and-reverb-send-depth">Understanding
+MIDI CC 91 and Reverb Send Depth</h1>
+<p>MIDI CC 91 is the standardized MIDI continuous controller designated
+for Effects 1 Depth, which functions universally across audio production
+hardware and software as the Reverb Send Level. This article explores
+the specific operational parameters altered by MIDI CC 91 when
+interfacing with global sound processors, distinguishing between the
+track-level send amplitude it controls and the master architectural
+settings of the global effects processor itself.</p>
+<h3 id="standard-definition-and-primary-function">Standard Definition
+and Primary Function</h3>
+<p>Under the official MIDI Manufacturers Association (MMA) and General
+MIDI (GM, GM2, GS, and XG) standards, Control Change 91 (CC 91) is
+assigned to <strong>Effects 1 Depth (Reverb Send)</strong>.</p>
+<p>When applied to an individual MIDI channel, CC 91 transmits a value
+from 0 to 127. This value governs the auxiliary send level feeding that
+channel’s audio into a master or global reverberation unit:</p>
+<ul>
+<li><strong>Value 0:</strong> Turns the reverb send off entirely,
+rendering the channel’s output completely dry.</li>
+<li><strong>Value 64:</strong> Sets the send level to standard unity or
+default half-power, balancing direct sound with spatial
+reflections.</li>
+<li><strong>Value 127:</strong> Routes maximum signal amplitude to the
+global processor, yielding an intensely wet, distant sound profile.</li>
+</ul>
+<h3 id="send-level-vs-internal-processor-parameters">Send Level vs.
+Internal Processor Parameters</h3>
+<p>A common point of confusion is whether CC 91 changes the acoustic
+properties of the reverb processor itself. In typical implementations,
+it does not. Global sound processor parameters such as decay time, room
+size, early reflection delay, and high-frequency damping remain
+unaltered when CC 91 messages are received.</p>
+<p>Instead, CC 91 governs the <strong>input gain</strong> directed to
+the processor:</p>
+<ol type="1">
+<li><strong>Ratio of Direct to Reverberant Sound:</strong> By increasing
+or decreasing the signal level entering the effect bus, CC 91 alters the
+wet/dry balance for that specific timbre. This psychoacoustically
+positions the sound closer to or farther from the listener in the
+virtual soundstage.</li>
+<li><strong>Dynamic Energy into the Reverb Algorithm:</strong> In
+dynamic DSP algorithms (such as non-linear or threshold-dependent
+reverbs), a higher CC 91 value increases the driving energy feeding the
+algorithm, changing how the simulated acoustic space saturates or
+responds without adjusting the master parameters.</li>
+</ol>
+<h3 id="implementation-in-modern-sound-engines">Implementation in Modern
+Sound Engines</h3>
+<p>Depending on how a synthesizer, sampler, or digital audio workstation
+(DAW) is architected, CC 91 affects processor depth in two distinct
+configurations:</p>
+<h4 id="1-multi-timbral-and-global-auxiliary-engines">1. Multi-Timbral
+and Global Auxiliary Engines</h4>
+<p>In multi-timbral setups (such as GM sound modules or multi-out
+samplers), a single global reverb processor serves all 16 MIDI channels.
+Here, CC 91 acts purely as an <strong>auxiliary send fader</strong>.
+Each channel sends a discrete proportion of its audio into the shared
+space, preserving a unified acoustic environment while allowing depth
+separation between instruments.</p>
+<h4 id="2-insert-based-or-self-contained-engines">2. Insert-Based or
+Self-Contained Engines</h4>
+<p>In standalone virtual instruments (VSTs) where the reverb module is
+applied as a local insert effect rather than an auxiliary send,
+developers often remap CC 91 to control the <strong>Wet/Dry Mix
+percentage</strong>. While functionally similar to a send level, this
+implementation directly balances the output blend knob rather than
+routing through an internal audio bus.</p>
+<h3 id="channel-wide-vs-global-cc-behavior">Channel-Wide vs. Global CC
+Behavior</h3>
+<p>Because CC 91 is a channel-specific controller, transmitting CC 91 on
+MIDI Channel 1 adjusts only that channel's depth within the global
+processor. To adjust global processor parameters across the entire
+engine—such as changing master reverb decay time or room
+algorithms—systems rely on System Exclusive (SysEx) messages,
+Non-Registered Parameter Numbers (NRPNs), or dedicated host automation
+rather than CC 91.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/understanding-midi-cc-91-and-reverb-send-depth';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

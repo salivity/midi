@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Hybrid Piano Optical Sensors Measure Hammer Velocity - midi</title>
+    <meta name="description" content="Hybrid grand pianos bridge the gap between traditional acoustic mechanics and digital sound production by using non-contact optical sensor systems to capture performance nuances. Instead of relying on mechanical switches that alter the weight and feel of">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-hybrid-piano-optical-sensors-measure-hammer-velocity">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Hybrid Piano Optical Sensors Measure Hammer Velocity - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-hybrid-piano-optical-sensors-measure-hammer-velocity" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Hybrid grand pianos bridge the gap between traditional acoustic mechanics and digital sound production by using non-contact optical sensor systems to capture performance nuances. Instead of relying on mechanical switches that alter the weight and feel of" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-hybrid-piano-optical-sensors-measure-hammer-velocity">How
+Hybrid Piano Optical Sensors Measure Hammer Velocity</h1>
+<p>Hybrid grand pianos bridge the gap between traditional acoustic
+mechanics and digital sound production by using non-contact optical
+sensor systems to capture performance nuances. Instead of relying on
+mechanical switches that alter the weight and feel of the action, these
+instruments employ infrared light beams to track the exact speed of
+moving hammers. By calculating the travel time of the hammer just before
+it strikes a virtual string, the piano’s internal computer accurately
+determines velocity and translates it into standard MIDI data without
+impeding the player's physical touch.</p>
+<h3 id="the-core-components-emitters-detectors-and-shutters">The Core
+Components: Emitters, Detectors, and Shutters</h3>
+<p>The optical measurement system relies on three primary elements
+installed beneath or alongside the grand piano action:</p>
+<ul>
+<li><strong>Light Emitters:</strong> Miniature light-emitting diodes
+(typically infrared LEDs) project focused, continuous beams of
+light.</li>
+<li><strong>Photodetectors:</strong> Photodiodes or phototransistors sit
+opposite or adjacent to the emitters to receive the light signal and
+convert light intensity into an electrical voltage.</li>
+<li><strong>Graded Shutters (Flags):</strong> Lightweight fins, or
+vanes, are mounted directly onto each individual hammer shank. These
+shutters are carefully balanced so they do not alter the authentic
+regulation or inertia of the wooden acoustic action.</li>
+</ul>
+<h3 id="the-non-contact-detection-process">The Non-Contact Detection
+Process</h3>
+<p>As a pianist presses a key, the internal grand piano mechanism (the
+whippen, jack, and repetition lever) launches the hammer upward toward
+the point where an acoustic string would normally sit.</p>
+<p>Because optical systems operate entirely through light interruption,
+the hammer never physically touches the sensor. As the hammer ascends,
+its attached shutter passes between the infrared LED and the
+photodetector, progressively breaking or reflecting the beam.</p>
+<p>Manufacturers generally use one of two methods to read this
+motion:</p>
+<ol type="1">
+<li><strong>Dual-Point Optical Gates:</strong> The shutter interrupts
+two distinct light beams positioned vertically along the hammer's path.
+The system detects the exact moment the shutter breaks the first beam
+and logs the time it takes to reach and break the second beam.</li>
+<li><strong>Continuous Optical Reflection/Absorption:</strong> The
+shutter features a gray-scale gradient or shaped profile that gradually
+diminishes the amount of light reaching the detector. The sensor
+continuously reads changes in voltage, monitoring the entire
+acceleration curve of the hammer in real time.</li>
+</ol>
+<h3 id="calculating-velocity-from-travel-time">Calculating Velocity from
+Travel Time</h3>
+<p>Hammer velocity is governed by the basic formula:</p>
+<p><span class="math display">\[\text{Velocity} =
+\frac{\text{Distance}}{\text{Time}}\]</span></p>
+<p>Because the distance between the two detection points (or along the
+continuous gradient) is fixed and precisely calibrated, the system only
+needs to measure elapsed time (<span class="math inline">\(\Delta
+t\)</span>).</p>
+<p>High-speed microprocessors sample the sensors at frequencies often
+exceeding several kilohertz. A faster hammer movement yields a shorter
+time interval between detection points, signaling a hard strike (<span
+class="math inline">\(fortissimo\)</span>), while a slower swing results
+in a longer time interval, indicating a soft touch (<span
+class="math inline">\(pianissimo\)</span>).</p>
+<h3 id="translating-velocity-into-midi-data">Translating Velocity into
+MIDI Data</h3>
+<p>Once the processor determines the hammer's velocity:</p>
+<ol type="1">
+<li><strong>Velocity Curve Mapping:</strong> The raw speed value is
+processed through dynamic response curves tailored to replicate the
+dynamic response of a concert grand piano.</li>
+<li><strong>MIDI Value Assignment:</strong> The calculated value is
+converted into a standard 7-bit MIDI velocity integer (ranging from 1 to
+127) or a high-resolution 14-bit MIDI prefix/extension (up to 16,383
+values) for MIDI 2.0-compatible systems.</li>
+<li><strong>Note-On Generation:</strong> The system transmits a
+<code>Note On</code> event containing the note number (pitch) and its
+corresponding velocity parameter to the internal sound engine or an
+external digital audio workstation (DAW).</li>
+</ol>
+<p>Because the measurement occurs at the hammer shank rather than the
+key itself, the optical system accurately accounts for advanced
+pianistic techniques, such as escapement releases, silent key presses,
+and rapid repetitions, delivering an authentic acoustic response
+entirely in the digital domain.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-hybrid-piano-optical-sensors-measure-hammer-velocity';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

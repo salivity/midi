@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmic MIDI Humanization with Gaussian Noise - midi</title>
+    <meta name="description" content="This article explains how digital audio workstations and MIDI plugins utilize Gaussian distribution noise to transform rigid, grid-aligned MIDI sequences into natural performances. By applying the mathematical principles of the normal distribution curve t">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/algorithmic-midi-humanization-with-gaussian-noise">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Algorithmic MIDI Humanization with Gaussian Noise - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/algorithmic-midi-humanization-with-gaussian-noise" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how digital audio workstations and MIDI plugins utilize Gaussian distribution noise to transform rigid, grid-aligned MIDI sequences into natural performances. By applying the mathematical principles of the normal distribution curve t" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="algorithmic-midi-humanization-with-gaussian-noise">Algorithmic
+MIDI Humanization with Gaussian Noise</h1>
+<p>This article explains how digital audio workstations and MIDI plugins
+utilize Gaussian distribution noise to transform rigid, grid-aligned
+MIDI sequences into natural performances. By applying the mathematical
+principles of the normal distribution curve to note onset times and
+velocity values, an algorithmic humanizer introduces realistic
+micro-variations that mimic human biomechanical variance rather than
+chaotic, unnatural randomness.</p>
+<h3 id="the-limitation-of-uniform-randomization">The Limitation of
+Uniform Randomization</h3>
+<p>Standard randomization applies a uniform distribution where every
+value within a chosen range has an equal probability of occurring. When
+applied to MIDI timing or velocity, uniform noise sounds sloppy and
+erratic—often described as sounding like a "drunken musician." Human
+musicians do not make errors with uniform probability; instead, they aim
+for a target metric and deviate from it slightly most of the time, with
+larger deviations occurring rarely.</p>
+<h3 id="why-gaussian-distribution-works">Why Gaussian Distribution
+Works</h3>
+<p>A Gaussian (or normal) distribution provides the characteristic "bell
+curve" defined by two core parameters: the mean (<span
+class="math inline">\(\mu\)</span>) and the standard deviation (<span
+class="math inline">\(\sigma\)</span>).</p>
+<ul>
+<li><strong>Mean (<span class="math inline">\(\mu\)</span>):</strong>
+Represents the target value. For timing, the mean offset is typically
+zero (the exact grid position). For velocity, the mean is the original
+programmed velocity of the note.</li>
+<li><strong>Standard Deviation (<span
+class="math inline">\(\sigma\)</span>):</strong> Represents the
+"humanize" strength or intensity parameter adjusted by the user.</li>
+</ul>
+<p>Under a standard normal distribution, approximately 68.2% of
+generated values fall within one standard deviation (<span
+class="math inline">\(\pm1\sigma\)</span>) of the mean, 95.4% fall
+within two standard deviations (<span
+class="math inline">\(\pm2\sigma\)</span>), and 99.7% fall within three
+standard deviations (<span class="math inline">\(\pm3\sigma\)</span>).
+This ensures that the majority of notes land extremely close to their
+intended timing and dynamics, while noticeable swings remain
+statistically rare, directly mimicking human motor control.</p>
+<h3 id="applying-gaussian-noise-to-timing">Applying Gaussian Noise to
+Timing</h3>
+<p>MIDI timing is calculated in ticks (pulses per quarter note, or PPQN)
+or in milliseconds. To humanize note timing:</p>
+<ol type="1">
+<li><strong>Calculate the Offset:</strong> The algorithm generates a
+random number <span class="math inline">\(Z\)</span> from a standard
+normal distribution using methods like the Box-Muller transform: <span
+class="math display">\[Z = \sqrt{-2 \ln(U_1)} \cos(2\pi U_2)\]</span>
+<em>(where <span class="math inline">\(U_1\)</span> and <span
+class="math inline">\(U_2\)</span> are independent random variables
+uniformly distributed between 0 and 1)</em></li>
+<li><strong>Scale by Deviation:</strong> The random value <span
+class="math inline">\(Z\)</span> is multiplied by the user-defined
+standard deviation <span
+class="math inline">\(\sigma_{\text{time}}\)</span> (measured in ticks
+or milliseconds) to compute the timing delta: <span
+class="math display">\[\Delta t = Z \times
+\sigma_{\text{time}}\]</span></li>
+<li><strong>Shift Note On and Note Off:</strong> The calculated delta is
+added to the original note-on timestamp: <span
+class="math display">\[t_{\text{new}} = t_{\text{original}} + \Delta
+t\]</span> Most algorithms apply a corresponding or slightly independent
+shift to the note-off event to maintain realistic note durations.</li>
+<li><strong>Boundary Checks:</strong> The algorithm clamps values to
+prevent chronological errors, such as a note shifting behind the
+playback start position or causing a note-off event to precede its
+corresponding note-on event.</li>
+</ol>
+<h3 id="applying-gaussian-noise-to-velocity">Applying Gaussian Noise to
+Velocity</h3>
+<p>MIDI velocity values are integers strictly bound between 1 and 127
+(with 0 reserved for note-off commands). Algorithmic humanization for
+dynamics follows a similar process:</p>
+<ol type="1">
+<li><strong>Calculate the Delta:</strong> Using the same Gaussian
+generator, a value is generated and scaled by the velocity standard
+deviation <span class="math inline">\(\sigma_{\text{vel}}\)</span>:
+<span class="math display">\[\Delta v = Z \times
+\sigma_{\text{vel}}\]</span></li>
+<li><strong>Apply and Round:</strong> The offset is added to the note's
+base velocity and rounded to the nearest integer: <span
+class="math display">\[v_{\text{new}} = \text{round}(v_{\text{original}}
++ \Delta v)\]</span></li>
+<li><strong>Clamping:</strong> The new value is restricted to valid MIDI
+boundaries: <span class="math display">\[v_{\text{clamped}} = \max(1,
+\min(127, v_{\text{new}}))\]</span></li>
+</ol>
+<h3 id="context-aware-refinements">Context-Aware Refinements</h3>
+<p>Advanced humanizers adjust <span class="math inline">\(\mu\)</span>
+and <span class="math inline">\(\sigma\)</span> dynamically depending on
+musical context. For example, downbeats might have a lower <span
+class="math inline">\(\sigma_{\text{time}}\)</span> (tighter timing) and
+higher mean velocity <span
+class="math inline">\(\mu_{\text{vel}}\)</span>, while syncopated ghost
+notes receive larger deviations. Furthermore, correlated noise (such as
+pink noise or 1/f noise) is sometimes layered over the Gaussian output
+to simulate the continuous drift of human tempo over extended musical
+phrases.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/algorithmic-midi-humanization-with-gaussian-noise';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

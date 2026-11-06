@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Ports Were Used for DC Phantom Power - midi</title>
+    <meta name="description" content="In the early days of the MIDI specification, several manufacturers routed direct current (DC) phantom power through the unused pins of standard 5-pin DIN connectors to eliminate bulky external power supplies for remote equipment. While this practice solve">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-ports-were-used-for-dc-phantom-power">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Ports Were Used for DC Phantom Power - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-ports-were-used-for-dc-phantom-power" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the early days of the MIDI specification, several manufacturers routed direct current (DC) phantom power through the unused pins of standard 5-pin DIN connectors to eliminate bulky external power supplies for remote equipment. While this practice solve" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-ports-were-used-for-dc-phantom-power">Why MIDI Ports
+Were Used for DC Phantom Power</h1>
+<p>In the early days of the MIDI specification, several manufacturers
+routed direct current (DC) phantom power through the unused pins of
+standard 5-pin DIN connectors to eliminate bulky external power supplies
+for remote equipment. While this practice solved an immediate
+convenience problem for stage musicians and studio engineers, it
+blatantly violated official MIDI standards, leading to widespread
+hardware incompatibilities, blown circuits, and fried components.</p>
+<h3 id="the-midi-10-pinout-architecture">The MIDI 1.0 Pinout
+Architecture</h3>
+<p>When the MIDI 1.0 specification was released in 1983, the standard
+adopted a 5-pin 180-degree DIN connector. However, the protocol only
+required three pins to function:</p>
+<ul>
+<li><strong>Pin 4:</strong> +5V source (current loop driver)</li>
+<li><strong>Pin 5:</strong> MIDI Data line</li>
+<li><strong>Pin 2:</strong> Cable shield / Ground (connected only at
+transmitter ports to prevent ground loops)</li>
+<li><strong>Pins 1 and 3:</strong> Unassigned and reserved for future
+specification updates</li>
+</ul>
+<p>Because pins 1 and 3 carried no electrical signals according to the
+official standard, they were left floating (unconnected) on compliant
+hardware.</p>
+<h3 id="the-problem-of-remote-power">The Problem of Remote Power</h3>
+<p>During the mid-to-late 1980s, rack-mount synthesizers, multi-effects
+units, and MIDI-controlled guitar preamps exploded in popularity.
+Musicians relied on floorboard MIDI foot controllers to switch patches
+and parameters from the front of the stage.</p>
+<p>These foot controllers required DC power to run their internal
+microprocessors and LED displays. This forced musicians to run two
+separate lines: a MIDI cable carrying control data to the rack, and an
+AC/DC power adapter ("wall wart") cable carrying power from the wall
+back to the stage floor. This added clutter, increased setup times, and
+introduced tripping hazards on dark stages.</p>
+<h3 id="repurposing-pins-1-and-3">Repurposing Pins 1 and 3</h3>
+<p>Recognizing that Pins 1 and 3 were electronically idle, several
+manufacturers—particularly those in the guitar and live-sound industries
+like Rocktron, ADA, and various boutique builders—decided to repurpose
+them.</p>
+<p>By wiring DC voltage (typically +9V or +12V) to Pin 1 and a dedicated
+ground return to Pin 3 at the rack receiver, power could be sent
+backwards down a single, standard 5-pin DIN cable directly to the foot
+controller. From an engineering and cost standpoint, this appeared to be
+an elegant, zero-cost solution that required no proprietary cables or
+bulky secondary power runs.</p>
+<h3 id="why-the-implementation-failed">Why the Implementation
+Failed</h3>
+<p>Despite its practical appeal, hijacking Pins 1 and 3 was
+fundamentally non-compliant and introduced several severe technical
+flaws:</p>
+<ul>
+<li><strong>Direct Short Circuits:</strong> Some fully compliant MIDI
+device manufacturers tied Pins 1 and 3 to ground on their circuit boards
+or chassis to reduce radio-frequency interference (RFI). When a
+proprietary power-injecting device was connected to one of these units,
+the DC supply rail was shorted directly to ground, often melting traces,
+blowing internal fuses, or destroying power supplies.</li>
+<li><strong>Cable Discrepancies:</strong> Because the MIDI specification
+only mandated three functional pins, many cable manufacturers sold
+budget "MIDI cables" that only had three physical conductors wired
+inside (Pins 2, 4, and 5). Pins 1 and 3 were entirely omitted. When
+consumers plugged these cables into non-compliant powered setups, the
+devices mysteriously failed to turn on.</li>
+<li><strong>Lack of Industry Standardization:</strong> Manufacturers did
+not agree on voltage, polarity, or pin assignment. One brand might use
+Pin 1 for positive voltage and Pin 3 for ground, while another reversed
+the polarity or sent low-voltage AC power instead. Cross-connecting gear
+from different brands could instantly destroy delicate logic chips.</li>
+</ul>
+<h3 id="the-shift-to-7-pin-connectors">The Shift to 7-Pin
+Connectors</h3>
+<p>To eliminate these hazards without abandoning single-cable setups,
+the industry eventually adopted 7-pin DIN connectors. By keeping Pins 1
+through 5 strictly compliant with standard MIDI data and adding
+dedicated Pins 6 and 7 specifically for phantom power, manufacturers
+could provide phantom power safely. Standard 5-pin MIDI cables could
+still plug directly into the center of a 7-pin female jack without
+shorting the external power lines, definitively resolving the issues
+caused by early non-compliant designs.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-midi-ports-were-used-for-dc-phantom-power';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guitar to MIDI Latency on Low Strings Explained - midi</title>
+    <meta name="description" content="Hardware guitar-to-MIDI converters suffer from noticeable latency when tracking bass and lower-register guitar strings. This article examines the primary cause of this delay: the fundamental physics of sound wave periods, which dictates that pitch-detecti">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/guitar-to-midi-latency-on-low-strings-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Guitar to MIDI Latency on Low Strings Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/guitar-to-midi-latency-on-low-strings-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Hardware guitar-to-MIDI converters suffer from noticeable latency when tracking bass and lower-register guitar strings. This article examines the primary cause of this delay: the fundamental physics of sound wave periods, which dictates that pitch-detecti" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="guitar-to-midi-latency-on-low-strings-explained">Guitar to MIDI
+Latency on Low Strings Explained</h1>
+<p>Hardware guitar-to-MIDI converters suffer from noticeable latency
+when tracking bass and lower-register guitar strings. This article
+examines the primary cause of this delay: the fundamental physics of
+sound wave periods, which dictates that pitch-detection algorithms must
+wait longer to analyze low-frequency waveforms before converting them
+into digital MIDI notes.</p>
+<h3 id="the-physics-of-the-fundamental-period">The Physics of the
+Fundamental Period</h3>
+<p>The primary cause of latency on low-frequency vibrating strings is
+the mathematical relationship between frequency and time, expressed as
+<span class="math inline">\(T = 1 / f\)</span>, where <span
+class="math inline">\(T\)</span> is the period in seconds and <span
+class="math inline">\(f\)</span> is the frequency in Hertz (Hz).</p>
+<p>Lower frequencies have longer wave cycles:</p>
+<ul>
+<li>A standard guitar's high E string vibrates at approximately 329.6
+Hz, yielding a single cycle period of roughly 3.03 milliseconds.</li>
+<li>The low E string vibrates at approximately 82.4 Hz, yielding a
+single cycle period of roughly 12.13 milliseconds.</li>
+<li>A standard bass low E string vibrates at 41.2 Hz, extending the
+period to 24.27 milliseconds per cycle.</li>
+</ul>
+<h3 id="algorithm-detection-requirements">Algorithm Detection
+Requirements</h3>
+<p>Hardware pitch-to-MIDI converters use pitch-detection methods such as
+autocorrelation, zero-crossing detection, or fast Fourier transforms
+(FFT). To accurately determine pitch and prevent false triggering, these
+algorithms cannot identify a note from a single instant of sound; they
+must observe at least one to two complete cycles of the waveform.</p>
+<p>Because low strings produce cycles lasting over 12 milliseconds each,
+sampling 1.5 to 2 full cycles requires an unavoidable buffer of 18 to 24
+milliseconds just to collect the necessary audio data. In contrast, the
+high E string requires only 4.5 to 6 milliseconds of audio data to
+complete the same analysis.</p>
+<h3 id="harmonic-transients-and-settling-time">Harmonic Transients and
+Settling Time</h3>
+<p>Compounding the long cycle period is the complexity of a plucked
+string's initial transient. The moment a pick strikes a low string, the
+sound is dominated by inharmonic noise and high-amplitude upper
+harmonics rather than a clean fundamental sine wave.</p>
+<p>Converters must wait for these chaotic pick transients to decay and
+the fundamental frequency to stabilize. If a converter triggers too
+quickly during this initial phase, it risks outputting an octave-up
+error or an erratic pitch. Waiting for the fundamental wave to stabilize
+adds additional cycles to the analysis window, increasing real-world
+tracking latency on low strings to 25–40 milliseconds before a MIDI
+Note-On message can be generated.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/guitar-to-midi-latency-on-low-strings-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

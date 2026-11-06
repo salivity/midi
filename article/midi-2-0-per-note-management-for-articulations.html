@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 2.0 Per-Note Management for Articulations - midi</title>
+    <meta name="description" content="MIDI 2.0 Per-Note Management messages provide the explicit voice-level instructions required to direct, isolate, and maintain individual musical expressions across polyphonic performances on a single channel. This article explains the precise function of">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-2-0-per-note-management-for-articulations">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 2.0 Per-Note Management for Articulations - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-2-0-per-note-management-for-articulations" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI 2.0 Per-Note Management messages provide the explicit voice-level instructions required to direct, isolate, and maintain individual musical expressions across polyphonic performances on a single channel. This article explains the precise function of" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-20-per-note-management-for-articulations">MIDI 2.0 Per-Note
+Management for Articulations</h1>
+<p>MIDI 2.0 Per-Note Management messages provide the explicit
+voice-level instructions required to direct, isolate, and maintain
+individual musical expressions across polyphonic performances on a
+single channel. This article explains the precise function of Per-Note
+Management messages, how they enable independent articulation changes
+for simultaneous notes, and why they eliminate the parameter crosstalk
+common in legacy MIDI architectures.</p>
+<h3 id="the-role-of-per-note-management-messages">The Role of Per-Note
+Management Messages</h3>
+<p>In MIDI 2.0, Channel Voice Messages operate with high-resolution
+control through the Universal MIDI Packet (UMP) format. While Registered
+Per-Note Controllers and Assignable Per-Note Controllers deliver
+specific values (such as bow pressure, timbre, or articulation types),
+the <strong>Per-Note Management message</strong> acts as the operational
+director for how receiving synthesizers and sample engines handle those
+incoming controller streams.</p>
+<p>The Per-Note Management message targets a specific note number on a
+designated channel and carries critical flags that control note
+lifecycle and parameter persistence.</p>
+<h3 id="managing-polyphonic-articulation-steering">Managing Polyphonic
+Articulation Steering</h3>
+<p>When performing or arranging complex orchestral or acoustic parts,
+different voices in a chord often require unique articulations—such as a
+sustained violin note held under a staccato pulse, or a single plucked
+note within a bowed chord. The Per-Note Management message steers these
+changes through three primary functions:</p>
+<h4 id="1-voice-specific-targeting-without-channel-splitting">1.
+Voice-Specific Targeting Without Channel Splitting</h4>
+<p>Legacy MIDI 1.0 applied Control Change (CC) and Program Change
+messages across the entire channel, requiring MIDI Polyphonic Expression
+(MPE) to distribute notes across 16 discrete channels as a
+workaround.</p>
+<p>MIDI 2.0 Per-Note Management allows all articulation data to remain
+on a single MIDI channel. By preceding or accompanying per-note
+articulation controllers with a management message, the sender
+explicitly instructs the sound engine to apply articulation shifts
+exclusively to the designated note instance, leaving neighboring notes
+completely unaffected.</p>
+<h4 id="2-the-detach-flag-decoupling-controllers-from-note-off">2. The
+Detach Flag (Decoupling Controllers from Note-Off)</h4>
+<p>A primary function within the Per-Note Management message is the
+<strong>Detach</strong> option.</p>
+<p>When steering polyphonic articulations, release behaviors often
+define the authenticity of an instrument (e.g., natural string
+resonance, key-release noise, or lingering vibrato). Setting the Detach
+flag allows the sound engine to continue processing per-note
+articulation and modulation data even after a Note-Off message has been
+received, extending into the release envelope.</p>
+<p>Crucially, this prevents a newly struck note of the same pitch from
+automatically inheriting the decaying articulation parameters of the
+previous note, maintaining pure polyphonic separation.</p>
+<h4 id="3-clearing-and-resetting-articulation-state">3. Clearing and
+Resetting Articulation State</h4>
+<p>When switching articulations rapidly across polyphonic passages,
+receivers must know when to revert to default states. The Per-Note
+Management message can reset per-note controller data for a specified
+note. This guarantees that temporary articulation overrides—such as a
+momentary pizzicato or brass fall—terminate cleanly upon note
+termination rather than persisting into subsequent phrases.</p>
+<h3 id="summary-of-benefits">Summary of Benefits</h3>
+<p>By combining precise note-instance identification with lifecycle
+flags like Detach and Reset, the MIDI 2.0 Per-Note Management message
+provides deterministic control over polyphonic patches. It ensures
+virtual instruments execute complex, multi-articulation arrangements
+accurately in real time without voice bleeding, stuck states, or the
+need for multi-channel routing workarounds.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-2-0-per-note-management-for-articulations';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

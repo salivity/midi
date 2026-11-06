@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Frame Rate in MIDI Time Code - midi</title>
+    <meta name="description" content="This article explains how to determine the exact frame rate from a MIDI Time Code (MTC) full frame payload. By examining the structure of the Universal System Exclusive message and applying a specific bitwise calculation to the hours byte, software and ha">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/calculate-frame-rate-in-midi-time-code">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Calculate Frame Rate in MIDI Time Code - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/calculate-frame-rate-in-midi-time-code" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how to determine the exact frame rate from a MIDI Time Code (MTC) full frame payload. By examining the structure of the Universal System Exclusive message and applying a specific bitwise calculation to the hours byte, software and ha" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="calculate-frame-rate-in-midi-time-code">Calculate Frame Rate in
+MIDI Time Code</h1>
+<p>This article explains how to determine the exact frame rate from a
+MIDI Time Code (MTC) full frame payload. By examining the structure of
+the Universal System Exclusive message and applying a specific bitwise
+calculation to the hours byte, software and hardware decoders identify
+whether a stream is operating at 24, 25, 29.97 drop-frame, or 30 frames
+per second.</p>
+<h3 id="the-full-frame-payload-structure">The Full Frame Payload
+Structure</h3>
+<p>An MTC Full Frame message is transmitted as a Universal Real-Time
+System Exclusive (SysEx) message formatted as follows:</p>
+<p><code>F0 7F [deviceID] 01 01 [hr] [mn] [sc] [fr] F7</code></p>
+<ul>
+<li><strong>F0 7F</strong>: Universal Real-Time SysEx header</li>
+<li><strong>[deviceID]</strong>: Target device ID (often <code>7F</code>
+for all call)</li>
+<li><strong>01 01</strong>: Sub-IDs indicating an MTC Full Frame
+message</li>
+<li><strong>[hr]</strong>: Encoded Hours and Time Code Type byte</li>
+<li><strong>[mn]</strong>: Minutes (00–59)</li>
+<li><strong>[sc]</strong>: Seconds (00–59)</li>
+<li><strong>[fr]</strong>: Frames (00–29)</li>
+<li><strong>F7</strong>: End of Exclusive (EOX)</li>
+</ul>
+<h3 id="the-bitwise-calculation">The Bitwise Calculation</h3>
+<p>MTC does not transmit the frame rate as an arbitrary numerical value
+or directly inside the frames (<code>[fr]</code>) byte. Instead, the
+frame rate is encoded directly within the two most significant data bits
+of the hours byte (<code>[hr]</code>).</p>
+<p>To calculate the 2-bit frame rate identifier from the hours byte,
+apply the following bitwise operation:</p>
+<p><span class="math display">\[\text{Rate Code} = (\text{hr} \ \&amp; \
+\text{0x60}) \gg 5\]</span></p>
+<p>Alternatively:</p>
+<p><span class="math display">\[\text{Rate Code} = \lfloor \text{hr} /
+32 \rfloor \pmod 4\]</span></p>
+<p>This isolates bits 5 and 6 of the 7-bit MIDI data byte:</p>
+<ul>
+<li><strong>Bit 7</strong>: Always <code>0</code> (standard MIDI data
+byte requirement)</li>
+<li><strong>Bits 6–5</strong>: Encoded Frame Rate Type (<code>00</code>,
+<code>01</code>, <code>10</code>, or <code>11</code>)</li>
+<li><strong>Bits 4–0</strong>: Actual Hours value (<span
+class="math inline">\(0\)</span>–<span
+class="math inline">\(23\)</span>)</li>
+</ul>
+<h3 id="frame-rate-mapping">Frame Rate Mapping</h3>
+<p>Once the 2-bit integer value (ranging from 0 to 3) is extracted, it
+maps to the exact SMPTE frame rate:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Rate Code (Binary)</th>
+<th style="text-align: left;">Rate Code (Decimal)</th>
+<th style="text-align: left;">Standard Frame Rate</th>
+<th style="text-align: left;">Exact Mathematical Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>00</code></td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">24 fps</td>
+<td style="text-align: left;"><span class="math inline">\(24.0\)</span>
+fps</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>01</code></td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">25 fps</td>
+<td style="text-align: left;"><span class="math inline">\(25.0\)</span>
+fps</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">29.97 fps (Drop Frame)</td>
+<td style="text-align: left;"><span
+class="math inline">\(\frac{30000}{1001} \approx 29.97002997\)</span>
+fps</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>11</code></td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">30 fps (Non-Drop)</td>
+<td style="text-align: left;"><span class="math inline">\(30.0\)</span>
+fps</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example">Example</h3>
+<p>If the received hours byte is <code>0x65</code> (binary
+<code>01100101</code>):</p>
+<ol type="1">
+<li>Mask with <code>0x60</code> (<code>01100000</code>):
+<code>0x65 &amp; 0x60 = 0x60</code></li>
+<li>Shift right by 5 bits: <code>0x60 &gt;&gt; 5 = 3</code> (binary
+<code>11</code>)</li>
+<li>Look up rate code <code>3</code>: The exact frame rate is <strong>30
+fps Non-Drop Frame</strong>.</li>
+<li>Mask with <code>0x1F</code> (<code>00011111</code>) to read the
+hours: <code>0x65 &amp; 0x1F = 5</code> hours.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/calculate-frame-rate-in-midi-time-code';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

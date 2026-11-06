@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why DPC Latency Causes USB-MIDI Clock Jitter - midi</title>
+    <meta name="description" content="Deferred Procedure Call (DPC) latency in modern operating systems directly impairs software-generated USB-MIDI clock output by interrupting the precise timing intervals required for real-time synchronization. When poorly optimized device drivers monopoliz">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-dpc-latency-causes-usb-midi-clock-jitter">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why DPC Latency Causes USB-MIDI Clock Jitter - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-dpc-latency-causes-usb-midi-clock-jitter" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Deferred Procedure Call (DPC) latency in modern operating systems directly impairs software-generated USB-MIDI clock output by interrupting the precise timing intervals required for real-time synchronization. When poorly optimized device drivers monopoliz" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-dpc-latency-causes-usb-midi-clock-jitter">Why DPC Latency
+Causes USB-MIDI Clock Jitter</h1>
+<p>Deferred Procedure Call (DPC) latency in modern operating systems
+directly impairs software-generated USB-MIDI clock output by
+interrupting the precise timing intervals required for real-time
+synchronization. When poorly optimized device drivers monopolize CPU
+cores with long-running DPCs, the operating system cannot return
+execution time to audio workstations and timer threads. This creates
+irregular delivery delays, causing MIDI clock pulses to bunch together
+or drop behind schedule, which manifests as severe audible jitter and
+tempo drift on external hardware synthesizers, drum machines, and
+sequencers.</p>
+<p>Standard MIDI clock relies on high-precision timing, demanding 24
+Pulses Per Quarter Note (PPQN). At a standard tempo of 120 BPM, a MIDI
+clock tick must be dispatched precisely every 20.83 milliseconds.
+Because human perception can detect rhythmic deviations as small as one
+to two milliseconds, absolute consistency between these pulses is
+critical. In a fully software-driven environment, digital audio
+workstations (DAWs) use high-resolution system timers to schedule and
+dispatch these events.</p>
+<p>The operating system manages hardware interactions through Interrupt
+Service Routines (ISRs) and Deferred Procedure Calls (DPCs). When
+hardware components—such as graphics cards, Wi-Fi adapters, or
+power-management controllers—request attention, the CPU runs an ISR to
+acknowledge the interrupt immediately. To avoid halting the system, the
+ISR delegates the heavier computational work to a DPC, placing it into a
+high-priority system execution queue.</p>
+<p>DPCs operate at a higher priority than user-mode processes, including
+DAWs and system audio threads. If a faulty or aggressive device driver
+generates a DPC that takes several milliseconds to complete, the
+operating system cannot preempt it. During this stalled window, the
+DAW's timer thread is blocked from processing or dispatching the
+scheduled MIDI clock byte. Even if the DAW is operating on a
+microsecond-accurate internal clock, it is physically prevented from
+executing the code required to send the data packet.</p>
+<p>Once the prolonged DPC finally finishes, the operating system resumes
+execution of the deferred user threads. At this point, the DAW detects
+that one or more clock ticks are overdue and attempts to catch up by
+dispatching the late bytes in rapid succession.</p>
+<p>This delay is further compounded by the nature of the Universal
+Serial Bus (USB) architecture. USB is a polled bus that transmits data
+in discrete time frames—typically 1 millisecond for Full Speed USB or
+125 microseconds for High Speed USB. When a DPC routine causes a clock
+tick to miss its designated USB frame, the event is forced into the next
+available frame alongside newly generated ticks.</p>
+<p>The combination of blocked driver execution and USB packet batching
+converts smooth, evenly spaced clock pulses into erratic bursts followed
+by idle gaps. The receiving hardware device interprets these clumped
+intervals as rapid tempo acceleration and deceleration, ultimately
+causing external sequencers to swing out of phase with the host
+software.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-dpc-latency-causes-usb-midi-clock-jitter';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

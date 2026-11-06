@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Fix Yamaha DX7 MIDI Velocity Limits - midi</title>
+    <meta name="description" content="The original Yamaha DX7 is an iconic synthesizer, but its early implementation of the MIDI standard limits its transmitted velocity output to a maximum of roughly 100 rather than the standard 127. When used as a master keyboard for modern virtual instrume">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-fix-yamaha-dx-7-midi-velocity-limits">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Fix Yamaha DX7 MIDI Velocity Limits - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-fix-yamaha-dx-7-midi-velocity-limits" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The original Yamaha DX7 is an iconic synthesizer, but its early implementation of the MIDI standard limits its transmitted velocity output to a maximum of roughly 100 rather than the standard 127. When used as a master keyboard for modern virtual instrume" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-fix-yamaha-dx7-midi-velocity-limits">How to Fix Yamaha
+DX7 MIDI Velocity Limits</h1>
+<p>The original Yamaha DX7 is an iconic synthesizer, but its early
+implementation of the MIDI standard limits its transmitted velocity
+output to a maximum of roughly 100 rather than the standard 127. When
+used as a master keyboard for modern virtual instruments, this
+limitation prevents players from triggering top-layer velocity samples,
+high-brightness filters, and maximum volume states. A modern MIDI
+velocity scaler plugin directly remedies this issue by intercepting the
+DX7's incoming MIDI stream and mathematically remapping the compressed
+1–100 input range into the full 0–127 MIDI spectrum, delivering full
+expressive dynamics without physical hardware modifications.</p>
+<h3 id="the-origin-of-the-dx7-velocity-issue">The Origin of the DX7
+Velocity Issue</h3>
+<p>Released in 1983, the Yamaha DX7 MK1 was among the earliest
+commercial synthesizers equipped with MIDI. Because the standard was
+still in its infancy, Yamaha engineered the keybed to transmit MIDI
+velocities between 0 and 100. Internally, the DX7’s FM synthesis engine
+adjusted to this scale, meaning the synth performed normally on its
+own.</p>
+<p>However, standard MIDI defines note velocity on a scale of 0 to 127.
+When a DX7 MK1 drives modern DAWs, plugins, or modern hardware samplers,
+it fails to reach the top 20% of the dynamic spectrum. As a result,
+virtual instruments sound dull, quiet, and dynamically compressed, with
+harder articulations like brass stabs or acoustic piano fortissimo
+layers remaining completely unreachable.</p>
+<h3 id="how-a-velocity-scaler-plugin-fixes-the-problem">How a Velocity
+Scaler Plugin Fixes the Problem</h3>
+<p>A MIDI velocity scaler is an insert plugin placed before a virtual
+instrument in a DAW's signal chain. It evaluates incoming
+<code>Note On</code> messages in real time, alters the velocity byte,
+and outputs the adjusted value with zero audible latency.</p>
+<p>The plugin restores the DX7's range through real-time mathematical
+interpolation:</p>
+<ol type="1">
+<li><strong>Input Range Setting:</strong> The user defines the minimum
+and maximum expected input values from the DX7—typically set from 1 to
+100.</li>
+<li><strong>Output Range Mapping:</strong> The target output is
+configured to standard MIDI parameters, spanning 0 to 127.</li>
+<li><strong>Scaling Calculation:</strong> The plugin applies a ratio
+formula to each incoming value. An incoming velocity of 100 is
+recalculated to 127, while a softer velocity, such as 50, is scaled
+upward to roughly 63. Any value received at the lowest threshold (1)
+remains at the base minimum.</li>
+</ol>
+<h3 id="curve-shaping-for-natural-playability">Curve Shaping for Natural
+Playability</h3>
+<p>Simple linear scaling expands the range, but it can sometimes make
+the DX7's physical keybed feel overly sensitive or jumpy. High-end
+velocity scalers offer dynamic response curves—such as logarithmic,
+exponential, or custom multi-point spline curves—to fine-tune how the
+keyboard translates touch into digital output.</p>
+<ul>
+<li><strong>Exponential Curves:</strong> Require harder playing to hit
+peak velocities, ideal for players who want to preserve low-velocity
+nuance on acoustic piano plugins.</li>
+<li><strong>Logarithmic Curves:</strong> Boost lower and mid-range
+velocities faster, which helps compensate for the DX7's relatively stiff
+key action on aggressive synth lines.</li>
+<li><strong>S-Curves:</strong> Soften the transitions at both the
+quietest and loudest extremes, creating a smooth response across the
+entire keybed.</li>
+</ul>
+<p>By using a velocity scaler plugin, musicians can preserve the durable
+build and distinct feel of the DX7 keyboard while achieving complete
+dynamic parity with modern MIDI controllers.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-to-fix-yamaha-dx-7-midi-velocity-limits';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

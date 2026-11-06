@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Sample Engines Handle Fast Legato Transitions - midi</title>
+    <meta name="description" content="Modern multi-gigabyte orchestral sample engines interpret rapid legato MIDI transitions by continuously tracking note timing and dynamically modifying recorded interval samples. When two MIDI notes overlap, the engine calculates the velocity and the delta">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-sample-engines-handle-fast-legato-transitions">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Sample Engines Handle Fast Legato Transitions - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-sample-engines-handle-fast-legato-transitions" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern multi-gigabyte orchestral sample engines interpret rapid legato MIDI transitions by continuously tracking note timing and dynamically modifying recorded interval samples. When two MIDI notes overlap, the engine calculates the velocity and the delta" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-sample-engines-handle-fast-legato-transitions">How Sample
+Engines Handle Fast Legato Transitions</h1>
+<p>Modern multi-gigabyte orchestral sample engines interpret rapid
+legato MIDI transitions by continuously tracking note timing and
+dynamically modifying recorded interval samples. When two MIDI notes
+overlap, the engine calculates the velocity and the delta-time between
+the events to decide whether to play a full transition, alter sample
+start points, time-compress the interval, or substitute it with an agile
+alternative. This article breaks down the mechanics of true legato
+scripting, the latency challenges introduced by fast passages, and the
+DSP techniques samplers use to maintain realism during quick
+transitions.</p>
+<h3 id="the-foundation-of-true-legato-sampling">The Foundation of True
+Legato Sampling</h3>
+<p>True legato libraries rely on recordings of every physical interval
+within an instrument's range. Rather than simulating transitions with
+synthesized crossfades or pitch glides, recording engineers capture a
+musician moving between two notes—for instance, from C4 to E4.</p>
+<p>The engine uses a monophonic script to detect when a new
+<code>note_on</code> message arrives while an existing note is still
+active. Upon detecting this overlap, the script:</p>
+<ol type="1">
+<li>Identifies the pitch of the current note and the incoming note to
+calculate the specific interval.</li>
+<li>Silences or fades out the first sustain sample.</li>
+<li>Triggers the corresponding two-note transition sample.</li>
+<li>Seamlessly crossfades from the transition sample into the steady
+sustain of the target note.</li>
+</ol>
+<h3 id="the-latency-problem-in-fast-passages">The Latency Problem in
+Fast Passages</h3>
+<p>Standard interval samples capture natural, expressive transitions
+that often contain between 80 and 300 milliseconds of physical
+transition time, such as bow changes, finger placement, or vocal
+portamento. During slow melodies, this natural delay preserves authentic
+phrasing.</p>
+<p>However, during rapid scalar runs or trills where notes occur every
+50 to 100 milliseconds, playing long transition samples creates severe
+issues:</p>
+<ul>
+<li><strong>Perceived Latency:</strong> The engine cannot complete the
+transition before the next note arrives, making playback feel sluggish
+and unresponsive to the performer.</li>
+<li><strong>Sample Clumping:</strong> If multiple transition samples
+overlap because notes trigger faster than the transitions can finish,
+phase cancellation, dynamic spikes, and sonic mud occur.</li>
+<li><strong>Loss of Attack:</strong> Slow, expressive interval samples
+lack the sharp transient necessary to articulate fast, agile
+playing.</li>
+</ul>
+<h3 id="real-time-detection-and-sample-start-manipulation">Real-Time
+Detection and Sample-Start Manipulation</h3>
+<p>To resolve these latency issues, modern engines monitor the time
+elapsed between incoming <code>note_on</code> events. When this
+inter-onset interval falls below a set threshold (typically under 150
+milliseconds), the engine alters playback via several mechanisms:</p>
+<h4 id="sample-start-offset">Sample Start Offset</h4>
+<p>The primary method for handling rapid legato is shifting the sample
+start position forward. Instead of playing the slow lead-in phase of the
+interval sample, the engine starts playback tens or hundreds of
+milliseconds into the recording. By skipping the slow portamento or
+breath phase, the playback starts at the sharpest part of the
+transition. The engine then applies an ultra-fast linear attack envelope
+to prevent audio clicks caused by starting mid-waveform.</p>
+<h4 id="dynamic-crossfade-envelopes">Dynamic Crossfade Envelopes</h4>
+<p>For fast sequences, the crossfade duration between the interval
+sample and the destination sustain is severely compressed. The engine
+truncates the natural release tail of the preceding sustain to zero
+almost instantaneously, while opening the target note's envelope with a
+steep attack. This tightens voice allocation and prevents polyphonic
+buildup.</p>
+<h4 id="time-stretching-and-playback-warping">Time-Stretching and
+Playback Warping</h4>
+<p>Some advanced sample engines apply proprietary real-time pitch and
+time-stretching algorithms to the interval samples. Rather than simply
+trimming the start of the sample, the engine dynamically speeds up the
+transition portion of the audio while preserving pitch and formants.
+This compresses a 200-millisecond natural transition into a
+50-millisecond burst that matches the tempo of the user's
+performance.</p>
+<h4 id="articulation-and-layer-swapping">Articulation and Layer
+Swapping</h4>
+<p>When transitions surpass a critical speed threshold, certain engines
+bypass the slow "true legato" sample entirely. The engine script
+silently substitutes the interval with an "agile" or "runs" sample
+layer—recordings specifically performed quickly by the musician. If no
+such layer exists, the engine may layer a low-volume staccato or
+spiccato attack transient over the start of the target sustain,
+providing the rhythmic definition required for rapid passage work.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-sample-engines-handle-fast-legato-transitions';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

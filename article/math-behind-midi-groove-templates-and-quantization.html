@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Behind MIDI Groove Templates and Quantization - midi</title>
+    <meta name="description" content="Groove templates bridge the gap between rigid, synthetic sequences and natural musical performances by mathematically remapping MIDI note parameters to human micro-timing variations. Rather than forcing events onto an equidistant metric division, groove q">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/math-behind-midi-groove-templates-and-quantization">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Math Behind MIDI Groove Templates and Quantization - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/math-behind-midi-groove-templates-and-quantization" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Groove templates bridge the gap between rigid, synthetic sequences and natural musical performances by mathematically remapping MIDI note parameters to human micro-timing variations. Rather than forcing events onto an equidistant metric division, groove q" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="math-behind-midi-groove-templates-and-quantization">Math Behind
+MIDI Groove Templates and Quantization</h1>
+<p>Groove templates bridge the gap between rigid, synthetic sequences
+and natural musical performances by mathematically remapping MIDI note
+parameters to human micro-timing variations. Rather than forcing events
+onto an equidistant metric division, groove quantizing captures the
+non-linear timing deviations, velocity fluctuations, and duration
+adjustments of a real performance and encodes them as a transferable set
+of offset vectors. By applying principles of linear interpolation,
+modulo metric mapping, and stochastic noise modeling, digital audio
+workstations (DAWs) algorithmically reshape raw MIDI data to impart
+specific rhythmic feels.</p>
+<h3 id="the-metric-grid-and-timing-displacement-vectors">The Metric Grid
+and Timing Displacement Vectors</h3>
+<p>Standard quantization snaps MIDI events to the nearest point on an
+equidistant discrete time grid. In a metric space where a bar is divided
+into <span class="math inline">\(N\)</span> equal subdivisions, the
+nominal metric position of a step <span class="math inline">\(i\)</span>
+is defined as:</p>
+<p><span class="math display">\[t_{\text{grid}}(i) = i \cdot \Delta
+t\]</span></p>
+<p>where <span class="math inline">\(\Delta t\)</span> is the duration
+of a single subdivision (such as a 16th note).</p>
+<p>A groove template extracts deviations from a recorded human
+performance. If a musician plays a note intended for step <span
+class="math inline">\(i\)</span> at actual time <span
+class="math inline">\(t_{\text{perf}}(i)\)</span>, the timing offset
+vector <span class="math inline">\(\Delta t_{\text{offset}}(i)\)</span>
+is calculated as:</p>
+<p><span class="math display">\[\Delta t_{\text{offset}}(i) =
+t_{\text{perf}}(i) - t_{\text{grid}}(i)\]</span></p>
+<p>A complete groove template consists of a multidimensional array
+storing these values over an <span
+class="math inline">\(L\)</span>-length metric cycle (typically one to
+two bars):</p>
+<p><span class="math display">\[\mathbf{G}(i) = \begin{bmatrix} \Delta
+t(i) \\ \Delta v(i) \\ \Delta d(i) \end{bmatrix}\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\Delta t(i)\)</span> is the temporal
+displacement (ticks or milliseconds),</li>
+<li><span class="math inline">\(\Delta v(i)\)</span> is the relative
+velocity deviation from a baseline dynamic,</li>
+<li><span class="math inline">\(\Delta d(i)\)</span> is the note
+duration scaling or offset.</li>
+</ul>
+<h3 id="phase-mapping-via-modulo-arithmetic">Phase Mapping via Modulo
+Arithmetic</h3>
+<p>To apply an <span class="math inline">\(L\)</span>-length template to
+an unquantized MIDI track of arbitrary length, incoming notes are mapped
+to the groove cycle using modulo operations. For a note located at
+timestamp <span class="math inline">\(t_{\text{note}}\)</span>, its
+metric phase <span class="math inline">\(\phi\)</span> within the groove
+cycle is determined by:</p>
+<p><span class="math display">\[\phi = t_{\text{note}} \pmod
+L\]</span></p>
+<p>The algorithm identifies the closest index <span
+class="math inline">\(k\)</span> in the template:</p>
+<p><span class="math display">\[k = \text{argmin}_j \left| \phi -
+t_{\text{grid}}(j) \right|\]</span></p>
+<p>Once index <span class="math inline">\(k\)</span> is found, the
+target time <span class="math inline">\(t_{\text{target}}\)</span> for
+the note is calculated using the groove's timing displacement:</p>
+<p><span class="math display">\[t_{\text{target}} = t_{\text{grid}}(k) +
+\left( \left\lfloor \frac{t_{\text{note}}}{L} \right\rfloor \cdot L
+\right) + \Delta t(k)\]</span></p>
+<h3 id="weighted-linear-interpolation-quantize-strength">Weighted Linear
+Interpolation (Quantize Strength)</h3>
+<p>Groove quantization algorithms rarely force an absolute snap to <span
+class="math inline">\(t_{\text{target}}\)</span>. Instead, they employ
+linear interpolation to allow user-defined quantize percentages (<span
+class="math inline">\(S \in [0, 1]\)</span>):</p>
+<p><span class="math display">\[t_{\text{final}} = t_{\text{note}} + S
+\cdot (t_{\text{target}} - t_{\text{note}})\]</span></p>
+<p>When <span class="math inline">\(S = 1\)</span>, the note fully
+adopts the template's timing. When <span class="math inline">\(S =
+0\)</span>, the note retains its original performance position. Velocity
+is scaled similarly against the template's dynamic offsets:</p>
+<p><span class="math display">\[v_{\text{final}} = \text{clamp}\left(
+v_{\text{note}} + S_v \cdot \Delta v(k), 1, 127 \right)\]</span></p>
+<p>where <span class="math inline">\(S_v\)</span> represents the groove
+velocity depth.</p>
+<h3 id="stochastic-jitter-and-fractal-timing-humanization">Stochastic
+Jitter and Fractal Timing (Humanization)</h3>
+<p>Human timing is not purely deterministic; identical metric positions
+are played with slight variations across successive bars. A humanized
+feel incorporates stochastic variance into the static groove
+template.</p>
+<p>Basic humanization algorithms introduce zero-mean Gaussian white
+noise:</p>
+<p><span class="math display">\[\Delta t_{\text{rand}} \sim
+\mathcal{N}(0, \sigma^2)\]</span></p>
+<p>However, human motor control and cognitive timekeeping exhibit
+long-range correlations rather than independent random errors. Empirical
+psychoacoustic studies demonstrate that human micro-timing follows a
+<span class="math inline">\(1/f\)</span> spectral density, commonly
+known as pink noise:</p>
+<p><span class="math display">\[S(f) \propto \frac{1}{f^\alpha} \quad
+(\text{where } \alpha \approx 1)\]</span></p>
+<p>Advanced groove algorithms combine the deterministic offset of the
+groove template with a fractional Brownian motion or pink noise
+generator. The resulting displacement equation for a note at cycle
+instance <span class="math inline">\(m\)</span> and step <span
+class="math inline">\(k\)</span> becomes:</p>
+<p><span class="math display">\[t_{\text{final}}(m, k) =
+t_{\text{grid}}(m, k) + \Delta t_{\text{groove}}(k) + \xi_{1/f}(m,
+k)\]</span></p>
+<p>where <span class="math inline">\(\Delta
+t_{\text{groove}}(k)\)</span> represents the macro-groove (the recurring
+swing, push, or drag) and <span class="math inline">\(\xi_{1/f}(m,
+k)\)</span> represents the non-repeating fractal motor jitter unique to
+each measure.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/math-behind-midi-groove-templates-and-quantization';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

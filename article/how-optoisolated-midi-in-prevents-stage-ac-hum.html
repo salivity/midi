@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Optoisolated MIDI In Prevents Stage AC Hum - midi</title>
+    <meta name="description" content="Ground loops are among the most persistent causes of low-frequency AC hum in live sound environments, but the original MIDI specification uniquely eliminated this issue for digital control data. By mandating an optoisolator on every MIDI In port, the arch">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-optoisolated-midi-in-prevents-stage-ac-hum">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Optoisolated MIDI In Prevents Stage AC Hum - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-optoisolated-midi-in-prevents-stage-ac-hum" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Ground loops are among the most persistent causes of low-frequency AC hum in live sound environments, but the original MIDI specification uniquely eliminated this issue for digital control data. By mandating an optoisolator on every MIDI In port, the arch" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-optoisolated-midi-in-prevents-stage-ac-hum">How Optoisolated
+MIDI In Prevents Stage AC Hum</h1>
+<p>Ground loops are among the most persistent causes of low-frequency AC
+hum in live sound environments, but the original MIDI specification
+uniquely eliminated this issue for digital control data. By mandating an
+optoisolator on every MIDI In port, the architecture guarantees galvanic
+isolation between interconnected gear. Instead of sharing a continuous
+electrical ground wire that can route stray alternating current through
+audio lines into the stage PA system, the interface transfers data using
+light pulses. This design breaks the physical circuit between devices,
+permanently preventing ground loops from forming across the digital
+communication chain.</p>
+<h3 id="the-mechanics-of-ac-hum-and-ground-loops">The Mechanics of AC
+Hum and Ground Loops</h3>
+<p>In a live performance setting, backline equipment such as
+synthesizers, drum machines, effects processors, and computer interfaces
+are often plugged into separate AC power outlets spread across a stage.
+Each AC outlet can have a slightly different ground potential.</p>
+<p>When two audio devices are connected via standard audio or data
+cables with shared ground wires, this voltage differential forces stray
+50Hz or 60Hz alternating current through the cable shield. This unwanted
+current leaks into the audio ground path, where it is amplified by the
+front-of-house (FOH) PA system as an audible, low-frequency hum or
+buzz.</p>
+<h3 id="the-optoisolator-at-the-midi-in-port">The Optoisolator at the
+MIDI In Port</h3>
+<p>To prevent digital data links from exacerbating this issue, the MIDI
+Manufacturers Association mandated optical isolation inside every MIDI
+In terminal. An optoisolator (or optocoupler) is an integrated component
+that contains two distinct elements separated by a physical air gap:</p>
+<ol type="1">
+<li><strong>A light-emitting diode (LED)</strong> connected directly to
+the incoming MIDI data loop.</li>
+<li><strong>A phototransistor</strong> connected to the receiving
+device’s internal microprocessor circuitry.</li>
+</ol>
+<p>When a transmitting device sends a digital "0" or "1," it sends a
+small 5-milliamp current loop through the MIDI cable. This current
+enters the receiving device, powers the internal LED, and immediately
+returns to the sender through the balanced data pair. The
+phototransistor on the other side of the gap detects this flashing light
+and converts it back into an electrical digital signal for the host
+synthesizer or sound module.</p>
+<h3 id="why-no-ground-loop-can-exist">Why No Ground Loop Can Exist</h3>
+<p>Because communication occurs entirely via light crossing a physical
+barrier, there is zero direct electrical contact (galvanic isolation)
+between the transmitting hardware and the receiving hardware:</p>
+<ul>
+<li><strong>Floating Inputs:</strong> The MIDI In jack does not connect
+to the chassis or internal circuit ground of the receiving device. Pins
+4 and 5 carry only the balanced current loop that drives the
+optocoupler's LED.</li>
+<li><strong>No Ground Pin on MIDI In:</strong> Pin 2 on a 5-pin DIN MIDI
+connector is designated as the shield/ground. While it is connected to
+ground at the MIDI Out port to shield the cable from radio frequency
+interference (RFI), it is intentionally left disconnected (floating) at
+the MIDI In port.</li>
+</ul>
+<h3 id="practical-impact-on-stage-pa-systems">Practical Impact on Stage
+PA Systems</h3>
+<p>Without optoisolation, linking multiple stage instruments via MIDI
+would create a massive web of parallel ground paths running alongside
+the unbalanced or balanced audio cables going to direct input (DI) boxes
+and stage snakes.</p>
+<p>By eliminating the physical copper ground link between the sender and
+receiver at the MIDI In port, the MIDI protocol ensures that digital
+networks never provide an alternate return path for AC power anomalies.
+Keyboard players and audio engineers can daisy-chain dozens of
+synthesizers, sequencers, and lighting controllers across independent
+power phases without introducing buzz, hum, or digital clock noise into
+the main stage PA sound system.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-optoisolated-midi-in-prevents-stage-ac-hum';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

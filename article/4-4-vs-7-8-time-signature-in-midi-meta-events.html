@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4/4 vs 7/8 Time Signature in MIDI Meta Events - midi</title>
+    <meta name="description" content="This article examines the musical and structural distinctions between a standard 4/4 meter and an asymmetrical 7/8 meter as represented in standard MIDI sequencing. It covers the contrasting rhythmic feels—symmetrical pulse versus additive meter—and detai">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/4-4-vs-7-8-time-signature-in-midi-meta-events">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="4/4 vs 7/8 Time Signature in MIDI Meta Events - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/4-4-vs-7-8-time-signature-in-midi-meta-events" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines the musical and structural distinctions between a standard 4/4 meter and an asymmetrical 7/8 meter as represented in standard MIDI sequencing. It covers the contrasting rhythmic feels—symmetrical pulse versus additive meter—and detai" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="44-vs-78-time-signature-in-midi-meta-events">4/4 vs 7/8 Time
+Signature in MIDI Meta Events</h1>
+<p>This article examines the musical and structural distinctions between
+a standard 4/4 meter and an asymmetrical 7/8 meter as represented in
+standard MIDI sequencing. It covers the contrasting rhythmic
+feels—symmetrical pulse versus additive meter—and details how these
+meters are technically encoded using the MIDI Time Signature Meta Event
+(<code>FF 58 04</code>). Finally, it highlights the inherent limitations
+of the MIDI specification when handling complex, non-isochronous
+rhythms.</p>
+<h3 id="musical-characteristics-symmetry-vs-additive-rhythm">Musical
+Characteristics: Symmetry vs. Additive Rhythm</h3>
+<p>Musically, 4/4 is a simple quadruple meter consisting of four
+quarter-note beats per measure. It relies on a predictable, symmetrical
+hierarchy: a strong downbeat on beat one, a weak beat on beat two, a
+secondary accent on beat three, and a weak upbeat on beat four. This
+provides a balanced, even pulse foundational to most modern Western
+music.</p>
+<p>In contrast, 7/8 is an irregular, asymmetrical (or additive) meter
+containing seven eighth-note pulses per measure. Because seven cannot be
+divided evenly into two or four equal beats, 7/8 is grouped into
+alternating combinations of two-pulse and three-pulse cells. Common
+subdivisions include:</p>
+<ul>
+<li><strong>2 + 2 + 3</strong> (short-short-long)</li>
+<li><strong>3 + 2 + 2</strong> (long-short-short)</li>
+<li><strong>2 + 3 + 2</strong> (short-long-short)</li>
+</ul>
+<p>This structure produces an uneven, shifting rhythmic weight where
+beats are not of equal duration, creating an inherent sense of momentum
+or disruption compared to the stability of 4/4.</p>
+<h3 id="structure-of-the-midi-time-signature-meta-event">Structure of
+the MIDI Time Signature Meta Event</h3>
+<p>In a Standard MIDI File (SMF), time signatures are declared inside a
+track chunk using a specific meta event. The event layout is:</p>
+<p><code>FF 58 04 nn dd cc bb</code></p>
+<ul>
+<li><code>FF 58</code>: The Time Signature Meta Event identifier.</li>
+<li><code>04</code>: The length of the remaining data (always 4
+bytes).</li>
+<li><code>nn</code>: The numerator of the time signature (beats per
+measure).</li>
+<li><code>dd</code>: The denominator expressed as a negative power of
+two (<span class="math inline">\(2^{dd}\)</span>).</li>
+<li><code>cc</code>: The number of MIDI clocks per metronome tick.</li>
+<li><code>bb</code>: The number of 32nd notes per MIDI quarter note
+(typically 8).</li>
+</ul>
+<h3 id="encoding-44-in-midi">Encoding 4/4 in MIDI</h3>
+<p>A standard 4/4 time signature is typically written in hexadecimal
+as:</p>
+<p><code>FF 58 04 04 02 18 08</code></p>
+<ul>
+<li><strong>Numerator (<code>nn</code> = 0x04):</strong> Indicates 4
+beats per measure.</li>
+<li><strong>Denominator (<code>dd</code> = 0x02):</strong> <span
+class="math inline">\(2^2 = 4\)</span>, signifying quarter notes.</li>
+<li><strong>Metronome Click (<code>cc</code> = 0x18):</strong>
+<code>0x18</code> is 24 in decimal. Because standard MIDI clocks occur
+at 24 pulses per quarter note (PPQN), a value of 24 clicks the metronome
+once per quarter note.</li>
+<li><strong>Subdivision (<code>bb</code> = 0x08):</strong> Specifies
+that there are 8 thirty-second notes in a quarter note.</li>
+</ul>
+<h3 id="encoding-78-in-midi">Encoding 7/8 in MIDI</h3>
+<p>A standard 7/8 time signature is encoded as:</p>
+<p><code>FF 58 04 07 03 18 08</code> (or
+<code>FF 58 04 07 03 0C 08</code>)</p>
+<ul>
+<li><strong>Numerator (<code>nn</code> = 0x07):</strong> Indicates 7
+beats per measure.</li>
+<li><strong>Denominator (<code>dd</code> = 0x03):</strong> <span
+class="math inline">\(2^3 = 8\)</span>, signifying eighth notes.</li>
+<li><strong>Metronome Click (<code>cc</code>):</strong>
+<ul>
+<li>If left at <code>0x18</code> (24), the metronome mechanically clicks
+every quarter note, ignoring the 7/8 measure boundary and causing
+metronome clicks to drift across measure lines.</li>
+<li>If set to <code>0x0C</code> (12), the metronome clicks every 12 MIDI
+clocks (one eighth note), generating seven equal clicks per
+measure.</li>
+</ul></li>
+<li><strong>Subdivision (<code>bb</code> = 0x08):</strong> Remains 8,
+establishing standard resolution reference relative to a quarter
+note.</li>
+</ul>
+<h3 id="the-limitation-of-the-midi-event">The Limitation of the MIDI
+Event</h3>
+<p>While the MIDI meta event successfully updates a digital audio
+workstation’s (DAW) grid and barline placement, it cannot encode the
+musical subdivision of 7/8. The meta event treats 7/8 as seven uniform
+eighth notes. It has no parameters to specify whether the bar should be
+felt as 2+2+3, 3+2+2, or 2+3+2.</p>
+<p>In 4/4, the mechanical MIDI event matches the natural musical pulse.
+In 7/8, the actual musical difference—the asymmetrical grouping and
+accented performance—must be executed manually through note velocity,
+duration, and placement within the sequencer rather than the meta event
+itself.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/4-4-vs-7-8-time-signature-in-midi-meta-events';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

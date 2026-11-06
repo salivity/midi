@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Touring Dual-Computer MIDI Failover Switching - midi</title>
+    <meta name="description" content="In modern arena-level concert tours, audio and MIDI playback failure is not an option. To guarantee uninterrupted performances, playback engineers build fully redundant, dual-computer rigs—commonly designated as System A (Primary) and System B (Redundant)">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/live-touring-dual-computer-midi-failover-switching">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Live Touring Dual-Computer MIDI Failover Switching - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/live-touring-dual-computer-midi-failover-switching" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In modern arena-level concert tours, audio and MIDI playback failure is not an option. To guarantee uninterrupted performances, playback engineers build fully redundant, dual-computer rigs—commonly designated as System A (Primary) and System B (Redundant)" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="live-touring-dual-computer-midi-failover-switching">Live Touring
+Dual-Computer MIDI Failover Switching</h1>
+<p>In modern arena-level concert tours, audio and MIDI playback failure
+is not an option. To guarantee uninterrupted performances, playback
+engineers build fully redundant, dual-computer rigs—commonly designated
+as System A (Primary) and System B (Redundant). This article breaks down
+the architecture of these touring rigs, detailing how playback engineers
+synchronize duplicate systems, use continuous heartbeat monitoring to
+detect system failure, and deploy hardware-based automatic failover
+switches to instantly transfer MIDI control to the backup machine
+without dropping a beat.</p>
+<h2 id="system-topology-rig-a-and-rig-b">System Topology: Rig A and Rig
+B</h2>
+<p>A redundant touring setup centers around two identical computers
+running matching digital audio workstations (DAWs), typically Ableton
+Live, Apple MainStage, or Pro Tools. Every virtual instrument, software
+patch, MIDI clip, and external routing parameter is precisely mirrored
+between the machines.</p>
+<p>Both computers receive the exact same controller inputs
+simultaneously. When a keyboardist plays an arena stage, the master
+keyboard's MIDI output connects to a hardware splitter (or an RTP-MIDI
+network interface) that routes identical incoming performance data into
+both System A and System B concurrently. Consequently, both systems
+continuously process and generate identical MIDI data in the
+background.</p>
+<h2 id="playback-synchronization">Playback Synchronization</h2>
+<p>For timed automation—such as program changes for guitar modelers,
+keyboard patch shifts, and lighting or video triggers—both DAWs must run
+in exact alignment. Engineers achieve this through two primary
+methods:</p>
+<ul>
+<li><strong>Simultaneous Playback Triggers:</strong> Hardware transport
+controllers (such as those from JLCooper or custom MIDI controllers)
+send a single "Play" and "Stop" command simultaneously over a split
+connection to both computers.</li>
+<li><strong>Master-Slave Synchronization:</strong> One machine acts as
+the timecode master, sending MIDI Timecode (MTC) or SMPTE LTC to the
+second machine. While effective, many modern playback technicians prefer
+fully decoupled, simultaneously triggered systems to prevent an issue on
+Rig A from corrupting Rig B's playback timeline.</li>
+</ul>
+<h2 id="heartbeat-detection-and-failover-triggers">Heartbeat Detection
+and Failover Triggers</h2>
+<p>To switch from Rig A to Rig B instantly, the system needs an
+automated mechanism to detect when the primary machine has frozen,
+crashed, or suffered a disconnected cable. This is achieved using a
+continuous "heartbeat" signal.</p>
+<p>Most professional auto-switchers use an audio tone (such as a
+continuous 20 kHz ultrasonic pitch, an inaudible sub-frequency, or a
+standard 1 kHz tone routed away from the main mix) output by Rig A.
+Alternatively, some modern systems monitor a continuous stream of MIDI
+clock or control change (CC) pulses.</p>
+<p>As long as the hardware switcher detects the continuous heartbeat
+from Rig A, it keeps the Rig A signal paths open to front-of-house (FOH)
+and the stage. If Rig A crashes, the audio/MIDI stream freezes, the
+heartbeat drops, and the switcher triggers an automatic swap within
+milliseconds.</p>
+<h2 id="hardware-failover-switchers">Hardware Failover Switchers</h2>
+<p>Hardware auto-switchers serve as the central hub of the redundant
+rig. These specialized rack units receive audio and MIDI connections
+from both computers and provide a single output destination for the rest
+of the tour's infrastructure.</p>
+<ul>
+<li><strong>Integrated Audio/MIDI Switchers:</strong> Units like the
+iConnectivity PlayAUDIO series handle both multi-channel audio and
+multi-stream MIDI over USB. The device connects directly to both
+computers via dual USB interfaces. When a failure is detected, the
+unit's onboard microcontrollers seamlessly switch the routing logic from
+USB Port A to USB Port B.</li>
+<li><strong>Modular Switchers:</strong> Analogous setups use dedicated
+MIDI switchers (such as those from Radial Engineering or custom MIDI
+solutions) slaved to an audio switcher (like the Radial SW8). When the
+master audio switcher detects a lost tone and activates the switch, it
+sends a control voltage (CV) pulse to the linked MIDI switcher,
+triggering an instantaneous, mechanical or digital relay swap for all
+MIDI lines.</li>
+</ul>
+<p>Because the switch happens in a fraction of a second, the backup
+machine takes over mid-stream. If notes are currently sustaining during
+a switch, modern MIDI switchers or DAW scripts transmit an immediate
+"All Notes Off" (CC 123) command to prevent stuck notes before resuming
+regular data transmission.</p>
+<h2 id="midi-distribution-to-the-stage">MIDI Distribution to the
+Stage</h2>
+<p>Once the active signal exits the switcher, it is distributed across
+the arena production environment:</p>
+<ol type="1">
+<li><strong>DIN and TRS MIDI:</strong> For local stage equipment like
+keyboard racks, drum sound modules, and guitar pedalboards, MIDI data is
+passed through high-grade MIDI distribution amplifiers (thru boxes) over
+balanced 5-pin DIN or TRS runs.</li>
+<li><strong>Network MIDI (RTP-MIDI):</strong> For long-distance arena
+runs to lighting consoles (grandMA), video servers (Resolume/Disguise),
+and automated backline stations, systems convert the post-switch MIDI
+output into RTP-MIDI over standard Gigabit Ethernet networks. This
+eliminates the latency and 50-foot distance limits of traditional 5-pin
+MIDI cabling.</li>
+</ol>
+<h2 id="best-practices-for-redundant-touring-operation">Best Practices
+for Redundant Touring Operation</h2>
+<ul>
+<li><strong>Isolated USB Buses:</strong> Engineers run dedicated,
+enterprise-grade USB hubs with isolated buses to prevent peripheral draw
+issues from crashing the computer's internal controller.</li>
+<li><strong>Uninterruptible Power Supplies (UPS):</strong> Both
+computers and all network/switching hardware are powered by separate,
+line-interactive battery backup systems to guard against stage power
+surges or drops.</li>
+<li><strong>Dedicated OS Optimization:</strong> Both touring computers
+run stripped-down operating systems with all wireless connectivity,
+system updates, sleep modes, and non-essential background processes
+permanently disabled.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/live-touring-dual-computer-midi-failover-switching';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

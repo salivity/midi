@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Send MIDI RPN Null Value 127 127 - midi</title>
+    <meta name="description" content="This article explains how sending the MIDI Registered Parameter Number (RPN) null value pair (127, 127) safeguards synthesizer and sound module configurations. In MIDI communications, RPNs operate through a state-based targeting system where a parameter r">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-send-midi-rpn-null-value-127-127">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Send MIDI RPN Null Value 127 127 - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-send-midi-rpn-null-value-127-127" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how sending the MIDI Registered Parameter Number (RPN) null value pair (127, 127) safeguards synthesizer and sound module configurations. In MIDI communications, RPNs operate through a state-based targeting system where a parameter r" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-send-midi-rpn-null-value-127-127">Why Send MIDI RPN Null
+Value 127 127</h1>
+<p>This article explains how sending the MIDI Registered Parameter
+Number (RPN) null value pair (127, 127) safeguards synthesizer and sound
+module configurations. In MIDI communications, RPNs operate through a
+state-based targeting system where a parameter remains active until
+explicitly cleared. Transmitting a null address deselects the active
+parameter, ensuring that subsequent generic Data Entry controller
+messages do not unintentionally alter critical hardware settings like
+pitch bend sensitivity or master tuning.</p>
+<h3 id="the-mechanism-of-midi-rpns">The Mechanism of MIDI RPNs</h3>
+<p>Unlike standard continuous controllers (such as Modulation Wheel CC 1
+or Volume CC 7) which combine the target parameter and value into a
+single message, RPNs rely on a sequential, two-step process:</p>
+<ol type="1">
+<li><strong>Parameter Addressing:</strong> The transmitter specifies the
+target parameter by sending its address via Control Change (CC) 101 (RPN
+MSB) and CC 100 (RPN LSB).</li>
+<li><strong>Data Manipulation:</strong> Once the address is received,
+the target hardware latches onto that parameter. The transmitter then
+adjusts the chosen parameter using Data Entry messages: CC 6 (Data Entry
+MSB), CC 38 (Data Entry LSB), CC 96 (Data Increment), or CC 97 (Data
+Decrement).</li>
+</ol>
+<h3 id="the-risk-of-latching-parameters">The Risk of Latching
+Parameters</h3>
+<p>Because the target device latches onto the chosen RPN, the address
+remains active indefinitely. The hardware retains this internal state
+until it receives another RPN or Non-Registered Parameter Number (NRPN)
+address message.</p>
+<p>This persistence introduces a significant risk. If a physical MIDI
+controller, sequence, or automation lane subsequently sends CC 6 or CC
+38 on that same MIDI channel, the receiving device applies those data
+values directly to whichever parameter was addressed last. For example,
+if a track sets Pitch Bend Sensitivity using RPN (0, 0) and does not
+clear the address, an accidental CC 6 message later in the performance
+will alter the pitch bend range rather than performing its intended
+function.</p>
+<h3 id="how-the-null-value-127-127-resolves-the-issue">How the Null
+Value (127, 127) Resolves the Issue</h3>
+<p>The MIDI 1.0 specification defines the RPN address (MSB 127, LSB
+127)—or hexadecimal <code>0x7F, 0x7F</code>—as the "RPN Reset" or "Null"
+parameter.</p>
+<p>To deactivate the current parameter target, the sending device
+transmits:</p>
+<ul>
+<li><strong>CC 101 with a value of 127</strong> (RPN MSB Null)</li>
+<li><strong>CC 100 with a value of 127</strong> (RPN LSB Null)</li>
+</ul>
+<p>When a synthesizer or sound module receives this specific address
+pair, it sets its internal RPN target register to an inactive state.
+With no valid parameter currently selected, the device simply ignores
+any rogue CC 6, CC 38, CC 96, or CC 97 messages that follow.</p>
+<p>Sending the RPN null value effectively acts as a safety disconnect.
+It closes the editing window immediately after a parameter change is
+complete, protecting the integrity of the sound engine from unintended
+modulation or user error.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-send-midi-rpn-null-value-127-127';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

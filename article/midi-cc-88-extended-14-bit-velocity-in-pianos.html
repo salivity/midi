@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI CC 88: Extended 14-Bit Velocity in Pianos - midi</title>
+    <meta name="description" content="This article examines how the MIDI Control Change 88 (CC 88) standard overcomes the dynamic constraints of legacy MIDI systems. By acting as a high-resolution velocity prefix, CC 88 pairs with standard Note-On and Note-Off commands to deliver 14-bit veloc">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-cc-88-extended-14-bit-velocity-in-pianos">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI CC 88: Extended 14-Bit Velocity in Pianos - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-cc-88-extended-14-bit-velocity-in-pianos" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how the MIDI Control Change 88 (CC 88) standard overcomes the dynamic constraints of legacy MIDI systems. By acting as a high-resolution velocity prefix, CC 88 pairs with standard Note-On and Note-Off commands to deliver 14-bit veloc" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-cc-88-extended-14-bit-velocity-in-pianos">MIDI CC 88:
+Extended 14-Bit Velocity in Pianos</h1>
+<p>This article examines how the MIDI Control Change 88 (CC 88) standard
+overcomes the dynamic constraints of legacy MIDI systems. By acting as a
+high-resolution velocity prefix, CC 88 pairs with standard Note-On and
+Note-Off commands to deliver 14-bit velocity resolution—expanding the
+dynamic scale from 128 levels to 16,384 levels. The following sections
+explain the technical mechanics of this dual-message architecture, its
+importance for digital and hybrid acoustic pianos, and how it maintains
+backward compatibility with older gear.</p>
+<h3 id="the-limitation-of-standard-7-bit-velocity">The Limitation of
+Standard 7-Bit Velocity</h3>
+<p>The original MIDI 1.0 specification defines note velocity using a
+7-bit integer, providing a range from 0 to 127. While 128 dynamic steps
+are sufficient for many electronic instruments, they present noticeable
+limitations when reproducing the expressive response of an acoustic
+grand piano.</p>
+<p>Pianists frequently play within subtle dynamic boundaries,
+particularly in <em>pianissimo</em> (<span
+class="math inline">\(pp\)</span>) and <em>mezzo-piano</em> (<span
+class="math inline">\(mp\)</span>) ranges. On a 7-bit scale, dynamic
+shifts can result in audible velocity stepping, where adjacent velocity
+values cause noticeable jumps in volume and harmonic timbre rather than
+a smooth, continuous transition.</p>
+<h3 id="the-function-of-midi-cc-88">The Function of MIDI CC 88</h3>
+<p>To resolve velocity stepping without breaking existing MIDI
+infrastructure, the MIDI Manufacturers Association adopted MIDI CC 88 as
+the standard for High-Resolution Velocity Prefix.</p>
+<p>Rather than replacing the standard Note-On message, CC 88 works in
+tandem with it:</p>
+<ol type="1">
+<li><strong>The CC 88 Message (LSB):</strong> Immediately before a
+Note-On or Note-Off message is sent, the controller transmits a
+<code>Control Change 88</code> message. The data byte of this message
+contains the 7 least significant bits (LSB) of the velocity value.</li>
+<li><strong>The Note-On Message (MSB):</strong> Directly following CC
+88, the instrument transmits the standard <code>Note-On</code> message.
+Its velocity byte serves as the 7 most significant bits (MSB).</li>
+<li><strong>14-Bit Reconstruction:</strong> A compatible receiving
+instrument or software engine combines the MSB and LSB to form a
+complete 14-bit velocity value, yielding <span
+class="math inline">\(2^{14}\)</span> or 16,384 distinct dynamic
+levels.</li>
+</ol>
+<h3 id="backward-compatibility">Backward Compatibility</h3>
+<p>A primary engineering benefit of the CC 88 design is full backward
+compatibility with legacy MIDI hardware and software.</p>
+<p>If a piano sends CC 88 data to a synthesizer or digital audio
+workstation (DAW) that does not support high-resolution velocity, the
+receiver simply ignores the CC 88 message as an unassigned or
+unrecognized control change. The receiver then processes the subsequent
+Note-On message normally, falling back to standard 7-bit resolution
+without dropped notes, timing errors, or corrupted data.</p>
+<h3 id="impact-on-piano-performance-and-emulation">Impact on Piano
+Performance and Emulation</h3>
+<p>Advanced digital pianos, hybrid acoustic systems, and high-end
+software instruments utilize CC 88 to bridge the mechanical-to-digital
+divide. High-speed optical or magnetic key sensors can measure hammer
+velocity with microsecond precision, generating data far more granular
+than standard MIDI allows.</p>
+<p>When paired with physically modeled software or multi-gigabyte sample
+libraries with dynamic interpolation, CC 88 allows:</p>
+<ul>
+<li><strong>Elimination of Timbral Stepping:</strong> Smooth, continuous
+filter and resonance adjustments across the entire dynamic range.</li>
+<li><strong>Refined Micro-Dynamics:</strong> Accurate capture of
+delicate trills, ghost notes, and weighted balance between polyphonic
+voices within the same chord.</li>
+<li><strong>Precise Release Velocity:</strong> Support for CC 88 on
+Note-Off events, allowing the instrument to measure key release speed
+across 16,384 steps to control damper-to-string physics and natural
+mechanical noise.</li>
+</ul>
+<p>By establishing a seamless 14-bit pathway, MIDI CC 88 preserves the
+nuanced touch of the performer, enabling digital pianos to closely match
+the expressive acoustic properties of traditional keyboard
+instruments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-cc-88-extended-14-bit-velocity-in-pianos';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

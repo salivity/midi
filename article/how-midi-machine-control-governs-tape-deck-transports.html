@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Machine Control Governs Tape Deck Transports - midi</title>
+    <meta name="description" content="MIDI Machine Control (MMC) is a specialized subset of the MIDI specification that enables an external mixing desk to act as a hardware remote for professional tape decks and multitrack recorders. By converting the mixer&#39;s physical transport button presses">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-machine-control-governs-tape-deck-transports">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Machine Control Governs Tape Deck Transports - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-machine-control-governs-tape-deck-transports" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Machine Control (MMC) is a specialized subset of the MIDI specification that enables an external mixing desk to act as a hardware remote for professional tape decks and multitrack recorders. By converting the mixer&#39;s physical transport button presses" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-machine-control-governs-tape-deck-transports">How MIDI
+Machine Control Governs Tape Deck Transports</h1>
+<p>MIDI Machine Control (MMC) is a specialized subset of the MIDI
+specification that enables an external mixing desk to act as a hardware
+remote for professional tape decks and multitrack recorders. By
+converting the mixer's physical transport button presses into
+standardized MIDI System Exclusive (SysEx) data packets, MMC directs the
+tape machine’s internal microprocessors to engage physical motors,
+solenoids, and record heads. This article explains the technical
+communication flow, command architecture, and electromechanical
+execution that make this remote transport governance possible.</p>
+<h3 id="the-master-slave-architecture">The Master-Slave
+Architecture</h3>
+<p>In an MMC-governed setup, the mixing desk operates as the master
+controller, and the tape deck acts as the slave device. The two units
+are connected via standard 5-pin DIN MIDI cables or modern
+equivalents.</p>
+<p>When an engineer presses a transport button on the mixing desk—such
+as Play, Stop, Rewind, or Record—the console’s internal firmware
+generates a real-time command sequence rather than a standard musical
+note event. The console broadcasts this command out of its MIDI Out port
+directly to the tape deck’s MIDI In port, triggering the corresponding
+action without requiring direct physical access to the tape machine
+itself.</p>
+<h3 id="structure-of-an-mmc-message">Structure of an MMC Message</h3>
+<p>MMC relies entirely on MIDI System Exclusive (SysEx) messaging, which
+allows manufacturers to send specialized device-control instructions. An
+MMC transport message contains specific hexadecimal bytes arranged in a
+strict sequence:</p>
+<ol type="1">
+<li><strong>SysEx Header (<code>F0</code>):</strong> Initiates the
+exclusive communication stream.</li>
+<li><strong>Universal Real-Time Identifier (<code>7F</code>):</strong>
+Designates that the message requires immediate, real-time priority.</li>
+<li><strong>Device ID:</strong> Specifies the target machine on the MIDI
+chain (from <code>00</code> to <code>7E</code> for specific units, or
+<code>7F</code> for an all-call broadcast to every connected
+machine).</li>
+<li><strong>MMC Sub-ID (<code>06</code>):</strong> Identifies the
+payload specifically as a MIDI Machine Control command.</li>
+<li><strong>Command Byte:</strong> Dictates the explicit transport
+instruction.</li>
+<li><strong>Data Bytes (Conditional):</strong> Additional parameters
+required for actions like locating to a specific timecode position.</li>
+<li><strong>End of Exclusive (<code>F7</code>):</strong> Closes the data
+packet.</li>
+</ol>
+<h3 id="standard-transport-command-codes">Standard Transport Command
+Codes</h3>
+<p>The core functionality of MMC relies on single-byte command codes
+that mirror standard mechanical deck operations:</p>
+<ul>
+<li><strong>Stop (<code>01</code>):</strong> Decelerates tape motion and
+engages reel brakes.</li>
+<li><strong>Play (<code>02</code>):</strong> Engages the capstan motor
+and pinch roller to read tape at nominal speed.</li>
+<li><strong>Deferred Play (<code>03</code>):</strong> Prepares the
+machine to roll as soon as tape tension and lock conditions are
+met.</li>
+<li><strong>Fast Forward (<code>04</code>):</strong> Releases the pinch
+roller and spins the take-up reel at high speed.</li>
+<li><strong>Rewind (<code>05</code>):</strong> Releases the pinch roller
+and spins the supply reel at high speed.</li>
+<li><strong>Record Strobe (<code>06</code>):</strong> Drops enabled
+audio channels directly into active recording.</li>
+<li><strong>Record Exit (<code>07</code>):</strong> Instantly drops
+designated tracks out of record mode without stopping tape movement
+(punch-out).</li>
+<li><strong>Pause (<code>09</code>):</strong> Halts tape motion while
+keeping transport mechanics primed for immediate restart.</li>
+</ul>
+<h3 id="advanced-operations-the-locate-function">Advanced Operations:
+The Locate Function</h3>
+<p>Beyond basic directional functions, MMC allows the mixing console to
+manage tape positioning via the Locate command (command code
+<code>44 00</code>). When an engineer enters a specific cue point or
+SMPTE timecode address on the mixing desk, the desk translates this
+target into hour, minute, second, frame, and subframe data bytes.</p>
+<p>Upon receiving the packet, the tape deck determines its current
+location using its internal tachometer or longitudinal timecode (LTC)
+track, calculates the shortest path to the target, winds the tape to
+that spot, and parks itself at the cue point automatically.</p>
+<h3 id="electromechanical-execution-at-the-deck">Electromechanical
+Execution at the Deck</h3>
+<p>Receiving the MIDI bytes is only half of the process; the tape
+machine must convert digital instructions into mechanical movement:</p>
+<ol type="1">
+<li><strong>Instruction Parsing:</strong> The deck’s dedicated MIDI
+interface reads incoming serial data and forwards the decoded command to
+the master logic board.</li>
+<li><strong>Safety Logic Verification:</strong> The deck’s logic system
+cross-checks the instruction against current operational states (e.g.,
+preventing a sudden shift into Play while high-speed rewinding to
+prevent tape snapping).</li>
+<li><strong>Hardware Actuation:</strong> Once safety logic verifies the
+state, the machine routes current to drive electronics. Transistor
+switches and relays fire mechanical solenoids that lower the head gate,
+clamp the pinch roller against the capstan, disengage mechanical brakes,
+or alter servo motor voltages.</li>
+</ol>
+<h3 id="two-way-feedback-and-synchronization">Two-Way Feedback and
+Synchronization</h3>
+<p>MMC can operate in an open-loop or closed-loop configuration. In
+open-loop mode, the mixer sends instructions blindly. In closed-loop
+mode, a return MIDI cable connects the tape deck’s MIDI Out back to the
+mixer’s MIDI In, enabling the deck to send status responses (command
+<code>07</code>).</p>
+<p>Through these responses, the tape machine continuously updates the
+mixing desk regarding its current mechanical state—confirming whether it
+is stopped, winding, playing, or recording. This bidirectional
+communication allows the mixing console’s transport meters, timecode
+displays, and status LEDs to accurately mirror the real-world
+operational status of the physical tape transport.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-machine-control-governs-tape-deck-transports';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

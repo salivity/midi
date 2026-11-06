@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optical Scanning for Sub-Millimeter Key Motion - midi</title>
+    <meta name="description" content="High-speed optical scanning inside modern keyboard consoles and digital instruments replaces traditional mechanical switches with continuous light sensing to deliver ultra-low latency and hyper-responsive playability. By combining infrared light sources,">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/optical-scanning-for-sub-millimeter-key-motion">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Optical Scanning for Sub-Millimeter Key Motion - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/optical-scanning-for-sub-millimeter-key-motion" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High-speed optical scanning inside modern keyboard consoles and digital instruments replaces traditional mechanical switches with continuous light sensing to deliver ultra-low latency and hyper-responsive playability. By combining infrared light sources," />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="optical-scanning-for-sub-millimeter-key-motion">Optical Scanning
+for Sub-Millimeter Key Motion</h1>
+<p>High-speed optical scanning inside modern keyboard consoles and
+digital instruments replaces traditional mechanical switches with
+continuous light sensing to deliver ultra-low latency and
+hyper-responsive playability. By combining infrared light sources,
+high-precision photodetectors, and ultra-fast sampling microcontrollers,
+these systems continuously track the exact physical position of each key
+with sub-millimeter precision. This article explains the underlying
+architecture of optical key tracking, how continuous displacement data
+is digitized, and why this method enables rapid, bounce-free MIDI
+triggering.</p>
+<h3 id="the-sensor-architecture-emitters-and-detectors">The Sensor
+Architecture: Emitters and Detectors</h3>
+<p>Traditional MIDI keyboards rely on dual- or triple-contact rubber
+dome switches that register binary electrical contacts at fixed points
+of key travel. Optical scanning eliminates mechanical contacts entirely.
+Beneath or behind each key sits an optoelectronic pair: an infrared (IR)
+light-emitting diode (LED) and a corresponding photodiode or
+phototransistor.</p>
+<p>Attached to the moving key mechanism is an opaque vane or shutter
+with a precise, often tapered profile. As the musician presses a key,
+this vane gradually obstructs or reflects the light path between the
+emitter and the detector. The amount of light reaching the detector
+changes proportionally to the physical displacement of the key.</p>
+<h3 id="continuous-analog-to-digital-tracking">Continuous
+Analog-to-Digital Tracking</h3>
+<p>Rather than waiting for a key to strike a physical contact pad, the
+photodetector outputs a continuous analog voltage that mirrors the key’s
+real-time position. High-speed analog-to-digital converters (ADCs),
+often integrated directly into an onboard digital signal processor (DSP)
+or field-programmable gate array (FPGA), sample these voltage variations
+at frequencies ranging from 1 kHz to over 10 kHz per key.</p>
+<p>Because the system tracks light attenuation across a calibrated
+curve, the processor can determine the key's position down to fractions
+of a millimeter (often with resolutions exceeding 0.05 mm). This
+continuous position stream provides full spatial awareness of the key
+throughout its entire downward and upward trajectory.</p>
+<h3 id="calculating-velocity-and-midi-triggering">Calculating Velocity
+and MIDI Triggering</h3>
+<p>MIDI note events require two primary data points: timing and velocity
+(the speed and force with which a key is struck). Optical scanning
+processes both mathematically using the key’s continuous position
+data:</p>
+<ol type="1">
+<li><strong>Velocity Calculation:</strong> Because the system samples
+position thousands of times per second, the processor computes the first
+derivative of displacement over time (<span class="math inline">\(v =
+\Delta d / \Delta t\)</span>). Instead of deriving velocity only between
+fixed contact points, the system calculates instantaneous velocity at
+any point during the stroke.</li>
+<li><strong>Dynamic Actuation:</strong> Firmware can set the MIDI "Note
+On" trigger threshold anywhere along the travel path. A player can
+configure keys to trigger after just 0.2 millimeters of travel for rapid
+synthesis play, or at a deeper mechanical threshold to mimic an acoustic
+grand piano.</li>
+<li><strong>Continuous Polyphonic Aftertouch:</strong> After the initial
+strike, optical systems can measure microscopic downward pressure
+variations or resting positions, transmitting real-time MIDI Polyphonic
+Aftertouch or continuous controller (CC) data without requiring
+secondary pressure-strip sensors.</li>
+</ol>
+<h3 id="eliminating-debounce-latency">Eliminating Debounce Latency</h3>
+<p>A major performance advantage of optical scanning is the complete
+elimination of mechanical switch bounce. When physical metal leaves or
+conductive carbon pads close a circuit, they vibrate and chatter for 2
+to 10 milliseconds before settling into a stable state. Traditional
+keyboard firmware must implement a software "debounce" delay to prevent
+these micro-vibrations from sending multiple false MIDI triggers.</p>
+<p>Optical sensing carries no physical impact bounce in the signal path.
+The optical transition is completely smooth. As soon as the optical
+sensor detects that a key has crossed the defined actuation threshold,
+the microcontroller can immediately generate and serialize the MIDI
+"Note On" packet, dropping physical-to-digital latency below one
+millisecond.</p>
+<h3 id="dynamic-reset-and-rapid-triggering">Dynamic Reset and Rapid
+Triggering</h3>
+<p>Optical scanning fundamentally changes note release and re-triggering
+through a feature often called "Rapid Trigger." On traditional
+mechanical assemblies, a key must rise past a fixed physical reset
+switch before it can register another note. If a musician fails to
+release the key far enough, subsequent strikes fail to produce
+sound.</p>
+<p>Because optical systems read instantaneous directional changes, the
+controller detects the microsecond a key reverses direction—even if the
+key has only risen a fraction of a millimeter. The system immediately
+resets the actuation threshold relative to the current position,
+allowing the player to rapidly flutter or re-trigger notes from anywhere
+in the key's travel path.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/optical-scanning-for-sub-millimeter-key-motion';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Atari ST Uses the 6850 ACIA for MIDI Out - midi</title>
+    <meta name="description" content="The Atari ST was the first mainstream personal computer to feature built-in Musical Instrument Digital Interface (MIDI) ports, establishing it as a legendary standard in music production. This article explores how the Atari ST generates MIDI Out signals u">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-atari-st-uses-the-6850-acia-for-midi-out">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Atari ST Uses the 6850 ACIA for MIDI Out - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-atari-st-uses-the-6850-acia-for-midi-out" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Atari ST was the first mainstream personal computer to feature built-in Musical Instrument Digital Interface (MIDI) ports, establishing it as a legendary standard in music production. This article explores how the Atari ST generates MIDI Out signals u" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-atari-st-uses-the-6850-acia-for-midi-out">How Atari ST Uses
+the 6850 ACIA for MIDI Out</h1>
+<p>The Atari ST was the first mainstream personal computer to feature
+built-in Musical Instrument Digital Interface (MIDI) ports, establishing
+it as a legendary standard in music production. This article explores
+how the Atari ST generates MIDI Out signals using the onboard Motorola
+6850 Asynchronous Communications Interface Adapter (ACIA), covering the
+hardware clocking configuration, the role of the 6850 controller, and
+the discrete analog circuitry required to produce standard
+MIDI-compliant current loops.</p>
+<h3 id="the-motorola-6850-acia">The Motorola 6850 ACIA</h3>
+<p>The Motorola MC6850 ACIA is a dedicated peripheral chip designed to
+convert parallel data from the computer's CPU into asynchronous serial
+data (and vice versa). In the Atari ST, two 6850 chips reside on the
+motherboard: one handles keyboard and mouse communication, while the
+second is dedicated entirely to the MIDI In and MIDI Out ports.</p>
+<p>The CPU communicates with the MIDI ACIA across the system data bus
+via memory-mapped input/output. When software transmits a MIDI message,
+the Motorola 68000 processor writes bytes to the 6850's transmit data
+register. The ACIA formats these bytes with standard asynchronous
+framing: one start bit, eight data bits, and one stop bit, with no
+parity.</p>
+<h3 id="achieving-the-3125-kbaud-midi-clock-rate">Achieving the 31.25
+kbaud MIDI Clock Rate</h3>
+<p>The MIDI 1.0 specification mandates a strict serial transmission rate
+of 31.25 kilobaud (kbaud) with a tolerance of ±1%. Standard computer
+communication ports of the era did not natively support this rate, but
+the ST achieves it through hardware frequency division:</p>
+<ol type="1">
+<li><strong>Clock Source:</strong> The master system oscillator feeds
+clock-divider logic within the ST's custom Glue/MMU chipset.</li>
+<li><strong>ACIA Clock Input:</strong> The chipset outputs a dedicated
+500 kHz clock signal routed directly to the Transmit Clock (<span
+class="math inline">\(TxCLK\)</span>) and Receive Clock (<span
+class="math inline">\(RxCLK\)</span>) pins of the MIDI 6850 ACIA.</li>
+<li><strong>Internal Division:</strong> During system initialization,
+the Atari TOS operating system configures the 6850's internal control
+register to use a divide-by-16 prescaler mode.</li>
+</ol>
+<p>Dividing the incoming 500 kHz clock by 16 yields exactly 31.25
+kHz:</p>
+<p><span class="math display">\[\frac{500\text{ kHz}}{16} = 31.25\text{
+kbaud}\]</span></p>
+<p>This hardware-level frequency matching allows the ACIA to transmit
+bit streams at the required rate without CPU-intensive software timing
+loops.</p>
+<h3 id="the-midi-out-driver-circuitry">The MIDI Out Driver
+Circuitry</h3>
+<p>The serial data stream leaves the 6850 ACIA via its Transmit Data
+(<span class="math inline">\(TxD\)</span>) pin as a standard TTL-level
+logic signal (0V to 5V). Because MIDI is designed as a 5-milliamp (mA)
+current loop interface rather than a direct voltage interface, the raw
+TTL output cannot drive external MIDI equipment directly.</p>
+<p>To convert this TTL signal into a robust, noise-immune current loop,
+the ST routes the signal through a driver stage before sending it to the
+standard 5-pin DIN connector:</p>
+<ul>
+<li><strong>Inverter/Buffer Stage:</strong> The <span
+class="math inline">\(TxD\)</span> pin connects to an internal
+open-collector inverter (part of a 74LS04 or 7406 logic package,
+depending on the motherboard revision). This inverter buffers the signal
+and provides the necessary current sinking capability to handle external
+cables.</li>
+<li><strong>Current-Limiting Resistors:</strong> Following the standard
+MIDI specification, the circuit incorporates two 220-ohm resistors. One
+resistor connects Pin 4 of the MIDI Out connector to the +5V supply
+rail. The other 220-ohm resistor connects Pin 5 of the connector to the
+output of the inverter.</li>
+<li><strong>Pin 2 (Shield):</strong> Pin 2 of the MIDI Out DIN socket is
+tied directly to the Atari ST’s chassis ground to provide cable
+shielding.</li>
+</ul>
+<h3 id="signal-transmission-mechanics">Signal Transmission
+Mechanics</h3>
+<p>When the line is idle, the ACIA holds the <span
+class="math inline">\(TxD\)</span> line high (logic 1). The inverter
+inverts this signal to low, preventing current from circulating between
+Pin 4 and Pin 5.</p>
+<p>When data transmission begins, the ACIA pulls <span
+class="math inline">\(TxD\)</span> low (logic 0 for the start bit). The
+inverter flips this state, pulling Pin 5 toward ground. This creates a
+voltage potential across Pins 4 and 5, causing approximately 5 mA of
+current to flow through the cable into the optocoupler of the receiving
+MIDI device. This current-loop approach isolates external noise,
+minimizes signal degradation over long cables, and avoids ground loops
+between connected instruments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-atari-st-uses-the-6850-acia-for-midi-out';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

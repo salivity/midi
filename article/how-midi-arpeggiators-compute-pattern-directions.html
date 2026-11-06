@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Arpeggiators Compute Pattern Directions - midi</title>
+    <meta name="description" content="A MIDI arpeggiator transforms static chord input into dynamic melodic sequences by capturing held notes, sorting them mathematically by pitch, and stepping through them using clock-synchronized algorithms. This article breaks down the internal mechanics o">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-arpeggiators-compute-pattern-directions">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Arpeggiators Compute Pattern Directions - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-arpeggiators-compute-pattern-directions" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI arpeggiator transforms static chord input into dynamic melodic sequences by capturing held notes, sorting them mathematically by pitch, and stepping through them using clock-synchronized algorithms. This article breaks down the internal mechanics o" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-arpeggiators-compute-pattern-directions">How MIDI
+Arpeggiators Compute Pattern Directions</h1>
+<p>A MIDI arpeggiator transforms static chord input into dynamic melodic
+sequences by capturing held notes, sorting them mathematically by pitch,
+and stepping through them using clock-synchronized algorithms. This
+article breaks down the internal mechanics of a MIDI arpeggiator,
+exploring how incoming MIDI data is buffered, sorted, and translated
+into specific directional playback patterns such as Up, Down, Up/Down,
+and Random.</p>
+<h3 id="note-capture-and-buffer-management">Note Capture and Buffer
+Management</h3>
+<p>When multiple keys are depressed on a MIDI controller, the device
+transmits simultaneous <code>Note On</code> messages, each containing a
+pitch number (0–127) and a velocity value. The arpeggiator does not
+immediately output these notes together. Instead, it catches these
+messages and registers them in a temporary memory buffer or array.</p>
+<p>As long as the keys remain held—or sustained via a hold/latch
+function—their note numbers remain active inside this buffer. When a key
+is released, its corresponding <code>Note Off</code> message removes
+that pitch from the active list.</p>
+<h3 id="array-sorting-and-pitch-indexing">Array Sorting and Pitch
+Indexing</h3>
+<p>Once the active notes are collected in the buffer, the arpeggiator
+establishes an organized baseline. Because human players rarely strike
+keys at the exact same millisecond, the raw input order usually reflects
+timing discrepancies rather than harmonic structure.</p>
+<p>To create predictable motion, the arpeggiator's firmware executes a
+sorting algorithm (such as quicksort or insertion sort) to arrange the
+active note numbers in ascending chromatic order. For example, if a
+player strikes a C major chord out of order (G4, C4, E4), the engine
+sorts the values numerically by their MIDI note values:</p>
+<ul>
+<li>Index 0: 60 (C4)</li>
+<li>Index 1: 64 (E4)</li>
+<li>Index 2: 67 (G4)</li>
+</ul>
+<p>If an octave range multiplier is engaged (e.g., +1 or +2 octaves),
+the arpeggiator mathematically duplicates the array, adding 12 or 24
+semitones to each value, and re-sorts the expanded list into a larger
+linear array.</p>
+<h3 id="clock-synchronization-and-pointer-tracking">Clock
+Synchronization and Pointer Tracking</h3>
+<p>Playback timing is governed by a clock source, either internal or
+synchronized to an external MIDI clock via pulses per quarter note
+(PPQN). At every specified musical subdivision (such as 1/8th or 1/16th
+notes), the clock triggers an execution cycle.</p>
+<p>The arpeggiator maintains an internal variable known as a pointer or
+index counter. When the clock fires, the arpeggiator reads the note
+stored at the current pointer index, outputs a <code>Note On</code>
+message, schedules a <code>Note Off</code> based on the defined gate
+length, and recalculates the pointer's position for the next step.</p>
+<h3 id="algorithmic-pattern-logic">Algorithmic Pattern Logic</h3>
+<p>The chosen pattern determines the mathematical rule used to update
+the pointer index on each clock pulse:</p>
+<ul>
+<li><strong>Up Mode:</strong> The pointer begins at index <code>0</code>
+and increments by 1 on each step (<code>pointer = pointer + 1</code>).
+Once the pointer reaches the maximum index (<code>n - 1</code>), a
+modulo operation or conditional reset loops the pointer back to
+<code>0</code>.</li>
+<li><strong>Down Mode:</strong> The pointer begins at the highest index
+(<code>n - 1</code>) and decrements by 1 on each step
+(<code>pointer = pointer - 1</code>). Upon reaching index
+<code>0</code>, it resets to <code>n - 1</code>.</li>
+<li><strong>Up/Down (Inclusive vs. Exclusive):</strong> The engine
+tracks a directional state flag (ascending or descending). In
+<em>Inclusive</em> mode, the pointer increments to the top note, plays
+it, reverses the state flag, and plays the top note again as the first
+step downward. In <em>Exclusive</em> mode, conditional logic prevents
+the boundary notes from repeating: upon reaching index
+<code>n - 1</code>, the engine reverses direction immediately, setting
+the next step to <code>n - 2</code>.</li>
+<li><strong>Random Mode:</strong> Instead of sequential math, the engine
+uses a pseudo-random number generator (PRNG) to select an index on each
+clock pulse (<code>pointer = random(0, n - 1)</code>). Advanced
+arpeggiators often include algorithmic constraints to prevent the same
+index from generating twice consecutively, ensuring continuous melodic
+movement.</li>
+</ul>
+<p>Through this combination of data buffering, numerical sorting, and
+index manipulation, an arpeggiator converts an unmoving chord into
+structured, real-time musical patterns.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-arpeggiators-compute-pattern-directions';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyphonic Audio to MIDI: Overlapping Harmonics - midi</title>
+    <meta name="description" content="Polyphonic audio-to-MIDI conversion remains one of the most complex challenges in digital signal processing and music information retrieval. While single-note (monophonic) detection is relatively straightforward, transcribing multiple simultaneous notes i">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/polyphonic-audio-to-midi-overlapping-harmonics">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Polyphonic Audio to MIDI: Overlapping Harmonics - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/polyphonic-audio-to-midi-overlapping-harmonics" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Polyphonic audio-to-MIDI conversion remains one of the most complex challenges in digital signal processing and music information retrieval. While single-note (monophonic) detection is relatively straightforward, transcribing multiple simultaneous notes i" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="polyphonic-audio-to-midi-overlapping-harmonics">Polyphonic Audio
+to MIDI: Overlapping Harmonics</h1>
+<p>Polyphonic audio-to-MIDI conversion remains one of the most complex
+challenges in digital signal processing and music information retrieval.
+While single-note (monophonic) detection is relatively straightforward,
+transcribing multiple simultaneous notes is confounded by acoustic
+interference. Algorithms frequently misidentify pitches, drop notes, or
+generate phantom triggers because simultaneous sound waves blend
+inextricably in the frequency domain. This article examines the core
+mathematical, physical, and algorithmic reasons why overlapping
+harmonics and sympathetic resonances evade accurate transcription.</p>
+<h3 id="the-harmonic-overlap-and-energy-attribution-problem">The
+Harmonic Overlap and Energy Attribution Problem</h3>
+<p>Every musical note produced by an acoustic instrument consists of a
+fundamental frequency (<span class="math inline">\(f_0\)</span>) and a
+series of integer-multiple overtones known as harmonics. When multiple
+notes are played simultaneously, their harmonic series inevitably
+intersect.</p>
+<p>For example, when a musician plays a musical fifth, such as C3
+(approx. 131 Hz) and G3 (approx. 196 Hz), the third harmonic of C3 (393
+Hz) aligns almost exactly with the second harmonic of G3 (392 Hz). In a
+standard spectral analysis, such as a Short-Time Fourier Transform
+(STFT), these distinct overtones merge into a single energy peak.</p>
+<p>Because audio signals undergo linear superposition, the algorithm
+cannot easily determine how much energy at a shared frequency belongs to
+the first note and how much belongs to the second. If the algorithm
+allocates too much energy to an overlapping harmonic, it may identify a
+"phantom fundamental"—inferring the presence of an octave or overtone
+note that was never played. Conversely, misallocating energy downward
+can cause the algorithm to miss lower-amplitude notes entirely.</p>
+<h3 id="the-impact-of-sympathetic-resonance">The Impact of Sympathetic
+Resonance</h3>
+<p>Sympathetic resonance is a physical acoustic phenomenon where an
+unplayed element (such as an undamped string on a piano or acoustic
+guitar) begins to vibrate in response to external vibrations matching
+its natural frequency. When a pianist strikes a C major chord with the
+sustain pedal down, strings across the entire soundboard vibrate
+sympathetically with the harmonics of the struck notes.</p>
+<p>To a transcription algorithm, sympathetic resonance looks identical
+to an intentional note event. The resonant strings produce their own
+fundamental frequencies and harmonic series, albeit at a lower amplitude
+and with different attack dynamics.</p>
+<p>Standard polyphonic transcription algorithms rely heavily on
+transient onset detection—the initial spike in energy that accompanies a
+physical pluck, strike, or bow change. Sympathetic resonance lacks a
+sharp transient, possessing a slow, swell-like envelope. Algorithms
+struggle to categorize these spectral features: they must guess whether
+the energy represents a soft, legato note played by the musician or
+passive physical bleed caused by sympathetic resonance.</p>
+<h3 id="time-frequency-resolution-trade-offs">Time-Frequency Resolution
+Trade-Offs</h3>
+<p>Audio-to-MIDI algorithms are inherently bounded by the Gabor limit
+(the acoustic equivalent of the Heisenberg uncertainty principle). A
+digital system cannot achieve high frequency resolution and high time
+resolution simultaneously:</p>
+<ul>
+<li><strong>High Frequency Resolution:</strong> Necessary to distinguish
+closely spaced low-frequency notes (e.g., distinguishing low bass
+intervals). Achieving this requires longer time windows, which blurs the
+timing of note onsets and offsets.</li>
+<li><strong>High Time Resolution:</strong> Necessary to catch rapid
+arpeggios, percussive attacks, and precise note durations. Achieving
+this requires short time windows, which causes spectral leakage and
+blurs distinct harmonic peaks into wide, indistinct frequency
+bands.</li>
+</ul>
+<p>This trade-off makes it difficult to detect the exact moment an
+overlapping harmonic changes amplitude, compounding the difficulty of
+separating overlapping voices in fast polyphonic passages.</p>
+<h3 id="phase-cancellation-and-timbral-modulation">Phase Cancellation
+and Timbral Modulation</h3>
+<p>In multi-instrument or dense polyphonic environments, overlapping
+sound waves interact constructively and destructively. Phase
+cancellation occurs when identical or close frequencies interfere,
+causing periodic drops in amplitude (known as acoustic beating).</p>
+<p>Algorithms that rely on consistent harmonic templates—expecting an
+instrument to maintain a predictable distribution of energy across its
+overtones—fail when phase cancellation distorts the overtone profile.
+This distortion causes spectral modeling algorithms (such as
+Non-Negative Matrix Factorization) to misclassify or segment continuous
+notes into multiple fractured MIDI events.</p>
+<h3 id="limitations-of-machine-learning-solutions">Limitations of
+Machine Learning Solutions</h3>
+<p>Modern deep learning architectures (such as Convolutional Recurrent
+Neural Networks and Transformers) have significantly reduced polyphonic
+transcription errors by learning contextual musical patterns rather than
+relying purely on spectral heuristics. However, these models still
+struggle with overlapping harmonics for distinct structural reasons:</p>
+<ul>
+<li><strong>Training Bias:</strong> Neural networks trained on
+synthesized datasets often fail on real-world recordings where room
+acoustics, mic placement, and physical resonances deviate from the
+training distribution.</li>
+<li><strong>Polyphonic Density:</strong> As the number of simultaneous
+voices increases, the number of harmonic collisions grows exponentially.
+Even state-of-the-art models exhibit a steep decline in precision when
+transcribing complex polyphony, as the internal neural representations
+cannot fully disentangle deeply intertwined spectral matrices.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/polyphonic-audio-to-midi-overlapping-harmonics';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

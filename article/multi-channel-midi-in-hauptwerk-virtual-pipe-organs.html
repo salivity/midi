@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Channel MIDI in Hauptwerk Virtual Pipe Organs - midi</title>
+    <meta name="description" content="This article explores how the Hauptwerk virtual pipe organ platform leverages multi-channel MIDI arrays to accurately recreate the mechanical and acoustic behaviors of historic pipe organs. By distributing control data across discrete MIDI channels, the s">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/multi-channel-midi-in-hauptwerk-virtual-pipe-organs">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Multi-Channel MIDI in Hauptwerk Virtual Pipe Organs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/multi-channel-midi-in-hauptwerk-virtual-pipe-organs" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how the Hauptwerk virtual pipe organ platform leverages multi-channel MIDI arrays to accurately recreate the mechanical and acoustic behaviors of historic pipe organs. By distributing control data across discrete MIDI channels, the s" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="multi-channel-midi-in-hauptwerk-virtual-pipe-organs">Multi-Channel
+MIDI in Hauptwerk Virtual Pipe Organs</h1>
+<p>This article explores how the Hauptwerk virtual pipe organ platform
+leverages multi-channel MIDI arrays to accurately recreate the
+mechanical and acoustic behaviors of historic pipe organs. By
+distributing control data across discrete MIDI channels, the system
+replicates complex multi-manual console layouts, stop action mechanisms,
+dynamic swell enclosures, and spatial pipe-chest configurations. The
+result is an authentic, responsive simulation that bridges modern
+digital hardware with centuries-old acoustic instruments.</p>
+<h3 id="console-architecture-and-midi-division-routing">Console
+Architecture and MIDI Division Routing</h3>
+<p>Historic pipe organs are divided into distinct physical and tonal
+sections, such as the Great, Swell, Choir, Solo, and Pedal divisions. In
+a Hauptwerk setup, physical digital organ consoles or converted pipe
+consoles use discrete MIDI channels to represent each of these divisions
+independently.</p>
+<p>Standard MIDI operates on 16 discrete channels per port. Hauptwerk
+can ingest multiple MIDI ports simultaneously, assigning each physical
+keyboard (manual) and the pedalboard to its own dedicated channel. When
+an organist depresses a key on the Swell manual, that specific note-on
+event is isolated to the Swell division's sample set within the
+software, preventing cross-talk and allowing independent management of
+coupler mechanisms.</p>
+<h3
+id="emulating-mechanical-couplers-and-division-interconnections">Emulating
+Mechanical Couplers and Division Interconnections</h3>
+<p>Historic organs frequently rely on mechanical or pneumatic couplers
+that allow the pipes of one division to be played from the manual of
+another (e.g., Swell to Great). Hauptwerk processes these operations
+internally rather than requiring complex hardware wiring:</p>
+<ul>
+<li><strong>Software-Side Routing:</strong> The physical console sends a
+single MIDI note on the Great channel. If the Swell-to-Great coupler is
+drawn, Hauptwerk duplicates that note trigger internally to the Swell
+sample set without requiring the physical Swell keys to move or send
+redundant MIDI traffic.</li>
+<li><strong>Melody and Bass Couplers:</strong> Advanced MIDI processing
+enables historical octave couplers (Sub and Super) and specialized
+directional couplers, calculating transposition and polyphonic priority
+in real time with zero mechanical latency.</li>
+</ul>
+<h3 id="stop-action-and-continuous-parameter-control">Stop Action and
+Continuous Parameter Control</h3>
+<p>Beyond pitch and note duration, an authentic performance requires
+control over registration (stops) and expressive variables.
+Multi-channel MIDI arrays achieve this via distinct message formats:</p>
+<ul>
+<li><strong>Stop and Drawknob Management:</strong> Physical stop tabs,
+drawknobs, and combination pistons interface using MIDI Control Change
+(CC) messages, Note-On/Off triggers, or System Exclusive (SysEx) data.
+Hauptwerk supports bi-directional MIDI: activating a combination piston
+sends MIDI data to the software, which then sends MIDI feedback back to
+motorized drawknobs or lighted indicators on the console.</li>
+<li><strong>Expression and Crescendo Control:</strong> Swell boxes
+(enclosures with movable shutters) and crescendo rollers continuously
+transmit 7-bit or high-resolution 14-bit MIDI CC data. Hauptwerk uses
+these continuous values to dynamically filter and alter the volume,
+high-frequency dampening, and acoustic resonance of the enclosed pipes,
+matching the physical physics of wooden swell shutters opening and
+closing.</li>
+</ul>
+<h3 id="pipe-chest-topography-and-spatial-audio-distribution">Pipe Chest
+Topography and Spatial Audio Distribution</h3>
+<p>Historic organs do not emit sound from a single point; pipes are
+physically arrayed across windchests in specific patterns, such as
+alternating C and C-sharp sides or chromatic spreads.</p>
+<p>Hauptwerk utilizes incoming MIDI note data to calculate the exact
+spatial origin of each individual pipe. When a MIDI Note-On message
+arrives:</p>
+<ol type="1">
+<li><strong>Velocity and Timing Evaluation:</strong> The software
+measures key travel velocity (via multi-contact MIDI sensors) to model
+the speed of the pallet opening inside the windchest, which alters the
+pipe's speech onset (chiff).</li>
+<li><strong>Wind Supply Modeling:</strong> The cumulative MIDI polyphony
+across all active channels dynamically affects the software's virtual
+wind chest reservoirs, simulating pressure drops that cause authentic,
+subtle pitch sagging when large chords are held.</li>
+<li><strong>Multi-Perspective Audio Routing:</strong> Once triggered,
+the pipe sound is routed through a multi-channel audio interface to an
+array of physical speakers. The MIDI input directly informs the
+multi-channel acoustic rendering, matching the historic instrument's
+true physical layout in the room.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/multi-channel-midi-in-hauptwerk-virtual-pipe-organs';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

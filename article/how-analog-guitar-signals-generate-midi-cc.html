@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Analog Guitar Signals Generate MIDI CC - midi</title>
+    <meta name="description" content="Converting an analog electric guitar signal into dynamic MIDI Control Change (CC) messages requires capturing the instrument&#39;s amplitude profile, converting that waveform into a direct-current (DC) voltage, and translating that voltage into digital data.">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-analog-guitar-signals-generate-midi-cc">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Analog Guitar Signals Generate MIDI CC - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-analog-guitar-signals-generate-midi-cc" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Converting an analog electric guitar signal into dynamic MIDI Control Change (CC) messages requires capturing the instrument&#39;s amplitude profile, converting that waveform into a direct-current (DC) voltage, and translating that voltage into digital data." />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-analog-guitar-signals-generate-midi-cc">How Analog Guitar
+Signals Generate MIDI CC</h1>
+<p>Converting an analog electric guitar signal into dynamic MIDI Control
+Change (CC) messages requires capturing the instrument's amplitude
+profile, converting that waveform into a direct-current (DC) voltage,
+and translating that voltage into digital data. An analog envelope
+follower extracts the dynamic contour of a performance by rectifying and
+smoothing the alternating-current (AC) output from the guitar pickups. A
+microcontroller then samples this extracted continuous voltage via an
+Analog-to-Digital Converter (ADC) and maps it to a standard MIDI CC
+range (0–127), transmitting real-time performance dynamics to external
+synthesizers, software, or digital effects.</p>
+<h3 id="1-preamplification-and-buffering">1. Preamplification and
+Buffering</h3>
+<p>The electrical signal produced by electric guitar pickups is a
+low-amplitude, high-impedance AC signal, typically measuring between
+tens to hundreds of millivolts. Before any dynamic processing can occur,
+the signal passes through a high-impedance buffer and preamplifier
+circuit. This stage prevents tone loading and boosts the signal to a
+usable operating level (often between 0V and 5V or line-level
+equivalents) while preserving the natural transient attacks and decaying
+sustain of the plucked strings.</p>
+<h3 id="2-full-wave-rectification">2. Full-Wave Rectification</h3>
+<p>Because an audio waveform oscillates symmetrically above and below a
+central reference line, an envelope follower must polarize the wave to
+read its absolute amplitude. A precision rectifier circuit—usually
+constructed with operational amplifiers (op-amps) and diodes—inverts the
+negative half-cycles of the AC signal into positive half-cycles.
+Full-wave rectification is favored over half-wave rectification because
+it doubles the ripple frequency, reducing latency and making the signal
+easier to smooth without filtering out fast playing dynamics.</p>
+<h3 id="3-filtering-and-envelope-extraction">3. Filtering and Envelope
+Extraction</h3>
+<p>Once rectified, the signal consists of rapid, pulsating positive DC
+bursts. To obtain a steady representation of volume rather than raw
+frequency oscillations, the signal passes into a peak detector and a
+low-pass filter, typically built using an RC (resistor-capacitor)
+network.</p>
+<p>This circuit establishes two critical timing parameters:</p>
+<ul>
+<li><strong>Attack Time:</strong> Dictates how fast the capacitor
+charges when the guitar is struck. A faster attack captures sudden
+percussive transients.</li>
+<li><strong>Release (Decay) Time:</strong> Governs how gradually the
+capacitor discharges through a resistor as the string's vibration
+fades.</li>
+</ul>
+<p>The resulting output is a smooth, continuous DC control voltage that
+rises and falls in direct proportion to the volume of the guitar
+performance.</p>
+<h3 id="4-analog-to-digital-conversion-adc">4. Analog-to-Digital
+Conversion (ADC)</h3>
+<p>The smoothed DC envelope is routed to the input pin of an onboard
+microcontroller equipped with an Analog-to-Digital Converter. The ADC
+repeatedly samples the continuous voltage at high speeds—commonly
+between 500 Hz and several kilohertz—to minimize tracking latency. The
+hardware translates the analog voltage into a digital integer based on
+its internal bit depth (for example, a 10-bit ADC provides values from 0
+to 1023).</p>
+<h3 id="5-digital-filtering-and-midi-cc-mapping">5. Digital Filtering
+and MIDI CC Mapping</h3>
+<p>Before transmitting data, the microcontroller's firmware processes
+the raw digital values to eliminate unwanted noise and MIDI buffer
+overloads:</p>
+<ul>
+<li><strong>Hysteresis and Noise Gating:</strong> Tiny fluctuations in
+the analog voltage (analog ripple) can cause rapid, unintended MIDI
+messages. Hysteresis algorithms ensure that a new value is only
+processed if the change crosses a defined threshold.</li>
+<li><strong>Scaling and Truncation:</strong> The digital integer is
+scaled down to a standard 7-bit MIDI data range (0 to 127), or
+occasionally a 14-bit high-resolution format.</li>
+<li><strong>Response Curves:</strong> Firmware often applies linear,
+logarithmic, or exponential response curves to match the perceptual
+dynamics of the player.</li>
+</ul>
+<h3 id="6-real-time-midi-transmission">6. Real-Time MIDI
+Transmission</h3>
+<p>Finally, the microcontroller formats the mapped integer into a
+standard 3-byte MIDI Control Change message:</p>
+<ol type="1">
+<li><strong>Status Byte:</strong> Specifies the MIDI channel and
+indicates a CC command (e.g., <code>0xBn</code>, where <code>n</code> is
+the channel).</li>
+<li><strong>Controller Number:</strong> Dictates the destination
+parameter, such as CC 1 (Modulation), CC 7 (Volume), or CC 11
+(Expression).</li>
+<li><strong>Data Byte:</strong> The actual envelope value between 0 and
+127.</li>
+</ol>
+<p>These packets are transmitted across a 5-pin DIN connection, a TRS
+jack, or via USB-MIDI with sub-5-millisecond latency, allowing the
+physical volume and touch response of the guitar to manipulate software
+synth filters, effects parameters, or secondary sound layers in real
+time.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-analog-guitar-signals-generate-midi-cc';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

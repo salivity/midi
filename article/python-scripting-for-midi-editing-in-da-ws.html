@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Scripting for MIDI Editing in DAWs - midi</title>
+    <meta name="description" content="Python scripting in modern digital audio workstations (DAWs) bridges the gap between conventional music production and algorithmic composition by enabling procedural editing of MIDI note lists. Rather than manually drawing notes on a piano roll, composers">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/python-scripting-for-midi-editing-in-da-ws">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Python Scripting for MIDI Editing in DAWs - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/python-scripting-for-midi-editing-in-da-ws" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Python scripting in modern digital audio workstations (DAWs) bridges the gap between conventional music production and algorithmic composition by enabling procedural editing of MIDI note lists. Rather than manually drawing notes on a piano roll, composers" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="python-scripting-for-midi-editing-in-daws">Python Scripting for
+MIDI Editing in DAWs</h1>
+<p>Python scripting in modern digital audio workstations (DAWs) bridges
+the gap between conventional music production and algorithmic
+composition by enabling procedural editing of MIDI note lists. Rather
+than manually drawing notes on a piano roll, composers and sound
+designers can interact with note data programmatically—manipulating note
+pitches, velocities, start times, and durations through code. This
+programmatic access transforms the DAW from a static sequencer into an
+extensible, generative production environment capable of advanced
+automation and complex musical operations.</p>
+<h3 id="programmatic-access-to-the-note-list">Programmatic Access to the
+Note List</h3>
+<p>At its core, a MIDI clip in a DAW is an array of note events, with
+each event containing discrete parameters: pitch (0–127), start time (in
+ticks, beats, or seconds), length, velocity, and MIDI channel. DAWs such
+as Cockos REAPER (via ReaScript) and Image-Line FL Studio (via Piano
+Roll scripting) expose this underlying data structure to Python runtime
+environments.</p>
+<p>A Python script accesses this list, iterates through the note
+objects, reads their properties, and modifies them in place or appends
+new notes. Because Python natively handles data structures like lists,
+dictionaries, and tuples with minimal syntax, it provides an ideal
+language for filtering, sorting, and transforming musical events in
+bulk.</p>
+<h3 id="algorithmic-and-generative-composition">Algorithmic and
+Generative Composition</h3>
+<p>By handling MIDI as raw data, Python allows users to implement
+algorithmic composition techniques directly within their projects:</p>
+<ul>
+<li><strong>Euclidean Rhythms:</strong> Scripts can distribute a set
+number of active notes across a defined grid using the Euclidean
+algorithm, instantly generating complex world rhythms or polymetric
+patterns.</li>
+<li><strong>Stochastic and Probabilistic Variation:</strong>
+Randomization libraries can introduce controlled probability to note
+generation, such as assigning higher chances of specific scale degrees
+occurring on downbeats or creating non-repeating hi-hat variations.</li>
+<li><strong>Markov Chains and Generative Harmony:</strong> Python
+scripts can analyze existing musical phrases and procedurally generate
+melodic continuations or voice-led chord progressions based on defined
+statistical rules.</li>
+</ul>
+<h3 id="advanced-transformations-and-quantization">Advanced
+Transformations and Quantization</h3>
+<p>Stock DAW quantize and transform tools are often limited to basic
+grid alignment and linear velocity ramps. Python removes these
+limitations by allowing users to write custom mathematical functions for
+note manipulation:</p>
+<ul>
+<li><strong>Micro-Timing and Groove Application:</strong> Scripts can
+apply custom swing curves, groove templates, or physiological
+humanization algorithms that mimic human timing fluctuations across
+multiple instrument voices.</li>
+<li><strong>Harmonic and Modal Snapping:</strong> Notes can be
+algorithmically remapped to obscure microtonal tunings, non-Western
+scales, or dynamically shifting chord progressions without manually
+editing individual piano roll entries.</li>
+<li><strong>Polyphonic Voice Separation:</strong> Complex piano
+performances can be parsed automatically, using pitch thresholds and
+voice-leading heuristics to split bass lines, inner harmonies, and lead
+melodies onto separate MIDI channels or tracks.</li>
+</ul>
+<h3 id="workflow-optimization-and-batch-processing">Workflow
+Optimization and Batch Processing</h3>
+<p>Aside from creative generation, Python scripting serves as an
+automation engine for utilitarian sequencing tasks. Producers can
+execute complex transformations across hundreds of bars in seconds—such
+as inversion, retrograde, dynamic compression of velocities, or removing
+overlapping duplicate notes caused by messy hardware recording. By
+eliminating repetitive manual labor, Python integration allows musicians
+to focus on high-level musical decision-making while relying on
+procedural logic to execute intricate sequencing tasks.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/python-scripting-for-midi-editing-in-da-ws';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

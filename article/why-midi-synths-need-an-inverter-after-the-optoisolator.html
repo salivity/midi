@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Synths Need an Inverter After the Optoisolator - midi</title>
+    <meta name="description" content="In MIDI hardware design, the input stage relies on an optoisolator to provide galvanic isolation between connected devices, preventing ground loops and electrical interference. When an open-collector optoisolator outputs an inverted digital signal, the sy">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-synths-need-an-inverter-after-the-optoisolator">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Synths Need an Inverter After the Optoisolator - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-synths-need-an-inverter-after-the-optoisolator" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In MIDI hardware design, the input stage relies on an optoisolator to provide galvanic isolation between connected devices, preventing ground loops and electrical interference. When an open-collector optoisolator outputs an inverted digital signal, the sy" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-synths-need-an-inverter-after-the-optoisolator">Why
+MIDI Synths Need an Inverter After the Optoisolator</h1>
+<p>In MIDI hardware design, the input stage relies on an optoisolator to
+provide galvanic isolation between connected devices, preventing ground
+loops and electrical interference. When an open-collector optoisolator
+outputs an inverted digital signal, the synthesizer must pass this
+signal through a logic inverter stage before routing it to the internal
+Universal Asynchronous Receiver-Transmitter (UART). This article
+explains the technical reasons for this requirement, detailing how the
+inverter restores standard UART polarity, sharpens degraded slew rates,
+and ensures stable data communication within the synthesizer.</p>
+<h2 id="restoring-standard-uart-polarity">Restoring Standard UART
+Polarity</h2>
+<p>MIDI communication relies on standard asynchronous serial data at a
+rate of 31.25 kbaud. A standard UART receiver expects the signal line to
+abide by standard Non-Return-to-Zero (NRZ) serial framing:</p>
+<ul>
+<li><strong>Idle State (Mark):</strong> Logic HIGH (binary 1)</li>
+<li><strong>Start Bit (Space):</strong> Logic LOW (binary 0)</li>
+<li><strong>Stop Bit:</strong> Logic HIGH (binary 1)</li>
+</ul>
+<p>Depending on how the optoisolator's phototransistor and input LED are
+biased, an open-collector stage commonly inverts the incoming logic
+stream. When the sending device asserts a logic LOW to transmit a start
+bit, the current loop turns the optoisolator's internal LED on,
+switching on the phototransistor and pulling the open-collector output
+to ground (LOW). Conversely, when no current flows (idle), the
+phototransistor stays off, and a pull-up resistor pulls the collector to
+the supply rail (HIGH).</p>
+<p>However, in circuit configurations where the optoisolator output
+produces an active-high inverted signal relative to the microprocessor’s
+expectations, the synthesizer's UART will misinterpret the line. If an
+idle state appears as LOW and a start bit appears as HIGH, the receiving
+UART cannot recognize framing boundaries, resulting in framing errors,
+false start bits, or total communication failure. Inserting a logic
+inverter stage flips the bitstream back to the correct polarity expected
+by the UART.</p>
+<h2 id="correcting-asymmetric-rise-and-fall-times">Correcting Asymmetric
+Rise and Fall Times</h2>
+<p>Open-collector optoisolator outputs suffer from an inherent physical
+asymmetry between their falling and rising edges:</p>
+<ol type="1">
+<li><strong>Active Pull-Down (Fast):</strong> When the phototransistor
+turns on, it directly shunts the output pin to ground with low
+impedance, producing a rapid, crisp falling edge.</li>
+<li><strong>Passive Pull-Up (Slow):</strong> When the phototransistor
+turns off, it cannot actively drive the line high. Instead, an external
+pull-up resistor must charge the parasitic capacitance of the
+phototransistor junction, PCB traces, and receiving inputs. This
+produces an exponential RC charging curve, leading to a significantly
+slower rising edge.</li>
+</ol>
+<p>This difference creates pulse-width distortion. Serial bits that
+spend more time rising than falling change the effective duration of
+high and low pulses, shrinking the valid sampling window in the center
+of each bit.</p>
+<h2 id="waveform-squaring-with-schmitt-trigger-inverters">Waveform
+Squaring with Schmitt Trigger Inverters</h2>
+<p>To resolve the timing degradation caused by the passive pull-up, the
+inverter stage in a MIDI input circuit is typically implemented using a
+Schmitt trigger inverter (such as the 74HCT14 or 74LVC14).</p>
+<p>A Schmitt trigger provides two distinct voltage thresholds: an upper
+threshold (<span class="math inline">\(V_{\text{T}+}\)</span>) for
+rising signals and a lower threshold (<span
+class="math inline">\(V_{\text{T}-}\)</span>) for falling signals. As
+the slow, exponential voltage ramp rises across the pull-up resistor,
+the Schmitt trigger snaps instantly to a solid digital state the moment
+the threshold is crossed. This restores steep, vertical edges to the
+digital waveform, virtually eliminating timing jitter and preventing
+false transitions caused by high-frequency electrical noise riding on
+the analog ramp.</p>
+<h2 id="providing-clean-logic-levels-and-fan-out">Providing Clean Logic
+Levels and Fan-Out</h2>
+<p>The collector of an optoisolator is a high-impedance node that is
+sensitive to electrical noise and trace loading inside the synthesizer
+chassis. Routing this high-impedance signal across a circuit board
+directly to a microcontroller or digital signal processor can cause
+signal degradation.</p>
+<p>The inverter stage acts as an active digital buffer with a
+low-impedance totem-pole (push-pull) output. This allows the signal to
+cleanly drive the input capacitance of the synthesizer’s CPU, secondary
+logic circuits, or a hardware "MIDI Thru" re-transmission buffer without
+altering pulse timing or loading down the optoisolator output.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-midi-synths-need-an-inverter-after-the-optoisolator';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

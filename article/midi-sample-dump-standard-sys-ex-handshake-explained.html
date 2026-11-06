@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Sample Dump Standard: SysEx Handshake Explained - midi</title>
+    <meta name="description" content="This article explores how Universal Non-Real-Time System Exclusive (SysEx) messages resolve hardware interoperability issues through the MIDI Sample Dump Standard (SDS). By establishing a structured, two-way communication protocol, SDS enables different M">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-sample-dump-standard-sys-ex-handshake-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Sample Dump Standard: SysEx Handshake Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-sample-dump-standard-sys-ex-handshake-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how Universal Non-Real-Time System Exclusive (SysEx) messages resolve hardware interoperability issues through the MIDI Sample Dump Standard (SDS). By establishing a structured, two-way communication protocol, SDS enables different M" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-sample-dump-standard-sysex-handshake-explained">MIDI Sample
+Dump Standard: SysEx Handshake Explained</h1>
+<p>This article explores how Universal Non-Real-Time System Exclusive
+(SysEx) messages resolve hardware interoperability issues through the
+MIDI Sample Dump Standard (SDS). By establishing a structured, two-way
+communication protocol, SDS enables different MIDI samplers to negotiate
+sample rates, word lengths, and data transmission regardless of
+manufacturer. Readers will learn the technical mechanics of the
+handshake process, the role of specific packet headers, and how
+bidirectional flow control ensures error-free sample transfers over
+standard MIDI connections.</p>
+<h3 id="the-challenge-of-proprietary-sample-transfers">The Challenge of
+Proprietary Sample Transfers</h3>
+<p>In the early era of digital sampling, hardware manufacturers used
+proprietary System Exclusive formats to transmit audio data. Because a
+Roland, Akai, or E-mu sampler used unique SysEx formats, transferring
+raw audio samples between different brands or between a computer and a
+sampler required specialized, machine-specific software. To solve this
+fragmentation, the MIDI Manufacturers Association defined the MIDI
+Sample Dump Standard (SDS) using Universal Non-Real-Time System
+Exclusive messages.</p>
+<h3 id="the-universal-non-real-time-sysex-framework">The Universal
+Non-Real-Time SysEx Framework</h3>
+<p>Universal Non-Real-Time SysEx messages use a dedicated MIDI standard
+structure starting with the SysEx status byte <code>F0h</code>, followed
+by the Universal Non-Real-Time identifier <code>7Eh</code>. Because
+sample transfers do not require immediate, sample-accurate playback
+timing, they are categorized as non-real-time.</p>
+<p>Within this framework, sub-ID bytes dictate the nature of the
+transmission. For SDS, the primary sub-ID <code>05h</code> specifies
+Sample Dump operations, followed by secondary sub-IDs that define
+whether a message is a header, a data packet, a request, or a handshake
+state (such as ACK or NAK).</p>
+<h3 id="the-handshake-sequence">The Handshake Sequence</h3>
+<p>The standardization of sample dumps relies on closed-loop,
+bidirectional communication between the sending and receiving devices.
+This handshake sequence proceeds through distinct phases:</p>
+<ol type="1">
+<li><strong>Dump Header (<code>01h</code>):</strong> The transmitter
+sends metadata detailing the sample slot number, sample format
+(typically 8 to 24 bits), sample period (sample rate represented in
+nanoseconds), total sample length in words, loop start and end points,
+and loop types.</li>
+<li><strong>Acceptance or Rejection:</strong> The receiving sampler
+evaluates the header against its internal memory and architectural
+limits. If compatible, it replies with an <strong>ACK</strong>
+(Acknowledge, sub-ID <code>7Fh</code>). If the format is unsupported, it
+transmits a <strong>CANCEL</strong> (<code>7Dh</code>) message, aborting
+the transfer before data is sent.</li>
+<li><strong>Data Packet Transmission (<code>02h</code>):</strong> Once
+accepted, the sender transmits sample data in small, numbered
+packets—usually 120 bytes of payload representing 7-bit converted audio
+data. Each packet includes a packet counter and an error-checking
+checksum.</li>
+<li><strong>Flow Control Handshaking:</strong> Upon receiving a packet
+and verifying the checksum, the receiver issues an <strong>ACK</strong>
+to request the next sequential packet. If a checksum error occurs or a
+packet is dropped, the receiver sends a <strong>NAK</strong> (Negative
+Acknowledge, sub-ID <code>7Eh</code>), prompting the sender to
+retransmit that specific packet. If the receiver needs time to process
+or write data to memory, it issues a <strong>WAIT</strong>
+(<code>7Ch</code>) message to pause transmission.</li>
+</ol>
+<h3 id="cross-manufacturer-uniformity">Cross-Manufacturer
+Uniformity</h3>
+<p>By defining strict, byte-level rules for handshaking, Universal
+Non-Real-Time SysEx detached sample transmission from proprietary
+chipsets and storage mediums. The standard forces different hardware
+samplers to normalize audio data into an identical packetized structure,
+transforming what was once a manufacturer-dependent process into a
+reliable, universal standard across the electronic music industry.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-sample-dump-standard-sys-ex-handshake-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

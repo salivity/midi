@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Breath Controllers Work - midi</title>
+    <meta name="description" content="A MIDI breath controller translates human lung air pressure into dynamic musical expression by using a pneumatic pressure sensor to detect breath force, converting that physical force into an analog electrical voltage, digitizing it, and outputting standa">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-breath-controllers-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Breath Controllers Work - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-breath-controllers-work" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI breath controller translates human lung air pressure into dynamic musical expression by using a pneumatic pressure sensor to detect breath force, converting that physical force into an analog electrical voltage, digitizing it, and outputting standa" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-breath-controllers-work">How MIDI Breath Controllers
+Work</h1>
+<p>A MIDI breath controller translates human lung air pressure into
+dynamic musical expression by using a pneumatic pressure sensor to
+detect breath force, converting that physical force into an analog
+electrical voltage, digitizing it, and outputting standard MIDI
+continuous controller data. The receiving software synthesizer or
+sampler maps this incoming data stream in real time to audio parameters
+such as amplifier gain and low-pass filter cutoff frequencies, resulting
+in seamless, natural variations in volume and acoustic brightness.</p>
+<h3 id="1-pressure-detection-via-transducers">1. Pressure Detection via
+Transducers</h3>
+<p>The process begins at the mouthpiece. When a player blows into the
+device, the expelled air enters an internal chamber containing an
+air-bleed valve and a solid-state pressure transducer (commonly a
+piezoresistive or piezoelectric sensor). The bleed valve provides
+physical resistance—simulating the backpressure of an acoustic wind
+instrument—while allowing air to escape so continuous airflow can be
+maintained.</p>
+<p>As lung pressure rises and falls within the chamber, it exerts force
+on a microscopic silicon diaphragm inside the transducer. This physical
+strain alters the electrical resistance of the material in direct
+proportion to the amount of breath pressure applied.</p>
+<h3 id="2-signal-amplification-and-analog-to-digital-conversion">2.
+Signal Amplification and Analog-to-Digital Conversion</h3>
+<p>The variable resistance inside the transducer alters a reference
+electrical voltage passing through it, generating a minute analog
+voltage signal. Because this raw signal is very low, an onboard
+operational amplifier strengthens and stabilizes it.</p>
+<p>This conditioned analog voltage is fed into an Analog-to-Digital
+Converter (ADC) embedded in the controller's microcontroller. The ADC
+samples the voltage hundreds of times per second and quantizes the
+continuous electrical stream into numeric steps. In standard 7-bit MIDI
+protocol, this produces values between 0 (no pressure) and 127 (maximum
+programmed pressure), though modern high-resolution controllers can
+generate 14-bit values (0–16,383) to eliminate stepping or "zipper"
+noise.</p>
+<h3 id="3-response-curves-and-midi-cc-generation">3. Response Curves and
+MIDI CC Generation</h3>
+<p>Before the data leaves the device, the microcontroller typically
+applies a response curve (linear, logarithmic, or exponential) to match
+human lung physiology and the player's personal playing technique.</p>
+<p>Once processed, the numbers are packaged into standard MIDI Control
+Change (CC) messages transmitted via USB or a standard 5-pin DIN cable.
+By convention, breath data is assigned to specific CC channels:</p>
+<ul>
+<li><strong>MIDI CC 2:</strong> Breath Controller (the dedicated
+standard)</li>
+<li><strong>MIDI CC 11:</strong> Expression (commonly used for overall
+dynamics)</li>
+<li><strong>MIDI CC 1:</strong> Modulation Wheel (often assigned to
+vibrato or intensity)</li>
+<li><strong>MIDI CC 74:</strong> Brightness / Filter Cutoff</li>
+</ul>
+<h3 id="4-synthesizer-modulation-volume-and-brightness">4. Synthesizer
+Modulation: Volume and Brightness</h3>
+<p>When the digital sound engine receives this rapid stream of MIDI CC
+values, it routes the data to internal synthesis engine parameters.
+Acoustic wind instruments naturally grow brighter (richer in
+high-frequency harmonics) as they get louder, and a breath controller
+reproduces this phenomenon through simultaneous parameter
+modulation:</p>
+<ul>
+<li><strong>Volume (Amplitude):</strong> The CC value modulates a
+Digital Voltage-Controlled Amplifier (DCA/VCA). Higher CC values scale
+the amplitude multiplier upward, raising the decibel output of the
+sound.</li>
+<li><strong>Brightness (Timbre):</strong> The same CC value is routed
+simultaneously to a low-pass filter's cutoff frequency. At zero
+pressure, the filter remains closed, dampening higher overtones and
+producing a muted, warm sound. As breath pressure increases, the rising
+CC values open the filter, allowing high-frequency harmonics to pass
+through and making the sound progressively brighter and more
+piercing.</li>
+</ul>
+<p>Because these changes occur instantly and continuously across the
+duration of a sustained note, the performer achieves the organic swell,
+attack, decay, and tonal shading characteristic of acoustic wind and
+brass instruments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-breath-controllers-work';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

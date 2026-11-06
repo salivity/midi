@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why MIDI Hardware Standardized on 31.25 kbps - midi</title>
+    <meta name="description" content="When the Musical Instrument Digital Interface (MIDI) specification was established in the early 1980s, its creators needed a transmission rate that balanced musical responsiveness, hardware affordability, and electrical reliability. The decision to settle">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-midi-hardware-standardized-on-31-25-kbps">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why MIDI Hardware Standardized on 31.25 kbps - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-midi-hardware-standardized-on-31-25-kbps" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When the Musical Instrument Digital Interface (MIDI) specification was established in the early 1980s, its creators needed a transmission rate that balanced musical responsiveness, hardware affordability, and electrical reliability. The decision to settle" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-midi-hardware-standardized-on-3125-kbps">Why MIDI Hardware
+Standardized on 31.25 kbps</h1>
+<p>When the Musical Instrument Digital Interface (MIDI) specification
+was established in the early 1980s, its creators needed a transmission
+rate that balanced musical responsiveness, hardware affordability, and
+electrical reliability. The decision to settle on 31.25 kilobits per
+second (kbps) was not an arbitrary number, but a pragmatic engineering
+solution rooted in standard microprocessor clock speeds, binary
+division, low-cost component limitations, and acceptable human
+perception of latency.</p>
+<h3 id="clean-division-of-microprocessor-clock-crystals">Clean Division
+of Microprocessor Clock Crystals</h3>
+<p>In the late 1970s and early 1980s, synthesizers and audio gear relied
+on inexpensive 8-bit microprocessors, such as the Intel 8048, Intel
+8051, Motorola 6800 family, and Zilog Z80. These systems operated using
+standard quartz crystals, frequently running at frequencies like 1 MHz,
+2 MHz, 4 MHz, or 8 MHz.</p>
+<p>Digital Universal Asynchronous Receiver-Transmitters (UARTs) derive
+their serial transmission speeds by dividing the system clock using
+internal binary counters. Standard UART architecture typically samples
+incoming serial bits at 16 times the baud rate (a 16x clock) to ensure
+reliable edge detection.</p>
+<p>The math works out cleanly with standard frequencies:</p>
+<ul>
+<li>A 1 MHz clock divided by 2 produces 500 kHz.</li>
+<li>500 kHz divided by 16 (the UART oversampling rate) yields exactly
+31,250 Hz, or 31.25 kbps.</li>
+<li>Similarly, a 2 MHz clock divided by 64, or a 4 MHz clock divided by
+128, directly yields 31,250 Hz.</li>
+</ul>
+<p>Using 31.25 kbps eliminated the need for specialized, expensive
+crystal oscillators or dedicated baud rate generator chips.
+Manufacturers could simply tap into the CPU's primary master clock and
+use a basic binary frequency divider to drive serial communications.</p>
+<h3 id="balancing-latency-with-musical-timing">Balancing Latency with
+Musical Timing</h3>
+<p>A primary design constraint led by Dave Smith (Sequential Circuits)
+and Ikutaro Kakehashi (Roland) was keeping latency below human
+perception. Musicians can generally detect timing delays larger than 5
+to 10 milliseconds.</p>
+<p>MIDI transmits data asynchronously using 10 bits per byte (1 start
+bit, 8 data bits, and 1 stop bit). At 31.25 kbps, transmitting one bit
+takes 32 microseconds, meaning a single 10-bit byte takes 320
+microseconds (0.32 ms).</p>
+<p>A standard MIDI "Note On" message consists of three bytes:</p>
+<ol type="1">
+<li>Status byte (Note On and Channel)</li>
+<li>Data byte 1 (Note number)</li>
+<li>Data byte 2 (Velocity)</li>
+</ol>
+<p>Transmitting this 3-byte message takes approximately 0.96
+milliseconds. Even when triggering chords across several instruments via
+standard daisy-chaining, the delay remains well within an acceptable
+operational window for real-time live performance.</p>
+<h3 id="inexpensive-optoisolators-and-cable-runs">Inexpensive
+Optoisolators and Cable Runs</h3>
+<p>Higher speeds, such as the 500 kbps or 1 Mbps rates common in
+computing networks of the era, were technically possible but
+economically impractical for consumer instruments.</p>
+<p>MIDI was designed to prevent ground loops—a common source of hum and
+noise in analog audio rigs—by requiring electrical optical isolation on
+every input. In 1982, high-speed optocouplers were expensive. Running
+serial data at 31.25 kbps permitted manufacturers to use cheap, readily
+available, relatively slow optoisolators (such as the Sharp PC900 or HP
+6N138) without corrupting digital pulses.</p>
+<p>Furthermore, lower speeds allowed musicians to run standard,
+unshielded 5-pin DIN cables up to 50 feet (15 meters) on stage without
+suffering severe signal degradation, radio frequency interference, or
+data reflections that plague higher-frequency serial lines.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-midi-hardware-standardized-on-31-25-kbps';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

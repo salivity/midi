@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a 5-Pin MIDI Expression Pedal Converter? - midi</title>
+    <meta name="description" content="A MIDI expression pedal converter that bridges simple resistance pedals to a 5-pin output acts as an analog-to-digital bridge for musical gear. It takes the passive analog voltage changes from a standard variable-resistance pedal and translates them into">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-5-pin-midi-expression-pedal-converter">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a 5-Pin MIDI Expression Pedal Converter? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-5-pin-midi-expression-pedal-converter" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI expression pedal converter that bridges simple resistance pedals to a 5-pin output acts as an analog-to-digital bridge for musical gear. It takes the passive analog voltage changes from a standard variable-resistance pedal and translates them into" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-5-pin-midi-expression-pedal-converter">What Is a 5-Pin
+MIDI Expression Pedal Converter?</h1>
+<p>A MIDI expression pedal converter that bridges simple resistance
+pedals to a 5-pin output acts as an analog-to-digital bridge for musical
+gear. It takes the passive analog voltage changes from a standard
+variable-resistance pedal and translates them into digital MIDI Control
+Change (CC) messages. These messages are then transmitted through a
+traditional 5-pin DIN MIDI port, allowing modern or legacy hardware that
+lacks dedicated analog expression inputs to be controlled in real time
+without requiring a computer.</p>
+<h3 id="how-passive-resistance-pedals-function">How Passive Resistance
+Pedals Function</h3>
+<p>A standard expression pedal relies on a built-in potentiometer
+connected to a 1/4-inch TRS (Tip-Ring-Sleeve) jack. When moved, the
+pedal does not generate audio or digital data; instead, it alters
+electrical resistance across the circuit. Hardware devices with built-in
+expression jacks supply a small reference voltage to measure this
+resistance change and determine the pedal's physical position. However,
+many synthesizers, vintage rack processors, and guitar effects units
+only feature digital 5-pin MIDI inputs, rendering them unable to read
+passive resistance pedals directly.</p>
+<h3 id="the-conversion-process">The Conversion Process</h3>
+<p>The converter bridges this gap by acting as an intermediary processor
+through the following steps:</p>
+<ol type="1">
+<li><strong>Voltage Supply and Sensing:</strong> The converter feeds a
+steady reference voltage into the pedal's TRS connection and detects the
+shifting voltage levels as the pedal moves.</li>
+<li><strong>Analog-to-Digital Conversion (ADC):</strong> An onboard
+microcontroller samples the varying analog voltage and converts it into
+a numerical scale, typically ranging from 0 to 127 to match standard
+7-bit MIDI protocol.</li>
+<li><strong>MIDI Message Generation:</strong> The internal processor
+packages this numerical value into a specific MIDI Control Change (CC)
+message, such as CC #11 (Expression), CC #7 (Volume), or CC #1
+(Modulation).</li>
+<li><strong>Serial Transmission:</strong> The converter encodes the
+message into the standard MIDI serial data format and outputs it through
+the hardware 5-pin DIN connection.</li>
+</ol>
+<h3 id="core-features-and-utility">Core Features and Utility</h3>
+<ul>
+<li><strong>Standalone Hardware Integration:</strong> Because the
+converter outputs standard 5-pin MIDI, it operates independently of a
+computer, making it suitable for live stage rigs and DAW-less studio
+setups.</li>
+<li><strong>Custom Parameter Mapping:</strong> Most converters allow
+users to assign the pedal to any standard MIDI channel (1–16) and
+specify any MIDI CC number, enabling control over filters, wet/dry
+mixes, pitch bends, and delay times.</li>
+<li><strong>Calibration and Polarity Adjustment:</strong> Pedals from
+different manufacturers use varying potentiometer resistances (typically
+10k to 50k ohms) and wiring polarities. The converter provides
+calibration functions to detect the minimum and maximum sweep limits and
+accommodate different TRS wiring standards.</li>
+<li><strong>Response Curves:</strong> Advanced converters offer
+configurable response curves—such as linear, logarithmic, or
+exponential—to tailor how physical pedal travel translates into
+parameter changes.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/what-is-a-5-pin-midi-expression-pedal-converter';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

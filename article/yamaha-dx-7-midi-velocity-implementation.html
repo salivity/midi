@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yamaha DX7 MIDI Velocity Implementation - midi</title>
+    <meta name="description" content="This article explores how the 1983 Yamaha DX7 captured physical key dynamics and transmitted them through the early MIDI 1.0 protocol. It covers the dual-contact mechanical sensing mechanism, the calculation of key velocity, the formatting of standard MID">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/yamaha-dx-7-midi-velocity-implementation">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Yamaha DX7 MIDI Velocity Implementation - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/yamaha-dx-7-midi-velocity-implementation" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how the 1983 Yamaha DX7 captured physical key dynamics and transmitted them through the early MIDI 1.0 protocol. It covers the dual-contact mechanical sensing mechanism, the calculation of key velocity, the formatting of standard MID" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="yamaha-dx7-midi-velocity-implementation">Yamaha DX7 MIDI
+Velocity Implementation</h1>
+<p>This article explores how the 1983 Yamaha DX7 captured physical key
+dynamics and transmitted them through the early MIDI 1.0 protocol. It
+covers the dual-contact mechanical sensing mechanism, the calculation of
+key velocity, the formatting of standard MIDI Note On packets, and the
+internal design quirks that caused the DX7's notorious failure to
+transmit the full MIDI velocity range of 0 to 127.</p>
+<h3 id="physical-keybed-and-transit-time-measurement">Physical Keybed
+and Transit-Time Measurement</h3>
+<p>The Yamaha DX7 used a proprietary dynamic keybed assembly equipped
+with dual-contact rubber dome switches beneath each key. Rather than
+measuring the physical force or downward pressure of a key strike, the
+system measured velocity by timing the transit of the key between two
+distinct physical points.</p>
+<p>When a performer pressed a key, the downward motion closed a primary
+electrical contact and, shortly after, a secondary contact. An internal
+scanning matrix driven by the DX7's central sub-processor (a variant of
+the Hitachi 6303 microprocessor) continuously polled these contacts. The
+hardware measured the elapsed time (<span class="math inline">\(\Delta
+t\)</span>) between the opening of the upper contact and the closing of
+the lower contact. A rapid key strike resulted in a small <span
+class="math inline">\(\Delta t\)</span>, indicating high velocity, while
+a gentle press yielded a larger <span class="math inline">\(\Delta
+t\)</span>, indicating low velocity.</p>
+<h3 id="translating-transit-time-to-digital-expression">Translating
+Transit Time to Digital Expression</h3>
+<p>The measured time interval was converted into a digital value via
+internal lookup tables stored in the synthesizer's firmware ROM. In
+Frequency Modulation (FM) synthesis, velocity does not merely control
+volume; it modulates operator output levels. By mapping velocity to
+operator levels, the DX7 allowed a harder strike to increase the
+modulation index of modulator operators, resulting in brighter,
+harmonically rich timbres, or to increase carrier operator levels to
+raise the volume.</p>
+<p>Simultaneously, this calculated velocity value was prepared for
+transmission over the synthesizer's 5-pin DIN MIDI Out port to interact
+with external hardware.</p>
+<h3 id="transmission-via-midi-10">Transmission via MIDI 1.0</h3>
+<p>The DX7 was among the earliest commercial synthesizers to feature
+MIDI 1.0, which was standardized in 1983. In accordance with the
+specification, the DX7 encoded velocity within a standard three-byte
+Note On message:</p>
+<ol type="1">
+<li><strong>Status Byte (<code>0x90</code> to
+<code>0x9F</code>):</strong> Indicates a Note On command alongside the
+specific MIDI channel (1–16).</li>
+<li><strong>Data Byte 1 (<code>0x00</code> to
+<code>0x7F</code>):</strong> Represents the MIDI note number (pitch),
+ranging from 0 to 127.</li>
+<li><strong>Data Byte 2 (<code>0x00</code> to
+<code>0x7F</code>):</strong> Represents the velocity value, specifying
+how hard the key was struck.</li>
+</ol>
+<p>When a key was released, the DX7 sent a Note On message with a
+velocity of zero (<code>0x00</code>), which the MIDI 1.0 standard treats
+as an efficient alternative to an explicit Note Off command
+(<code>0x80</code>).</p>
+<h3 id="the-dx7-velocity-range-limitation">The DX7 Velocity Range
+Limitation</h3>
+<p>Despite the MIDI 1.0 specification defining velocity on a scale from
+0 to 127, the original generation of the DX7 rarely, if ever,
+transmitted a value of 127. Under normal playing conditions, the
+transmitted velocity capped out around 100, occasionally reaching
+roughly 110 to 118 with exceptionally forceful strikes.</p>
+<p>This discrepancy occurred because Yamaha developed the DX7's firmware
+and hardware scanning routines concurrently with the finalization of the
+MIDI standard. Yamaha engineers tuned the keybed's velocity curve and
+the mathematical formulas within the firmware to maximize the dynamic
+range and nuance of the internal 6-operator FM engine rather than
+treating the external MIDI specification as a linear controller.
+Consequently, while the internal engine interpreted the maximum physical
+strike as full intensity, the corresponding value written to the MIDI
+output buffer never reached <code>0x7F</code> (127).</p>
+<p>This limitation became a well-known hurdle when using the DX7 as a
+master MIDI keyboard for external modules, samplers, and synthesizers,
+which expected incoming velocity to span the full 0–127 range to trigger
+maximum filter brightness or top-tier sample layers. Later revisions and
+third-party modifications, such as the Grey Matter Response E! expansion
+board, eventually updated the firmware to scale the output across the
+complete 0–127 range.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/yamaha-dx-7-midi-velocity-implementation';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Stealing: Last-Note vs First-Note Priority - midi</title>
+    <meta name="description" content="MIDI tone generators rely on voice stealing algorithms to manage polyphony limits when the number of incoming notes exceeds the hardware or software&#39;s available sound channels. This article breaks down the operational differences between Last-Note Priorit">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/voice-stealing-last-note-vs-first-note-priority">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Voice Stealing: Last-Note vs First-Note Priority - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/voice-stealing-last-note-vs-first-note-priority" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI tone generators rely on voice stealing algorithms to manage polyphony limits when the number of incoming notes exceeds the hardware or software&#39;s available sound channels. This article breaks down the operational differences between Last-Note Priorit" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="voice-stealing-last-note-vs-first-note-priority">Voice Stealing:
+Last-Note vs First-Note Priority</h1>
+<p>MIDI tone generators rely on voice stealing algorithms to manage
+polyphony limits when the number of incoming notes exceeds the hardware
+or software's available sound channels. This article breaks down the
+operational differences between Last-Note Priority and First-Note
+Priority algorithms, analyzing how each manages voice allocation, how
+they alter the performer's tactile experience, and where each approach
+is best applied in musical production.</p>
+<h3 id="the-mechanism-of-voice-stealing">The Mechanism of Voice
+Stealing</h3>
+<p>Every MIDI synthesizer or tone generator has a maximum polyphony—the
+number of individual audio voices it can generate simultaneously. When a
+musician plays more notes than the available polyphony allows, the
+system must execute a voice allocation policy to decide whether to drop
+an existing voice to accommodate the new input or to reject the new
+input altogether.</p>
+<h3 id="last-note-priority-lnp">Last-Note Priority (LNP)</h3>
+<p>Under a Last-Note Priority algorithm, the most recently played note
+is always guaranteed to sound. When the polyphony limit is reached:</p>
+<ul>
+<li><strong>Voice Reallocation:</strong> The generator actively
+terminates ("steals") one of the currently sounding voices to free up a
+channel for the newly triggered note. Most implementations steal the
+oldest active note or the voice closest to completing its release
+envelope.</li>
+<li><strong>Performer Feel:</strong> LNP feels responsive and immediate.
+Fast runs, arpeggios, and melodic solos never suffer from silent key
+presses, even if a sustain pedal is held down and sustaining dozens of
+previous notes.</li>
+<li><strong>Drawbacks:</strong> Sustained foundation notes, such as a
+low bass note or an evolving pad chord, can be abruptly cut off if the
+player triggers too many subsequent notes above them.</li>
+</ul>
+<h3 id="first-note-priority-fnp">First-Note Priority (FNP)</h3>
+<p>Under a First-Note Priority algorithm, older notes take absolute
+precedence over new notes. When the polyphony limit is reached:</p>
+<ul>
+<li><strong>Voice Preservation:</strong> The generator refuses to
+interrupt active voices. Instead, any incoming MIDI Note-On message that
+exceeds the voice count is dropped or ignored until an existing voice is
+released and its envelope fully decays.</li>
+<li><strong>Performer Feel:</strong> FNP can feel "choked" or
+unresponsive during rapid playing because keys played after reaching the
+limit produce no sound.</li>
+<li><strong>Drawbacks:</strong> If a musician plays a dense chord with a
+sustain pedal held, subsequent melodic attempts will be completely
+silent until the pedal is released or earlier notes naturally fade
+out.</li>
+</ul>
+<h3 id="key-functional-differences">Key Functional Differences</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Last-Note Priority</th>
+<th style="text-align: left;">First-Note Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>New Note Behavior</strong></td>
+<td style="text-align: left;">Always sounds immediately</td>
+<td style="text-align: left;">Silenced/ignored if voice limit is
+reached</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Voice Termination</strong></td>
+<td style="text-align: left;">Drops the oldest/quietest active
+voice</td>
+<td style="text-align: left;">Never interrupts active voices</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Common Musical Use</strong></td>
+<td style="text-align: left;">Lead synthesizers, expressive piano, fast
+solos</td>
+<td style="text-align: left;">Drone synthesizers, specific emulation of
+vintage hardware, pedal-point arrangements</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Player Perception</strong></td>
+<td style="text-align: left;">Fluid, dynamic, and responsive</td>
+<td style="text-align: left;">Rigid, stable, but potentially
+obstructive</td>
+</tr>
+</tbody>
+</table>
+<h3 id="summary">Summary</h3>
+<p>The fundamental difference lies in whether the synthesizer favors the
+player's past actions or their present actions. First-Note Priority
+prioritizes the integrity of established harmony and sustained tones at
+the expense of new input. Last-Note Priority favors real-time
+responsiveness and forward musical motion, ensuring that the latest
+musical idea is always heard.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/voice-stealing-last-note-vs-first-note-priority';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

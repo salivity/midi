@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Boundary Chunk Headers in SMF MIDI Files - midi</title>
+    <meta name="description" content="Standard MIDI Files (SMF) rely on a chunk-based binary architecture to structure musical performances, metadata, and timing information. This article details the specific four-byte chunk identifier used to define track boundaries within an SMF file, expla">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/track-boundary-chunk-headers-in-smf-midi-files">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Track Boundary Chunk Headers in SMF MIDI Files - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/track-boundary-chunk-headers-in-smf-midi-files" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Standard MIDI Files (SMF) rely on a chunk-based binary architecture to structure musical performances, metadata, and timing information. This article details the specific four-byte chunk identifier used to define track boundaries within an SMF file, expla" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="track-boundary-chunk-headers-in-smf-midi-files">Track Boundary
+Chunk Headers in SMF MIDI Files</h1>
+<p>Standard MIDI Files (SMF) rely on a chunk-based binary architecture
+to structure musical performances, metadata, and timing information.
+This article details the specific four-byte chunk identifier used to
+define track boundaries within an SMF file, explaining its binary
+representation, structural role, and how parsers interpret track
+data.</p>
+<h2 id="the-track-chunk-identifier-mtrk">The Track Chunk Identifier:
+MTrk</h2>
+<p>The specific binary chunk header that identifies track boundaries
+inside a Standard MIDI File is <strong><code>MTrk</code></strong>. In
+hexadecimal notation, this four-byte ASCII sequence is represented
+as:</p>
+<p><code>0x4D 0x54 0x72 0x6B</code></p>
+<p>Whenever a MIDI parser encounters this sequence after the initial
+file header, it marks the beginning of an independent track chunk
+containing musical events, control data, or metadata.</p>
+<h2 id="structure-of-the-mtrk-chunk">Structure of the MTrk Chunk</h2>
+<p>Every track within an SMF file consists of three sequential
+components:</p>
+<ol type="1">
+<li><strong>Chunk Type (4 bytes):</strong> The literal ASCII string
+<code>MTrk</code> (<code>4D 54 72 6B</code>), serving as the track
+boundary marker.</li>
+<li><strong>Chunk Length (4 bytes):</strong> A 32-bit, big-endian
+unsigned integer indicating the exact size in bytes of the track event
+data that directly follows. This value does not include the 8 bytes
+consumed by the <code>MTrk</code> identifier and the length field
+itself.</li>
+<li><strong>Track Event Data (Variable length):</strong> A continuous
+stream of delta-times paired with MIDI channel events, System Exclusive
+(SysEx) events, or Meta-events.</li>
+</ol>
+<h2 id="determining-track-boundaries">Determining Track Boundaries</h2>
+<p>Track boundaries are governed by both the chunk length field and a
+mandatory terminating event:</p>
+<ul>
+<li><strong>Header-Defined Boundary:</strong> The 32-bit length field
+immediately following <code>MTrk</code> tells the parser precisely how
+many bytes belong to that track, allowing decoders to jump directly to
+the next track chunk without reading intermediate bytes.</li>
+<li><strong>Internal Termination Marker:</strong> By specification, the
+data payload inside an <code>MTrk</code> chunk must always conclude with
+the "End of Track" Meta-event. This event is represented by the binary
+sequence <code>FF 2F 00</code>.</li>
+</ul>
+<p>While the header chunk (<code>MThd</code>) defines overall file
+parameters such as the format type and track count, the
+<code>MTrk</code> signature uniquely isolates and encapsulates each
+individual stream of performance data.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/track-boundary-chunk-headers-in-smf-midi-files';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

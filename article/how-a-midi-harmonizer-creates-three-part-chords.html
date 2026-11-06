@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How a MIDI Harmonizer Creates Three-Part Chords - midi</title>
+    <meta name="description" content="A hardware MIDI harmonizer transforms a single incoming root note into a full three-part chord through real-time data parsing, scale-based algorithmic processing, and multi-note generation. By interpreting the pitch of an incoming MIDI message, referencin">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-a-midi-harmonizer-creates-three-part-chords">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How a MIDI Harmonizer Creates Three-Part Chords - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-a-midi-harmonizer-creates-three-part-chords" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A hardware MIDI harmonizer transforms a single incoming root note into a full three-part chord through real-time data parsing, scale-based algorithmic processing, and multi-note generation. By interpreting the pitch of an incoming MIDI message, referencin" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-a-midi-harmonizer-creates-three-part-chords">How a MIDI
+Harmonizer Creates Three-Part Chords</h1>
+<p>A hardware MIDI harmonizer transforms a single incoming root note
+into a full three-part chord through real-time data parsing, scale-based
+algorithmic processing, and multi-note generation. By interpreting the
+pitch of an incoming MIDI message, referencing user-defined musical
+parameters such as key and scale, and instantly generating the
+appropriate complementary intervals, the device outputs a coordinated
+set of notes that form a harmonically accurate triad with near-zero
+latency.</p>
+<h3 id="1-receiving-and-parsing-the-input-message">1. Receiving and
+Parsing the Input Message</h3>
+<p>The process begins at the hardware’s physical MIDI IN port (or
+USB-MIDI interface). When a musician plays a key, the controller
+transmits an asynchronous serial digital signal. The harmonizer’s
+microprocessor monitors this stream and immediately captures the
+standard three-byte <code>Note On</code> command:</p>
+<ul>
+<li><strong>Byte 1 (Status Byte):</strong> Indicates the command type
+(<code>Note On</code>) and the specific MIDI channel.</li>
+<li><strong>Byte 2 (Data Byte 1):</strong> Represents the pitch value as
+a number from 0 to 127 (for example, Middle C is 60).</li>
+<li><strong>Byte 3 (Data Byte 2):</strong> Captures the strike velocity
+(0 to 127), which represents volume and dynamics.</li>
+</ul>
+<h3 id="2-musical-context-and-lookup-tables">2. Musical Context and
+Lookup Tables</h3>
+<p>Unlike a basic pitch shifter that adds fixed intervals (such as
+always adding 4 semitones), an intelligent MIDI harmonizer relies on
+musical context. The user presets a musical key (e.g., G) and a scale
+type (e.g., Major, Natural Minor, Mixolydian). Alternatively, some
+devices determine the context dynamically via a secondary MIDI input
+receiving chord data from an accompanying instrument.</p>
+<p>Internally, the harmonizer holds pre-programmed lookup tables that
+define the allowable scale degrees for every key. When the incoming note
+arrives, the processor cross-references the note number against the
+active scale to determine its diatonic role (e.g., tonic, mediant,
+dominant).</p>
+<h3 id="3-calculating-the-harmony-notes">3. Calculating the Harmony
+Notes</h3>
+<p>To build a standard three-part chord, the unit needs to calculate two
+additional pitches alongside the root—typically the 3rd and the 5th
+degree above the root note within the selected scale:</p>
+<ul>
+<li><strong>Diad Calculation:</strong> If the input is C (MIDI note 60)
+in the key of C Major, the harmonizer looks up the third scale degree
+above it (E, MIDI note 64) and the fifth scale degree (G, MIDI note
+67).</li>
+<li><strong>Dynamic Interval Adjustment:</strong> If the next input note
+is D (MIDI note 62), the harmonizer’s logic knows that a major third
+would produce an out-of-key F# (66). Instead, it automatically selects a
+minor third (F, MIDI note 65) and a perfect fifth (A, MIDI note 69) to
+maintain strict diatonic harmony.</li>
+</ul>
+<p>Advanced hardware units also feature voice-leading algorithms that
+apply inversions or octave shifts to prevent harmony voices from jumping
+erratically across high or low frequency registers.</p>
+<h3 id="4-velocity-and-timing-processing">4. Velocity and Timing
+Processing</h3>
+<p>To ensure the resulting chord sounds natural, the hardware assigns
+appropriate velocity values to the newly calculated notes. Typically,
+the harmonizer duplicates the velocity of the original root note across
+all voices, though many units permit scaling (e.g., setting harmony
+voices to play slightly softer than the lead note).</p>
+<p>The processor also handles the timing envelope. When the input key is
+released, the device captures the corresponding <code>Note Off</code>
+message for the root note and instantly transmits matching
+<code>Note Off</code> commands for the harmony voices to prevent stuck
+notes.</p>
+<h3 id="5-generating-the-multi-voice-output">5. Generating the
+Multi-Voice Output</h3>
+<p>Once the processor calculates the target pitches, it constructs two
+new <code>Note On</code> messages. The hardware serializes these
+messages and transmits all three notes (the original root plus the two
+generated harmonies) through the MIDI OUT port in rapid succession.
+Because standard 5-pin DIN MIDI runs at 31.25 kbaud, sending three
+consecutive three-byte messages takes under one millisecond, ensuring
+the human ear perceives the three notes as a simultaneous, three-part
+chord.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-a-midi-harmonizer-creates-three-part-chords';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

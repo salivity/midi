@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Current Flows in a MIDI Circuit - midi</title>
+    <meta name="description" content="This article provides a technical overview of how electrical current moves through a standard MIDI hardware interface. It traces the signal from the transmitter&#39;s power source, through the cable, into the receiving optocoupler, and back along the return p">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-current-flows-in-a-midi-circuit">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Current Flows in a MIDI Circuit - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-current-flows-in-a-midi-circuit" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a technical overview of how electrical current moves through a standard MIDI hardware interface. It traces the signal from the transmitter&#39;s power source, through the cable, into the receiving optocoupler, and back along the return p" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-current-flows-in-a-midi-circuit">How Current Flows in a MIDI
+Circuit</h1>
+<p>This article provides a technical overview of how electrical current
+moves through a standard MIDI hardware interface. It traces the signal
+from the transmitter's power source, through the cable, into the
+receiving optocoupler, and back along the return path. Additionally, it
+clarifies the distinct role of the cable shield versus the active signal
+conductors to explain why MIDI circuits avoid common ground hum and
+electrical noise.</p>
+<p>The standard MIDI 1.0 hardware specification utilizes a 5 milliamp
+(mA) current loop rather than a simple voltage-level signaling scheme.
+This design prioritizes noise immunity and prevents ground loops between
+interconnected equipment. Signaling is active-low: current flows through
+the loop to represent a logical "0" (a space), while the absence of
+current represents a logical "1" (a mark).</p>
+<p>The transmission path begins at the MIDI OUT port:</p>
+<ol type="1">
+<li><p><strong>The Outgoing Path (Pin 4):</strong> A +5V power rail
+inside the transmitting device feeds Pin 4 of a 5-pin DIN connector
+through a current-limiting 220-ohm resistor. When a byte is being
+transmitted and the signal line drops low, current flows out of Pin 4,
+into the cable core, and travels the length of the wire toward the
+receiving device.</p></li>
+<li><p><strong>The Receiving Load (Optocoupler):</strong> At the MIDI IN
+port, the current arrives via Pin 4 and enters the anode of an infrared
+LED inside a high-speed optocoupler (such as a 6N138 or PC900). The
+current excites the LED, causing it to emit light internally toward a
+phototransistor. This light transfer creates galvanic isolation, meaning
+there is zero direct electrical connection between the transmitter's
+internal circuitry and the receiver's microcontroller.</p></li>
+<li><p><strong>The Return Path (Pin 5):</strong> After exiting the
+optocoupler’s LED cathode, the current exits the receiver via Pin 5. It
+travels back through a dedicated conductor in the cable to Pin 5 of the
+transmitter's MIDI OUT port. From there, the current passes through a
+second 220-ohm resistor to an open-collector inverter or UART output pin
+that pulls the line down to the transmitter's ground plane, completing
+the loop.</p></li>
+</ol>
+<p>A critical design element of the MIDI current loop is the role of the
+ground line (Pin 2). Pin 2 connects exclusively to the cable shield. In
+a compliant MIDI installation, this shield is grounded solely at the
+MIDI OUT or MIDI THRU transmitter port. The MIDI IN port leaves Pin 2
+disconnected entirely.</p>
+<p>Because Pin 2 is intentionally floating at the receiving end, the
+signal return current does not travel through the ground shield; it
+returns exclusively through the Pin 5 signal wire. Keeping the return
+path separate from the shield and isolating the receiver via the
+optocoupler ensures that signal currents are contained within a balanced
+loop, completely eliminating the possibility of audio-frequency ground
+loops between the connected devices.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-current-flows-in-a-midi-circuit';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

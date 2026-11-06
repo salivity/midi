@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Delay Effect and How Does It Work? - midi</title>
+    <meta name="description" content="A MIDI delay effect is an event-based processor that manipulates digital performance data rather than recorded audio waveforms to produce rhythmic repetitions. Unlike traditional audio delays that manipulate and repeat an existing audio signal, a MIDI del">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-delay-effect-and-how-does-it-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Delay Effect and How Does It Work? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-delay-effect-and-how-does-it-work" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI delay effect is an event-based processor that manipulates digital performance data rather than recorded audio waveforms to produce rhythmic repetitions. Unlike traditional audio delays that manipulate and repeat an existing audio signal, a MIDI del" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-delay-effect-and-how-does-it-work">What Is a MIDI
+Delay Effect and How Does It Work?</h1>
+<p>A MIDI delay effect is an event-based processor that manipulates
+digital performance data rather than recorded audio waveforms to produce
+rhythmic repetitions. Unlike traditional audio delays that manipulate
+and repeat an existing audio signal, a MIDI delay duplicates the musical
+instructions sent to a synthesizer or sampler. This article explains
+what a MIDI delay is, how it differs from an audio delay, and the
+algorithmic process it uses to generate repeating Note On messages with
+decaying velocity values.</p>
+<h2 id="defining-the-midi-delay">Defining the MIDI Delay</h2>
+<p>A MIDI delay operates strictly within the MIDI protocol domain. When
+a musician plays a note on a keyboard, the instrument generates data
+packets containing information such as pitch, channel, and velocity. A
+MIDI delay intercepts these data packets, holds them in a buffer, and
+outputs duplicates at specified time intervals.</p>
+<p>Because the delay occurs before sound generation, each repetition
+triggers the target sound engine anew. This allows subsequent repeats to
+trigger new synthesizer envelope cycles, distinct round-robin sample
+layers, and dynamic filter responses, resulting in a cleaner and more
+modular performance than traditional audio echoes.</p>
+<h2 id="how-repeating-note-on-messages-are-generated">How Repeating Note
+On Messages Are Generated</h2>
+<p>The generation of repeating notes relies on a clock-synchronized or
+millisecond-based timing loop. The process unfolds in several precise
+steps:</p>
+<ol type="1">
+<li><strong>Message Interception:</strong> When a key is pressed, the
+MIDI delay receives a <code>Note On</code> message containing the note
+number (pitch) and an initial velocity value (ranging from 1 to
+127).</li>
+<li><strong>Time Calculation:</strong> The processor reads its timing
+parameters—either set to absolute milliseconds or synchronized to
+musical divisions (such as 1/8 notes or 1/16 notes based on the host
+tempo). It calculates the target timestamp for when the first repetition
+should occur.</li>
+<li><strong>Queueing and Re-transmission:</strong> The system places the
+note event into a scheduling buffer. Once the internal clock reaches the
+calculated timestamp, the processor transmits a new <code>Note On</code>
+message with the identical note number to the destination sound
+generator.</li>
+<li><strong>Note Off Pairing:</strong> To maintain proper articulation
+and prevent hanging notes, the processor also tracks the original
+<code>Note Off</code> message (or note duration) and generates
+corresponding <code>Note Off</code> messages for every delayed
+iteration.</li>
+</ol>
+<h2 id="the-velocity-decay-mechanism">The Velocity Decay Mechanism</h2>
+<p>In an audio delay, repetitions fade out because the amplitude of the
+audio waveform is reduced through a feedback circuit. In a MIDI delay,
+volume attenuation is achieved mathematically by lowering the velocity
+parameter of each successive <code>Note On</code> event.</p>
+<h3 id="the-feedback-calculation">The Feedback Calculation</h3>
+<p>The reduction in velocity is controlled by a feedback or decay
+setting within the effect's algorithm. This is calculated using either a
+multiplicative scaling factor or a fixed subtraction method:</p>
+<ul>
+<li><strong>Multiplicative Scaling:</strong> The algorithm multiplies
+the previous velocity by a decay coefficient (e.g., <span
+class="math inline">\(Velocity_{next} = Velocity_{current} \times
+0.75\)</span>). This creates an exponential decay that closely mimics
+acoustic energy dissipation.</li>
+<li><strong>Fixed Subtraction:</strong> The algorithm subtracts a
+constant integer value on each cycle (e.g., <span
+class="math inline">\(Velocity_{next} = Velocity_{current} -
+15\)</span>). This yields a linear decay rate.</li>
+</ul>
+<h3 id="cutoff-and-termination">Cutoff and Termination</h3>
+<p>MIDI velocity values are strictly limited to integers between 0 and
+127, where a velocity of 0 is functionally interpreted as a
+<code>Note Off</code> command.</p>
+<p>During each repetition cycle, the processor calculates the new
+velocity value and checks it against a minimum threshold:</p>
+<ul>
+<li>If the newly calculated velocity is greater than zero (or a
+user-defined threshold, such as 1), the processor rounds the value to
+the nearest integer and schedules the new <code>Note On</code>
+event.</li>
+<li>Once the mathematical decay causes the velocity value to reach zero
+or fall below the minimum threshold, the algorithm stops generating
+repetitions for that note event and clears it from the buffer.</li>
+</ul>
+<p>Through this digital feedback loop, the MIDI delay continuously
+outputs distinct, progressively softer performance instructions that
+cause the target instrument to play the musical phrase until it
+naturally fades away.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/what-is-a-midi-delay-effect-and-how-does-it-work';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

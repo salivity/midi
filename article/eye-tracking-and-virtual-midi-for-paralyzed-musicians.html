@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye Tracking and Virtual MIDI for Paralyzed Musicians - midi</title>
+    <meta name="description" content="Eye-tracking technology serves as a vital bridge between creative intent and musical output for individuals living with severe paralysis, such as those with ALS, spinal cord injuries, or locked-in syndrome. By translating ocular movement into actionable d">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/eye-tracking-and-virtual-midi-for-paralyzed-musicians">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Eye Tracking and Virtual MIDI for Paralyzed Musicians - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/eye-tracking-and-virtual-midi-for-paralyzed-musicians" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Eye-tracking technology serves as a vital bridge between creative intent and musical output for individuals living with severe paralysis, such as those with ALS, spinal cord injuries, or locked-in syndrome. By translating ocular movement into actionable d" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="eye-tracking-and-virtual-midi-for-paralyzed-musicians">Eye
+Tracking and Virtual MIDI for Paralyzed Musicians</h1>
+<p>Eye-tracking technology serves as a vital bridge between creative
+intent and musical output for individuals living with severe paralysis,
+such as those with ALS, spinal cord injuries, or locked-in syndrome. By
+translating ocular movement into actionable digital data, specialized
+software enables users to trigger and manipulate virtual MIDI (Musical
+Instrument Digital Interface) controllers. This article explores how
+gaze-tracking systems function as real-time musical interfaces, how they
+communicate with modern digital audio workstations, and the creative
+autonomy they restore to paralyzed performers.</p>
+<h3 id="translating-gaze-into-musical-data">Translating Gaze into
+Musical Data</h3>
+<p>Eye-tracking systems rely on near-infrared hardware and high-speed
+cameras to track the user's pupil position and corneal reflection.
+Software calibrates this data to determine the exact point of gaze on a
+computer display. In musical applications, the screen displays a virtual
+MIDI interface—such as an on-screen keyboard, a drum pad grid, or a
+matrix of chords.</p>
+<p>When a user focuses on a specific zone, the software registers the
+target note or parameter. To trigger the sound, systems generally use
+two methods:</p>
+<ul>
+<li><strong>Dwell Time:</strong> The user maintains their gaze on a
+specific key or pad for a predefined duration (measured in
+milliseconds), which generates a MIDI "Note On" message. Moving the eyes
+away sends a "Note Off" command.</li>
+<li><strong>Wink and Blink Detection:</strong> Deliberate blinks or
+micro-gestures can act as distinct switches, separating the act of
+looking at a note from actually striking it.</li>
+</ul>
+<h3 id="continuous-expression-and-parameter-control">Continuous
+Expression and Parameter Control</h3>
+<p>Beyond simply triggering individual notes, eye tracking allows for
+nuanced musical performance through continuous control. Virtual MIDI
+controllers can map the X and Y coordinates of a musician’s gaze to
+continuous controllers (CC messages).</p>
+<p>For example, a performer can modulate vibrato, filter sweeps, volume,
+or pitch bend by gliding their eyes along horizontal or vertical ribbons
+on the screen. Specialized algorithms smooth the natural jitter of eye
+movements (saccades) to ensure transitions sound musical rather than
+erratic, enabling expressive dynamics that mirror traditional acoustic
+instruments.</p>
+<h3 id="virtual-midi-routing-and-software-integration">Virtual MIDI
+Routing and Software Integration</h3>
+<p>Eye-tracking music applications do not typically generate complex
+synthesizer sounds on their own; instead, they function as input
+controllers. The software sends standard MIDI protocols through internal
+routing drivers (such as the IAC Driver on macOS or LoopMIDI on Windows)
+into standard Digital Audio Workstations (DAWs) like Ableton Live, Logic
+Pro, or Reaper.</p>
+<p>This routing capability allows the performer to access the same
+professional virtual instruments, sample libraries, and synthesizers
+used by non-disabled producers. Custom interfaces built in environments
+like Max/MSP or Pure Data frequently tailor the sensitivity, layouts,
+and scale locks (such as pentatonic or major scales) to minimize
+misfires and maximize the performer's speed.</p>
+<h3 id="enabling-creative-autonomy">Enabling Creative Autonomy</h3>
+<p>The primary role of eye tracking in this context is the elimination
+of physical barriers to real-time artistic agency. Rather than relying
+on step-by-step sequencing or passive assistance, paralyzed musicians
+regain the ability to improvise, participate in live ensembles, and
+control the timing and emotion of a performance directly. By converting
+intentional ocular motion into universal digital audio signals,
+eye-tracking software transforms standard computers into deeply
+expressive, accessible instruments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/eye-tracking-and-virtual-midi-for-paralyzed-musicians';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

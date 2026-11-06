@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyphonic Audio to MIDI: AI Model Limitations - midi</title>
+    <meta name="description" content="Automated polyphonic audio-to-MIDI conversion uses machine learning to transcribe complex, multi-layered audio recordings into editable musical notes. While modern deep learning algorithms have significantly advanced music transcription, current models st">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/polyphonic-audio-to-midi-ai-model-limitations">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Polyphonic Audio to MIDI: AI Model Limitations - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/polyphonic-audio-to-midi-ai-model-limitations" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Automated polyphonic audio-to-MIDI conversion uses machine learning to transcribe complex, multi-layered audio recordings into editable musical notes. While modern deep learning algorithms have significantly advanced music transcription, current models st" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="polyphonic-audio-to-midi-ai-model-limitations">Polyphonic Audio
+to MIDI: AI Model Limitations</h1>
+<p>Automated polyphonic audio-to-MIDI conversion uses machine learning
+to transcribe complex, multi-layered audio recordings into editable
+musical notes. While modern deep learning algorithms have significantly
+advanced music transcription, current models still encounter fundamental
+technical hurdles. These systems frequently struggle with harmonic
+interference, expressive human performance nuances, multi-instrument
+separation, and poor generalization beyond specific instruments like the
+piano.</p>
+<h2 id="harmonic-overlap-and-pitch-disambiguation">Harmonic Overlap and
+Pitch Disambiguation</h2>
+<p>The most significant physical limitation in polyphonic transcription
+is the collision of harmonic overtones. In polyphonic music, multiple
+notes sound simultaneously, causing their respective harmonic series to
+interlock. When two notes form common musical intervals—such as octaves,
+perfect fifths, or unisons—their overtones occupy identical frequency
+bins. Current neural networks often fail to determine whether a detected
+frequency peak belongs to the fundamental pitch of a higher note or an
+upper harmonic of a lower note, resulting in phantom notes or missed
+fundamentals.</p>
+<h2 id="timbre-interference-and-multi-instrument-separation">Timbre
+Interference and Multi-Instrument Separation</h2>
+<p>Current polyphonic transcription models perform best in
+single-instrument, homogeneous settings, particularly solo piano. When
+presented with multi-instrumental arrangements, such as a rock band or
+an orchestral ensemble, the task becomes exponentially more difficult.
+Models struggle to perform joint source separation and pitch detection
+simultaneously. When instruments share frequency spectra, AI often
+attributes notes to the incorrect MIDI track or conflates multiple
+instrument layers into a single garbled stream.</p>
+<h2 id="capturing-micro-expressivity-and-articulation">Capturing
+Micro-Expressivity and Articulation</h2>
+<p>MIDI captures not just pitch, but performance dynamics, including
+velocity, continuous pitch bends, vibrato, and articulation. Machine
+learning systems excel at binary classification (identifying whether a
+note exists or not), but struggle to accurately map performance
+subtleties:</p>
+<ul>
+<li><strong>Velocity Accuracy:</strong> Estimating how hard a note was
+struck depends heavily on mastering, compression, and distance from the
+microphone, leading models to assign inaccurate velocity values.</li>
+<li><strong>Pitch Variations:</strong> Continuous pitch bends,
+glissandos, and vocal or string vibrato are often incorrectly
+transcribed as rapid successions of distinct semitones rather than
+smooth pitch-wheel data.</li>
+<li><strong>Onset and Offset Precision:</strong> Detecting the exact
+start (onset) and end (offset) of a note is difficult with
+non-percussive sounds, such as bowed strings, woodwinds, or pads with
+long attack and release envelopes.</li>
+</ul>
+<h2 id="reverberation-and-acoustic-interference">Reverberation and
+Acoustic Interference</h2>
+<p>Real-world audio contains room reflections, reverberation, and
+environmental noise. Reverb causes frequency energy to linger long after
+an instrument stops producing sound. AI models frequently misinterpret
+decaying reverberant energy as sustained notes, leading to smeared note
+durations or false onsets. While algorithms can be trained on clean,
+isolated stems, their accuracy drops significantly when applied to live
+recordings or fully mastered commercial tracks.</p>
+<h2 id="lack-of-diverse-training-datasets">Lack of Diverse Training
+Datasets</h2>
+<p>Supervised learning requires paired data: raw audio aligned with
+precise ground-truth MIDI files. The majority of existing public
+datasets, such as MAESTRO, consist predominantly of classical piano
+recorded on specialized acoustic-digital hybrid pianos. Generating
+accurately aligned polyphonic data for other instruments—such as
+distorted guitars, expressive vocals, or full ensembles—is
+labor-intensive and technically challenging. Consequently, models
+overfit to piano mechanics and acoustic profiles, limiting their
+transferability to diverse music genres.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/polyphonic-audio-to-midi-ai-model-limitations';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

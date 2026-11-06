@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding MIDI 2.0 Profile Configuration - midi</title>
+    <meta name="description" content="MIDI 2.0 Profile Configuration is a feature of the MIDI-CI (Capability Inquiry) specification that allows connected musical instruments and software to automatically negotiate rules for how controllers, notes, and parameters interact. By establishing stan">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/understanding-midi-2-0-profile-configuration">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding MIDI 2.0 Profile Configuration - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/understanding-midi-2-0-profile-configuration" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI 2.0 Profile Configuration is a feature of the MIDI-CI (Capability Inquiry) specification that allows connected musical instruments and software to automatically negotiate rules for how controllers, notes, and parameters interact. By establishing stan" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="understanding-midi-20-profile-configuration">Understanding MIDI
+2.0 Profile Configuration</h1>
+<p>MIDI 2.0 Profile Configuration is a feature of the MIDI-CI
+(Capability Inquiry) specification that allows connected musical
+instruments and software to automatically negotiate rules for how
+controllers, notes, and parameters interact. By establishing
+standardized sets of behaviors called "Profiles," devices can instantly
+configure themselves without manual MIDI mapping. This article breaks
+down how MIDI 2.0 Profile Configuration functions and explains how it
+creates universal consistency for instruments like organ drawbars and
+drum modules.</p>
+<h2 id="what-is-midi-20-profile-configuration">What Is MIDI 2.0 Profile
+Configuration?</h2>
+<p>Under the traditional MIDI 1.0 specification, mapping hardware
+controllers to software or other sound modules required manual setup.
+Continuous Controller (CC) numbers differed between manufacturers,
+forcing musicians to rely on tedious "MIDI Learn" functions or custom
+mapping templates.</p>
+<p>MIDI 2.0 eliminates this friction using MIDI-CI Profile
+Configuration. When two MIDI 2.0 devices connect, they perform a
+bidirectional handshake. During this process, one device can ask, "Do
+you support this Profile?" If both agree, the Profile is turned on, and
+both devices immediately conform to a pre-defined set of control
+standards, message formats, and response behaviors. Profiles can be
+industry-standard (defined by the MIDI Association) or
+manufacturer-specific.</p>
+<h2 id="standardizing-synth-and-organ-drawbars">Standardizing Synth and
+Organ Drawbars</h2>
+<p>Tone-wheel organ simulations and specialized synthesizers rely
+heavily on drawbars to sculpt harmonics. In MIDI 1.0, configuring
+drawbars was notoriously inconsistent:</p>
+<ul>
+<li>Different plugins mapped harmonic footages (e.g., 16', 5 1/3', 8',
+4') to arbitrary CC numbers.</li>
+<li>Physical drawbar hardware often pulled outward to increase volume
+(inverting the standard 0–127 value curve), which frequently clashed
+with synth software expecting higher values to push inward.</li>
+</ul>
+<p>A standardized <strong>Drawbar Profile</strong> solves this by
+establishing an explicit definition for every harmonic element:</p>
+<ol type="1">
+<li><strong>Fixed Harmonic Assignment:</strong> Specific footages are
+assigned predetermined controller messages, ensuring the physical 8'
+drawbar always controls the 8' harmonic in the software engine.</li>
+<li><strong>Standardized Value Scaling:</strong> The profile defines
+value polarities and ranges so that drawing a physical slider outward
+always yields the proper sonic increase, regardless of brand.</li>
+<li><strong>Dedicated Performance Controls:</strong> Associated features
+like rotary speaker speed (slow/fast/brake), vibrato/chorus type, and
+percussion decay are mapped to universal targets.</li>
+</ol>
+<p>Once the Drawbar Profile is activated, any compliant drawbar
+controller works out of the box with any compliant organ plugin or synth
+module.</p>
+<h2 id="standardizing-drum-maps-and-articulations">Standardizing Drum
+Maps and Articulations</h2>
+<p>While MIDI 1.0 introduced the General MIDI (GM) drum map, it was too
+rigid and limited for modern production. It primarily fixed certain
+percussion sounds to specific note numbers on Channel 10, but it
+provided no framework for deep multi-sampling, positional sensing, or
+complex electronic drum articulations.</p>
+<p>A standardized <strong>Drum Profile</strong> modernizes percussion
+mapping by defining how pad inputs translate to sound engines:</p>
+<ul>
+<li><strong>Rich Articulations:</strong> Instead of treating a snare
+drum as a single note trigger, the Drum Profile accommodates modern pad
+capabilities—such as center hits, edge hits, rimshots, cross-sticks, and
+positional sensing—using consistent message structures.</li>
+<li><strong>Hi-Hat States:</strong> Electronic hi-hat systems require
+continuous pedal position data paired with variable bow, edge, and
+splash articulations. The profile provides standard parameters so pedal
+openness accurately modulates the triggering sample across hardware from
+different brands.</li>
+<li><strong>Extended Kit Navigation:</strong> Modern electronic kits
+containing auxiliary percussion, secondary kicks, or stacked cymbals
+automatically match up with corresponding sound slots in the receiving
+sampler without requiring manual note remapping.</li>
+</ul>
+<h2 id="the-impact-on-musical-workflow">The Impact on Musical
+Workflow</h2>
+<p>By removing the configuration barrier between controllers and sound
+generators, MIDI 2.0 Profile Configuration transforms dynamic hardware
+into true plug-and-play instruments. Whether performing with
+multi-harmonic organ drawbars, acoustic drum modules, or analog
+synthesizers, musicians spend less time programming controller
+assignments and more time playing.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/understanding-midi-2-0-profile-configuration';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

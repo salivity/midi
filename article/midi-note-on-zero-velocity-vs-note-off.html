@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Note On Zero Velocity vs Note Off - midi</title>
+    <meta name="description" content="In the MIDI 1.0 specification, transmitting a Note On command with a velocity value of zero functionally serves as a Note Off command. This design choice was engineered primarily to optimize data transmission over low-bandwidth serial connections by lever">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-note-on-zero-velocity-vs-note-off">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Note On Zero Velocity vs Note Off - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-note-on-zero-velocity-vs-note-off" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the MIDI 1.0 specification, transmitting a Note On command with a velocity value of zero functionally serves as a Note Off command. This design choice was engineered primarily to optimize data transmission over low-bandwidth serial connections by lever" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-note-on-zero-velocity-vs-note-off">MIDI Note On Zero
+Velocity vs Note Off</h1>
+<p>In the MIDI 1.0 specification, transmitting a Note On command with a
+velocity value of zero functionally serves as a Note Off command. This
+design choice was engineered primarily to optimize data transmission
+over low-bandwidth serial connections by leveraging a feature called
+"Running Status." Modern digital audio workstations and hardware
+synthesizers treat a Note On message with zero velocity as identical to
+a dedicated Note Off message, initiating the release stage of a sound
+without requiring an explicit change in the MIDI status byte.</p>
+<h3 id="the-structure-of-midi-note-messages">The Structure of MIDI Note
+Messages</h3>
+<p>Standard MIDI channel voice messages for triggering and releasing
+notes are composed of three bytes:</p>
+<ol type="1">
+<li><strong>Status Byte:</strong> Identifies the message type and the
+MIDI channel (e.g., <code>0x90</code> represents a Note On event on
+Channel 1, while <code>0x80</code> represents a Note Off event on
+Channel 1).</li>
+<li><strong>Data Byte 1:</strong> Identifies the MIDI note number
+(0–127).</li>
+<li><strong>Data Byte 2:</strong> Identifies the velocity value
+(0–127).</li>
+</ol>
+<p>Under standard conditions, playing a note sends
+<code>0x90 [Note Number] [Velocity]</code>, and releasing that key sends
+<code>0x80 [Note Number] [Release Velocity]</code>.</p>
+<h3 id="bandwidth-optimization-via-running-status">Bandwidth
+Optimization via Running Status</h3>
+<p>The original MIDI 1.0 standard operates over a 31.25 kbaud serial
+interface, which is susceptible to latency and jitter when large volumes
+of data are transmitted simultaneously. To conserve bandwidth, the
+specification introduces Running Status.</p>
+<p>Running Status permits a MIDI transmitter to omit the status byte if
+subsequent messages share the same status type and channel. If a
+keyboard constantly switches between Note On (<code>0x90</code>) and
+Note Off (<code>0x80</code>), every action requires transmitting the
+full three bytes because the status byte changes with every press and
+release.</p>
+<p>By defining a Note On message with a velocity of zero
+(<code>0x90 [Note Number] 0x00</code>) as a functional release command,
+the transmitter never needs to leave the Note On status. Once the
+initial <code>0x90</code> byte is sent, all subsequent note presses and
+releases require only two bytes—the note number and the
+velocity—reducing data overhead by roughly 33% during dense musical
+passages.</p>
+<h3 id="functional-behavior-at-the-receiver">Functional Behavior at the
+Receiver</h3>
+<p>When a MIDI receiver parses incoming data, it evaluates both the
+status byte and the velocity byte:</p>
+<ul>
+<li>If it encounters a dedicated Note Off status byte
+(<code>0x80</code>), it ends the specified note immediately.</li>
+<li>If it encounters a Note On status byte (<code>0x90</code>) with a
+velocity greater than zero, it triggers the note's attack phase.</li>
+<li>If it encounters a Note On status byte (<code>0x90</code>) where the
+velocity byte equals <code>0</code>, internal logic automatically routes
+this to the note-ending handler.</li>
+</ul>
+<p>In both termination scenarios, the sound generator enters the release
+stage of its amplitude envelope.</p>
+<h3 id="the-single-difference-release-velocity">The Single Difference:
+Release Velocity</h3>
+<p>The only operational distinction between the two approaches involves
+release velocity (often called "note-off velocity"). A dedicated Note
+Off message (<code>0x80</code>) uses its second data byte to indicate
+how quickly the key was released, allowing compatible synthesizers to
+modulate the length or timbre of the sound's release tail. Because Note
+On with zero velocity fixes the velocity byte at zero to signal the
+release, it cannot carry variable release velocity data. However,
+because the vast majority of commercial MIDI controllers and sound
+engines do not utilize release velocity, Note On with zero velocity
+remains a standard implementation across the industry.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-note-on-zero-velocity-vs-note-off';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI RPN vs NRPN: Key Differences Explained - midi</title>
+    <meta name="description" content="In MIDI communication, Registered Parameter Numbers (RPN) and Non-Registered Parameter Numbers (NRPN) are methods used to extend the standard 7-bit Control Change (CC) space, allowing devices to transmit 14-bit parameter addresses and high-resolution data">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-rpn-vs-nrpn-key-differences-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI RPN vs NRPN: Key Differences Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-rpn-vs-nrpn-key-differences-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In MIDI communication, Registered Parameter Numbers (RPN) and Non-Registered Parameter Numbers (NRPN) are methods used to extend the standard 7-bit Control Change (CC) space, allowing devices to transmit 14-bit parameter addresses and high-resolution data" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-rpn-vs-nrpn-key-differences-explained">MIDI RPN vs NRPN:
+Key Differences Explained</h1>
+<p>In MIDI communication, Registered Parameter Numbers (RPN) and
+Non-Registered Parameter Numbers (NRPN) are methods used to extend the
+standard 7-bit Control Change (CC) space, allowing devices to transmit
+14-bit parameter addresses and high-resolution data. While both
+protocols follow an identical four-part transaction structure—combining
+parameter selection, data entry, and parameter deselect—they
+fundamentally differ in their standardization and the specific Control
+Change messages used to address them.</p>
+<h3 id="standardization-and-scope">Standardization and Scope</h3>
+<p>The primary conceptual difference between RPN and NRPN lies in
+parameter ownership:</p>
+<ul>
+<li><strong>RPN (Registered Parameter Number):</strong> These parameters
+are standardized and defined universally by the MIDI Manufacturers
+Association (MMA) and the Association of Musical Electronics Industry
+(AMEI). Because they are standard specifications, any MIDI device
+supporting an RPN will interpret it the same way. Common examples
+include Pitch Bend Sensitivity (RPN 0,0), Master Fine Tuning (RPN 0,1),
+and Master Coarse Tuning (RPN 0,2).</li>
+<li><strong>NRPN (Non-Registered Parameter Number):</strong> These
+parameters are manufacturer-specific and proprietary. Hardware and
+software developers use NRPNs to control unique internal synth engine
+features—such as filter resonance, oscillator wavetables, or envelope
+decay rates—without needing approval from the MMA. Because they are not
+standardized, NRPN values defined on one synthesizer will likely control
+completely different functions or be ignored entirely on another.</li>
+</ul>
+<h3 id="cc-message-allocation">CC Message Allocation</h3>
+<p>Technically, the transaction process differs only by the specific
+MIDI Control Change (CC) numbers assigned to target the parameter:</p>
+<ul>
+<li><strong>RPN Selection:</strong> Uses <strong>CC 101</strong> for the
+Parameter MSB (Most Significant Byte) and <strong>CC 100</strong> for
+the Parameter LSB (Least Significant Byte).</li>
+<li><strong>NRPN Selection:</strong> Uses <strong>CC 99</strong> for the
+Parameter MSB and <strong>CC 98</strong> for the Parameter LSB.</li>
+</ul>
+<h3 id="shared-data-transmission">Shared Data Transmission</h3>
+<p>Once the target parameter is selected—via either CC 101/100 or CC
+99/98—the method used to change its value is identical for both RPN and
+NRPN:</p>
+<ol type="1">
+<li><strong>Data Entry MSB:</strong> CC 6 sets the coarse value of the
+selected parameter (values 0–127).</li>
+<li><strong>Data Entry LSB:</strong> CC 38 sets the fine adjustment
+(values 0–127), enabling high-resolution 14-bit data (up to 16,384
+values).</li>
+<li><strong>Step Adjustments:</strong> CC 96 (Data Increment) and CC 97
+(Data Decrement) can alter the current value up or down in discrete
+single-step units.</li>
+</ol>
+<h3 id="transaction-reset-null-parameter">Transaction Reset (Null
+Parameter)</h3>
+<p>To prevent accidental parameter alteration by stray CC 6 or CC 38
+messages, good practice dictates "closing" the transaction. This is done
+by sending the "Null" parameter:</p>
+<ul>
+<li>For RPN transactions, send CC 101 with a value of 127, followed by
+CC 100 with a value of 127.</li>
+<li>For NRPN transactions, send CC 99 with a value of 127, followed by
+CC 98 with a value of 127.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-rpn-vs-nrpn-key-differences-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

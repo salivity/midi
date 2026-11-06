@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping MIDI Joysticks to 3D Spatial Audio Coordinates - midi</title>
+    <meta name="description" content="Mapping physical hardware joysticks to spatial 3D audio coordinates bridges tactile mixing workflows with immersive sound environments like Dolby Atmos, Ambisonics, and binaural audio. By assigning continuous controller (MIDI CC) messages to the physical">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/mapping-midi-joysticks-to-3-d-spatial-audio-coordinates">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mapping MIDI Joysticks to 3D Spatial Audio Coordinates - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/mapping-midi-joysticks-to-3-d-spatial-audio-coordinates" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mapping physical hardware joysticks to spatial 3D audio coordinates bridges tactile mixing workflows with immersive sound environments like Dolby Atmos, Ambisonics, and binaural audio. By assigning continuous controller (MIDI CC) messages to the physical" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="mapping-midi-joysticks-to-3d-spatial-audio-coordinates">Mapping
+MIDI Joysticks to 3D Spatial Audio Coordinates</h1>
+<p>Mapping physical hardware joysticks to spatial 3D audio coordinates
+bridges tactile mixing workflows with immersive sound environments like
+Dolby Atmos, Ambisonics, and binaural audio. By assigning continuous
+controller (MIDI CC) messages to the physical axes of a joystick,
+engineers can manipulate sound sources across X, Y, and Z planes in real
+time. This guide outlines how to configure controller hardware, route
+control data inside a Digital Audio Workstation (DAW), link CCs to
+spatial panning plugins, and calibrate coordinate behavior for fluid
+multi-dimensional positioning.</p>
+<h3 id="1-hardware-configuration-and-axis-assignment">1. Hardware
+Configuration and Axis Assignment</h3>
+<p>Most modern USB or 5-pin MIDI joysticks—ranging from standard flight
+sticks to dedicated studio controllers—output data along two to three
+primary axes.</p>
+<ul>
+<li><strong>X-Axis (Horizontal tilt):</strong> Assign to a free CC
+number (e.g., CC 16).</li>
+<li><strong>Y-Axis (Vertical tilt):</strong> Assign to a secondary CC
+number (e.g., CC 17).</li>
+<li><strong>Z-Axis (Twist rotation or separate throttle fader):</strong>
+Assign to a tertiary CC number (e.g., CC 18).</li>
+</ul>
+<p>If using a gaming joystick or DIY controller (such as an Arduino or
+Teensy board), utilize controller software or firmware to ensure the
+hardware transmits standard 7-bit MIDI CC values (0–127) or 14-bit
+high-resolution values for finer positional resolution.</p>
+<h3 id="2-daw-setup-and-track-routing">2. DAW Setup and Track
+Routing</h3>
+<p>Connect the joystick to your workstation and verify its input within
+your DAW:</p>
+<ol type="1">
+<li>Enable the joystick as an active MIDI input device inside your DAW’s
+MIDI settings, ensuring control messages (Remote/Control Surface mode)
+are permitted.</li>
+<li>Create an audio track containing the source audio you wish to
+spatialize.</li>
+<li>Insert your spatial panner or immersive encoder plugin (e.g., Dolby
+Atmos Panner, IEM StereoEncoder, or IRCAM Spat).</li>
+<li>Create a dedicated MIDI or Instrument track set to receive inputs
+from the joystick, and route its output directly to the spatial audio
+plugin on the target track.</li>
+</ol>
+<h3 id="3-coordinate-system-mapping">3. Coordinate System Mapping</h3>
+<p>Spatial audio software handles coordinates in either Cartesian or
+Spherical formats. Map the CC parameters accordingly:</p>
+<h4 id="cartesian-mode-x-y-z">Cartesian Mode (X, Y, Z)</h4>
+<ul>
+<li><strong>X (Left/Right):</strong> Map CC 16. A value of 0 represents
+full left, 64 is the center, and 127 is full right.</li>
+<li><strong>Y (Front/Back):</strong> Map CC 17. A value of 0 represents
+rear/behind the listener, 64 is center, and 127 is front.</li>
+<li><strong>Z (Height/Elevation):</strong> Map CC 18. A value of 0
+places the audio at ear level or below, while 127 places it at maximum
+ceiling height.</li>
+</ul>
+<h4 id="spherical-mode-azimuth-elevation-distance">Spherical Mode
+(Azimuth, Elevation, Distance)</h4>
+<ul>
+<li><strong>Azimuth:</strong> Map CC 16 to horizontal panning around the
+listener (-180° to +180°).</li>
+<li><strong>Elevation:</strong> Map CC 17 to vertical trajectory (-90°
+to +90°).</li>
+<li><strong>Distance:</strong> Map CC 18 to radius scaling (0m to
+maximum defined boundary).</li>
+</ul>
+<p>Use the plugin's native "MIDI Learn" feature or the DAW’s parameter
+modulation/mapping utility (such as Reaper's Parameter Modulation or
+Ableton’s MIDI Map) to bind each CC to its respective dimension.</p>
+<h3 id="4-calibration-and-response-shaping">4. Calibration and Response
+Shaping</h3>
+<p>To achieve production-grade control, refine how the physical hardware
+interprets gestures:</p>
+<ul>
+<li><strong>Deadzones:</strong> Configure a 2–5% deadzone around the
+center position (value 64) via the controller's software to prevent
+cursor drift when the stick is resting.</li>
+<li><strong>Spring-Back vs. Hold:</strong> If the joystick features
+spring-loaded auto-centering, it is ideal for dynamic, velocity-like
+gestures. For static positioning, disable the internal spring mechanism
+or use an automation mode (such as "Latch" or "Touch") so the sound
+source remains at its placed position when the stick is released.</li>
+<li><strong>Smoothing and Filtering:</strong> Apply low-pass filtering
+or slew rate limits within the plugin’s MIDI mapping parameters to
+eliminate quantization steps or jerky movements inherent in standard
+7-bit MIDI streams.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/mapping-midi-joysticks-to-3-d-spatial-audio-coordinates';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

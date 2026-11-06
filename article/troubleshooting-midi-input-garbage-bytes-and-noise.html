@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting MIDI Input Garbage Bytes and Noise - midi</title>
+    <meta name="description" content="A continuous flood of unexpected active sensing bytes (0xFE) or corrupted data on a MIDI input is typically caused by electrical issues in the optoisolator circuit or cable interface, most notably a floating UART receive line, a failing pull-up resistor,">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/troubleshooting-midi-input-garbage-bytes-and-noise">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Troubleshooting MIDI Input Garbage Bytes and Noise - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/troubleshooting-midi-input-garbage-bytes-and-noise" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A continuous flood of unexpected active sensing bytes (0xFE) or corrupted data on a MIDI input is typically caused by electrical issues in the optoisolator circuit or cable interface, most notably a floating UART receive line, a failing pull-up resistor," />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="troubleshooting-midi-input-garbage-bytes-and-noise">Troubleshooting
+MIDI Input Garbage Bytes and Noise</h1>
+<p>A continuous flood of unexpected active sensing bytes
+(<code>0xFE</code>) or corrupted data on a MIDI input is typically
+caused by electrical issues in the optoisolator circuit or cable
+interface, most notably a floating UART receive line, a failing pull-up
+resistor, or a degraded optocoupler. Because MIDI idle state is held at
+logic high, brief transient drops in voltage are misinterpreted by the
+receiving Universal Asynchronous Receiver-Transmitter (UART) as start
+bits, resulting in false active sensing messages or framing errors.</p>
+<h2 id="the-electrical-cause-false-start-bits">The Electrical Cause:
+False Start Bits</h2>
+<p>Standard MIDI 1.0 operates as an optically isolated 5 mA current loop
+running at 31.25 kbaud. In this design:</p>
+<ul>
+<li><strong>Idle (Mark):</strong> Current does not flow through the loop
+when disconnected, but the receiver’s internal UART input is held at a
+continuous <strong>Logic HIGH (Mark)</strong> via a pull-up resistor
+connected to the optocoupler's output transistor or logic gate.</li>
+<li><strong>Active (Space):</strong> When current flows through the MIDI
+input LED, the optocoupler activates, pulling the UART line down to
+<strong>Logic LOW (Space)</strong>.</li>
+<li><strong>Framing:</strong> Every byte begins with a single
+<code>0</code> (Start Bit), followed by 8 data bits, and terminates with
+at least one <code>1</code> (Stop Bit).</li>
+</ul>
+<p>When an electrical fault causes the logic line to briefly dip from
+HIGH to LOW and immediately recover to HIGH, the UART detects the dip as
+a valid Start Bit (<code>0</code>). As the line settles back to its idle
+HIGH state, the UART reads consecutive <code>1</code>s for the data
+payload and stop bit. Because MIDI data is transmitted least-significant
+bit (LSB) first, a brief negative glitch decodes as:</p>
+<ul>
+<li>Start Bit: <code>0</code></li>
+<li>Bit 0 (LSB): <code>0</code></li>
+<li>Bits 1–7: <code>1111111</code></li>
+<li>Stop Bit: <code>1</code></li>
+</ul>
+<p>In hexadecimal, binary <code>11111110</code> translates directly to
+<strong><code>0xFE</code></strong>—the MIDI Real-Time status byte for
+<strong>Active Sensing</strong>.</p>
+<h2 id="primary-circuit-failures">Primary Circuit Failures</h2>
+<h3 id="1-defective-or-missing-pull-up-resistor">1. Defective or Missing
+Pull-Up Resistor</h3>
+<p>The phototransistor output of the receiver’s optocoupler (such as a
+6N138 or PC900) requires an external pull-up resistor (typically 270 Ω
+to 4.7 kΩ) to hold the UART line at logic HIGH when inactive. If this
+resistor cracks, develops a cold solder joint, or drifts excessively
+high in resistance, the UART RX pin begins to float. The floating
+high-impedance pin picks up ambient electromagnetic interference (EMI)
+or power rail noise, triggering repeated false start bits.</p>
+<h3
+id="2-failing-optocoupler-and-degraded-current-transfer-ratio-ctr">2.
+Failing Optocoupler and Degraded Current Transfer Ratio (CTR)</h3>
+<p>Optocouplers degrade over time due to thermal stress and the aging of
+their internal infrared LEDs. As the Current Transfer Ratio (CTR)
+drops:</p>
+<ul>
+<li>Rise and fall switching times slow significantly.</li>
+<li>Output waveforms fail to meet standard transition thresholds within
+the 32-microsecond bit windows.</li>
+<li>The output stage may hover near the UART’s logic threshold, causing
+high-frequency ringing and jitter that the hardware UART parses as
+continuous streams of random garbage bytes.</li>
+</ul>
+<h3 id="3-power-supply-ripple-and-decoupling-failure">3. Power Supply
+Ripple and Decoupling Failure</h3>
+<p>The receiver-side optocoupler and Schmitt trigger logic require clean
+DC power. If the local bypass capacitor (typically a 0.1 µF ceramic
+capacitor placed adjacent to the optocoupler's VCC pin) fails or is
+omitted:</p>
+<ul>
+<li>Switching noise from digital microcontrollers or switched-mode power
+supplies (SMPS) modulates onto the optocoupler collector rail.</li>
+<li>The voltage dips below the receiver’s minimum high-level input
+voltage (<span class="math inline">\(V_{IH}\)</span>), generating
+rhythmic bursts of garbage data or repetitive <code>0xFE</code> commands
+synchronized with power supply ripple.</li>
+</ul>
+<h3 id="4-cable-leakage-and-damaged-optocoupler-reverse-diode">4. Cable
+Leakage and Damaged Optocoupler Reverse Diode</h3>
+<p>MIDI inputs feature a reverse-protection diode (such as a 1N4148) in
+parallel with the optocoupler’s internal LED to prevent reverse-polarity
+damage. If this protection diode fails, or if a partially shorted,
+moisture-contaminated cable introduces high-resistance bridging across
+pins 4 and 5:</p>
+<ul>
+<li>Small leakage currents hover near the optocoupler LED's forward
+threshold voltage (<span class="math inline">\(V_F \approx
+1.2\text{V}\)</span> to <span
+class="math inline">\(1.7\text{V}\)</span>).</li>
+<li>The receiver erratically toggles between logic states independently
+of valid incoming MIDI transmissions.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/troubleshooting-midi-input-garbage-bytes-and-noise';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

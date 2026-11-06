@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Sequencers Store Polyrhythmic Tracks - midi</title>
+    <meta name="description" content="MIDI sequencers store polyrhythmic tracks with differing lengths and independent loop points by decoupling individual track timelines from the global transport clock. Instead of forcing all data into a uniform measure-based grid, the sequencer treats each">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-sequencers-store-polyrhythmic-tracks">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Sequencers Store Polyrhythmic Tracks - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-sequencers-store-polyrhythmic-tracks" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI sequencers store polyrhythmic tracks with differing lengths and independent loop points by decoupling individual track timelines from the global transport clock. Instead of forcing all data into a uniform measure-based grid, the sequencer treats each" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-sequencers-store-polyrhythmic-tracks">How MIDI
+Sequencers Store Polyrhythmic Tracks</h1>
+<p>MIDI sequencers store polyrhythmic tracks with differing lengths and
+independent loop points by decoupling individual track timelines from
+the global transport clock. Instead of forcing all data into a uniform
+measure-based grid, the sequencer treats each track as an autonomous
+data stream governed by its own timebase, loop markers, and playhead
+position. By utilizing modular data structures, high-resolution tick
+counters, and modulo arithmetic, modern sequencers can play back
+sequences of arbitrary lengths—such as a 7-step hi-hat pattern alongside
+a 16-step kick drum—while maintaining continuous synchronization.</p>
+<h2 id="independent-track-architecture">Independent Track
+Architecture</h2>
+<p>At the code level, a sequencer models each track as a distinct object
+or data structure rather than a flat, monolithic list of MIDI events. A
+typical polyrhythmic track structure contains:</p>
+<ul>
+<li><strong>A Local Event List:</strong> A buffer of MIDI events (Note
+On, Note Off, CC values) stored with timestamps relative to the track's
+local origin rather than the master project timeline.</li>
+<li><strong>Local Boundary Pointers:</strong> Explicit properties
+defining <code>loop_start</code>, <code>loop_end</code>, and
+<code>track_length</code>, typically measured in internal clock ticks
+(Pulses Per Quarter Note, or PPQN).</li>
+<li><strong>A Local Playhead/Phase Accumulator:</strong> A
+floating-point or integer variable that tracks the current read position
+within that specific track.</li>
+<li><strong>A Clock Multiplier/Divider:</strong> A rational number
+(e.g., 3/2, 5/4, or 1/1) that scales incoming clock pulses to adjust the
+playback rate for metric polyrhythms.</li>
+</ul>
+<p>By isolating these parameters inside each track's memory space,
+changing the loop length or playback rate of one track has zero
+structural impact on any other track in the project.</p>
+<h2 id="delta-ticks-and-modulo-looping">Delta Ticks and Modulo
+Looping</h2>
+<p>Internal sequencer engines rely on a high-resolution integer clock
+running at a standard rate, such as 960 or 1920 PPQN. When handling
+independent loop points, the sequencer calculates playback using modulo
+arithmetic to determine which events to trigger.</p>
+<p>When the global transport advances, each track updates its internal
+phase counter:</p>
+<p><span class="math display">\[\text{Current Position} = (\text{Elapsed
+Track Ticks}) \pmod{\text{Loop Length}}\]</span></p>
+<p>Because the loop calculation is evaluated per-track, track lengths do
+not need to share a common denominator. If Track A has a loop length of
+1,920 ticks (a standard 4/4 measure at 480 PPQN) and Track B has a loop
+length of 2,400 ticks (a 5-beat phrase), the sequencer resets each
+track's read pointer back to its local <code>loop_start</code> as soon
+as its unique limit is reached. The events are kept in a sorted priority
+queue or flat array, and the read pointer fires any event whose
+timestamp falls within the current processing block.</p>
+<h2 id="polymeter-vs-polyrhythm-storage">Polymeter vs. Polyrhythm
+Storage</h2>
+<p>Sequencers differentiate between polymetric tracks (different phrase
+lengths running at the same tempo) and true polyrhythmic tracks
+(different tempos or subdivisions running concurrently):</p>
+<ul>
+<li><strong>Polymetric Storage:</strong> Events share the exact same
+tick duration (e.g., a sixteenth note is always 120 ticks). The file or
+memory buffer simply stores different terminal boundaries for each
+track. The tracks naturally shift out of phase over time because the
+modulo reset occurs at different intervals.</li>
+<li><strong>Polyrhythmic Storage:</strong> The sequencer stores
+time-scaling factors or uses independent PPQN definitions per track. For
+instance, playing five notes in the space of four notes requires the
+sequencer to store either fractional tick durations or multiply incoming
+master clock ticks by a factor of <span
+class="math inline">\(5/4\)</span> before updating the track's
+playhead.</li>
+</ul>
+<h2 id="project-file-serialization">Project File Serialization</h2>
+<p>Standard MIDI Files (SMF Type 1) represent events sequentially along
+a single timeline and lack native, standardized support for independent
+track loops. Consequently, sequencers store polyrhythmic configurations
+within their own proprietary file formats (such as XML, JSON, SQLite
+databases, or custom binary files).</p>
+<p>In these formats, the sequencer serializes:</p>
+<ol type="1">
+<li><strong>The Raw Pattern Data:</strong> The note values and their
+positions inside a normalized loop container (e.g., 0 to <span
+class="math inline">\(N\)</span> ticks).</li>
+<li><strong>Clip and Track Metadata:</strong> The explicit loop points,
+start offsets, time signatures, and play rates assigned to the
+container.</li>
+<li><strong>Playback Rules:</strong> Instructions detailing whether a
+clip should loop infinitely, truncate, or re-trigger based on global bar
+markers.</li>
+</ol>
+<p>When loading the file, the sequencer reconstitutes the independent
+virtual playheads, feeds them into the main scheduling loop, and relies
+on the playback engine's real-time math to keep the disparate patterns
+in sync.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-sequencers-store-polyrhythmic-tracks';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

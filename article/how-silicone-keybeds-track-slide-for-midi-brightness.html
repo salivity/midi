@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Silicone Keybeds Track Slide for MIDI Brightness - midi</title>
+    <meta name="description" content="Continuous silicone keybeds track longitudinal finger slide by pairing flexible surface elastomers with high-density sensor arrays that monitor positional shifts along the vertical axis of each key. By calculating the movement of a finger&#39;s pressure cente">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-silicone-keybeds-track-slide-for-midi-brightness">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Silicone Keybeds Track Slide for MIDI Brightness - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-silicone-keybeds-track-slide-for-midi-brightness" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Continuous silicone keybeds track longitudinal finger slide by pairing flexible surface elastomers with high-density sensor arrays that monitor positional shifts along the vertical axis of each key. By calculating the movement of a finger&#39;s pressure cente" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-silicone-keybeds-track-slide-for-midi-brightness">How
+Silicone Keybeds Track Slide for MIDI Brightness</h1>
+<p>Continuous silicone keybeds track longitudinal finger slide by
+pairing flexible surface elastomers with high-density sensor arrays that
+monitor positional shifts along the vertical axis of each key. By
+calculating the movement of a finger's pressure center in real time, the
+controller's internal processor translates physical motion into
+continuous control data. Through MIDI Polyphonic Expression (MPE), these
+coordinates are transmitted as dedicated per-note control change
+messages—typically MIDI CC 74—allowing independent modulation of
+acoustic brightness and timbre for every held note.</p>
+<h3 id="the-sensor-matrix-beneath-the-silicone">The Sensor Matrix
+Beneath the Silicone</h3>
+<p>Beneath the pliable, seamless silicone surface lies an advanced
+sensor grid. Most modern expressive keybeds utilize either a dense array
+of Force-Sensing Resistors (FSRs) or continuous capacitive sensor strips
+arranged along the length of each keywave.</p>
+<p>When a player presses into the silicone, the material compresses and
+distributes mechanical force onto the sensor plane below. Because the
+silicone is pliable and continuous, it creates a footprint of contact
+rather than a single pinpoint. The underlying sensor layer detects this
+contact area across multiple sensing nodes simultaneously.</p>
+<h3 id="detecting-longitudinal-motion">Detecting Longitudinal
+Motion</h3>
+<p>Longitudinal slide refers to the forward-and-backward movement along
+the long axis (Y-axis) of a key. Tracking this motion involves three
+primary steps:</p>
+<ol type="1">
+<li><strong>Continuous High-Speed Scanning:</strong> The hardware
+controller scans the sensor matrix at rates often exceeding 1,000 Hz to
+capture micro-movements without perceptible latency.</li>
+<li><strong>Centroid Calculation:</strong> Instead of reading only raw
+electrical resistance or capacitance at discrete points, the firmware
+calculates the "center of force" or centroid of the contact patch. As
+the finger glides along the silicone, the highest concentration of
+pressure shifts across neighboring sensor elements.</li>
+<li><strong>Interpolation Algorithms:</strong> Sophisticated
+mathematical interpolation estimates the exact position of the finger
+between discrete physical sensor nodes. This prevents stepping artifacts
+and yields a smooth, continuous stream of positional data.</li>
+</ol>
+<h3 id="translation-to-per-note-midi-cc-74">Translation to Per-Note MIDI
+CC 74</h3>
+<p>Standard MIDI sends control change messages globally across a single
+channel, meaning a brightness shift would affect all sounding notes
+simultaneously. Continuous keybeds overcome this limitation using MIDI
+Polyphonic Expression (MPE).</p>
+<p>When a note is triggered, the controller assigns that specific voice
+to its own dedicated MIDI channel within a defined zone. As the tracking
+algorithm detects movement along the Y-axis:</p>
+<ul>
+<li>The firmware maps the calculated Y-coordinate to values ranging from
+0 to 127 (or higher resolution 14-bit MIDI values).</li>
+<li>These values are formatted as MIDI CC 74 messages, which represent
+"Slide" or "Timbre" in the MPE specification.</li>
+<li>The message is sent exclusively through the MIDI channel assigned to
+that specific finger.</li>
+</ul>
+<h3 id="synthesizer-response-to-brightness-shifts">Synthesizer Response
+to Brightness Shifts</h3>
+<p>When the receiving MPE-compatible software or hardware synthesizer
+receives CC 74 data on a specific channel, it routes that data directly
+to the sound engine parameters assigned to that single voice. In most
+default synthesizer patches, CC 74 is routed to the cutoff frequency of
+a low-pass filter.</p>
+<p>Moving the finger upward along the silicone keybed raises the filter
+cutoff, letting higher harmonic frequencies pass through to create a
+brighter timbre. Sliding the finger downward lowers the cutoff,
+darkening the sound. Because the sensing and transmission occur
+independently per key, one note can open up in brightness while adjacent
+held notes remain completely unaffected.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-silicone-keybeds-track-slide-for-midi-brightness';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
