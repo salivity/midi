@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMF Marker Meta Events for Film Hit Points - midi</title>
+    <meta name="description" content="A Standard MIDI File (SMF) marker meta event is a non-musical data tag embedded within a MIDI sequence to label specific moments in time with descriptive text. In film scoring, composers rely on these markers to pinpoint and annotate precise visual hit po">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/smf-marker-meta-events-for-film-hit-points">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SMF Marker Meta Events for Film Hit Points - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/smf-marker-meta-events-for-film-hit-points" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A Standard MIDI File (SMF) marker meta event is a non-musical data tag embedded within a MIDI sequence to label specific moments in time with descriptive text. In film scoring, composers rely on these markers to pinpoint and annotate precise visual hit po" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="smf-marker-meta-events-for-film-hit-points">SMF Marker Meta
+Events for Film Hit Points</h1>
+<p>A Standard MIDI File (SMF) marker meta event is a non-musical data
+tag embedded within a MIDI sequence to label specific moments in time
+with descriptive text. In film scoring, composers rely on these markers
+to pinpoint and annotate precise visual hit points—such as scene cuts,
+explosions, or emotional shifts—ensuring that musical cues synchronize
+accurately with the picture across different digital audio workstations
+(DAWs) and scoring software.</p>
+<h3 id="technical-definition-of-an-smf-marker-meta-event">Technical
+Definition of an SMF Marker Meta Event</h3>
+<p>Under the Standard MIDI File specification, events are categorized
+into channel events (such as Note On, Note Off, and Control Changes) and
+meta events. While channel events transmit performance data to
+instruments, meta events communicate information about the file
+itself.</p>
+<p>The marker meta event is represented by the byte sequence
+<code>0xFF 0x06 [length] [text]</code>.</p>
+<ul>
+<li><code>0xFF</code> identifies the data as a meta event.</li>
+<li><code>0x06</code> designates the specific type as a "Marker."</li>
+<li><code>[length]</code> dictates the byte length of the following text
+payload.</li>
+<li><code>[text]</code> contains the ASCII string defining the marker
+name or description.</li>
+</ul>
+<p>Because it includes a timestamp (delta-time) relative to the tempo
+map, the marker is locked to a specific musical division (bars, beats,
+and ticks) or a precise real-world timecode frame, depending on the
+file's time format.</p>
+<h3 id="how-film-composers-use-markers-for-hit-points">How Film
+Composers Use Markers for Hit Points</h3>
+<p>In film music production, a "hit point" (or sync point) is an exact
+visual frame that requires a corresponding musical accent, tempo change,
+or dramatic shift. Composers use SMF marker meta events to map these
+moments methodically:</p>
+<ol type="1">
+<li><strong>Spotting and Annotation:</strong> During the spotting
+session, composers mark visual actions (for example, "Car Crash," "Door
+Slams," or "Character Smiles") directly on their timeline. These labels
+are written into the sequence as marker events.</li>
+<li><strong>Tempo Mapping and Calculation:</strong> Film cues often
+require complex tempo fluctuations, rubato passages, or meter changes to
+ensure that musical downbeats coincide with visual hits. Because marker
+meta events exist on the global tempo track, adjusting tempos in a DAW
+automatically recalculates where bars and beats fall relative to the
+absolute SMPTE timecode of the visual marker.</li>
+<li><strong>Cross-Platform Interoperability:</strong> A major challenge
+in film post-production is software diversity. A composer might write in
+Cubase or Digital Performer, the music editor works in Pro Tools, and
+the orchestrator prepares parts in Dorico or Sibelius. Exporting an SMF
+preserves these marker meta events. When imported into another
+workstation, the markers automatically populate the target software’s
+ruler or marker track with exact timings and labels intact.</li>
+<li><strong>Scoring and Orchestration Preparation:</strong> Notation
+software translates SMF marker meta events into score-level text
+annotations. Orchestrators and conductors use these markers above the
+measure lines to identify film cues, dialogue snippets, or visual hits,
+providing immediate dramatic context to the orchestra during a live
+recording session.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/smf-marker-meta-events-for-film-hit-points';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

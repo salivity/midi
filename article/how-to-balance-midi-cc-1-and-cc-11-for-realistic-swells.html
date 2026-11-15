@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Balance MIDI CC 1 and CC 11 for Realistic Swells - midi</title>
+    <meta name="description" content="This article outlines how modern orchestrators and mock-up producers balance MIDI Continuous Controllers CC 1 (Dynamics/Modulation) and CC 11 (Expression) to program realistic orchestral swells. By understanding how modern sample libraries map timbre agai">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-balance-midi-cc-1-and-cc-11-for-realistic-swells">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Balance MIDI CC 1 and CC 11 for Realistic Swells - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-balance-midi-cc-1-and-cc-11-for-realistic-swells" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article outlines how modern orchestrators and mock-up producers balance MIDI Continuous Controllers CC 1 (Dynamics/Modulation) and CC 11 (Expression) to program realistic orchestral swells. By understanding how modern sample libraries map timbre agai" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-balance-midi-cc-1-and-cc-11-for-realistic-swells">How to
+Balance MIDI CC 1 and CC 11 for Realistic Swells</h1>
+<p>This article outlines how modern orchestrators and mock-up producers
+balance MIDI Continuous Controllers CC 1 (Dynamics/Modulation) and CC 11
+(Expression) to program realistic orchestral swells. By understanding
+how modern sample libraries map timbre against volume, orchestrators can
+avoid the artificial "fader" effect and accurately simulate the organic
+rise and fall of acoustic acoustic ensembles performing hairpins and
+dynamic peaks.</p>
+<h3 id="understanding-the-roles-of-cc-1-and-cc-11">Understanding the
+Roles of CC 1 and CC 11</h3>
+<p>Realistic orchestral programming requires separating timbre from
+overall volume:</p>
+<ul>
+<li><strong>MIDI CC 1 (Dynamics):</strong> Governs dynamic layer
+crossfading. Moving CC 1 sweeps across recorded sample layers, shifting
+an instrument's sound from soft (<em>pianissimo</em>) to loud
+(<em>fortissimo</em>). In doing so, it introduces harmonic richness,
+high-frequency presence, and increased bow or breath resistance.</li>
+<li><strong>MIDI CC 11 (Expression):</strong> Acts as a secondary volume
+multiplier nested under the master track volume (CC 7). CC 11 adjusts
+amplitude without changing the underlying sample layer or tonal
+character.</li>
+</ul>
+<p>Relying exclusively on CC 1 creates issues because dynamic layers are
+discrete. Sweeping CC 1 across a swell often reveals phase cancellation
+artifacts between adjacent sample layers. Furthermore, the lowest layer
+of CC 1 rarely goes completely silent. Relying exclusively on CC 11
+merely sounds like an audio fader moving, lacking the natural spectral
+brightening that occurs when acoustic musicians play louder.</p>
+<h3 id="the-swell-architecture-combining-curves">The Swell Architecture:
+Combining Curves</h3>
+<p>To simulate an authentic section swell (<em>crescendo</em> into
+<em>decrescendo</em>), an orchestrator must link CC 1 and CC 11 through
+distinct but complementary trajectories:</p>
+<ol type="1">
+<li><p><strong>Carving the Base with CC 1:</strong> Draw CC 1 to
+establish the dynamic peak of the phrase. If a string section is
+intended to swell from <em>piano</em> to <em>mezzo-forte</em>, CC 1
+should start in the lower third of the controller range (roughly 30–45)
+and peak around the middle (roughly 70–85). The shape should follow an
+exponential or logarithmic curve rather than a linear line, matching the
+natural, non-linear energy transfer of a moving bow or breath
+pressure.</p></li>
+<li><p><strong>Refining Dynamic Exaggeration with CC 11:</strong> Draw
+CC 11 to amplify the perceived dynamic range. Acoustic swells naturally
+produce dramatic shifts in sound pressure level (SPL) that raw
+velocity-layered crossfades alone cannot replicate. While CC 1 handles
+the acoustic timbre changes, CC 11 should simultaneously rise to expand
+that amplitude envelope.</p></li>
+<li><p><strong>Managing <em>Dal Niente</em> and <em>Al Niente</em>
+(From/To Silence):</strong> Virtual instrument dynamic layers rarely
+reach complete silence at CC 1 value 0. To achieve a seamless swell out
+of nowhere (<em>dal niente</em>), pull CC 11 down to 0 while CC 1 is
+parked at its lowest dynamic layer. As the swell begins, lead the
+movement with CC 11 before CC 1 crossfades into louder layers. Mirror
+this process on the decay (<em>decrescendo</em>) by lowering CC 11 fully
+to 0 slightly after CC 1 has settled into its quietest layer.</p></li>
+</ol>
+<h3 id="offsetting-curves-to-simulate-human-timing">Offsetting Curves to
+Simulate Human Timing</h3>
+<p>In a live ensemble, acoustic volume and tonal brightness do not
+always peak at the exact same millisecond. Orchestrators replicate human
+performance imperfections by slightly offsetting the envelopes:</p>
+<ul>
+<li><strong>Timbral Lag in Brass and Woodwinds:</strong> Air column
+resonance means volume (CC 11) often leads slightly ahead of full
+harmonic saturation (CC 1). Lagging the CC 1 curve behind CC 11 by
+several milliseconds avoids a sterile, machine-like response.</li>
+<li><strong>Strings Peak Management:</strong> As strings approach the
+apex of a swell, players naturally control their bow speed to avoid
+harsh overtones. Peaking CC 11 slightly higher while easing back the
+maximum peak of CC 1 simulates a rounder, warmer apex that prevents
+virtual string sections from sounding thin or brittle at maximum
+effort.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-to-balance-midi-cc-1-and-cc-11-for-realistic-swells';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

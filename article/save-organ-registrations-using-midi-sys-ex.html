@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Organ Registrations Using MIDI SysEx - midi</title>
+    <meta name="description" content="Modern digital and hybrid pipe organs allow performers to save and recall complex stop registrations beyond internal memory limits by transmitting MIDI System Exclusive (SysEx) dumps to external devices. This article explains the technical mechanics of or">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/save-organ-registrations-using-midi-sys-ex">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Save Organ Registrations Using MIDI SysEx - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/save-organ-registrations-using-midi-sys-ex" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern digital and hybrid pipe organs allow performers to save and recall complex stop registrations beyond internal memory limits by transmitting MIDI System Exclusive (SysEx) dumps to external devices. This article explains the technical mechanics of or" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="save-organ-registrations-using-midi-sysex">Save Organ
+Registrations Using MIDI SysEx</h1>
+<p>Modern digital and hybrid pipe organs allow performers to save and
+recall complex stop registrations beyond internal memory limits by
+transmitting MIDI System Exclusive (SysEx) dumps to external devices.
+This article explains the technical mechanics of organ SysEx data, the
+necessary hardware and software tools required, and the step-by-step
+procedure for capturing, storing, and transmitting SysEx data packets
+back to the console to instantly restore entire registration
+combinations.</p>
+<h3 id="understanding-organ-sysex-communication">Understanding Organ
+SysEx Communication</h3>
+<p>Unlike standard MIDI messages that handle note-on/off events and
+continuous controllers, System Exclusive (SysEx) messages are
+manufacturer-specific data packets designed to transmit proprietary
+information. In digital consoles (such as those from Allen, Rodgers,
+Johannus, or Viscount) and pipe organs equipped with modern solid-state
+combination actions, SysEx messages encode the state of every stop tab,
+drawknob, coupler, and combination piston.</p>
+<p>A single SysEx registration dump includes the manufacturer ID, the
+specific model identifier, command instructions, the raw bitmapped data
+detailing which stops are engaged or disengaged across all divisions,
+and an End of Exclusive (EOX) byte (<code>F7</code>).</p>
+<h3 id="required-hardware-and-software">Required Hardware and
+Software</h3>
+<p>To manage SysEx dumps, an organist needs:</p>
+<ol type="1">
+<li><strong>A MIDI Interface:</strong> A reliable, low-latency
+USB-to-MIDI interface connected to the organ console's standard 5-pin
+DIN <code>MIDI IN</code> and <code>MIDI OUT</code> ports, or a direct
+USB-MIDI connection if the console supports it.</li>
+<li><strong>A SysEx Librarian or DAW:</strong> Free software utilities
+are the standard tool for this task:
+<ul>
+<li><strong>Windows:</strong> MIDI-OX or Bome SendSX.</li>
+<li><strong>macOS:</strong> Snoize SysEx Librarian.</li>
+<li><strong>iOS/iPadOS:</strong> Apps such as Sysex Base (via a
+compatible camera connection kit/MIDI interface).</li>
+</ul></li>
+</ol>
+<h3 id="how-to-save-a-registration-sending-the-dump-to-a-computer">How
+to Save a Registration (Sending the Dump to a Computer)</h3>
+<ol type="1">
+<li><strong>Establish Connections:</strong> Connect the organ's
+<code>MIDI OUT</code> port to the computer interface's
+<code>MIDI IN</code> port.</li>
+<li><strong>Set the Software to Record:</strong> Open your SysEx utility
+software, select your MIDI interface as the active input, and enable the
+"Record Many SysEx" or "Receive Dump" mode. The software is now waiting
+for an incoming stream.</li>
+<li><strong>Trigger the Console Dump:</strong>
+<ul>
+<li>Navigate to the organ console's onboard menu system (often found
+under <em>MIDI Settings</em>, <em>Memory</em>, or
+<em>Sequencer</em>).</li>
+<li>Select the option labeled <em>SysEx Dump</em>, <em>Send Memory</em>,
+or <em>MIDI Save</em>. Many consoles allow you to choose whether to send
+the entire piston memory, specific memory levels, or only the currently
+active registration.</li>
+<li>Confirm the operation. The console's display will typically read
+"Transmitting..." as the data is pushed.</li>
+</ul></li>
+<li><strong>Save and Archive:</strong> The software will display the
+received byte count and payload. Save this captured capture as a raw
+<code>.syx</code> file. Use a precise naming convention containing the
+composer, piece, console model, and date (e.g.,
+<code>Bach_Passacaglia_MemLevel3.syx</code>).</li>
+</ol>
+<h3 id="how-to-recall-a-registration-sending-the-dump-to-the-organ">How
+to Recall a Registration (Sending the Dump to the Organ)</h3>
+<ol type="1">
+<li><strong>Establish Connections:</strong> Connect the computer
+interface's <code>MIDI OUT</code> port to the organ's
+<code>MIDI IN</code> port.</li>
+<li><strong>Prepare the Console:</strong> Turn on the console and
+disengage any memory lock switches or write-protect settings. Many
+organs automatically listen for valid SysEx headers on their primary
+MIDI channel without needing to enter a dedicated receive menu.</li>
+<li><strong>Transmit the File:</strong> In the SysEx software, load your
+saved <code>.syx</code> file and click "Send" or "Transmit."</li>
+<li><strong>Observe the Console:</strong> If the console features
+motorized drawknobs or lighted stop tabs, the physical stops will move
+or illuminate to match the saved state. If the dump contains a
+multi-level combination memory backup, the onboard internal memory
+levels will populate automatically.</li>
+</ol>
+<h3 id="critical-considerations-and-troubleshooting">Critical
+Considerations and Troubleshooting</h3>
+<ul>
+<li><strong>Buffer Overruns and Speed Throttling:</strong> Physical
+solenoids on drawknob consoles require electrical current and time to
+engage. If stops fail to actuate or drops occur, lower the transmission
+speed inside the SysEx software by increasing the delay between data
+packets (set packet buffers to 256 or 512 bytes, with a 50–100
+millisecond delay between buffers).</li>
+<li><strong>Firmware Matching:</strong> SysEx dumps are strictly tied to
+specific console firmware architectures. A dump taken from an organ
+running one firmware revision may not successfully parse if the
+console's internal software is later upgraded. Keep firmware logs
+alongside archived <code>.syx</code> files.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/save-organ-registrations-using-midi-sys-ex';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

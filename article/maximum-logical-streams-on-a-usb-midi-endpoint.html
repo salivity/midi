@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maximum Logical Streams on a USB-MIDI Endpoint - midi</title>
+    <meta name="description" content="A standard USB-MIDI endpoint supports a maximum of 16 logical 16-channel streams. Under the Universal Serial Bus Device Class Definition for MIDI Devices, each USB-MIDI event packet allocates a 4-bit field to distinguish between different virtual cables o">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/maximum-logical-streams-on-a-usb-midi-endpoint">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Maximum Logical Streams on a USB-MIDI Endpoint - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/maximum-logical-streams-on-a-usb-midi-endpoint" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A standard USB-MIDI endpoint supports a maximum of 16 logical 16-channel streams. Under the Universal Serial Bus Device Class Definition for MIDI Devices, each USB-MIDI event packet allocates a 4-bit field to distinguish between different virtual cables o" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="maximum-logical-streams-on-a-usb-midi-endpoint">Maximum Logical
+Streams on a USB-MIDI Endpoint</h1>
+<p>A standard USB-MIDI endpoint supports a maximum of 16 logical
+16-channel streams. Under the Universal Serial Bus Device Class
+Definition for MIDI Devices, each USB-MIDI event packet allocates a
+4-bit field to distinguish between different virtual cables or streams.
+Because each logical stream carries the standard 16 polyphonic MIDI
+channels, a single endpoint can route up to 256 individual MIDI channels
+simultaneously without requiring additional physical hardware
+endpoints.</p>
+<h3 id="how-the-16-stream-limit-works">How the 16-Stream Limit
+Works</h3>
+<p>USB-MIDI transmits data using fixed 32-bit (4-byte) USB-MIDI Event
+Packets. Rather than sending a raw serial byte stream, the specification
+wraps standard MIDI data into these structured packets.</p>
+<p>The first byte of every 32-bit packet is split into two 4-bit
+nibbles:</p>
+<ul>
+<li><strong>Cable Number (CN):</strong> Bits 7–4 identify the target or
+source logical MIDI stream (virtual cable).</li>
+<li><strong>Code Index Number (CIN):</strong> Bits 3–0 classify the type
+of MIDI message being encapsulated (e.g., Note On, Control Change,
+SysEx).</li>
+</ul>
+<p>Because the Cable Number is strictly a 4-bit integer, its range is
+limited from <code>0x0</code> to <code>0xF</code> (0 to 15 in decimal).
+This architecture enables a single USB bulk or interrupt endpoint to
+multiplex up to 16 distinct, independent MIDI streams across one
+physical pipe.</p>
+<h3 id="total-channel-capacity">Total Channel Capacity</h3>
+<p>Each of the 16 logical cables acts as a completely independent MIDI
+bus:</p>
+<ul>
+<li><strong>Channels per Stream:</strong> 16 standard MIDI channels</li>
+<li><strong>Total Supported Streams:</strong> 16 virtual cables</li>
+<li><strong>Total Channel Capacity:</strong> <span
+class="math inline">\(16 \text{ streams} \times 16 \text{ channels} =
+256 \text{ channels}\)</span></li>
+</ul>
+<p>This structure allows complex multi-port MIDI interfaces and
+multi-timbral synthesizers to communicate with a host computer over a
+single USB endpoint, eliminating the need to allocate separate USB
+endpoints for every physical MIDI in/out port on the device.</p>
+<h3 id="continuity-in-usb-midi-20">Continuity in USB-MIDI 2.0</h3>
+<p>This 16-stream architecture remains intact in newer implementations.
+The USB-MIDI 2.0 standard, built around the Universal MIDI Packet (UMP)
+format, replaces the "Cable Number" terminology with "Group." Like its
+predecessor, the UMP Group field is defined as a 4-bit value
+representing Groups 0 through 15. Consequently, modern USB-MIDI
+configurations maintain the exact same architectural boundary of 16
+distinct 16-channel streams per endpoint.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/maximum-logical-streams-on-a-usb-midi-endpoint';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

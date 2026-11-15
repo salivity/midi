@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expression Pedal Pot Resistance and MIDI Linearity - midi</title>
+    <meta name="description" content="An expression pedal operates as a variable voltage divider that an analog-to-digital converter (ADC) inside a MIDI controller reads to generate continuous control data. In a theoretically ideal circuit, potentiometer resistance values like 10kΩ or 50kΩ do">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/expression-pedal-pot-resistance-and-midi-linearity">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Expression Pedal Pot Resistance and MIDI Linearity - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/expression-pedal-pot-resistance-and-midi-linearity" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="An expression pedal operates as a variable voltage divider that an analog-to-digital converter (ADC) inside a MIDI controller reads to generate continuous control data. In a theoretically ideal circuit, potentiometer resistance values like 10kΩ or 50kΩ do" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="expression-pedal-pot-resistance-and-midi-linearity">Expression
+Pedal Pot Resistance and MIDI Linearity</h1>
+<p>An expression pedal operates as a variable voltage divider that an
+analog-to-digital converter (ADC) inside a MIDI controller reads to
+generate continuous control data. In a theoretically ideal circuit,
+potentiometer resistance values like 10kΩ or 50kΩ do not change the
+linearity of translated MIDI values, because the voltage ratio remains
+identical. In real-world hardware, however, the interaction between the
+potentiometer’s total resistance and the receiving circuit’s input
+impedance introduces loading effects that can significantly warp a
+linear sweep into an uneven, non-linear MIDI response.</p>
+<h3 id="the-voltage-divider-principle">The Voltage Divider
+Principle</h3>
+<p>Expression pedals work by applying a reference voltage (typically
++3.3V or +5V) across the outer lugs of a potentiometer while the wiper
+terminal reads the position. In an unloaded system, the output voltage
+is governed strictly by the ratio of the wiper’s position along the
+resistive track:</p>
+<p><span class="math display">\[\text{V}_{\text{out}} =
+\text{V}_{\text{ref}} \times
+\left(\frac{\text{R}_{\text{wiper}}}{\text{R}_{\text{total}}}\right)\]</span></p>
+<p>Assuming the potentiometer has a linear taper (type "B"), the output
+voltage increases proportionally to foot movement. The host controller’s
+ADC samples this voltage and digitizes it into standard MIDI values
+(typically 0 to 127 for 7-bit Control Change messages, or 0 to 16,383
+for 14-bit high-resolution MIDI). Because this is a relative voltage
+ratio, a 10kΩ pot and a 50kΩ pot output identical theoretical voltages
+at 50% travel.</p>
+<h3 id="input-impedance-and-the-loading-effect">Input Impedance and the
+Loading Effect</h3>
+<p>The deviation from linearity occurs because the receiving MIDI device
+does not possess infinite input impedance. The sensing input pin of the
+microcontroller or ADC circuit places its own internal input impedance
+(<span class="math inline">\(R_{in}\)</span>) in parallel with the
+potentiometer’s lower half (<span
+class="math inline">\(R_{lower}\)</span>).</p>
+<p>The equivalent resistance seen at the wiper is:</p>
+<p><span class="math display">\[\text{R}_{\text{parallel}} =
+\frac{\text{R}_{\text{lower}} \times
+\text{R}_{\text{in}}}{\text{R}_{\text{lower}} +
+\text{R}_{\text{in}}}\]</span></p>
+<p>When <span class="math inline">\(R_{in}\)</span> is significantly
+larger than the total resistance of the pot (typically 10 to 100 times
+higher), the loading effect is negligible. However, many MIDI
+controllers, audio interfaces, and digital modelers feature input
+impedances ranging between 10kΩ and 100kΩ.</p>
+<ul>
+<li><strong>10kΩ Potentiometer:</strong> Because 10kΩ is relatively low,
+its source impedance remains small throughout the sweep. Even when
+connected to a moderate input impedance (such as 50kΩ), the voltage sag
+at the midpoint is minimal, keeping the translated MIDI data
+linear.</li>
+<li><strong>50kΩ Potentiometer:</strong> When a 50kΩ pot is set to 50%
+travel, the source impedance at the wiper peaks at 12.5kΩ (the two 25kΩ
+halves in parallel). If connected to an input with a 50kΩ or lower
+impedance, this creates a pronounced voltage sag. Instead of reading 50%
+of the reference voltage at the midpoint, the ADC reads a lower value,
+causing the MIDI curve to bunch up near the toe-down position.</li>
+</ul>
+<h3 id="adc-sampling-capacitance-and-slew-rate">ADC Sampling Capacitance
+and Slew Rate</h3>
+<p>Microcontroller ADCs sample voltage using an internal sample-and-hold
+capacitor. Charging this capacitor requires a stable current source:</p>
+<ul>
+<li>A <strong>10kΩ pot</strong> provides lower output impedance,
+allowing the ADC sampling capacitor to charge rapidly within the
+acquisition time window. This results in stable, instantaneous, and
+accurate numerical conversions.</li>
+<li>A <strong>50kΩ pot</strong> has a higher output impedance that slows
+the charging rate of the internal ADC capacitor. If the microcontroller
+samples too rapidly, the capacitor may not reach full voltage before the
+measurement is locked, producing artificial dead zones, jitter, and
+non-linear transitions between MIDI values.</li>
+</ul>
+<h3 id="practical-impact-on-midi-performance">Practical Impact on MIDI
+Performance</h3>
+<p>When a 50kΩ pedal is used with hardware optimized for 10kΩ
+inputs:</p>
+<ol type="1">
+<li><strong>Value Clustering:</strong> MIDI values advance slowly
+throughout the heel-to-mid range of travel, then accelerate rapidly
+toward value 127 in the final quarter of pedal throw.</li>
+<li><strong>Reduced Usable Range:</strong> If pull-up or pull-down
+protection resistors are present on the controller's jack, a 50kΩ
+resistance can prevent the signal from reaching true 0V or full
+reference voltage, clipping the minimum or maximum MIDI output.</li>
+<li><strong>Noise and Jitter:</strong> Higher impedance circuits are
+more susceptible to radio-frequency and electromagnetic interference
+along the expression cable, which manifests as fluctuating MIDI CC
+values ("MIDI jitter") that can degrade performance stability unless
+heavily filtered via software.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/expression-pedal-pot-resistance-and-midi-linearity';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expanding MIDI Controller Inputs with Multiplexers - midi</title>
+    <meta name="description" content="Building massive MIDI controller desks with dozens of potentiometers, faders, and rotary knobs quickly exhausts the native analog-to-digital converter (ADC) pins of standard microcontrollers. Analog multiplexer integrated circuits (ICs), such as the 74HC4">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/expanding-midi-controller-inputs-with-multiplexers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Expanding MIDI Controller Inputs with Multiplexers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/expanding-midi-controller-inputs-with-multiplexers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Building massive MIDI controller desks with dozens of potentiometers, faders, and rotary knobs quickly exhausts the native analog-to-digital converter (ADC) pins of standard microcontrollers. Analog multiplexer integrated circuits (ICs), such as the 74HC4" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="expanding-midi-controller-inputs-with-multiplexers">Expanding
+MIDI Controller Inputs with Multiplexers</h1>
+<p>Building massive MIDI controller desks with dozens of potentiometers,
+faders, and rotary knobs quickly exhausts the native analog-to-digital
+converter (ADC) pins of standard microcontrollers. Analog multiplexer
+integrated circuits (ICs), such as the 74HC4051, overcome this physical
+limitation by functioning as digitally controlled multi-way switches
+that route multiple analog signals into a single ADC pin sequentially.
+This article explains the internal architecture of the 74HC4051, details
+how time-division multiplexing routes input data without noticeable
+latency, and provides the hardware and software principles required to
+scale these chips across large MIDI consoles.</p>
+<h2 id="the-adc-bottleneck-in-midi-controller-design">The ADC Bottleneck
+in MIDI Controller Design</h2>
+<p>Most common microcontrollers, such as the ATmega328P, RP2040, or
+ESP32, offer between 4 and 16 analog input channels. Professional audio
+mixing desks and complex MIDI control surfaces often demand 32, 64, or
+even 128 continuous controls to manage audio parameters, synthesizer
+parameters, and volume levels.</p>
+<p>Upgrading to microcontrollers with massive pin counts significantly
+drives up cost, PCB complexity, and routing difficulty. Analog
+multiplexers provide a cost-effective, scalable alternative by trading
+high processing speeds for pin availability, leveraging the fact that
+human interaction with physical controls occurs at speeds far slower
+than microsecond-level microcontroller operations.</p>
+<h2 id="how-the-74hc4051-multiplexer-works">How the 74HC4051 Multiplexer
+Works</h2>
+<p>The 74HC4051 is an 8-channel analog multiplexer/demultiplexer.
+Mechanically, it functions identically to an 8-position single-pole
+rotary switch, but its position is chosen electronically via logic gates
+and bilateral CMOS switches.</p>
+<p>The IC features:</p>
+<ul>
+<li><strong>8 Independent I/O Channels (Y0–Y7):</strong> Connected to
+individual potentiometers or faders.</li>
+<li><strong>1 Common I/O Pin (Z):</strong> Connected to a single
+microcontroller ADC pin.</li>
+<li><strong>3 Digital Binary Select Pins (S0, S1, S2):</strong>
+Controlled by microcontroller digital output pins.</li>
+<li><strong>1 Active-Low Enable Pin (/E):</strong> Enables or disables
+the multiplexer switches.</li>
+</ul>
+<p>The microcontroller selects which channel connects to the common pin
+by setting a 3-bit binary combination across pins S0, S1, and S2:</p>
+<ul>
+<li><code>000</code> connects Channel 0 (Y0) to Common (Z)</li>
+<li><code>001</code> connects Channel 1 (Y1) to Common (Z)</li>
+<li><code>010</code> connects Channel 2 (Y2) to Common (Z)</li>
+<li>Continuing through <code>111</code>, which connects Channel 7 (Y7)
+to Common (Z)</li>
+</ul>
+<p>Because the internal switches are bidirectional, the 74HC4051 can
+route analog voltages smoothly in either direction with minimal signal
+degradation, handling standard 0V to 5V (or 0V to 3.3V) potentiometer
+sweeps.</p>
+<h2 id="scanning-inputs-using-time-division-multiplexing">Scanning
+Inputs Using Time-Division Multiplexing</h2>
+<p>To read all 8 inputs from a single ADC pin, the microcontroller
+executes a high-speed loop using time-division multiplexing:</p>
+<ol type="1">
+<li><strong>Address Selection:</strong> The microcontroller sets the
+binary state of <code>S0</code>, <code>S1</code>, and <code>S2</code> to
+address the desired channel.</li>
+<li><strong>Settling Time:</strong> A brief delay (often less than a
+microsecond) allows the internal resistance and capacitance of the
+switch, along with circuit trace capacitance, to stabilize.</li>
+<li><strong>ADC Acquisition:</strong> The microcontroller triggers its
+internal ADC to sample the voltage from the common <code>Z</code>
+pin.</li>
+<li><strong>Data Storage:</strong> The converted digital value is saved
+into an array tracking the previous state of that control.</li>
+<li><strong>Next Channel:</strong> The loop increments the binary
+address and repeats the sequence.</li>
+</ol>
+<p>Because an analog read typically takes between 10 and 100
+microseconds depending on the microcontroller architecture, all eight
+channels can be sampled in less than one millisecond. The human ear and
+hand cannot perceive latency below 5 to 10 milliseconds, making the
+multiplexing completely invisible to the performer.</p>
+<h2 id="scaling-to-massive-consoles">Scaling to Massive Consoles</h2>
+<p>To read 32, 64, or 128 controls, multiple 74HC4051 ICs are combined
+using one of two primary architectural strategies:</p>
+<h3 id="parallel-address-architecture-multi-adc-pin">Parallel Address
+Architecture (Multi-ADC Pin)</h3>
+<p>The most common approach connects the digital address lines
+(<code>S0</code>, <code>S1</code>, <code>S2</code>) of all multiplexers
+together in parallel.</p>
+<ul>
+<li>By dedicating 3 digital pins for the shared address lines, 8
+separate 74HC4051 chips can be addressed simultaneously.</li>
+<li>Each multiplexer's common <code>Z</code> pin connects to its own
+dedicated microcontroller ADC pin.</li>
+<li>Setting the address pins to <code>000</code> allows the
+microcontroller to read Channel 0 of all eight ICs concurrently across 8
+ADC pins.</li>
+<li>This configuration reads 64 analog controls using only 11
+microcontroller pins (3 digital outputs + 8 analog inputs).</li>
+</ul>
+<h3 id="cascaded-enable-architecture-single-adc-pin">Cascaded Enable
+Architecture (Single-ADC Pin)</h3>
+<p>When microcontroller ADC pins are severely limited, multiple
+multiplexers can share both the address lines and a single common analog
+input pin.</p>
+<ul>
+<li>The common <code>Z</code> pins of all multiplexers tie together into
+a single ADC pin.</li>
+<li>The active-low Enable (<code>/E</code>) pin on each IC is driven
+independently (often via a digital demultiplexer like the 74HC138 or a
+shift register).</li>
+<li>Only one multiplexer is enabled at any given moment, while the
+others remain in a high-impedance state, preventing signal
+collisions.</li>
+<li>This configuration allows dozens of potentiometers to route through
+a single analog pin on the processor.</li>
+</ul>
+<h2 id="hardware-and-signal-integrity-considerations">Hardware and
+Signal Integrity Considerations</h2>
+<p>While multiplexing simplifies routing, high channel counts present
+electronic challenges that require careful board design:</p>
+<ul>
+<li><strong>On-State Resistance (<span
+class="math inline">\(R_{ON}\)</span>):</strong> The internal switches
+have an internal resistance (typically around 60 to 80 ohms at 5V).
+Using potentiometers with values between <span
+class="math inline">\(10\,\text{k}\Omega\)</span> and <span
+class="math inline">\(50\,\text{k}\Omega\)</span> ensures that the
+internal switch resistance remains a negligible fraction of the total
+impedance, preventing voltage drop errors.</li>
+<li><strong>Crosstalk and Settling Capacitance:</strong> The ADC
+internal sampling capacitor takes time to charge. When switching rapidly
+from a channel at 0V to a channel at 5V, residual charge can bleed
+between readings. Adding a small settling delay (or taking two
+consecutive ADC readings and discarding the first) eliminates ghosting
+between adjacent channels.</li>
+<li><strong>Decoupling Capacitors:</strong> Placing a <span
+class="math inline">\(0.1\,\mu\text{F}\)</span> ceramic capacitor
+directly across the VCC and GND pins of each 74HC4051 minimizes
+switching noise generated when toggling address lines.</li>
+</ul>
+<h2 id="software-processing-and-midi-generation">Software Processing and
+MIDI Generation</h2>
+<p>Once values are digitized, the microcontroller converts raw voltages
+into standard MIDI Control Change (CC) messages:</p>
+<ol type="1">
+<li><strong>Jitter Filtering:</strong> Raw ADC readings naturally
+fluctuate by a few millivolts due to environmental electromagnetic
+interference. Software deadbanding (ignoring changes below a set
+threshold, such as 4–8 counts on a 10-bit ADC) prevents controllers from
+transmitting continuous streams of phantom MIDI messages.</li>
+<li><strong>Resolution Mapping:</strong> Raw readings (typically 10-bit
+or 12-bit) are downscaled to standard 7-bit MIDI CC values (0–127) or
+mapped to 14-bit high-resolution MIDI formats.</li>
+<li><strong>Change Detection:</strong> The microcontroller compares the
+newly mapped value against the last transmitted value for that channel.
+A MIDI message is only sent via serial UART or USB-MIDI if a deliberate
+state change has occurred, preserving bus bandwidth and processor
+time.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/expanding-midi-controller-inputs-with-multiplexers';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

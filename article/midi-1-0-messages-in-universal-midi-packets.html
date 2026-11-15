@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI 1.0 Messages in Universal MIDI Packets - midi</title>
+    <meta name="description" content="This article provides an overview of how the MIDI 2.0 specification maintains backward compatibility with legacy MIDI 1.0 data through the Universal MIDI Packet (UMP) architecture. It explains how legacy Channel Voice messages and System messages are enca">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-1-0-messages-in-universal-midi-packets">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI 1.0 Messages in Universal MIDI Packets - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-1-0-messages-in-universal-midi-packets" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how the MIDI 2.0 specification maintains backward compatibility with legacy MIDI 1.0 data through the Universal MIDI Packet (UMP) architecture. It explains how legacy Channel Voice messages and System messages are enca" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-10-messages-in-universal-midi-packets">MIDI 1.0 Messages in
+Universal MIDI Packets</h1>
+<p>This article provides an overview of how the MIDI 2.0 specification
+maintains backward compatibility with legacy MIDI 1.0 data through the
+Universal MIDI Packet (UMP) architecture. It explains how legacy Channel
+Voice messages and System messages are encapsulated into standardized
+32-bit packets, how Group fields expand channel routing, and how running
+status and timing issues from the original standard are modernized
+within the UMP envelope.</p>
+<h3 id="the-universal-midi-packet-ump-framework">The Universal MIDI
+Packet (UMP) Framework</h3>
+<p>The Universal MIDI Packet is the fundamental data container for MIDI
+2.0. Unlike the byte-stream approach of traditional MIDI 1.0, UMP
+organizes all MIDI communications into standardized 32-bit data blocks
+(words), which can scale up to 64-bit, 96-bit, or 128-bit packets
+depending on the message type.</p>
+<p>To ensure complete backward compatibility, the MIDI 2.0 specification
+assigns dedicated Message Types within UMP specifically for legacy MIDI
+1.0 data.</p>
+<h3 id="message-type-allocation-for-legacy-messages">Message Type
+Allocation for Legacy Messages</h3>
+<p>Every UMP begins with a 4-bit Message Type (MT) identifier located in
+bits 31 to 28 of the first word. MIDI 2.0 allocates two specific Message
+Types for legacy MIDI 1.0 communications:</p>
+<ul>
+<li><strong>Message Type <code>0x1</code> (System Real-Time and System
+Common):</strong> Used for single-word (32-bit) packets carrying legacy
+system messages, such as Timing Clock, Start, Stop, Active Sensing, and
+Song Position Pointer.</li>
+<li><strong>Message Type <code>0x2</code> (MIDI 1.0 Channel Voice
+Messages):</strong> Used for single-word (32-bit) packets carrying
+legacy Channel Voice messages, including Note On, Note Off, Control
+Change, Program Change, Pitch Bend, Polyphonic Aftertouch, and Channel
+Pressure.</li>
+</ul>
+<h3
+id="structure-of-encapsulated-midi-10-channel-voice-messages">Structure
+of Encapsulated MIDI 1.0 Channel Voice Messages</h3>
+<p>When a MIDI 1.0 Channel Voice message is enclosed in a UMP, it forms
+a single 32-bit word structured as follows:</p>
+<ul>
+<li><strong>Bits [31:28] — Message Type:</strong> Fixed as
+<code>0x2</code>.</li>
+<li><strong>Bits [27:24] — Group:</strong> Designates one of 16 possible
+UMP Groups (0–15).</li>
+<li><strong>Bits [23:16] — Status Byte:</strong> Contains the standard
+MIDI 1.0 status nibble (such as <code>0x9</code> for Note On or
+<code>0xB</code> for Control Change) combined with the 4-bit Channel
+index (0–15).</li>
+<li><strong>Bits [15:8] — Data Byte 1:</strong> The first legacy 7-bit
+data byte (e.g., Note Number or Controller Number). If unused, this byte
+is padded with <code>0x00</code>.</li>
+<li><strong>Bits [7:0] — Data Byte 2:</strong> The second legacy 7-bit
+data byte (e.g., Velocity or Controller Value). If unused, this byte is
+padded with <code>0x00</code>.</li>
+</ul>
+<h3 id="expanded-routing-via-ump-groups">Expanded Routing via UMP
+Groups</h3>
+<p>In legacy MIDI 1.0, messages are strictly limited to 16 channels per
+physical connection. Within the UMP envelope, each MIDI 1.0 message
+includes a 4-bit Group field.</p>
+<p>This enables a single MIDI 2.0 connection to carry up to 16 distinct
+"Groups," where each Group operates as an independent 16-channel MIDI
+subsystem. As a result, legacy MIDI 1.0 messages inside UMP can be
+routed across 256 distinct channels (16 Groups × 16 Channels)
+simultaneously without translating them into the MIDI 2.0 message
+format.</p>
+<h3 id="deprecation-of-running-status">Deprecation of Running
+Status</h3>
+<p>Traditional MIDI 1.0 implementations frequently used "Running Status"
+to save bandwidth over 31.25 kbps serial connections by omitting the
+status byte when sending repeated commands on the same channel.</p>
+<p>The UMP envelope explicitly forbids Running Status. Because each UMP
+is an isolated, self-contained 32-bit entity, the complete status byte
+must be included in every packet. When hardware or software translates
+an incoming legacy byte stream into UMP, the translator is required to
+unpack any Running Status sequences and populate the complete status
+nibble and channel for every packet generated.</p>
+<h3 id="system-exclusive-sysex-handling">System Exclusive (SysEx)
+Handling</h3>
+<p>Legacy MIDI 1.0 7-bit System Exclusive messages do not use Message
+Type <code>0x2</code>. Instead, they are encapsulated within Message
+Type <code>0x3</code> (Data Messages).</p>
+<p>Message Type <code>0x3</code> packets are 64-bit containers that
+carry up to six 7-bit SysEx payload bytes per packet. The UMP header
+defines the fragmentation status (Complete, Start, Continue, or End) and
+byte count, allowing variable-length legacy SysEx data to stream cleanly
+over fixed-size packet transport systems.</p>
+<h3 id="timing-precision-with-jitter-reduction-timestamps">Timing
+Precision with Jitter Reduction Timestamps</h3>
+<p>Legacy MIDI 1.0 messages inside UMP can benefit from MIDI 2.0 timing
+enhancements without changing the message data. By prefixing a legacy
+UMP packet with a Jitter Reduction Timestamp packet (Message Type
+<code>0x0</code>), senders can attach accurate microsecond-level timing
+offsets. This mechanism allows legacy-format events to be rendered with
+precise temporal accuracy, eliminating transmission jitter caused by USB
+or network packet buffers.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-1-0-messages-in-universal-midi-packets';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

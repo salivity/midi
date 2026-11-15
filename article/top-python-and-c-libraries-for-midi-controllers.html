@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Python and C++ Libraries for MIDI Controllers - midi</title>
+    <meta name="description" content="Building custom MIDI controllers has become increasingly accessible thanks to modern microcontrollers like the Raspberry Pi Pico, Teensy, ESP32, and Arduino. This article provides an overview of the most reliable and widely used C++ and Python libraries d">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/top-python-and-c-libraries-for-midi-controllers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Top Python and C++ Libraries for MIDI Controllers - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/top-python-and-c-libraries-for-midi-controllers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Building custom MIDI controllers has become increasingly accessible thanks to modern microcontrollers like the Raspberry Pi Pico, Teensy, ESP32, and Arduino. This article provides an overview of the most reliable and widely used C++ and Python libraries d" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="top-python-and-c-libraries-for-midi-controllers">Top Python and
+C++ Libraries for MIDI Controllers</h1>
+<p>Building custom MIDI controllers has become increasingly accessible
+thanks to modern microcontrollers like the Raspberry Pi Pico, Teensy,
+ESP32, and Arduino. This article provides an overview of the most
+reliable and widely used C++ and Python libraries designed to handle
+MIDI communication, hardware abstraction, and signal processing on
+embedded devices. Whether you need low-latency performance using C++ or
+rapid development with Python, these libraries form the foundation for
+processing potentiometer inputs, button matrices, motorized faders, and
+digital audio communication over USB and traditional DIN ports.</p>
+<h2 id="leading-c-libraries-for-midi-firmware">Leading C++ Libraries for
+MIDI Firmware</h2>
+<p>C++ remains the industry standard for production-grade, low-latency
+MIDI controller firmware. It provides direct memory access and
+deterministic timing, which are critical for eliminating audio-visual
+delay.</p>
+<h3 id="1-control-surface">1. Control Surface</h3>
+<p>Developed by Pieter P, <strong>Control Surface</strong> is the most
+feature-rich and advanced C++ library for creating MIDI controllers on
+Arduino, Teensy, and ESP platforms. Instead of requiring you to write
+manual debounce logic or analog smoothing algorithms, Control Surface
+includes modular hardware abstractions.</p>
+<p>Key features include:</p>
+<ul>
+<li>Native filtering and hysteresis for analog inputs to eliminate
+potentiometer jitter.</li>
+<li>Built-in support for hardware multiplexers (e.g., 74HC4051), shift
+registers, and LED rings.</li>
+<li>Pre-configured modules for motorized faders, rotary encoders, and
+OLED displays.</li>
+<li>Seamless transport switching between 5-pin DIN, USB MIDI, and
+Bluetooth LE MIDI.</li>
+</ul>
+<h3 id="2-arduino-midi-library-fortyseveneffects">2. Arduino MIDI
+Library (FortySevenEffects)</h3>
+<p>The <strong>Arduino MIDI Library</strong> is the foundational
+standard for classic MIDI over serial interfaces. If your project uses
+traditional 5-pin DIN connectors or standard UART communication, this
+library provides straightforward API methods to send and receive
+standard MIDI events (Note On/Off, Control Change, Pitch Bend, and
+SysEx). It serves as the baseline communication engine across nearly all
+8-bit and 32-bit Arduino-compatible boards.</p>
+<h3 id="3-midiusb">3. MIDIUSB</h3>
+<p>For older standard boards with native USB capabilities, such as the
+Arduino Leonardo and Micro (ATmega32U4), the <strong>MIDIUSB</strong>
+library allows the microcontroller to enumerate as a class-compliant USB
+MIDI device. It handles low-level USB endpoint packets directly, making
+it easy to send and receive raw 4-byte MIDI USB event packets without
+requiring third-party drivers on host computers.</p>
+<h3 id="4-tinyusb-midi-class">4. TinyUSB (MIDI Class)</h3>
+<p><strong>TinyUSB</strong> is an open-source, cross-platform USB
+host/device stack built specifically for embedded systems. It is the
+default USB engine powering the Raspberry Pi RP2040, Adafruit SAMD
+boards, and Espressif ESP32-S2/S3 chips. TinyUSB’s MIDI class allows
+developers writing bare-metal C/C++ or Arduino code to implement
+high-speed, multi-cable USB MIDI endpoints with minimal CPU
+overhead.</p>
+<h3 id="5-teensyduino-core-usb-midi">5. Teensyduino Core USB MIDI</h3>
+<p>PJRC's Teensy boards (such as the Teensy 4.0 and 4.1) are widely
+regarded as the gold standard for high-performance DIY MIDI devices. The
+Teensyduino software add-on integrates a proprietary, highly optimized
+USB MIDI stack directly into the core framework. It allows you to select
+"MIDI" from the standard USB Type menu, giving you access to ultra-low
+latency <code>usbMIDI</code> functions out of the box without installing
+external dependencies.</p>
+<hr />
+<h2 id="leading-python-libraries-for-microcontroller-midi">Leading
+Python Libraries for Microcontroller MIDI</h2>
+<p>Python on microcontrollers—primarily via CircuitPython and
+MicroPython—has gained substantial popularity. While it introduces
+slightly higher latency than compiled C++, it enables rapid prototyping
+and instant code iteration without recompiling.</p>
+<h3 id="1-adafruit-circuitpython-midi-adafruit_midi">1. Adafruit
+CircuitPython MIDI (<code>adafruit_midi</code>)</h3>
+<p>The <strong>adafruit_midi</strong> library is the primary framework
+for Python-based MIDI development on microcontrollers. It provides
+high-level message objects for all standard MIDI message types,
+including Control Change, Program Change, Note On, Note Off, and System
+Exclusive.</p>
+<p>Working directly with CircuitPython's built-in <code>usb_midi</code>
+core module, <code>adafruit_midi</code> handles packet parsing and
+dispatching automatically. It allows developers to read analog pins, map
+values, and send standard USB MIDI messages in only a few lines of
+readable code.</p>
+<h3 id="2-built-in-usb_midi-circuitpython-core">2. Built-in
+<code>usb_midi</code> (CircuitPython Core)</h3>
+<p>Rather than an external package, <code>usb_midi</code> is compiled
+directly into the CircuitPython core runtime on microcontrollers
+supporting native USB (such as the RP2040 and SAMD51). It exposes raw
+input and output ports to the operating system as class-compliant MIDI
+endpoints. Most developers combine this core module with the
+<code>adafruit_midi</code> helper library to construct higher-level
+controller firmware.</p>
+<h3 id="3-micropython-midi-implementations">3. MicroPython MIDI
+Implementations</h3>
+<p>MicroPython does not possess a single centralized MIDI standard as
+cohesive as CircuitPython's, but it provides several
+community-maintained modules—such as <code>micropython-midi</code> and
+custom bindings built on top of TinyUSB. For projects utilizing
+UART-based DIN connections on boards like the ESP32, developers
+frequently utilize MicroPython's native <code>machine.UART</code> class
+paired with custom stream-parsing scripts to send standard MIDI byte
+arrays.</p>
+<hr />
+<h2 id="choosing-between-c-and-python">Choosing Between C++ and
+Python</h2>
+<ul>
+<li><strong>Choose C++ (via Control Surface or Teensyduino)</strong> if
+your controller requires complex routing, dozens of multiplexed inputs,
+motorized feedback, analog filtering, or the absolute lowest possible
+latency.</li>
+<li><strong>Choose Python (via CircuitPython and
+<code>adafruit_midi</code>)</strong> if your build consists of a modest
+number of buttons and potentiometers, or if you prioritize ease of
+development, live script editing, and rapid testing without a full
+toolchain setup.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/top-python-and-c-libraries-for-midi-controllers';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optocoupler Rise Time and MIDI Cable Distortion - midi</title>
+    <meta name="description" content="This article examines how the rise time of an optocoupler impacts the integrity of MIDI data transmissions across extended cable runs. Standard MIDI relies on galvanic isolation to prevent ground loops, using optocouplers to translate incoming current pul">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/optocoupler-rise-time-and-midi-cable-distortion">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Optocoupler Rise Time and MIDI Cable Distortion - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/optocoupler-rise-time-and-midi-cable-distortion" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how the rise time of an optocoupler impacts the integrity of MIDI data transmissions across extended cable runs. Standard MIDI relies on galvanic isolation to prevent ground loops, using optocouplers to translate incoming current pul" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="optocoupler-rise-time-and-midi-cable-distortion">Optocoupler
+Rise Time and MIDI Cable Distortion</h1>
+<p>This article examines how the rise time of an optocoupler impacts the
+integrity of MIDI data transmissions across extended cable runs.
+Standard MIDI relies on galvanic isolation to prevent ground loops,
+using optocouplers to translate incoming current pulses into digital
+voltage levels. When long cables introduce parasitic capacitance, a slow
+optocoupler rise time compounds signal degradation, ultimately dictating
+whether the receiver's UART can successfully decode high-speed serial
+pulses or succumb to pulse width distortion and data corruption.</p>
+<h3 id="the-role-of-optocouplers-in-the-midi-specification">The Role of
+Optocouplers in the MIDI Specification</h3>
+<p>The standard MIDI hardware specification specifies a 5 mA current
+loop operating at a baud rate of 31.25 kbaud, translating to a bit
+period of exactly 32 microseconds. To eliminate ground loops and protect
+equipment, every standard MIDI input port must include galvanic
+isolation via an optocoupler.</p>
+<p>An optocoupler consists of an internal LED optically coupled to a
+light sensor, typically a phototransistor or a high-speed photodiode
+connected to an integrated logic gate. When current flows through the
+MIDI loop, the LED lights up, triggering the photosensor to drive the
+output pin low or high, depending on the circuit configuration.</p>
+<h3 id="how-cable-run-distance-degrades-the-signal">How Cable Run
+Distance Degrades the Signal</h3>
+<p>Long cable runs exhibit distributed series resistance and parallel
+capacitance. In a typical twin-lead shielded audio or MIDI cable,
+capacitance ranges from 50 to 150 picofarads per meter. Over runs
+spanning 15 meters (50 feet) or more, this total capacitance becomes
+substantial.</p>
+<p>This capacitance, combined with the loop's driving and pull-up
+resistances, forms a distributed RC low-pass filter. Instead of arriving
+at the receiver as crisp, instantaneous square waves, the transitions
+between current states round off. The rising and falling edges of the
+current pulses entering the optocoupler's LED stage become ramped,
+slowing down the excitation of the internal light-emitting element.</p>
+<h3 id="rise-time-and-asymmetric-switching">Rise Time and Asymmetric
+Switching</h3>
+<p>Rise time (<span class="math inline">\(t_r\)</span>) is the duration
+required for an optocoupler's output voltage to rise from 10% to 90% of
+its logic high level. In phototransistor-based optocouplers, rise and
+fall times are primarily governed by charge storage effects in the base
+region and the RC constant created by the load resistor and the internal
+junction capacitance.</p>
+<p>Crucially, optocoupler rise time is rarely equal to its fall time
+(<span class="math inline">\(t_f\)</span>). In standard phototransistor
+models (such as the 4N25 or PC817), turning off the transistor is
+significantly slower than turning it on because trapped base charge must
+recombine. When a high-speed digital pulse arrives:</p>
+<ol type="1">
+<li><strong>Slow Turn-Off / Extended Rise Time:</strong> If the rise
+time is slow, the output signal takes an excessive amount of time to
+cross the receiver’s logic threshold voltage (<span
+class="math inline">\(V_{IH}\)</span>).</li>
+<li><strong>Duty Cycle Distortion:</strong> The difference between <span
+class="math inline">\(t_r\)</span> and <span
+class="math inline">\(t_f\)</span> causes pulse-width distortion (PWD).
+High pulses become wider or narrower than low pulses, skewing the
+intended 50% duty cycle of alternating bits.</li>
+</ol>
+<h3 id="the-impact-on-long-cable-runs">The Impact on Long Cable
+Runs</h3>
+<p>When a signal has already been softened by long cable capacitance, a
+slow optocoupler creates a compounding bottleneck:</p>
+<ul>
+<li><strong>Threshold Delay:</strong> Because the LED current takes
+longer to decay due to cable capacitance, a slow optocoupler delays the
+rise transition even further. The combined delay eats into the
+32-microsecond bit window.</li>
+<li><strong>Jitter and Sampling Misalignment:</strong> A UART samples
+incoming serial data in the middle of each expected bit period (around
+the 16-microsecond mark after a start bit transition). If the
+optocoupler's rise time stretches into several microseconds, the edge
+shifts past the expected sampling point.</li>
+<li><strong>Bit Corruption and Framing Errors:</strong> When the
+combined rise time pushes the logic transition too far, the UART samples
+the incorrect logic level. This manifests as framing errors, corrupted
+MIDI status bytes, missing Note-Off commands (resulting in "stuck
+notes"), or dropped System Exclusive packets.</li>
+</ul>
+<h3 id="design-solutions-for-signal-integrity">Design Solutions for
+Signal Integrity</h3>
+<p>To prevent signal distortion across long cable spans, the MIDI
+specification mandates high-speed optocouplers, such as the 6N138,
+6N137, or H11L1:</p>
+<ul>
+<li><strong>Active Logic Stages:</strong> Devices like the 6N137
+incorporate an integrated photodiode and a high-speed amplifier instead
+of relying on a slow phototransistor base, reducing rise and fall times
+to under 100 nanoseconds.</li>
+<li><strong>Schmitt Trigger Outputs:</strong> Optocouplers equipped with
+built-in Schmitt triggers (such as the H11L1) provide hysteresis,
+snapping cleanly between logic states even if the optocoupler's internal
+rise time is subjected to slow, ramped inputs from high-capacitance
+cables.</li>
+<li><strong>Optimized Load Resistors:</strong> For open-collector
+outputs, lowering the pull-up resistance (within safe operating current
+limits) reduces the RC time constant at the output node, accelerating
+the rise time and restoring square-wave integrity.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/optocoupler-rise-time-and-midi-cable-distortion';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

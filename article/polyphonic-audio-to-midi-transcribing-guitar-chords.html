@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyphonic Audio to MIDI: Transcribing Guitar Chords - midi</title>
+    <meta name="description" content="Polyphonic audio-to-MIDI transcription converts complex acoustic audio into discrete digital musical events by identifying multiple simultaneous notes within a single recording. When applied to an acoustic guitar chord, the system analyzes a dense mixture">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/polyphonic-audio-to-midi-transcribing-guitar-chords">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Polyphonic Audio to MIDI: Transcribing Guitar Chords - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/polyphonic-audio-to-midi-transcribing-guitar-chords" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Polyphonic audio-to-MIDI transcription converts complex acoustic audio into discrete digital musical events by identifying multiple simultaneous notes within a single recording. When applied to an acoustic guitar chord, the system analyzes a dense mixture" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="polyphonic-audio-to-midi-transcribing-guitar-chords">Polyphonic
+Audio to MIDI: Transcribing Guitar Chords</h1>
+<p>Polyphonic audio-to-MIDI transcription converts complex acoustic
+audio into discrete digital musical events by identifying multiple
+simultaneous notes within a single recording. When applied to an
+acoustic guitar chord, the system analyzes a dense mixture of
+overlapping sound waves, isolates the fundamental frequency of each
+vibrating string, and tracks the start, duration, and volume of every
+distinct pitch. This process relies on a combination of time-frequency
+spectral analysis, harmonic modeling, and deep learning algorithms to
+untangle shared frequencies and translate an organic performance into
+accurate MIDI data.</p>
+<h3 id="the-challenge-of-acoustic-guitar-chords">The Challenge of
+Acoustic Guitar Chords</h3>
+<p>An acoustic guitar chord is not simply a collection of pure sine
+waves; it is a complex acoustic event. When multiple strings are struck
+simultaneously, each string produces a fundamental frequency (the
+perceived pitch) along with a series of integer-multiple overtones known
+as harmonics or partials.</p>
+<p>In a standard chord, these harmonics collide. For example, the higher
+harmonics of a low E string can land on the exact same frequencies as
+the fundamental or lower harmonics of the higher strings. Additionally,
+physical acoustic guitars introduce body resonance, sympathetic
+vibration from adjacent strings, and percussive pick attack transients,
+all of which flood the audio spectrum with competing energy.</p>
+<h3 id="step-1-time-frequency-representation">Step 1: Time-Frequency
+Representation</h3>
+<p>The raw audio waveform represents changes in air pressure over time,
+which provides insufficient pitch information on its own. Transcription
+systems first convert this raw audio into a time-frequency
+representation, typically using the Short-Time Fourier Transform (STFT)
+or the Constant-Q Transform (CQT).</p>
+<p>The Constant-Q Transform is particularly suited for musical analysis
+because its frequency bins are logarithmically spaced, mirroring the
+human perception of pitch and the twelve-tone musical scale. This
+produces a spectrogram—a visual map plotting time along the x-axis,
+frequency along the y-axis, and energy amplitude through intensity.</p>
+<h3 id="step-2-onset-detection">Step 2: Onset Detection</h3>
+<p>To separate notes, the algorithm must determine the exact millisecond
+the chord was struck. Onset detection algorithms monitor sudden surges
+in high-frequency energy caused by the pick or fingers hitting the
+strings.</p>
+<p>By analyzing the "spectral flux" (the rate of local change across
+frequency bands), the system identifies the transient attack of the
+chord. In arpeggiated or strummed chords, advanced onset detection can
+differentiate micro-delays between individual string plucks, registering
+each string contact as a distinct note start rather than a single
+homogeneous block.</p>
+<h3 id="step-3-multi-pitch-estimation-mpe">Step 3: Multi-Pitch
+Estimation (MPE)</h3>
+<p>The core mechanism for isolating individual notes is Multi-Pitch
+Estimation. Systems use two primary frameworks to solve this:</p>
+<h4 id="traditional-signal-processing-spectral-unmixing">Traditional
+Signal Processing: Spectral Unmixing</h4>
+<p>Classic transcription uses techniques like Non-Negative Matrix
+Factorization (NMF) or harmonic template matching. These systems know
+what an idealized guitar string spectrum looks like: a strong
+fundamental followed by decaying harmonic peaks.</p>
+<p>The algorithm scans the frequency spectrum from the lowest
+frequencies upward. When it detects a prominent fundamental, it
+estimates the expected energy of that note's harmonic series and
+mathematically subtracts those theoretical overtones from the total
+spectrogram. This "spectral peeling" exposes the remaining fundamental
+frequencies that were previously masked by the louder, lower notes.</p>
+<h4 id="deep-learning-and-neural-networks">Deep Learning and Neural
+Networks</h4>
+<p>Modern state-of-the-art transcription relies heavily on Convolutional
+Neural Networks (CNNs) and Recurrent Neural Networks (RNNs) or
+Transformers. Instead of hard-coded mathematical rules, these networks
+are trained on thousands of hours of synchronized guitar audio and MIDI
+data.</p>
+<ul>
+<li><strong>CNNs</strong> analyze the spectrogram as an image, learning
+to recognize the visual "fingerprint" of overlapping harmonic ladders
+unique to acoustic guitars.</li>
+<li><strong>RNNs and Transformers</strong> evaluate the temporal
+dynamics, understanding how guitar notes naturally decay and how strings
+behave together in conventional playing styles.</li>
+</ul>
+<p>These models output pitch activation probabilities for all 88
+standard musical pitches across every continuous time frame.</p>
+<h3 id="step-4-tracking-note-trajectories-and-decay">Step 4: Tracking
+Note Trajectories and Decay</h3>
+<p>Acoustic guitar strings decay non-linearly; higher harmonics fade
+much faster than the fundamental frequency. Polyphonic transcription
+engines track the temporal trajectory of each identified note frame by
+frame.</p>
+<p>The algorithm distinguishes between a note that is ringing out
+naturally, a note that has been deliberately damped or muted, and a new
+note struck on the same string. Thresholding algorithms establish
+boundaries: when the energy probability of a specific fundamental drops
+below a predetermined floor, the system registers the end of that
+note.</p>
+<h3 id="step-5-midi-message-generation">Step 5: MIDI Message
+Generation</h3>
+<p>Once the frequencies, onsets, and offsets are confirmed, the system
+maps the physical data into standard MIDI commands:</p>
+<ul>
+<li><strong>Note-On Event:</strong> The identified fundamental frequency
+is mapped to its corresponding MIDI note number (e.g., 82.4 Hz maps to
+E2, MIDI note 40).</li>
+<li><strong>Velocity:</strong> The amplitude of the onset transient
+determines the MIDI velocity value (0–127), reflecting how hard the
+player strummed or plucked that individual string.</li>
+<li><strong>Note-Off Event:</strong> Triggered when the fundamental
+frequency decays past the detection threshold or is cut off by a
+subsequent action.</li>
+</ul>
+<p>Through this multi-stage pipeline, the composite acoustic vibration
+of a guitar chord is successfully deconstructed into clean, independent
+digital musical notes.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/polyphonic-audio-to-midi-transcribing-guitar-chords';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

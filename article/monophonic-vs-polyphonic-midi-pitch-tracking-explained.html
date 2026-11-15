@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monophonic vs Polyphonic MIDI Pitch Tracking Explained - midi</title>
+    <meta name="description" content="Converting an acoustic microphone signal into digital MIDI data requires audio-to-MIDI pitch tracking algorithms that analyze incoming sound waves in real time. The primary difference between monophonic and polyphonic pitch tracking lies in the complexity">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/monophonic-vs-polyphonic-midi-pitch-tracking-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Monophonic vs Polyphonic MIDI Pitch Tracking Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/monophonic-vs-polyphonic-midi-pitch-tracking-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Converting an acoustic microphone signal into digital MIDI data requires audio-to-MIDI pitch tracking algorithms that analyze incoming sound waves in real time. The primary difference between monophonic and polyphonic pitch tracking lies in the complexity" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="monophonic-vs-polyphonic-midi-pitch-tracking-explained">Monophonic
+vs Polyphonic MIDI Pitch Tracking Explained</h1>
+<p>Converting an acoustic microphone signal into digital MIDI data
+requires audio-to-MIDI pitch tracking algorithms that analyze incoming
+sound waves in real time. The primary difference between monophonic and
+polyphonic pitch tracking lies in the complexity of the signal they can
+interpret: monophonic systems track only one pitch at a time, whereas
+polyphonic systems can detect and separate multiple simultaneous
+pitches, such as chords. Understanding how these two approaches process
+acoustic input determines the accuracy, latency, and hardware
+requirements for musicians and audio engineers working with acoustic
+instruments.</p>
+<h3 id="how-monophonic-pitch-tracking-works">How Monophonic Pitch
+Tracking Works</h3>
+<p>Monophonic pitch tracking is designed to detect a single fundamental
+frequency (<span class="math inline">\(f_0\)</span>) at any given
+moment. When an acoustic instrument plays a single note into a
+microphone, the tracking algorithm uses methods such as zero-crossing
+detection, autocorrelation, or the YIN algorithm to measure the exact
+period of the repeating waveform.</p>
+<p>Because the algorithm only needs to isolate a single pitch cycle, it
+operates with minimal computational overhead. This allows for
+near-instantaneous processing with negligible latency, making monophonic
+tracking ideal for live performance.</p>
+<ul>
+<li><strong>Best suited for:</strong> Lead vocals, woodwinds (flute,
+saxophone), brass (trumpet, trombone), and solo string
+performances.</li>
+<li><strong>Limitations:</strong> If two notes sound
+simultaneously—whether from harmony, open strings ringing out, or room
+reverberation—the algorithm becomes confused. This typically results in
+erratic octave jumps, pitch fluttering, or missed notes.</li>
+</ul>
+<h3 id="how-polyphonic-pitch-tracking-works">How Polyphonic Pitch
+Tracking Works</h3>
+<p>Polyphonic pitch tracking analyzes complex acoustic waveforms
+containing multiple overlapping fundamental frequencies and their
+respective harmonic overtone series. When an instrument plays a chord,
+the microphone captures an intricate composite wave where harmonics from
+different notes collide and intertwine.</p>
+<p>To translate this input into MIDI, polyphonic algorithms employ
+advanced spectral decomposition techniques, such as high-resolution Fast
+Fourier Transforms (FFT), machine learning models, or spectral peak
+tracking. The algorithm must identify the fundamental frequency of each
+active note while ignoring or correctly assigning secondary harmonics to
+prevent false note triggers.</p>
+<ul>
+<li><strong>Best suited for:</strong> Acoustic guitars, pianos, harps,
+and polyphonic ensemble recordings.</li>
+<li><strong>Limitations:</strong> Polyphonic analysis requires
+significantly more CPU power. Because the algorithm must gather larger
+windows of audio data over time to accurately distinguish low
+frequencies and complex harmonics, it introduces higher latency. This
+latency can make real-time live performance challenging, often
+relegating polyphonic audio-to-MIDI conversion to post-recording studio
+workflows.</li>
+</ul>
+<h3 id="acoustic-environment-and-input-sensitivity">Acoustic Environment
+and Input Sensitivity</h3>
+<p>The nature of the microphone input drastically influences both
+tracking methods, but polyphonic tracking is far more vulnerable to
+acoustic imperfections.</p>
+<ol type="1">
+<li><strong>Harmonic Richness:</strong> Acoustic instruments with rich,
+dense overtones (such as a 12-string acoustic guitar) can produce
+harmonics stronger than the fundamental frequencies. Monophonic trackers
+can misinterpret these as higher octaves, while polyphonic trackers
+might generate unintended "ghost notes."</li>
+<li><strong>Bleed and Room Noise:</strong> Background noise, room
+reflections, or bleed from other instruments can easily corrupt
+polyphonic pitch tracking. A monophonic tracker often requires just a
+simple noise gate to isolate the primary note, whereas a polyphonic
+engine may misread background resonance as additional musical
+pitches.</li>
+<li><strong>Transient Response:</strong> Polyphonic tracking requires
+sophisticated transient detection to determine precisely when a specific
+note within a sustained chord starts and stops (note-on and note-off
+messages), whereas monophonic trackers simply monitor changes in
+amplitude and pitch continuity.</li>
+</ol>
+<p>Choosing between monophonic and polyphonic tracking depends entirely
+on the musical context: monophonic tracking offers the speed and
+reliability needed for single-line melodies and live control, while
+polyphonic tracking provides the analytical depth required to transcribe
+multi-layered harmonic material.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/monophonic-vs-polyphonic-midi-pitch-tracking-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

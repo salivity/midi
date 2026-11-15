@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Organ Keybeds Trigger Rapid MIDI Notes - midi</title>
+    <meta name="description" content="This article explains how organ-style keybeds achieve ultra-fast note repetition and minimal latency through shallow contact points. By placing trigger mechanisms near the top of the key travel rather than the bottom, these keyboards bypass the mechanical">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-organ-keybeds-trigger-rapid-midi-notes">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Organ Keybeds Trigger Rapid MIDI Notes - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-organ-keybeds-trigger-rapid-midi-notes" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how organ-style keybeds achieve ultra-fast note repetition and minimal latency through shallow contact points. By placing trigger mechanisms near the top of the key travel rather than the bottom, these keyboards bypass the mechanical" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-organ-keybeds-trigger-rapid-midi-notes">How Organ Keybeds
+Trigger Rapid MIDI Notes</h1>
+<p>This article explains how organ-style keybeds achieve ultra-fast note
+repetition and minimal latency through shallow contact points. By
+placing trigger mechanisms near the top of the key travel rather than
+the bottom, these keyboards bypass the mechanical delay inherent in
+traditional piano actions, enabling instant MIDI Note On and Note Off
+transmission for rapid trills, smears, and glissandos.</p>
+<h2 id="the-principle-of-the-high-trigger-point">The Principle of the
+High Trigger Point</h2>
+<p>Standard digital pianos and synthesizer keybeds typically use dual or
+triple rubber dome switches located near the bottom of the key's
+mechanical travel. To register a MIDI Note On event, the key must travel
+downward several millimeters to compress these switches, measuring the
+time between contacts to determine velocity.</p>
+<p>Organ keybeds (specifically "waterfall" or light synth-action
+keyboards) prioritize speed over mechanical velocity calculation.
+Instead of requiring a full downward stroke, the keybed utilizes a "high
+trigger point." The electrical or optical contact point is positioned
+just 1 to 2 millimeters below the key's resting position. As soon as the
+player initiates downward pressure, the contact engages almost
+immediately.</p>
+<h2 id="shallow-switching-mechanisms">Shallow Switching Mechanisms</h2>
+<p>Modern digital organs and MIDI controllers accomplish rapid
+triggering through several specialized switch designs:</p>
+<ul>
+<li><strong>Dual-Height Rubber Dome Contacts:</strong> The keybed
+contains two distinct contact levels. When playing organ patches, the
+internal firmware ignores the lower velocity-sensing contact and
+activates a MIDI Note On event the microsecond the upper contact closes.
+Because the organ sound engine does not require velocity dynamics, the
+controller transmits a fixed MIDI velocity (typically 127)
+instantly.</li>
+<li><strong>Optical Sensors:</strong> Some advanced organ controllers
+use infrared beams and light-interrupting vanes attached to the keys.
+These sensors allow customizable trigger heights in the firmware,
+enabling the user to set an extremely shallow trigger threshold that
+registers light breaks within fractions of a millimeter.</li>
+<li><strong>Leaf Spring and Busbar Contacts:</strong> In virtual
+tonewheel and vintage clone instruments, traditional mechanical leaf
+switches bridge a circuit near the top of the key throw, providing
+instantaneous mechanical-to-electrical signal translation without the
+resistance of rubber pads.</li>
+</ul>
+<h2 id="elimination-of-travel-distance-and-latency">Elimination of
+Travel Distance and Latency</h2>
+<p>In MIDI data transmission, latency consists of both electronic
+processing time and physical key travel time. Physical travel often
+accounts for 10 to 30 milliseconds of perceived delay on weighted
+actions.</p>
+<p>By engaging at a shallow contact point, physical travel latency drops
+to near zero. The key does not need to bottom out against the keybed
+felt to send a signal. This design closely mimics the mechanical busbars
+of vintage tonewheel organs, where notes fire the moment the key
+moves.</p>
+<h2 id="fast-reset-and-rapid-retriggering">Fast Reset and Rapid
+Retriggering</h2>
+<p>High contact points do not just accelerate the initial MIDI Note On
+message; they radically speed up note releases and retriggering.</p>
+<ol type="1">
+<li><strong>Immediate Note Off:</strong> The switch disengages the
+moment the key begins to rise, sending a MIDI Note Off command without
+requiring the player to lift their hand completely off the
+keyboard.</li>
+<li><strong>Short Hysteresis Loop:</strong> The physical distance
+between the engagement point (Note On) and the release point (Note
+Off)—known as switch hysteresis—is microscopic.</li>
+<li><strong>Absence of Hammer Inertia:</strong> Organ keys rely on
+light, direct return springs rather than weighted levers or
+counterweights. The key snaps back instantly past the reset
+threshold.</li>
+</ol>
+<p>Because the key resets near the top of the stroke, players can
+rapidly flutter, trill, or repeatedly strike the key across a tiny
+fraction of its total mechanical travel, resulting in an exceptionally
+high rate of continuous MIDI note triggers.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-organ-keybeds-trigger-rapid-midi-notes';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

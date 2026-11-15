@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Organ High Triggering in MIDI Keybeds - midi</title>
+    <meta name="description" content="High-triggering is an electronic keybed configuration where notes sound almost instantaneously at the very beginning of a keypress, rather than requiring the player to press the key down to the bottom of its travel. Modern organ emulations and clonewheel">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/understanding-organ-high-triggering-in-midi-keybeds">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding Organ High Triggering in MIDI Keybeds - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/understanding-organ-high-triggering-in-midi-keybeds" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High-triggering is an electronic keybed configuration where notes sound almost instantaneously at the very beginning of a keypress, rather than requiring the player to press the key down to the bottom of its travel. Modern organ emulations and clonewheel" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="understanding-organ-high-triggering-in-midi-keybeds">Understanding
+Organ High Triggering in MIDI Keybeds</h1>
+<p>High-triggering is an electronic keybed configuration where notes
+sound almost instantaneously at the very beginning of a keypress, rather
+than requiring the player to press the key down to the bottom of its
+travel. Modern organ emulations and clonewheel MIDI controllers use this
+feature to replicate the shallow, lightning-fast response of vintage
+electro-mechanical tonewheel organs like the Hammond B-3. By bypassing
+standard velocity-sensing mechanics in favor of a shallow activation
+point, high-triggering enables organists to execute authentic playing
+techniques, including fast runs, effortless glissandos, and rapid
+rhythmic repeats.</p>
+<h3 id="the-mechanics-of-vintage-tonewheel-organs">The Mechanics of
+Vintage Tonewheel Organs</h3>
+<p>To understand high-triggering, one must look at how vintage tonewheel
+consoles generate sound. Beneath each key on a classic Hammond organ
+sits a set of nine mechanical contact wires, each corresponding to a
+drawbar pitch. When a player depresses a key, these wires touch their
+respective busbars in sequence.</p>
+<p>Crucially, this contact occurs near the top of the key’s travel. The
+organist does not need to push the key down to the bed felt to hear the
+note; merely touching or grazing the key pushes the contacts together,
+triggering the tone wheels immediately. This design produces zero
+electronic latency and creates the Hammond’s distinctive "spit" and
+click as the multiple contacts meet the busbars.</p>
+<h3 id="the-limitation-of-standard-midi-keybeds">The Limitation of
+Standard MIDI Keybeds</h3>
+<p>Traditional piano-style MIDI keybeds are designed to measure
+velocity—how hard or fast a key is played. To calculate this, standard
+keybeds utilize two or three rubber dome switches positioned at the
+middle and bottom of the key's throw:</p>
+<ol type="1">
+<li><strong>Upper Sensor:</strong> Registers that the key movement has
+begun.</li>
+<li><strong>Lower Sensor:</strong> Registers that the key has hit the
+bottom.</li>
+</ol>
+<p>The MIDI controller measures the elapsed time between the key passing
+the upper sensor and striking the lower sensor to assign a velocity
+value (between 1 and 127). Consequently, a note cannot sound until the
+key travel is nearly complete. For organists, this introduces a
+perceived sluggishness. Fast repeated notes require the key to cycle
+entirely up and down, and techniques like palm smears can feel stiff or
+miss notes entirely.</p>
+<h3 id="how-high-triggering-recreates-the-vintage-feel">How
+High-Triggering Recreates the Vintage Feel</h3>
+<p>High-triggering bridges this gap by altering how the internal sensors
+communicate with the sound engine. When high-trigger mode is engaged,
+the instrument triggers the MIDI Note On command the exact moment the
+key hits the <em>first</em> (uppermost) sensor.</p>
+<p>Because the engine triggers sound at the very start of the physical
+travel:</p>
+<ul>
+<li><strong>Activation is instantaneous:</strong> The note sounds after
+minimal key movement, often just a millimeter or two down.</li>
+<li><strong>Release is immediate:</strong> Releasing the key breaks the
+contact near the top, allowing for rapid-fire note repetition without
+lifting the finger entirely off the keybed.</li>
+<li><strong>Technique becomes authentic:</strong> Organ-specific
+techniques, such as palm smears, rakes, and percussive "ghost notes,"
+translate accurately without requiring heavy physical impact.</li>
+</ul>
+<h3 id="trade-offs-velocity-vs-trigger-point">Trade-offs: Velocity vs.
+Trigger Point</h3>
+<p>Because high-triggering uses only the top sensor to fire the note,
+the system cannot measure the time between two contacts to calculate
+dynamic velocity. As a result, when high-triggering is active, the
+keyboard sends a fixed velocity value (typically 127).</p>
+<p>This behavior is historically accurate, as genuine tonewheel organs
+are non-velocity-sensitive instruments whose volume is controlled
+exclusively via an expression pedal. Modern clonewheel keyboards (such
+as those from Nord, Hammond-Suzuki, and Viscount) allow players to
+switch between high-triggering with fixed velocity for organ patches and
+low-triggering with standard velocity sensing when playing acoustic and
+electric piano sounds.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/understanding-organ-high-triggering-in-midi-keybeds';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

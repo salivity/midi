@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Time Code vs MIDI Machine Control Explained - midi</title>
+    <meta name="description" content="MIDI Time Code (MTC) and MIDI Machine Control (MMC) are two distinct MIDI specifications frequently used together in professional audio and video production, yet they perform fundamentally different roles. The exact functional distinction lies in synchron">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-time-code-vs-midi-machine-control-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Time Code vs MIDI Machine Control Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-time-code-vs-midi-machine-control-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI Time Code (MTC) and MIDI Machine Control (MMC) are two distinct MIDI specifications frequently used together in professional audio and video production, yet they perform fundamentally different roles. The exact functional distinction lies in synchron" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-time-code-vs-midi-machine-control-explained">MIDI Time Code
+vs MIDI Machine Control Explained</h1>
+<p>MIDI Time Code (MTC) and MIDI Machine Control (MMC) are two distinct
+MIDI specifications frequently used together in professional audio and
+video production, yet they perform fundamentally different roles. The
+exact functional distinction lies in <strong>synchronization versus
+remote operation</strong>: MTC tells devices <em>where they are</em> in
+time by transmitting continuous temporal positioning data, while MMC
+tells devices <em>what to do</em> by transmitting discrete transport
+commands like Play, Stop, and Record.</p>
+<h3 id="midi-time-code-mtc-positional-synchronization">MIDI Time Code
+(MTC): Positional Synchronization</h3>
+<p>MIDI Time Code is a digital representation of SMPTE timecode
+translated into standard MIDI messages. It acts as an absolute time
+reference that allows multiple devices—such as digital audio
+workstations (DAWs), video playback systems, and lighting consoles—to
+lock their playback speeds and positions together.</p>
+<ul>
+<li><strong>Continuous Data Stream:</strong> MTC transmits timing
+references continuously using quarter-frame messages during normal
+playback, ensuring that a follower device stays matched frame-for-frame
+with the leader device.</li>
+<li><strong>Format:</strong> It represents time in absolute real-world
+units: hours, minutes, seconds, and frames (e.g.,
+<code>01:14:22:15</code>).</li>
+<li><strong>Function:</strong> MTC does not directly command a transport
+to initiate playback. Instead, a follower system set to chase MTC simply
+detects the incoming flow of time values and automatically chases and
+locks its timeline to match that continuous position.</li>
+</ul>
+<h3 id="midi-machine-control-mmc-transport-commands">MIDI Machine
+Control (MMC): Transport Commands</h3>
+<p>MIDI Machine Control is a specialized subset of MIDI System Exclusive
+(SysEx) messages designed specifically to emulate physical transport
+buttons on external recording hardware, analog tape machines, video
+decks, and software workstations.</p>
+<ul>
+<li><strong>Discrete Event-Based Messages:</strong> Unlike MTC, MMC is
+not a continuous clock stream. An MMC message is transmitted only when a
+user presses a transport button or initiates a locator function.</li>
+<li><strong>Command Set:</strong> Common MMC instructions include Play,
+Stop, Pause, Fast Forward, Rewind, Record Arm/Punch, and Locate (jumping
+to a specific timecode position).</li>
+<li><strong>Function:</strong> MMC serves as a remote control. Sending
+an MMC "Play" command tells a secondary device to engage its playback
+mechanism, but it does not transmit continuous timing data to ensure the
+two devices run at the exact same speed once playing.</li>
+</ul>
+<h3 id="key-functional-differences">Key Functional Differences</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">MIDI Time Code (MTC)</th>
+<th style="text-align: left;">MIDI Machine Control (MMC)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Primary Purpose</strong></td>
+<td style="text-align: left;">Clock synchronization and positional
+alignment</td>
+<td style="text-align: left;">Remote transport operation and track
+arming</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Data Nature</strong></td>
+<td style="text-align: left;">Continuous stream of time data</td>
+<td style="text-align: left;">Intermittent, single-event command
+messages</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Message Type</strong></td>
+<td style="text-align: left;">MIDI Quarter Frame &amp; Full Frame System
+Common</td>
+<td style="text-align: left;">Universal System Exclusive (SysEx)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Clock/Drift
+Prevention</strong></td>
+<td style="text-align: left;">Yes (maintains time alignment during
+playback)</td>
+<td style="text-align: left;">No (does not govern playback speed or
+prevent drift)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-mtc-and-mmc-work-together">How MTC and MMC Work
+Together</h3>
+<p>In a typical production environment, MMC and MTC complement each
+other to create a unified system. For example, when you press "Play" on
+a master DAW, it sends a single <strong>MMC Play</strong> message to an
+external multi-track recorder to engage its transport. As the tape or
+secondary system starts moving, it generates and sends continuous
+<strong>MTC</strong> back to the DAW, allowing the software timeline to
+follow the hardware's precise speed and location without drifting out of
+sync.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-time-code-vs-midi-machine-control-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

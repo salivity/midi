@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Ground Loop Isolation Circuitry Explained - midi</title>
+    <meta name="description" content="This article examines the internal circuitry designed to prevent digital microprocessor switching noise from contaminating analog audio signals through MIDI connections. It details the role of the optoisolator, the deliberate omission of ground connection">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-ground-loop-isolation-circuitry-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Ground Loop Isolation Circuitry Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-ground-loop-isolation-circuitry-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines the internal circuitry designed to prevent digital microprocessor switching noise from contaminating analog audio signals through MIDI connections. It details the role of the optoisolator, the deliberate omission of ground connection" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-ground-loop-isolation-circuitry-explained">MIDI Ground Loop
+Isolation Circuitry Explained</h1>
+<p>This article examines the internal circuitry designed to prevent
+digital microprocessor switching noise from contaminating analog audio
+signals through MIDI connections. It details the role of the
+optoisolator, the deliberate omission of ground connections at the MIDI
+input, and the operation of the 5mA current loop that together eliminate
+common-mode ground loops and isolate sensitive audio paths from
+high-frequency digital interference.</p>
+<h3 id="the-problem-microprocessor-noise-and-audio-grounds">The Problem:
+Microprocessor Noise and Audio Grounds</h3>
+<p>Digital microprocessors, clock generators, and digital signal
+processors (DSPs) constantly toggle logic states at high frequencies.
+These switching transitions introduce high-frequency current spikes into
+the system’s digital ground plane. If a direct electrical connection
+exists between the digital grounds of two connected instruments or
+interfaces, this noise can circulate through common chassis or signal
+grounds, infiltrating analog audio lines. In audio gear, this manifests
+as audible hum, buzz, or high-pitched digital "hash."</p>
+<h3 id="the-solution-the-optoisolator-optocoupler">The Solution: The
+Optoisolator (Optocoupler)</h3>
+<p>To prevent this noise transfer, the MIDI specification mandates
+galvanic isolation on every standard MIDI receiver circuit using an
+optoisolator (also known as an optocoupler).</p>
+<p>An optoisolator packages an infrared light-emitting diode (LED) and a
+photodetector (typically a phototransistor or high-speed logic gate)
+inside a single light-tight integrated circuit. When a digital "low"
+(active state) is transmitted, electrical current flows through the LED,
+causing it to emit infrared light across an internal physical barrier.
+The photodetector detects this light and switches the receiving device's
+internal circuitry accordingly. Because the signal bridges the boundary
+purely as light, there is no physical or electrical connection between
+the transmitting circuitry and the receiving microprocessor.</p>
+<p>Common components used for this purpose include high-speed
+optocouplers such as the 6N138, Sharp PC900, or Fairchild H11L1, which
+feature rapid switching times to handle the standard 31.25 kbaud MIDI
+data rate without signal degradation.</p>
+<h3 id="the-5ma-balanced-current-loop">The 5mA Balanced Current
+Loop</h3>
+<p>The MIDI hardware interface functions as a 5 milliampere (mA) current
+loop rather than a typical voltage-driven interface:</p>
+<ul>
+<li><strong>MIDI OUT/THRU:</strong> Uses two pull-up/limiting resistors
+(typically 220 ohms) tied to the transmitter’s power rail and ground to
+supply current to Pins 4 and 5 of the 5-pin DIN connector.</li>
+<li><strong>MIDI IN:</strong> Routes Pins 4 and 5 directly across the
+optoisolator's internal LED (with a reverse-protection diode wired in
+parallel).</li>
+</ul>
+<p>Because the detector triggers based on the current circulating
+through the closed loop rather than a voltage referenced to a shared
+ground, the receiving side does not need to know or share the
+transmitter's voltage reference.</p>
+<h3 id="floating-ground-configuration-at-midi-in">Floating Ground
+Configuration at MIDI IN</h3>
+<p>The critical design choice that completely breaks ground loops lies
+in Pin 2 of the MIDI IN connector:</p>
+<ul>
+<li>On <strong>MIDI OUT</strong> and <strong>MIDI THRU</strong> ports,
+Pin 2 is connected directly to the transmitter's chassis/circuit ground
+to provide shielding along the cable.</li>
+<li>On <strong>MIDI IN</strong> ports, Pin 2 is left entirely
+unconnected (floating).</li>
+</ul>
+<p>Because Pin 2 is disconnected at the input, the cable shield connects
+to ground at only one end (the transmitting end). This ensures that
+ground currents cannot return through the MIDI cable shield.
+Microprocessor switching noise on the host or controller's ground plane
+is physically prevented from flowing into the synthesizer or audio
+interface's analog ground, preserving audio fidelity and preventing
+ground loop hum.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-ground-loop-isolation-circuitry-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

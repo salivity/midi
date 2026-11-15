@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI CC 65 Controls Polyphonic Portamento - midi</title>
+    <meta name="description" content="This article explains how MIDI Continuous Controller 65 (CC 65) functions as a switch to toggle portamento across the individual voices of a polyphonic synthesizer. It covers the MIDI specification for CC 65, the mechanics of polyphonic voice allocation d">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-cc-65-controls-polyphonic-portamento">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI CC 65 Controls Polyphonic Portamento - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-cc-65-controls-polyphonic-portamento" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how MIDI Continuous Controller 65 (CC 65) functions as a switch to toggle portamento across the individual voices of a polyphonic synthesizer. It covers the MIDI specification for CC 65, the mechanics of polyphonic voice allocation d" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-cc-65-controls-polyphonic-portamento">How MIDI CC 65
+Controls Polyphonic Portamento</h1>
+<p>This article explains how MIDI Continuous Controller 65 (CC 65)
+functions as a switch to toggle portamento across the individual voices
+of a polyphonic synthesizer. It covers the MIDI specification for CC 65,
+the mechanics of polyphonic voice allocation during glides, the
+difference between voice-to-voice tracking, and how synthesizer engines
+handle pitch transitions when this control is engaged or disengaged.</p>
+<h3 id="the-standard-function-of-midi-cc-65">The Standard Function of
+MIDI CC 65</h3>
+<p>Under the standard MIDI specification, CC 65 is designated as the
+Portamento On/Off switch. It operates as a binary controller based on a
+standard 0 to 127 data value range:</p>
+<ul>
+<li><strong>Values 0 to 63:</strong> Portamento Off</li>
+<li><strong>Values 64 to 127:</strong> Portamento On</li>
+</ul>
+<p>When active, CC 65 instructs the synthesizer’s sound engine to enable
+a smooth, continuous pitch slide between consecutive notes rather than
+instantly jumping from one frequency to another. The duration or rate of
+this slide is usually determined independently by MIDI CC 5 (Portamento
+Time) or CC 37 (Portamento Control).</p>
+<h3 id="polyphonic-voice-allocation-and-glide-tracking">Polyphonic Voice
+Allocation and Glide Tracking</h3>
+<p>Monophonic synthesizers handle portamento straightforwardly because
+there is only one voice channel: the pitch slides from the last active
+note to the new note. In a polyphonic synthesizer, managing portamento
+is significantly more complex because the instrument must calculate
+glides across multiple independent hardware or software voices
+simultaneously.</p>
+<p>When CC 65 is toggled to "On" (64–127), the synthesizer's voice
+management system must determine which existing voice glides to which
+incoming note. Synthesizer firmware typically accomplishes this using
+one of three primary allocation strategies:</p>
+<ol type="1">
+<li><strong>Voice-Index Mapping:</strong> Polyphonic synthesizers assign
+notes to distinct internal voice slots (e.g., Voices 1 through 8). When
+a new chord is struck, Voice 1 glides from its previous note to the new
+note assigned to Voice 1, Voice 2 glides to the new Voice 2 note, and so
+forth. If the voice count of the new chord does not match the previous
+chord, unused voices will jump immediately or remain idle.</li>
+<li><strong>Nearest-Pitch Matching:</strong> Advanced synthesis engines
+calculate the pitch distance between the notes of the previous chord and
+the notes of the newly triggered chord. The engine assigns glides so
+that each new note glides from the closest available pitch played
+previously, minimizing dramatic or chaotic cross-pitch movement.</li>
+<li><strong>Ascending/Descending Register Pairing:</strong> The engine
+sorts the notes of the previous chord and the new chord from lowest to
+highest pitch. The lowest note of the old chord glides to the lowest
+note of the new chord, the second glides to the second, and so on. This
+maintains chord inversions and harmonic structures during the
+transition.</li>
+</ol>
+<h3 id="instantaneous-state-changes-and-active-glides">Instantaneous
+State Changes and Active Glides</h3>
+<p>When CC 65 is switched during live performance or playback, the
+synthesizer alters its behavior at the moment of the message
+arrival:</p>
+<ul>
+<li><strong>Toggling On Mid-Performance:</strong> Any notes already
+sounding maintain their current pitch. The portamento behavior applies
+strictly to subsequent Note-On events, which will pull their starting
+frequencies from the assigned voice history.</li>
+<li><strong>Toggling Off Mid-Glide:</strong> If CC 65 receives a value
+below 64 while voices are actively sliding, behavior depends on the
+synthesizer's internal programming. Most modern engines immediately snap
+the voices to their final destination pitch to prevent notes from
+hanging out of tune. Other engines allow current active glides to finish
+their designated trajectory while ensuring all subsequent Note-On
+messages trigger instantly at their target pitch without sliding.</li>
+</ul>
+<h3 id="interaction-with-legato-modes">Interaction with Legato
+Modes</h3>
+<p>Polyphonic portamento via CC 65 is frequently linked with MIDI CC 68
+(Legato Footswitch) or internal legato settings. When standard
+polyphonic portamento is active via CC 65, every new chord glides from
+the previous one, regardless of playing style. However, if the synth
+engine is set to polyphonic legato mode, CC 65 only initiates a pitch
+glide on voices where the player overlaps keys, allowing staccato chords
+to trigger cleanly without sliding while connected chord movements
+smoothly transition.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-cc-65-controls-polyphonic-portamento';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

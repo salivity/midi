@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Interrupted MIDI Running Status Needs a Status Byte - midi</title>
+    <meta name="description" content="Running status is an optimization feature in the MIDI 1.0 specification designed to conserve bandwidth by omitting redundant status bytes during continuous, identical message streams. When an interrupting MIDI event occurs, the receiver&#39;s internal state i">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-interrupted-midi-running-status-needs-a-status-byte">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Interrupted MIDI Running Status Needs a Status Byte - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-interrupted-midi-running-status-needs-a-status-byte" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running status is an optimization feature in the MIDI 1.0 specification designed to conserve bandwidth by omitting redundant status bytes during continuous, identical message streams. When an interrupting MIDI event occurs, the receiver&#39;s internal state i" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-interrupted-midi-running-status-needs-a-status-byte">Why
+Interrupted MIDI Running Status Needs a Status Byte</h1>
+<p>Running status is an optimization feature in the MIDI 1.0
+specification designed to conserve bandwidth by omitting redundant
+status bytes during continuous, identical message streams. When an
+interrupting MIDI event occurs, the receiver's internal state is altered
+or reset, making it impossible to correctly decode subsequent data
+without explicitly re-establishing the target command. Transmitting a
+new status byte immediately after an interruption is strictly required
+to prevent catastrophic data misinterpretation, stuck notes, and dropped
+commands.</p>
+<p>In standard MIDI communication, a complete Channel Voice message
+consists of a status byte (which defines the action and the channel,
+such as Note On for Channel 1) followed by one or two data bytes (such
+as pitch and velocity). Under running status rules, if a transmitter
+sends multiple consecutive messages of the exact same type and channel,
+it can omit the status byte after the first message. The receiving
+device stores this initial status byte in a dedicated running status
+buffer and automatically applies it to all incoming raw data bytes.</p>
+<p>This mechanism relies entirely on the receiver maintaining an
+unbroken state. If another MIDI event interrupts the stream, this state
+is fundamentally compromised:</p>
+<ul>
+<li><strong>Channel Voice Overwrites:</strong> If a different Channel
+Voice message arrives—such as a Note On for a different channel, a
+Control Change, or a Pitch Bend—the receiver updates its running status
+buffer to reflect the new command. If the transmitter subsequently
+returns to sending data bytes from the original sequence without
+providing a new status byte, the receiver will apply the
+<em>interrupting</em> status to those bytes. For example, pitch and
+velocity data meant for a note could be misparsed as controller numbers
+and values, causing unpredictable sonic glitches.</li>
+<li><strong>Buffer Invalidation via System Messages:</strong> System
+Common messages (such as Song Select or Tune Request) and System
+Exclusive (SysEx) messages explicitly clear the running status buffer
+entirely. If a stream is interrupted by one of these messages, the
+receiver no longer possesses an active status byte in its buffer. Any
+raw data bytes received immediately afterward are considered orphaned
+data and are discarded by the receiver, resulting in missing notes or
+ignored performance data.</li>
+</ul>
+<p>While MIDI System Real-Time messages (such as MIDI Clock and Active
+Sensing) are an exception that can weave into a running status stream
+without clearing the buffer, any other interrupting event breaks the
+continuity.</p>
+<p>Because the receiver cannot guess when a sender has switched back to
+an earlier context, the transmitter is mandated by the MIDI
+specification to send a fresh status byte the moment it resumes the
+prior stream. This guarantees that the receiver updates its running
+status register to the correct command and channel before parsing any
+subsequent data bytes.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-interrupted-midi-running-status-needs-a-status-byte';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

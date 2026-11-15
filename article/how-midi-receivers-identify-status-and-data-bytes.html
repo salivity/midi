@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Receivers Identify Status and Data Bytes - midi</title>
+    <meta name="description" content="The MIDI (Musical Instrument Digital Interface) specification relies on a stream of 8-bit bytes to transmit musical performance data, where the Most Significant Bit (MSB) acts as a binary flag that immediately tells a receiver whether an incoming byte rep">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-receivers-identify-status-and-data-bytes">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Receivers Identify Status and Data Bytes - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-receivers-identify-status-and-data-bytes" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The MIDI (Musical Instrument Digital Interface) specification relies on a stream of 8-bit bytes to transmit musical performance data, where the Most Significant Bit (MSB) acts as a binary flag that immediately tells a receiver whether an incoming byte rep" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-receivers-identify-status-and-data-bytes">How MIDI
+Receivers Identify Status and Data Bytes</h1>
+<p>The MIDI (Musical Instrument Digital Interface) specification relies
+on a stream of 8-bit bytes to transmit musical performance data, where
+the Most Significant Bit (MSB) acts as a binary flag that immediately
+tells a receiver whether an incoming byte represents an operational
+command or the parameter data accompanying that command. By evaluating
+the state of this single bit—Bit 7—a MIDI receiver can determine the
+function of any byte without needing prior context, ensuring reliable,
+low-latency communication between instruments and digital audio
+devices.</p>
+<h3 id="the-binary-structure-of-midi-bytes">The Binary Structure of MIDI
+Bytes</h3>
+<p>Every standard MIDI message consists of one or more 8-bit bytes
+(octets). These bits are numbered from 0 to 7, where Bit 0 is the least
+significant bit (LSB) and Bit 7 is the most significant bit (MSB).</p>
+<ul>
+<li><strong>Status Bytes (MSB = 1):</strong> If Bit 7 is high
+(<code>1</code>), the receiver interprets the byte as a status byte.
+These values fall in the hexadecimal range <code>0x80</code> to
+<code>0xFF</code> (decimal 128 to 255).</li>
+<li><strong>Data Bytes (MSB = 0):</strong> If Bit 7 is low
+(<code>0</code>), the receiver interprets the byte as a data byte. These
+values fall in the hexadecimal range <code>0x00</code> to
+<code>0x7F</code> (decimal 0 to 127).</li>
+</ul>
+<h3 id="status-bytes-defining-the-command">Status Bytes: Defining the
+Command</h3>
+<p>When a receiver encounters a byte with an MSB of <code>1</code>, it
+signals the beginning of a new instruction or event. The remaining seven
+bits define:</p>
+<ol type="1">
+<li>The message type (such as Note On, Note Off, Control Change, or
+Pitch Bend).</li>
+<li>The target MIDI channel (channels 1 through 16).</li>
+</ol>
+<p>For example, the byte <code>10010000</code> (<code>0x90</code> in
+hexadecimal) has a <code>1</code> in the MSB position. The upper nibble
+(<code>1001</code>) defines a "Note On" command, while the lower nibble
+(<code>0000</code>) specifies MIDI Channel 1.</p>
+<h3 id="data-bytes-providing-the-parameters">Data Bytes: Providing the
+Parameters</h3>
+<p>Once a receiver registers a status byte, it anticipates one or two
+data bytes to complete the instruction, depending on the message type.
+Because the MSB of a data byte is always <code>0</code>, only the lower
+7 bits are used to represent values, limiting MIDI data values to a
+range of 0 to 127.</p>
+<p>Using the previous "Note On" example, the status byte
+<code>0x90</code> is followed by two data bytes:</p>
+<ol type="1">
+<li><strong>Note Number:</strong> e.g., <code>00111100</code>
+(<code>0x3C</code>, decimal 60, corresponding to Middle C).</li>
+<li><strong>Velocity:</strong> e.g., <code>01000000</code>
+(<code>0x40</code>, decimal 64, representing key velocity).</li>
+</ol>
+<p>Both bytes begin with <code>0</code>, signaling to the receiver that
+they represent values rather than new commands.</p>
+<h3 id="receiver-parsing-logic">Receiver Parsing Logic</h3>
+<p>At the hardware and firmware level, a MIDI receiver evaluates
+incoming serial data using simple bitwise masking. By applying a bitwise
+AND operation with <code>0x80</code> (binary <code>10000000</code>), the
+receiver checks the state of Bit 7:</p>
+<ul>
+<li><code>(incoming_byte &amp; 0x80) != 0</code> evaluates to
+<strong>True</strong>: Process as a Status Byte.</li>
+<li><code>(incoming_byte &amp; 0x80) == 0</code> evaluates to
+<strong>False</strong>: Process as a Data Byte.</li>
+</ul>
+<h3 id="operational-advantages">Operational Advantages</h3>
+<p>Using the MSB as an identifier provides critical advantages for
+real-time music hardware:</p>
+<ul>
+<li><strong>Error Recovery:</strong> If a cable is unplugged
+mid-transmission or bytes are corrupted, the receiver does not stay
+desynchronized. As soon as it encounters the next byte starting with
+<code>1</code>, it immediately re-aligns to the start of a valid
+command.</li>
+<li><strong>Running Status:</strong> When sending repetitive commands
+(such as a rapid series of Note On messages), the MIDI protocol allows
+the transmitter to send the status byte once, followed by multiple pairs
+of data bytes. The receiver knows it is still processing the same
+command because incoming bytes continue to have an MSB of
+<code>0</code>.</li>
+<li><strong>Real-Time Interrupts:</strong> System Real-Time messages
+(such as MIDI Clock or Active Sensing) have status bytes that can be
+sent at any time, even in the middle of another message's data stream.
+The receiver sees the <code>1</code> in the MSB, immediately processes
+the single-byte command, and resumes collecting data bytes for the
+original message.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-receivers-identify-status-and-data-bytes';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

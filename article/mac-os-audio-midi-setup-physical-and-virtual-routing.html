@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>macOS Audio MIDI Setup Physical and Virtual Routing - midi</title>
+    <meta name="description" content="The macOS Audio MIDI Setup utility provides a centralized, graphical environment known as the MIDI Studio to visualize, configure, and route both hardware and software MIDI streams across the operating system. This article examines how the utility depicts">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/mac-os-audio-midi-setup-physical-and-virtual-routing">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="macOS Audio MIDI Setup Physical and Virtual Routing - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/mac-os-audio-midi-setup-physical-and-virtual-routing" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The macOS Audio MIDI Setup utility provides a centralized, graphical environment known as the MIDI Studio to visualize, configure, and route both hardware and software MIDI streams across the operating system. This article examines how the utility depicts" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="macos-audio-midi-setup-physical-and-virtual-routing">macOS Audio
+MIDI Setup Physical and Virtual Routing</h1>
+<p>The macOS Audio MIDI Setup utility provides a centralized, graphical
+environment known as the MIDI Studio to visualize, configure, and route
+both hardware and software MIDI streams across the operating system.
+This article examines how the utility depicts physical hardware
+connections via virtual cabling, manages inter-application routing
+through the Inter-Application Communication (IAC) Driver, and bridges
+local network and wireless devices through dedicated virtual nodes.</p>
+<h3 id="the-midi-studio-interface">The MIDI Studio Interface</h3>
+<p>The MIDI Studio window functions as a dynamic canvas that reflects
+CoreMIDI's internal configuration. Every active MIDI endpoint connected
+to macOS is visually rendered as a distinct device icon. Each device
+block displays input and output connection terminals (represented by
+directional arrowheads), which indicate the number of physical or
+logical ports available for that specific endpoint.</p>
+<h3 id="visualizing-physical-hardware-connections">Visualizing Physical
+Hardware Connections</h3>
+<p>When class-compliant USB MIDI controllers or multi-port MIDI
+interfaces are plugged into the Mac, Audio MIDI Setup automatically
+generates an icon representing that hardware. However, traditional
+hardware instruments connected via standard 5-pin DIN cables do not
+automatically report their presence to the system.</p>
+<p>To map traditional hardware:</p>
+<ol type="1">
+<li>Users create a placeholder icon using the "Add Device"
+function.</li>
+<li>The user configures properties such as device name, manufacturer,
+and active MIDI channels.</li>
+<li>The user creates a visual connection by clicking a port terminal on
+the interface icon and dragging a virtual patch cord to the
+corresponding input or output terminal on the external gear icon.</li>
+</ol>
+<p>This virtual patch cord represents the physical MIDI cable layout in
+the studio. CoreMIDI uses this visual mapping to broadcast port names
+and channel assignments directly to digital audio workstations (DAWs)
+and standalone software instruments.</p>
+<h3 id="virtual-inter-application-routing-the-iac-driver">Virtual
+Inter-Application Routing (The IAC Driver)</h3>
+<p>To route MIDI data between two software applications running on the
+same Mac—such as sending clock from a DAW to a standalone
+sequencer—Audio MIDI Setup provides the Inter-Application Communication
+(IAC) Driver.</p>
+<p>Unlike physical devices, the IAC Driver exists entirely within
+software:</p>
+<ul>
+<li><strong>Activation:</strong> The IAC Driver icon appears permanently
+inside the MIDI Studio canvas. It is inactive by default and must be set
+to "Device is online" inside its property inspector.</li>
+<li><strong>Buses:</strong> Users can configure one or more virtual
+"buses" (named channels).</li>
+<li><strong>Application Access:</strong> Each active bus manifests
+inside any CoreMIDI-compatible application as an independent input and
+output destination.</li>
+</ul>
+<p>Once configured, data sent to an IAC output port by one program is
+immediately available on that same IAC input port in another program,
+removing the need for external loopback cables or third-party virtual
+routing utilities.</p>
+<h3 id="network-and-wireless-virtual-endpoints">Network and Wireless
+Virtual Endpoints</h3>
+<p>Audio MIDI Setup also handles remote inter-device communication via
+RTP MIDI and Bluetooth:</p>
+<ul>
+<li><strong>Network Sessions:</strong> Accessed via the Network icon,
+this creates software-based network endpoints that route MIDI over local
+Wi-Fi or Ethernet. It allows bi-directional communication with other
+Macs, iOS devices, or Windows computers using the Apple MIDI network
+protocol.</li>
+<li><strong>Bluetooth MIDI:</strong> The Bluetooth panel scans for and
+connects to low-energy wireless controllers, instantly instantiating
+them as standard device nodes within the canvas.</li>
+</ul>
+<p>Both network sessions and Bluetooth connections are represented in
+the CoreMIDI environment as standard routing endpoints, functioning
+identically to local hardware ports or IAC virtual buses.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/mac-os-audio-midi-setup-physical-and-virtual-routing';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

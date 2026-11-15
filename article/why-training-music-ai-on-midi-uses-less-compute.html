@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Training Music AI on MIDI Uses Less Compute - midi</title>
+    <meta name="description" content="Training generative music systems on Musical Instrument Digital Interface (MIDI) files is significantly less resource-intensive than training on raw audio due to differences in data representation and computational complexity. While raw audio models must">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/why-training-music-ai-on-midi-uses-less-compute">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Training Music AI on MIDI Uses Less Compute - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/why-training-music-ai-on-midi-uses-less-compute" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Training generative music systems on Musical Instrument Digital Interface (MIDI) files is significantly less resource-intensive than training on raw audio due to differences in data representation and computational complexity. While raw audio models must" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-training-music-ai-on-midi-uses-less-compute">Why Training
+Music AI on MIDI Uses Less Compute</h1>
+<p>Training generative music systems on Musical Instrument Digital
+Interface (MIDI) files is significantly less resource-intensive than
+training on raw audio due to differences in data representation and
+computational complexity. While raw audio models must learn to
+synthesize complex physical waveforms containing millions of data points
+per minute, MIDI models only need to interpret lightweight symbolic
+instructions that describe musical events. Consequently, MIDI-based
+architectures require exponentially lower data storage, shorter sequence
+lengths, and reduced GPU memory, leading to dramatically faster and more
+affordable model training.</p>
+<h2 id="symbolic-data-vs-raw-waveforms">Symbolic Data vs. Raw
+Waveforms</h2>
+<p>The fundamental difference lies in how music is encoded. Raw audio is
+a continuous acoustic waveform captured at high sample rates, typically
+44,100 Hz (samples per second) for CD quality. One minute of
+uncompressed stereo audio contains over 5 million data points. A
+generative model working with raw audio must learn the physical
+properties of sound, including timbre, harmonics, phase alignment, room
+acoustics, and microphone artifacts.</p>
+<p>In contrast, MIDI is symbolic metadata. It does not contain sound;
+instead, it contains digital instructions such as:</p>
+<ul>
+<li>Note On and Note Off events</li>
+<li>Pitch values (0–127)</li>
+<li>Velocity (volume/attack intensity)</li>
+<li>Timing and duration</li>
+</ul>
+<p>A one-minute piano piece might require only a few hundred or thousand
+discrete MIDI events. While an uncompressed audio file for that minute
+can easily exceed 10 megabytes, the corresponding MIDI file is typically
+between 10 and 50 kilobytes.</p>
+<h2 id="sequence-length-and-attention-mechanisms">Sequence Length and
+Attention Mechanisms</h2>
+<p>Modern generative models, such as Transformers, rely on attention
+mechanisms whose computational and memory demands scale quadratically
+with sequence length (<span class="math inline">\(O(N^2)\)</span>).</p>
+<p>Even when neural audio codecs compress raw audio into discrete tokens
+(such as EnCodec or SoundStream), they still generate between 50 to 150
+tokens per second across multiple codebooks. A three-minute song still
+translates to tens of thousands of tokens.</p>
+<p>Because MIDI only logs events when a state changes (e.g., when a key
+is pressed or released), it achieves an exceptionally high information
+density per token. The same three-minute song might consist of just
+1,000 to 3,000 tokens in MIDI format. The drastically shorter sequence
+length directly translates to:</p>
+<ul>
+<li>Dramatically reduced matrix multiplication operations per training
+step</li>
+<li>Ability to fit much larger batch sizes into GPU VRAM</li>
+<li>Longer musical contexts processed without exceeding context-window
+limits</li>
+</ul>
+<h2 id="decoupling-composition-from-sound-design">Decoupling Composition
+from Sound Design</h2>
+<p>Audio models are tasked with solving two extremely hard problems
+simultaneously: musical composition (melody, harmony, rhythm, and
+structural development) and acoustic synthesis (generating realistic
+instrument timbres, mixing, and mastering).</p>
+<p>MIDI isolates composition from sound synthesis. Because the
+generative system is solely responsible for determining which notes to
+play and when, it offloads the resource-heavy task of sound production
+to standard software synthesizers or soundfonts downstream. This
+division of labor allows the neural network to focus exclusively on
+high-level musical logic, requiring fewer parameters and less data to
+achieve coherent results.</p>
+<h2 id="hardware-and-training-footprint">Hardware and Training
+Footprint</h2>
+<p>Because of these structural advantages, the hardware requirements
+diverge significantly:</p>
+<ul>
+<li><strong>Audio Models:</strong> Often require large clusters of
+enterprise-grade GPUs (e.g., NVIDIA A100s or H100s) running for weeks or
+months, costing tens to hundreds of thousands of dollars in cloud
+computing resources.</li>
+<li><strong>MIDI Models:</strong> Can often be trained on a single
+consumer-grade GPU (such as an RTX 3080 or 4090) in a matter of hours or
+days, making symbolic generative music accessible on standard
+workstations.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/why-training-music-ai-on-midi-uses-less-compute';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

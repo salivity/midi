@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Pad Controllers Sense MIDI Velocity and Pressure - midi</title>
+    <meta name="description" content="Modern rubber pad controllers rely on Force-Sensing Resistor (FSR) technology to capture expressive musical performances with high dynamic fidelity. This article explores the physical and electrical mechanisms underlying these instruments, detailing how a">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-pad-controllers-sense-midi-velocity-and-pressure">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Pad Controllers Sense MIDI Velocity and Pressure - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-pad-controllers-sense-midi-velocity-and-pressure" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern rubber pad controllers rely on Force-Sensing Resistor (FSR) technology to capture expressive musical performances with high dynamic fidelity. This article explores the physical and electrical mechanisms underlying these instruments, detailing how a" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-pad-controllers-sense-midi-velocity-and-pressure">How Pad
+Controllers Sense MIDI Velocity and Pressure</h1>
+<p>Modern rubber pad controllers rely on Force-Sensing Resistor (FSR)
+technology to capture expressive musical performances with high dynamic
+fidelity. This article explores the physical and electrical mechanisms
+underlying these instruments, detailing how a single sensor layer can
+determine initial strike speed (MIDI velocity) through the rate of
+voltage change, while simultaneously tracking continuous, per-pad finger
+force (polyphonic pressure or aftertouch) through ongoing resistance
+monitoring.</p>
+<h3 id="the-force-sensing-resistor-fsr">The Force-Sensing Resistor
+(FSR)</h3>
+<p>The foundation of modern pad controllers—such as those found on
+modern MPCs, Ableton Push, and Maschine units—is the Force-Sensing
+Resistor (FSR).</p>
+<p>An FSR assembly typically consists of:</p>
+<ul>
+<li><strong>A conductive grid:</strong> Interlocking (interdigitated)
+electrical traces printed on a flexible substrate or printed circuit
+board (PCB).</li>
+<li><strong>A semi-conductive layer:</strong> A polymer film embedded
+with electrically conductive nanoparticles (often carbon or metal).</li>
+<li><strong>An elastomeric pad:</strong> The external silicone or rubber
+pad that acts as a mechanical actuator.</li>
+</ul>
+<p>When no pressure is applied, the conductive particles inside the
+polymer film are physically separated, resulting in an open circuit with
+near-infinite electrical resistance. When a musician strikes or presses
+the rubber pad, the elastomer compresses against the FSR. This physical
+compression forces the conductive particles closer together—a phenomenon
+governed by percolation theory—and establishes microscopic contact
+points with the underlying conductive traces. As applied force
+increases, electrical resistance decreases predictably and
+non-linearly.</p>
+<h3 id="deriving-midi-velocity">Deriving MIDI Velocity</h3>
+<p>MIDI velocity represents the speed and intensity of an initial hit,
+mapped to a scale from 1 to 127. Because the rubber pad does not contain
+moving parts or multiple contact switches (like traditional piano-style
+dual-switch keybeds), velocity is calculated mathematically rather than
+measured directly.</p>
+<ol type="1">
+<li><strong>Transient Detection:</strong> When a pad is struck, an
+onboard microcontroller constantly scans the analog voltage output
+across the FSR matrix at sample rates often exceeding 1,000 Hz.</li>
+<li><strong>Delta Measurement (<span class="math inline">\(\Delta V /
+\Delta t\)</span>):</strong> Upon initial contact, the resistance drops
+sharply, causing a rapid spike in voltage. The microcontroller measures
+the rate of this voltage increase over a short time window (typically
+within the first 1 to 5 milliseconds of impact).</li>
+<li><strong>Velocity Translation:</strong> A hard, fast strike generates
+a steep voltage curve in a very short window, whereas a soft strike
+generates a gradual curve. The firmware maps this slope through a
+user-selected velocity curve (linear, exponential, or logarithmic) to
+generate the final MIDI Note-On velocity value.</li>
+</ol>
+<h3 id="capturing-polyphonic-pressure-aftertouch">Capturing Polyphonic
+Pressure (Aftertouch)</h3>
+<p>Once the initial strike is registered and the velocity value is
+transmitted, the controller does not reset the sensor. Instead, it
+transitions to monitoring steady-state and fluctuating force to generate
+polyphonic pressure (per-note aftertouch).</p>
+<p>Unlike standard channel aftertouch—which uses a single long sensor
+strip beneath an entire keyboard to affect all notes globally—modern pad
+grids isolate the FSR nodes beneath each rubber pad:</p>
+<ol type="1">
+<li><strong>Independent Electrical Paths:</strong> Each pad sits over an
+isolated sensor zone or an individually multiplexed intersection in a
+matrix circuit.</li>
+<li><strong>Continuous Analog Sampling:</strong> While the finger
+remains on the pad, the microcontroller continuously samples the
+resistance across that specific node.</li>
+<li><strong>Real-Time Mapping:</strong> Modulations in holding pressure
+cause real-time variations in resistance. The hardware converts these
+continuous analog voltage changes into a stream of 7-bit (0–127) or
+14-bit (high-resolution) MIDI Polyphonic Pressure messages or MIDI
+Polyphonic Expression (MPE) pressure data. Because each sensor is
+electrically discrete, pressing harder on one pad has no electrical
+effect on the pressure values generated by adjacent pads.</li>
+</ol>
+<h3 id="mechanical-isolation-and-crosstalk-elimination">Mechanical
+Isolation and Crosstalk Elimination</h3>
+<p>For this mechanism to function accurately, mechanical isolation is
+critical. If striking one pad deforms the surrounding silicone enough to
+compress neighboring sensors, false velocity triggers or incorrect
+pressure data occur (known as mechanical crosstalk). Manufacturers
+prevent this by molding the rubber pad sheet with isolated elastomer
+wells, incorporating air gaps between individual sensors, and employing
+firmware algorithms that reject secondary shockwaves traveling across
+adjacent pads.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-pad-controllers-sense-midi-velocity-and-pressure';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

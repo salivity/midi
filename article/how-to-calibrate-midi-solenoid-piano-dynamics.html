@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Calibrate MIDI Solenoid Piano Dynamics - midi</title>
+    <meta name="description" content="Transforming a mechanical MIDI solenoid piano into an expressive instrument capable of replicating human touch requires systematic physical and digital calibration. This guide covers the essential engineering steps—including mechanical pre-regulation, sol">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-to-calibrate-midi-solenoid-piano-dynamics">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Calibrate MIDI Solenoid Piano Dynamics - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-to-calibrate-midi-solenoid-piano-dynamics" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Transforming a mechanical MIDI solenoid piano into an expressive instrument capable of replicating human touch requires systematic physical and digital calibration. This guide covers the essential engineering steps—including mechanical pre-regulation, sol" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-calibrate-midi-solenoid-piano-dynamics">How to Calibrate
+MIDI Solenoid Piano Dynamics</h1>
+<p>Transforming a mechanical MIDI solenoid piano into an expressive
+instrument capable of replicating human touch requires systematic
+physical and digital calibration. This guide covers the essential
+engineering steps—including mechanical pre-regulation, solenoid force
+profiling, individual key offset mapping, and release velocity
+calibration—required to bridge the gap between raw binary MIDI data and
+the nuanced dynamics of an acoustic performance.</p>
+<h3 id="1-mechanical-pre-regulation-and-physical-alignment">1.
+Mechanical Pre-Regulation and Physical Alignment</h3>
+<p>Before attempting any software or electrical calibration, the
+acoustic piano and the solenoid rail must be mechanically aligned.</p>
+<ul>
+<li><strong>Piano Action Regulation:</strong> Ensure the acoustic
+piano's action is fully regulated to standard factory specifications.
+Uniform key dip, let-off (escapement), drop, and hammer blow distance
+across all 88 keys provide a consistent mechanical baseline.</li>
+<li><strong>Rail Placement and Plunger Spacing:</strong> Mount the
+solenoid rail so that each plunger contacts the key or wippen
+dead-center. Plungers must move freely without lateral friction or
+binding. Set the rest gap (the distance between the tip of the plunger
+and the underside of the key) uniformly—typically between 1 to 2
+millimeters—to allow the key to return fully without rattling.</li>
+</ul>
+<h3 id="2-identifying-thresholds-for-minimum-and-maximum-force">2.
+Identifying Thresholds for Minimum and Maximum Force</h3>
+<p>Solenoids convert electrical pulses (typically Pulse Width Modulation
+or PWM) into magnetic force. Because bass keys have heavier hammers and
+dampers than treble keys, each key requires a unique minimum and maximum
+electrical threshold.</p>
+<ul>
+<li><strong>Deadband and Minimum Strike (Pianissimo):</strong> Determine
+the exact pulse width required to overcome static inertia and key
+weight. The minimum threshold is reached when the solenoid delivers just
+enough momentum to throw the hammer past escapement to produce an
+audible, clean <em>pianissimo</em> (<span
+class="math inline">\(pp\)</span>) without choking or ghosting.</li>
+<li><strong>Saturation and Maximum Strike (Fortissimo):</strong>
+Establish the upper limit where increases in pulse width or voltage no
+longer produce a measurable increase in acoustic volume or hammer speed.
+Limiting the maximum drive prevents solenoid overheating, mechanical
+wear, and harsh string impacts.</li>
+</ul>
+<h3 id="3-non-linear-electromechanical-mapping">3. Non-Linear
+Electromechanical Mapping</h3>
+<p>Solenoid magnetic force is naturally non-linear; as the ferromagnetic
+plunger moves deeper into the coil, the magnetic pull increases
+exponentially even under constant current.</p>
+<ul>
+<li><strong>PWM-to-Force Linearization:</strong> Implement an algorithm
+that compensates for this inverse-square magnetic behavior. Human
+fingers exert a push characterized by follow-through, whereas an
+uncalibrated solenoid delivers an aggressive snap.</li>
+<li><strong>Velocity Curve Profiling:</strong> Map standard MIDI
+velocities (1–127) onto a tailored power curve rather than a linear
+slope. Human perception of loudness (sones/phons) is logarithmic;
+translating MIDI values through an exponential power function ensures
+proportional acoustic steps between dynamic levels.</li>
+</ul>
+<h3 id="4-per-key-dynamic-profiling-individual-offsets">4. Per-Key
+Dynamic Profiling (Individual Offsets)</h3>
+<p>Friction, hammer mass, and wood elasticity vary across an 88-key
+piano action, meaning a uniform global velocity curve is
+insufficient.</p>
+<ul>
+<li><strong>Sensor-Based Feedback:</strong> Utilize an optical sensor
+rail (measuring time-of-flight of the hammer shanks just before striking
+the string) or an acoustic measurement microphone.</li>
+<li><strong>Automated Strike Sweep:</strong> Run calibration software
+that triggers each key through discrete MIDI velocity steps (e.g.,
+values 16, 32, 64, 96, 127).</li>
+<li><strong>Per-Note Look-Up Tables (LUT):</strong> Record the resulting
+hammer velocity or decibel output for each strike. Generate an 88-column
+calibration matrix containing key-specific gain and offset values,
+ensuring that a MIDI velocity of 64 produces the exact same hammer
+velocity whether struck in the bass, middle, or treble register.</li>
+</ul>
+<h3 id="5-calibrating-note-off-and-release-damping">5. Calibrating
+Note-Off and Release Damping</h3>
+<p>Human expression depends as much on how a key is released as how it
+is struck. Abruptly cutting current to a solenoid causes the plunger to
+drop instantly, causing key bounce and abrupt damper cutoff.</p>
+<ul>
+<li><strong>Variable Decay Curves:</strong> Calibrate the decay rate of
+the solenoid drive current to reflect the incoming MIDI Note-Off
+velocity.</li>
+<li><strong>Controlled Descent:</strong> Implement a soft-release
+routine (controlled PWM ramp-down) that allows the damper felt to settle
+gently onto the vibrating string. This replicates the finger-cushioned
+release used by pianists for smooth legato transitions and controlled
+staccato articulation.</li>
+</ul>
+<h3 id="6-pedal-state-dynamic-compensation">6. Pedal State Dynamic
+Compensation</h3>
+<p>Engaging the sustain (damper) pedal lifts all dampers off the strings
+simultaneously, which drastically reduces the physical resistance felt
+by the keys.</p>
+<ul>
+<li><strong>Pedal-Down Offset:</strong> Program an automated offset into
+the system's firmware that detects the position of the MIDI sustain
+pedal (CC64).</li>
+<li><strong>Energy Reduction:</strong> When the dampers are raised,
+reduce the solenoid strike energy by a calibrated percentage (typically
+3% to 6%) across the keyboard. This prevents notes played with the pedal
+engaged from sounding noticeably louder or harsher than notes played
+with the pedal up.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-to-calibrate-midi-solenoid-piano-dynamics';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

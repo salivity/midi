@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Floor Pressure Pads for Museum MIDI Audio - midi</title>
+    <meta name="description" content="Interactive museum exhibits often use floor pressure pads to transform visitor movement into dynamic soundscapes. By stepping on specific floor zones, visitors mechanically compress sensors that convert physical force into electrical signals. A microcontr">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/using-floor-pressure-pads-for-museum-midi-audio">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using Floor Pressure Pads for Museum MIDI Audio - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/using-floor-pressure-pads-for-museum-midi-audio" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interactive museum exhibits often use floor pressure pads to transform visitor movement into dynamic soundscapes. By stepping on specific floor zones, visitors mechanically compress sensors that convert physical force into electrical signals. A microcontr" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="using-floor-pressure-pads-for-museum-midi-audio">Using Floor
+Pressure Pads for Museum MIDI Audio</h1>
+<p>Interactive museum exhibits often use floor pressure pads to
+transform visitor movement into dynamic soundscapes. By stepping on
+specific floor zones, visitors mechanically compress sensors that
+convert physical force into electrical signals. A microcontroller or
+hardware encoder translates these electrical changes into standard
+Musical Instrument Digital Interface (MIDI) messages, which are then
+transmitted to a central computer running audio software to trigger or
+modulate sound in real time.</p>
+<h3 id="the-sensor-detecting-physical-pressure">The Sensor: Detecting
+Physical Pressure</h3>
+<p>The interaction begins at the floor level using specialized
+pressure-sensing technology. Installations typically deploy one of three
+types of sensors hidden beneath carpets, rubber mats, or raised
+flooring:</p>
+<ul>
+<li><strong>Momentary Contact Switches:</strong> Simple on/off mats that
+close a circuit when a visitor's weight exceeds a specific threshold.
+These function like oversized keyboard keys.</li>
+<li><strong>Force-Sensitive Resistors (FSRs):</strong> Sensors whose
+electrical resistance decreases as more force is applied. These allow
+the system to detect not just the presence of a visitor, but also their
+weight, impact speed, and pressure changes.</li>
+<li><strong>Piezoelectric Sensors:</strong> Transducers that generate a
+voltage spike upon sudden physical impact, making them ideal for
+detecting transient footsteps or tapping rhythms.</li>
+</ul>
+<h3 id="signal-processing-and-midi-encoding">Signal Processing and MIDI
+Encoding</h3>
+<p>Raw electrical data from the floor pads cannot directly communicate
+with audio software. A hardware intermediary—typically a microcontroller
+like an Arduino, Teensy, or a dedicated commercial MIDI
+encoder—processes the signals.</p>
+<ol type="1">
+<li><strong>Analog-to-Digital Conversion:</strong> When an FSR or piezo
+sensor receives pressure, the microcontroller reads the varying voltage
+through an Analog-to-Digital Converter (ADC).</li>
+<li><strong>Debouncing and Calibration:</strong> Software running on the
+microcontroller filters out electrical noise, vibration ripple, and
+erratic signals (a process known as debouncing) to prevent accidental
+double-triggers.</li>
+<li><strong>MIDI Mapping:</strong> The microcontroller formats the clean
+data into standardized MIDI packets:
+<ul>
+<li><strong>Note On / Note Off:</strong> Stepping on a switch triggers a
+<code>Note On</code> event (identifying the specific pad as a distinct
+musical pitch), while stepping off sends a <code>Note Off</code>
+event.</li>
+<li><strong>Velocity:</strong> For FSRs or piezos, the speed and
+intensity of the footstep are mapped to a MIDI velocity value ranging
+from 0 to 127.</li>
+<li><strong>Continuous Controller (CC):</strong> Sustained shifting of
+body weight can be translated into CC messages to modulate audio
+parameters like volume, filter cutoff, or pitch bend.</li>
+</ul></li>
+</ol>
+<h3 id="transmission-to-the-audio-engine">Transmission to the Audio
+Engine</h3>
+<p>Once the MIDI commands are generated, they must travel reliably
+across the exhibit space. For short distances, the microcontroller sends
+MIDI data directly over USB (USB-MIDI). In larger museum spaces where
+audio racks are located tens or hundreds of feet away in control rooms,
+installations use traditional 5-pin DIN cables, RS-485 balanced serial
+signals, or MIDI over Ethernet (RTP-MIDI) to avoid latency and data
+degradation.</p>
+<h3 id="sound-generation-and-spatialization">Sound Generation and
+Spatialization</h3>
+<p>At the destination, the incoming MIDI data feeds into an audio
+workstation or interactive software platform, such as Max/MSP, Pure
+Data, Ableton Live, or TouchDesigner.</p>
+<p>The software maps incoming signals to specific sound events. A single
+step might trigger a discrete sample, advance an algorithmic melody, or
+alter an ambient background drone. In advanced exhibits, systems use
+multi-channel audio interfaces to route the triggered sounds to
+localized directional speakers positioned directly above or around the
+specific pad being pressed, creating an immersive, spatially accurate
+auditory response to the visitor’s movement.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/using-floor-pressure-pads-for-museum-midi-audio';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

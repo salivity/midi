@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Clock Syncs Analog Filter Resonance - midi</title>
+    <meta name="description" content="This article explores how an external analog MIDI filter module intercepts digital clock pulses, translates them into continuous analog control signals, and dynamically modulates an analog resonance circuit to remain locked in tempo with external hardware">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-clock-syncs-analog-filter-resonance">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Clock Syncs Analog Filter Resonance - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-clock-syncs-analog-filter-resonance" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how an external analog MIDI filter module intercepts digital clock pulses, translates them into continuous analog control signals, and dynamically modulates an analog resonance circuit to remain locked in tempo with external hardware" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-clock-syncs-analog-filter-resonance">How MIDI Clock
+Syncs Analog Filter Resonance</h1>
+<p>This article explores how an external analog MIDI filter module
+intercepts digital clock pulses, translates them into continuous analog
+control signals, and dynamically modulates an analog resonance circuit
+to remain locked in tempo with external hardware or a digital audio
+workstation (DAW).</p>
+<h3 id="1-receiving-and-interpreting-the-midi-clock">1. Receiving and
+Interpreting the MIDI Clock</h3>
+<p>Standard MIDI timing clock operates on a protocol of 24 Pulses Per
+Quarter Note (PPQN), transmitted as single-byte <code>0xF8</code> timing
+messages. When an external hardware sequencer, synthesizer, or DAW sends
+a MIDI clock to an analog filter module, the module’s onboard
+microcontroller intercepts these incoming ticks.</p>
+<p>By measuring the precise time delta (microseconds) between successive
+ticks, the microcontroller calculates the current tempo (BPM). If the
+master tempo fluctuates, the delta changes proportionally, allowing the
+module to track accelerations, decelerations, and immediate tempo shifts
+in real time.</p>
+<h3 id="2-digital-tempo-division-and-modulation-calculation">2. Digital
+Tempo Division and Modulation Calculation</h3>
+<p>Pure analog filter circuits cannot natively read raw serial digital
+data like MIDI. To bridge this gap, the module's microcontroller hosts
+an internal digital modulation engine.</p>
+<p>Once the master tempo is derived from the clock ticks, the processor
+scales the clock into musically relevant subdivisions (e.g., quarter
+notes, eighth-note triplets, sixteenth notes). The processor then
+generates a tempo-synced modulation waveform—such as an LFO (sine,
+triangle, ramp) or a rhythmic step-pattern—whose cycle duration is
+hard-locked to the selected subdivision of the incoming MIDI clock.</p>
+<h3 id="3-digital-to-analog-control-voltage-conversion">3.
+Digital-to-Analog Control Voltage Conversion</h3>
+<p>To apply the synchronized modulation to an analog filter, the
+calculated digital waveform values must be transformed into analog
+electrical current or voltage:</p>
+<ul>
+<li><strong>Digital-to-Analog Converters (DACs):</strong> The
+microcontroller streams high-resolution digital values (typically 12-bit
+to 16-bit) to an internal DAC.</li>
+<li><strong>Smoothing and Filtering:</strong> The output of the DAC
+passes through a low-pass analog reconstruction filter to remove digital
+stepping (quantization artifacts), producing a smooth, continuous
+Control Voltage (CV).</li>
+<li><strong>Clock Jitter Compensation:</strong> The software often
+employs Phase-Locked Loops (PLL) or moving-average algorithms to ensure
+micro-jitter on the MIDI line does not translate into audible
+fluctuations in the CV.</li>
+</ul>
+<h3 id="4-controlling-the-analog-resonance-circuit">4. Controlling the
+Analog Resonance Circuit</h3>
+<p>Analog filter resonance (often designated as "Q") is governed by a
+feedback loop within the filter topology (such as a 4-pole transistor
+ladder, state-variable filter, or Sallen-Key circuit). Resonance occurs
+when a portion of the filter's output signal is fed back into its input
+stage, amplifying frequencies around the cutoff point.</p>
+<p>To dynamically modulate resonance, the tempo-synced CV is fed
+directly into a voltage-responsive component that controls this feedback
+loop:</p>
+<ul>
+<li><strong>Operational Transconductance Amplifiers (OTAs):</strong> The
+CV varies the bias current of an OTA sitting in the feedback path,
+dynamically increasing or decreasing loop gain.</li>
+<li><strong>Voltage-Controlled Amplifiers (VCAs):</strong> A dedicated
+analog VCA attenuates or boosts the amount of output signal returning to
+the filter's input stage based on the CV.</li>
+<li><strong>Optocouplers (Vactrols) or FETs:</strong> Some modules use
+Field-Effect Transistors (FETs) or light-dependent resistors as
+voltage-variable resistors to scale the feedback resistance.</li>
+</ul>
+<h3 id="dynamic-interaction-and-rhythm">Dynamic Interaction and
+Rhythm</h3>
+<p>As the incoming MIDI clock ticks vary, the microcontroller expands or
+contracts the period of the control waveform instantly. The analog
+feedback path responds by dynamically driving the filter from mild
+warmth to self-oscillation in lockstep with the rhythm, achieving
+continuous, tempo-synchronized analog resonance without introducing
+digital artifacts into the audio signal path itself.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-clock-syncs-analog-filter-resonance';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

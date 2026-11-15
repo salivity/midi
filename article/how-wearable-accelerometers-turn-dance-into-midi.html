@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Wearable Accelerometers Turn Dance into MIDI - midi</title>
+    <meta name="description" content="Wearable performance systems bridge physical choreography and sonic synthesis by converting human kinetic energy into real-time digital sound. This technology relies on wearable hardware equipped with multi-axis accelerometers that capture dynamic movemen">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-wearable-accelerometers-turn-dance-into-midi">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Wearable Accelerometers Turn Dance into MIDI - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-wearable-accelerometers-turn-dance-into-midi" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Wearable performance systems bridge physical choreography and sonic synthesis by converting human kinetic energy into real-time digital sound. This technology relies on wearable hardware equipped with multi-axis accelerometers that capture dynamic movemen" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-wearable-accelerometers-turn-dance-into-midi">How Wearable
+Accelerometers Turn Dance into MIDI</h1>
+<p>Wearable performance systems bridge physical choreography and sonic
+synthesis by converting human kinetic energy into real-time digital
+sound. This technology relies on wearable hardware equipped with
+multi-axis accelerometers that capture dynamic movement, onboard
+microcontrollers that process raw inertial data, and mapping algorithms
+that translate physical gestures into standard Musical Instrument
+Digital Interface (MIDI) control streams.</p>
+<h3 id="capturing-kinetic-data-at-the-source">Capturing Kinetic Data at
+the Source</h3>
+<p>The process begins with micro-electro-mechanical systems (MEMS)
+accelerometers positioned on the dancer's limbs, torso, or extremities.
+These sensors continuously measure acceleration along three spatial axes
+(<span class="math inline">\(X\)</span>, <span
+class="math inline">\(Y\)</span>, and <span
+class="math inline">\(Z\)</span>). The data captured includes both
+dynamic acceleration, which stems from motion, sudden stops, and
+velocity changes, and static acceleration, which is caused by the pull
+of Earth's gravity. When a dancer moves, the internal microscopic proof
+mass inside the sensor shifts, creating proportional changes in
+capacitance that the sensor outputs as raw digital values.</p>
+<h3 id="signal-conditioning-and-sensor-fusion">Signal Conditioning and
+Sensor Fusion</h3>
+<p>Raw accelerometer data is inherently noisy and erratic due to muscle
+tremors and sensor drift. Before this data can be utilized musically, an
+onboard microcontroller (such as an ARM Cortex or ESP32) processes the
+signals:</p>
+<ul>
+<li><strong>Filtering:</strong> Low-pass and complementary filters
+remove high-frequency noise and separate continuous gravitational tilt
+from sudden dynamic movements.</li>
+<li><strong>Sensor Fusion:</strong> While standalone accelerometers
+provide basic motion data, wearable systems often combine them with
+gyroscopes within Inertial Measurement Units (IMUs). Fusion algorithms,
+such as Kalman or Madgwick filters, calculate accurate 3D spatial
+orientation (pitch, roll, and yaw) relative to the stage.</li>
+</ul>
+<h3 id="gesture-extraction-and-feature-analysis">Gesture Extraction and
+Feature Analysis</h3>
+<p>Once the movement data is conditioned, the system extracts distinct
+choreographic features. The software monitors variables such as peak
+acceleration, jerk (the rate of change of acceleration), spatial vector
+trajectories, and sustained posture. Algorithms evaluate these variables
+against preset thresholds to categorize movements into two primary
+forms:</p>
+<ol type="1">
+<li><strong>Continuous Gestures:</strong> Fluid, ongoing motions like
+sweeping arms or tilting the torso.</li>
+<li><strong>Discrete Gestures:</strong> Sudden, momentary actions like
+stomps, sharp snaps, hand claps, or rapid directional changes.</li>
+</ol>
+<h3 id="mapping-motion-to-midi-messages">Mapping Motion to MIDI
+Messages</h3>
+<p>The extracted kinematic parameters must be translated into the
+standardized vocabulary of MIDI, which digital audio workstations (DAWs)
+and synthesizers understand. Mapping strategies generally follow two
+distinct paths:</p>
+<ul>
+<li><strong>Continuous Control (MIDI CC):</strong> Continuous parameters
+are normalized to the 7-bit standard range of MIDI (0 to 127). For
+example, the elevation angle of an arm can map directly to a low-pass
+filter cutoff frequency via MIDI CC #74, while the speed of a spin can
+control reverb depth or volume modulation.</li>
+<li><strong>Note Events (Note On / Note Off):</strong> Discrete
+movements trigger specific musical notes. A sudden spike in acceleration
+along a specific axis triggers a <code>Note On</code> command. The
+velocity parameter of that command (how loud the note plays) directly
+correlates with the physical impact force or speed detected at that
+precise moment. When the movement ceases or passes a reset threshold,
+the system transmits a corresponding <code>Note Off</code> message.</li>
+</ul>
+<h3 id="wireless-transmission-and-performance-integration">Wireless
+Transmission and Performance Integration</h3>
+<p>Finally, the generated MIDI events must reach the sound engine with
+minimal latency to preserve the dancer's rhythmic connection to the
+music. The wearable's microcontroller packages the data into standard
+MIDI packets and transmits them wirelessly via Bluetooth Low Energy
+(BLE-MIDI), high-bandwidth Wi-Fi (often utilizing Open Sound Control as
+an intermediary before converting to MIDI), or proprietary
+ultra-low-latency radio frequency protocols.</p>
+<p>Upon receipt by a computer or hardware synthesizer, these incoming
+serial streams trigger samples, modulate acoustic parameters, and
+advance algorithmic sequences in real time, making the dancer's physical
+movement the master controller of the auditory landscape.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-wearable-accelerometers-turn-dance-into-midi';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

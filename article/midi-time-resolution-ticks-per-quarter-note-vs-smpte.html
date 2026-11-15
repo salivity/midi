@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Time Resolution: Ticks Per Quarter Note vs SMPTE - midi</title>
+    <meta name="description" content="A Standard MIDI File (SMF) defines its timing resolution using a dedicated 16-bit field called division, located in the header chunk (MThd). This setting dictates how delta-time values between MIDI events are interpreted by software or hardware sequencers">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/midi-time-resolution-ticks-per-quarter-note-vs-smpte">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MIDI Time Resolution: Ticks Per Quarter Note vs SMPTE - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/midi-time-resolution-ticks-per-quarter-note-vs-smpte" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A Standard MIDI File (SMF) defines its timing resolution using a dedicated 16-bit field called division, located in the header chunk (MThd). This setting dictates how delta-time values between MIDI events are interpreted by software or hardware sequencers" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="midi-time-resolution-ticks-per-quarter-note-vs-smpte">MIDI Time
+Resolution: Ticks Per Quarter Note vs SMPTE</h1>
+<p>A Standard MIDI File (SMF) defines its timing resolution using a
+dedicated 16-bit field called <code>division</code>, located in the
+header chunk (<code>MThd</code>). This setting dictates how delta-time
+values between MIDI events are interpreted by software or hardware
+sequencers. The file format supports two distinct timing modes: metrical
+time based on ticks per quarter note, which ties resolution to musical
+tempo, and absolute time based on the SMPTE (Society of Motion Picture
+and Television Engineers) standard, which ties resolution to fixed
+real-world clock time.</p>
+<h3 id="the-header-division-field">The Header <code>division</code>
+Field</h3>
+<p>The <code>division</code> parameter occupies the final two bytes of
+the standard 14-byte <code>MThd</code> chunk. The interpretation of
+these 16 bits is determined entirely by the most significant bit (bit
+15). Software reading the file checks this bit to decide whether the
+time base is metrical or timecode-based.</p>
+<h3 id="metrical-timing-ticks-per-quarter-note-ppqn">Metrical Timing:
+Ticks Per Quarter Note (PPQN)</h3>
+<p>When bit 15 of the <code>division</code> word is set to
+<code>0</code>, the file uses metrical time. In this mode, the remaining
+15 bits (bits 0 through 14) represent an unsigned integer that specifies
+the number of clock ticks per quarter note, often abbreviated as TPQN or
+PPQN (pulses per quarter note).</p>
+<ul>
+<li><strong>Format:</strong> A positive 16-bit integer ranging from 1 to
+32,767. Common historical values include 96, 120, 240, 480, and
+960.</li>
+<li><strong>Behavior:</strong> Delta times in this format are musical,
+not absolute. The real-world duration of each tick fluctuates depending
+on the current tempo of the sequence. If the sequence contains a "Set
+Tempo" meta-event (specifying microseconds per quarter note), the
+duration of a single tick is calculated as: <span
+class="math display">\[\text{Tick Duration} = \frac{\text{Microseconds
+per Quarter Note}}{\text{Ticks per Quarter Note}}\]</span></li>
+<li><strong>Application:</strong> This is the default format for
+standard musical compositions, as it allows tempo changes, rubato,
+accelerando, and ritardando without requiring recalculation of every
+note's delta time.</li>
+</ul>
+<h3 id="absolute-timing-smpte-units">Absolute Timing: SMPTE Units</h3>
+<p>When bit 15 of the <code>division</code> word is set to
+<code>1</code>, the file uses absolute, wall-clock time referencing the
+SMPTE timecode standard. In this mode, the 16-bit value is split into
+two separate 8-bit signed and unsigned bytes.</p>
+<ul>
+<li><strong>High Byte (SMPTE Format):</strong> Bits 8 through 15
+represent the SMPTE frame rate stored as a negative two's complement
+integer. The standard values are:
+<ul>
+<li><code>-24</code> (0xE8): 24 frames per second (standard film)</li>
+<li><code>-25</code> (0xE7): 25 frames per second (PAL/SECAM video)</li>
+<li><code>-29</code> (0xE3): 29.97 frames per second (NTSC drop-frame
+video)</li>
+<li><code>-30</code> (0xE2): 30 frames per second (NTSC non-drop
+video)</li>
+</ul></li>
+<li><strong>Low Byte (Ticks Per Frame):</strong> Bits 0 through 7
+represent an unsigned 8-bit integer specifying the resolution within
+each frame (sub-frame divisions). Common values include 4, 8, 40, or 80
+ticks per frame. A configuration of 30 frames per second with 80 ticks
+per frame yields a resolution of 2,400 ticks per second.</li>
+<li><strong>Behavior:</strong> Ticks represent a fixed interval of
+real-world time. The duration of each tick is constant and immune to
+MIDI tempo meta-events.</li>
+<li><strong>Application:</strong> SMPTE-based timing is typically
+utilized in film scoring, television post-production, and audio-video
+synchronization, where events must align precisely with visual cues
+regardless of musical structure.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/midi-time-resolution-ticks-per-quarter-note-vs-smpte';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI-CI Profile in Synthesizers? - midi</title>
+    <meta name="description" content="A MIDI-CI (Capability Inquiry) Profile is a standardized configuration defined within the MIDI 2.0 and expanded MIDI 1.0 specifications that establishes agreed-upon rules, behaviors, and control sets between connected musical devices. By providing a mutua">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-ci-profile-in-synthesizers">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI-CI Profile in Synthesizers? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-ci-profile-in-synthesizers" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI-CI (Capability Inquiry) Profile is a standardized configuration defined within the MIDI 2.0 and expanded MIDI 1.0 specifications that establishes agreed-upon rules, behaviors, and control sets between connected musical devices. By providing a mutua" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-ci-profile-in-synthesizers">What Is a MIDI-CI
+Profile in Synthesizers?</h1>
+<p>A MIDI-CI (Capability Inquiry) Profile is a standardized
+configuration defined within the MIDI 2.0 and expanded MIDI 1.0
+specifications that establishes agreed-upon rules, behaviors, and
+control sets between connected musical devices. By providing a mutually
+understood framework for specific device categories—such as drawbar
+organs, vintage analog synthesizers, or orchestral sample
+libraries—MIDI-CI Profiles guarantee consistent parameter mapping across
+diverse synthesizers. Instead of requiring users to manually configure
+MIDI Continuous Controller (CC) numbers for every new device, profiles
+allow instruments and controllers to automatically negotiate a common
+functional language.</p>
+<h2 id="the-role-of-midi-capability-inquiry-midi-ci">The Role of MIDI
+Capability Inquiry (MIDI-CI)</h2>
+<p>MIDI Capability Inquiry serves as the foundational handshake
+mechanism in modern MIDI communication. It operates across three
+distinct functional categories: Protocol Negotiation, Property Exchange,
+and Profile Configuration.</p>
+<p>While Protocol Negotiation determines whether devices should
+communicate using MIDI 1.0 or MIDI 2.0, and Property Exchange retrieves
+deep metadata like patch names and synth parameters, Profile
+Configuration specifically governs operational behavior. A Profile
+defines a common set of MIDI messages, parameter behaviors, and
+expectations tailored to a specific musical workflow or instrument
+type.</p>
+<h2 id="how-midi-ci-profiles-guarantee-consistent-parameter-mapping">How
+MIDI-CI Profiles Guarantee Consistent Parameter Mapping</h2>
+<p>Traditionally, connecting a MIDI controller to a third-party hardware
+or software synthesizer required manual configuration or custom mapping
+templates. For example, Filter Cutoff might be assigned to CC 74 on one
+instrument, CC 16 on another, and an obscure System Exclusive (SysEx)
+command on a third. MIDI-CI Profiles resolve this fragmentation through
+a structured, multi-step process:</p>
+<h3 id="1-automatic-discovery-and-handshake">1. Automatic Discovery and
+Handshake</h3>
+<p>When two MIDI-CI-compatible devices are connected, the controller or
+digital audio workstation (DAW) transmits a Profile Inquiry message. The
+receiving synthesizer replies with a list of profiles it supports. The
+controller can then request to activate a specific profile, such as the
+standard "Analog Synthesizer" profile. Once both devices confirm
+activation, standard parameters are locked into a unified schema.</p>
+<h3 id="2-semantic-mapping-over-raw-controller-numbers">2. Semantic
+Mapping Over Raw Controller Numbers</h3>
+<p>Rather than binding controls to arbitrary hardware addresses, a
+profile relies on semantic definitions. Within a standard profile,
+control functions are clearly defined by their musical role rather than
+a vendor-specific CC assignment. If a profile specifies an address for
+"Envelope 1 Attack" or "Filter Resonance," every compliant synthesizer
+interprets that incoming message in the exact same functional context,
+regardless of its internal architecture or brand.</p>
+<h3 id="3-normalized-ranges-and-resolution">3. Normalized Ranges and
+Resolution</h3>
+<p>MIDI-CI Profiles define not only what the controls are, but also how
+their values behave. In MIDI 2.0 environments, profiles take advantage
+of high-resolution 32-bit values instead of the traditional 7-bit
+(0–127) limitations. Profiles establish baseline expectations for
+minimum, maximum, and default states, ensuring that adjusting a knob by
+50% produces a functionally comparable sonic adjustment across different
+synthesizer implementations.</p>
+<h2 id="common-types-of-profiles">Common Types of Profiles</h2>
+<p>Profiles are categorized into standard types managed by the MIDI
+Association, as well as manufacturer-specific profiles for specialized
+equipment:</p>
+<ul>
+<li><strong>Instrument-Specific Profiles:</strong> Dedicated setups for
+distinct instrument archetypes, such as drawbar organs (covering
+percussion, drawbars, and rotary speaker speed) or analog-style
+subtractive synthesizers (covering oscillators, filters, and standard
+ADSR envelopes).</li>
+<li><strong>Workflow Profiles:</strong> Configurations designed around
+specific tasks, such as microtonal tuning, multi-channel expressive
+control (like MPE), or standard mixer operations (volume, pan, solo,
+mute).</li>
+<li><strong>Vendor Profiles:</strong> Custom profiles created by
+manufacturers for their proprietary ecosystems that can still be
+automatically recognized and negotiated when matched with compatible
+companion hardware or software.</li>
+</ul>
+<h2 id="benefits-for-modern-music-production">Benefits for Modern Music
+Production</h2>
+<p>The implementation of MIDI-CI Profiles creates a true plug-and-play
+environment for electronic musicians. Controllers automatically display
+correct labels and adjust their dials to match the connected
+synthesizer's operational parameters. Furthermore, complex setups
+containing instruments from multiple manufacturers can be controlled
+from a single master interface without mapping conflicts, streamlining
+both live performance workflows and studio production environments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/what-is-a-midi-ci-profile-in-synthesizers';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

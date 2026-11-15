@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>32-Bit to 7-Bit MIDI Downscaling Explained - midi</title>
+    <meta name="description" content="This article explains how modern MIDI translation systems convert high-resolution 32-bit controller data into the legacy 7-bit format used by standard MIDI 1.0 hardware. You will learn the mathematical principles behind this conversion, the primary method">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/32-bit-to-7-bit-midi-downscaling-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="32-Bit to 7-Bit MIDI Downscaling Explained - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/32-bit-to-7-bit-midi-downscaling-explained" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how modern MIDI translation systems convert high-resolution 32-bit controller data into the legacy 7-bit format used by standard MIDI 1.0 hardware. You will learn the mathematical principles behind this conversion, the primary method" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="32-bit-to-7-bit-midi-downscaling-explained">32-Bit to 7-Bit MIDI
+Downscaling Explained</h1>
+<p>This article explains how modern MIDI translation systems convert
+high-resolution 32-bit controller data into the legacy 7-bit format used
+by standard MIDI 1.0 hardware. You will learn the mathematical
+principles behind this conversion, the primary methods of truncation and
+linear scaling, and how protocol converters manage data density without
+overwhelming legacy communication bandwidth.</p>
+<h3 id="the-numerical-difference">The Numerical Difference</h3>
+<p>A standard MIDI 1.0 Control Change (CC) message represents values
+using a 7-bit unsigned integer, providing 128 discrete steps ranging
+from 0 to 127. In contrast, modern protocols—such as MIDI 2.0—utilize
+32-bit resolution for property exchange and continuous controllers. A
+32-bit unsigned integer offers 4,294,967,296 discrete values (0 to
+4,294,967,295).</p>
+<p>To make a 32-bit controller compatible with a 7-bit receiver, a
+downscaler must compress this multi-billion-step range into 128 discrete
+values while maintaining proportional accuracy.</p>
+<h3 id="method-1-bit-shifting-truncation">Method 1: Bit-Shifting
+(Truncation)</h3>
+<p>The fastest and most computationally efficient method to downscale is
+bitwise right-shifting. Because the target format requires 7 bits, the
+downscaler isolates the 7 most significant bits (MSBs) of the 32-bit
+word and discards the remaining 25 least significant bits (LSBs).</p>
+<p>In code or digital logic, this operation is expressed as:</p>
+<p><code>7_bit_value = 32_bit_value &gt;&gt; 25</code></p>
+<p>Because <span class="math inline">\(32 - 7 = 25\)</span>, shifting
+the binary data 25 places to the right moves the top 7 bits into the
+lowest positions (0 through 6) and clears out the rest.</p>
+<ul>
+<li><strong>Advantage:</strong> Requires virtually zero processor
+overhead, making it ideal for microcontrollers and hardware
+bridges.</li>
+<li><strong>Limitation:</strong> It performs an implicit floor
+operation, discarding fine-grained fractional movement without rounding
+to the nearest target value.</li>
+</ul>
+<h3 id="method-2-linear-ratio-scaling-normalization">Method 2: Linear
+Ratio Scaling (Normalization)</h3>
+<p>Linear scaling preserves mathematical proportions more accurately by
+normalizing the 32-bit value to a range between 0.0 and 1.0, multiplying
+by the 7-bit maximum (127), and rounding to the nearest integer.</p>
+<p>The formula is:</p>
+<p><code>7_bit_value = round((32_bit_value / 4294967295) * 127)</code></p>
+<p>In pure integer arithmetic to prevent floating-point overhead:</p>
+<p><code>7_bit_value = ((32_bit_value * 127) + 2147483647) / 4294967295</code></p>
+<ul>
+<li><strong>Advantage:</strong> Correctly maps absolute minimum (<span
+class="math inline">\(0\)</span>) to <span
+class="math inline">\(0\)</span> and absolute maximum (<span
+class="math inline">\(4,294,967,295\)</span>) to <span
+class="math inline">\(127\)</span>, distributing transition points
+symmetrically.</li>
+<li><strong>Limitation:</strong> Involves multiplication and division
+operations that require slightly more processing power than a basic
+bit-shift.</li>
+</ul>
+<h3 id="official-midi-20-downscaling-standard">Official MIDI 2.0
+Downscaling Standard</h3>
+<p>The MIDI Association specifies exact rules for downscaling MIDI 2.0
+32-bit values to MIDI 1.0 messages. For standard 7-bit controllers, the
+specification dictates taking the top 7 bits directly (equivalent to
+<code>value &gt;&gt; 25</code>).</p>
+<p>This simple bit-truncation standard ensures deterministic performance
+across all hardware manufacturers:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">32-Bit Hex Range</th>
+<th style="text-align: left;">32-Bit Decimal Range</th>
+<th style="text-align: left;">Resulting 7-Bit Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>0x00000000</code> –
+<code>0x01FFFFFF</code></td>
+<td style="text-align: left;">0 – 33,554,431</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0x02000000</code> –
+<code>0x03FFFFFF</code></td>
+<td style="text-align: left;">33,554,432 – 67,108,863</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr>
+<td style="text-align: left;">...</td>
+<td style="text-align: left;">...</td>
+<td style="text-align: left;">...</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>0xFE000000</code> –
+<code>0xFFFFFFFF</code></td>
+<td style="text-align: left;">4,261,412,864 – 4,294,967,295</td>
+<td style="text-align: left;">127</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rate-limiting-and-thinning">Rate Limiting and Thinning</h3>
+<p>Downscaling involves more than reducing resolution; it also requires
+managing transmission speed. A 32-bit continuous controller stream often
+transmits updates at high frequencies over USB or Ethernet.</p>
+<p>Legacy MIDI 1.0 operates via a 5-pin DIN serial connection limited to
+a baud rate of 31.25 kbps, which can handle roughly 1,000 standard CC
+messages per second. A hardware downscaler must therefore implement
+value filtering:</p>
+<ol type="1">
+<li><strong>State Tracking:</strong> The downscaler stores the previous
+7-bit output value in memory.</li>
+<li><strong>Change Evaluation:</strong> When a new 32-bit value arrives,
+it is downscaled. If the newly calculated 7-bit value matches the stored
+value, the message is discarded.</li>
+<li><strong>Throttling:</strong> Only when the continuous input shifts
+enough to cross a 7-bit threshold is a new MIDI 1.0 message transmitted,
+preventing buffer overflows on older equipment.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/32-bit-to-7-bit-midi-downscaling-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Clock Converts to Roland DIN Sync 24 - midi</title>
+    <meta name="description" content="This article explains how hardware converters translate modern, digital MIDI clock data into the vintage analog voltage pulses required by Roland’s DIN Sync 24 protocol. By interpreting serial timing bytes and converting them into discrete 5-volt electric">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-clock-converts-to-roland-din-sync-24">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Clock Converts to Roland DIN Sync 24 - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-clock-converts-to-roland-din-sync-24" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how hardware converters translate modern, digital MIDI clock data into the vintage analog voltage pulses required by Roland’s DIN Sync 24 protocol. By interpreting serial timing bytes and converting them into discrete 5-volt electric" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-clock-converts-to-roland-din-sync-24">How MIDI Clock
+Converts to Roland DIN Sync 24</h1>
+<p>This article explains how hardware converters translate modern,
+digital MIDI clock data into the vintage analog voltage pulses required
+by Roland’s DIN Sync 24 protocol. By interpreting serial timing bytes
+and converting them into discrete 5-volt electrical signals, these
+converters allow modern digital audio workstations (DAWs) and sequencers
+to synchronize seamlessly with vintage drum machines and synthesizers
+like the TR-808, TR-606, and TB-303.</p>
+<h3 id="understanding-the-two-protocols">Understanding the Two
+Protocols</h3>
+<p>To understand how translation works, it is essential to recognize the
+fundamental difference between the two formats:</p>
+<ul>
+<li><strong>MIDI Clock:</strong> A digital, serial data stream operating
+at 31.25 kbaud. It transmits specific hexadecimal status bytes across a
+balanced current loop. Timing is defined by the Timing Clock message
+(<code>0xF8</code>), which is transmitted at a rate of 24 Pulses Per
+Quarter Note (PPQN). Playback control relies on separate bytes: Start
+(<code>0xFA</code>), Continue (<code>0xFB</code>), and Stop
+(<code>0xFC</code>).</li>
+<li><strong>DIN Sync 24 (Sync24):</strong> A parallel, hardware-level
+interface introduced by Roland. Instead of digital data packets, it uses
+direct direct-current (DC) voltage states transmitted over separate pins
+of a 5-pin DIN connector. Timing is driven by discrete 5V clock
+pulses—also standardized at 24 pulses per quarter note—while transport
+status is determined by a continuous high or low voltage level.</li>
+</ul>
+<h3 id="the-conversion-process">The Conversion Process</h3>
+<p>A hardware converter uses a dedicated microprocessor (or
+microcontroller) to parse the digital stream and generate the
+corresponding analog signals in real time through four main steps:</p>
+<h4 id="1-ingestion-and-isolation">1. Ingestion and Isolation</h4>
+<p>The incoming MIDI signal first passes through an optocoupler,
+adhering to standard MIDI hardware specifications. This optically
+isolates the converter's internal logic circuitry from ground loops and
+electrical interference originating from the host computer or master
+sequencer.</p>
+<h4 id="2-byte-parsing-via-microcontroller">2. Byte Parsing via
+Microcontroller</h4>
+<p>The isolated digital signal feeds into the UART (Universal
+Asynchronous Receiver-Transmitter) Rx pin of the converter's onboard
+microcontroller. The microcontroller's firmware continuously monitors
+the serial buffer specifically for MIDI Real-Time messages. Because
+Real-Time bytes can be interleaved anywhere within standard MIDI channel
+data, the parser must intercept and process them with near-zero
+latency:</p>
+<ul>
+<li>When a Start (<code>0xFA</code>) or Continue (<code>0xFB</code>)
+byte arrives, the processor prepares the transport state.</li>
+<li>When a Stop (<code>0xFC</code>) byte arrives, the processor
+disengages transport.</li>
+<li>When a Timing Clock (<code>0xF8</code>) byte arrives, the processor
+initiates a clock trigger.</li>
+</ul>
+<h4 id="3-generating-the-runstop-signal">3. Generating the Run/Stop
+Signal</h4>
+<p>DIN Sync controls playback state on Pin 1 of the 5-pin DIN connector.
+When the microcontroller registers a MIDI Start (<code>0xFA</code>) or
+Continue (<code>0xFB</code>) byte, it shifts a general-purpose
+input/output (GPIO) pin to a high state (+5V DC). This informs the
+connected vintage device that the sequencer is actively running. When a
+MIDI Stop (<code>0xFC</code>) message is received, the GPIO pin drops
+back to 0V (Ground), instantly pausing or stopping the slave
+hardware.</p>
+<h4 id="4-generating-the-clock-pulses">4. Generating the Clock
+Pulses</h4>
+<p>Both MIDI Clock and Sync 24 utilize a resolution of 24 PPQN. Because
+the ratios are identical (1:1), the converter does not need to perform
+complex mathematical clock division or multiplication.</p>
+<p>Instead, every time the microcontroller receives a single
+<code>0xF8</code> byte, it outputs a discrete electrical pulse on Pin 3
+of the DIN connector:</p>
+<ol type="1">
+<li><strong>Rising Edge:</strong> The output pin transitions
+instantaneously from 0V to +5V. Vintage Roland gear triggers its
+sequencer steps specifically on this rising edge.</li>
+<li><strong>Pulse Width Timing:</strong> The pin remains at +5V for a
+precise duration—typically between 2 and 5 milliseconds (or a fixed 50%
+duty cycle relative to the current tempo)—to give the vintage hardware's
+internal logic gates adequate time to register the pulse.</li>
+<li><strong>Falling Edge:</strong> The pin drops back to 0V to reset the
+line before the next <code>0xF8</code> byte arrives.</li>
+</ol>
+<h3 id="latency-and-jitter-management">Latency and Jitter
+Management</h3>
+<p>Because analog instruments rely on stable clock edges,
+microcontrollers in MIDI-to-DIN converters prioritize MIDI Real-Time
+interrupts over all other operations. This ensures that the delay
+between receiving a digital <code>0xF8</code> byte and asserting the +5V
+analog pin is kept to fractions of a millisecond, preventing audible
+jitter and keeping vintage sequencers locked in groove with modern
+digital production environments.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-clock-converts-to-roland-din-sync-24';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

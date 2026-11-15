@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MIDI Running Status Saves Bandwidth - midi</title>
+    <meta name="description" content="MIDI running status is an optimization rule within the MIDI 1.0 specification designed to conserve transmission bandwidth and minimize latency over serial connections. In traditional MIDI communication, every command requires a status byte followed by rel">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/how-midi-running-status-saves-bandwidth">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MIDI Running Status Saves Bandwidth - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/how-midi-running-status-saves-bandwidth" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MIDI running status is an optimization rule within the MIDI 1.0 specification designed to conserve transmission bandwidth and minimize latency over serial connections. In traditional MIDI communication, every command requires a status byte followed by rel" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-midi-running-status-saves-bandwidth">How MIDI Running Status
+Saves Bandwidth</h1>
+<p>MIDI running status is an optimization rule within the MIDI 1.0
+specification designed to conserve transmission bandwidth and minimize
+latency over serial connections. In traditional MIDI communication,
+every command requires a status byte followed by relevant data bytes.
+When multiple consecutive commands share the same status type and
+channel—such as rapid chord progressions, dense pitch bends, or
+continuous controller sweeps—running status permits the transmitter to
+omit redundant status bytes, reducing total data throughput by up to 33
+percent.</p>
+<p>Under standard conditions, a channel voice message like a "Note On"
+consists of three bytes:</p>
+<ol type="1">
+<li><strong>Status Byte:</strong> Identifies the event type and MIDI
+channel (e.g., <code>0x90</code> for Note On, Channel 1).</li>
+<li><strong>Data Byte 1:</strong> Identifies the note number (e.g.,
+<code>0x3C</code> for Middle C).</li>
+<li><strong>Data Byte 2:</strong> Identifies the velocity (e.g.,
+<code>0x64</code> for strike velocity).</li>
+</ol>
+<p>Without running status, sending a four-note chord at the same instant
+requires 12 bytes: four sets of three-byte messages. Because traditional
+MIDI operates at a fixed, relatively slow baud rate of 31.25 kbps,
+transmitting each byte takes approximately 320 microseconds. A 12-byte
+block takes roughly 3.84 milliseconds to transmit, introducing audible
+timing jitter in dense musical passages.</p>
+<p>Running status eliminates this overhead. Once a receiver processes a
+status byte, it stores that byte in an internal buffer. If the
+subsequent message uses the exact same status byte, the sender transmits
+only the new data bytes. The receiver checks the most significant bit
+(MSB) of incoming bytes:</p>
+<ul>
+<li>If the MSB is <code>1</code> (values <code>128–255</code>), the byte
+is recognized as a new status byte, which updates the buffer.</li>
+<li>If the MSB is <code>0</code> (values <code>0–127</code>), the
+receiver recognizes it as a data byte and applies the active status
+stored in its buffer.</li>
+</ul>
+<p>Applying running status to the same four-note chord reduces the
+transmission payload:</p>
+<ul>
+<li>Note 1: <code>0x90</code> (Status), <code>0x3C</code> (Note),
+<code>0x64</code> (Velocity) — 3 bytes</li>
+<li>Note 2: <code>0x40</code> (Note), <code>0x64</code> (Velocity) — 2
+bytes</li>
+<li>Note 3: <code>0x43</code> (Note), <code>0x64</code> (Velocity) — 2
+bytes</li>
+<li>Note 4: <code>0x47</code> (Note), <code>0x64</code> (Velocity) — 2
+bytes</li>
+</ul>
+<p>Total data drops from 12 bytes to 9 bytes, yielding a 25 percent
+reduction in data volume. For continuous controller streams (like
+modulation or volume) and pitch bend changes, where the status byte
+repeats dozens of times in a fraction of a second, bandwidth savings
+approach the theoretical maximum of 33.3 percent.</p>
+<p>Running status also integrates seamlessly with common playing
+techniques. Because sending a "Note On" with a velocity of zero is
+treated by the MIDI standard as a "Note Off," a sequence of note attacks
+and releases on the same channel can run continuously under a single
+initial <code>0x90</code> status byte without ever sending an explicit
+Note Off (<code>0x80</code>) status byte.</p>
+<p>The running status buffer remains active until a new channel message
+or system common message appears. System Real-Time messages (such as
+MIDI Clock or Active Sensing) are an exception; they can be inserted
+anywhere in the data stream without clearing or interrupting the active
+running status. Through this simple byte-dropping rule, MIDI hardware
+maximizes throughput and reduces audible latency without requiring
+higher physical transmission clock rates.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/how-midi-running-status-saves-bandwidth';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

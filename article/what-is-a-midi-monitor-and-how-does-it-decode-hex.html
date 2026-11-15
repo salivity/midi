@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a MIDI Monitor and How Does It Decode Hex? - midi</title>
+    <meta name="description" content="A MIDI monitor utility is a diagnostic software tool that intercepts, logs, and displays incoming and outgoing Musical Instrument Digital Interface (MIDI) communications in real time. It translates low-level binary and hexadecimal data streams sent by ele">
+    <link rel="canonical" href="https://salivity.github.io/midi/article/what-is-a-midi-monitor-and-how-does-it-decode-hex">
+    <link rel="search" type="application/opensearchdescription+xml" title="midi" href="/midi/opensearch.xml">
+    <link rel="icon" href="/midi/favicon.ico">
+    <link rel="stylesheet" href="/midi/css/style.css">
+    <link media="print" rel="stylesheet" href="/midi/css/print.css">
+    <script src="/midi/js/fuse.min.js"></script>
+    <script src="/midi/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a MIDI Monitor and How Does It Decode Hex? - midi" />
+    <meta property="og:url" content="https://salivity.github.io/midi/article/what-is-a-midi-monitor-and-how-does-it-decode-hex" />
+    <meta property="og:image" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/midi/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A MIDI monitor utility is a diagnostic software tool that intercepts, logs, and displays incoming and outgoing Musical Instrument Digital Interface (MIDI) communications in real time. It translates low-level binary and hexadecimal data streams sent by ele" />
+    <link rel="manifest" href="/midi/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/midi/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>midi</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/midi/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-midi-monitor-and-how-does-it-decode-hex">What Is a
+MIDI Monitor and How Does It Decode Hex?</h1>
+<p>A MIDI monitor utility is a diagnostic software tool that intercepts,
+logs, and displays incoming and outgoing Musical Instrument Digital
+Interface (MIDI) communications in real time. It translates low-level
+binary and hexadecimal data streams sent by electronic instruments,
+controllers, and software into plain-text musical commands such as note
+triggers, controller changes, and velocity values. This guide explains
+what a MIDI monitor does, breaks down the structure of raw MIDI hex
+data, and details the decoding process used to convert raw bytes into
+actionable musical information.</p>
+<h3 id="what-is-a-midi-monitor-utility">What Is a MIDI Monitor
+Utility?</h3>
+<p>A MIDI monitor acts as an inspection station between MIDI hardware
+and digital audio workstations (DAWs). When a musician presses a key,
+turns a knob, or presses a sustain pedal, the hardware generates a
+stream of digital events. A MIDI monitor attaches itself to the active
+MIDI input or output ports to capture these events without altering
+them.</p>
+<p>Audio engineers, hardware developers, and musicians use MIDI monitors
+to:</p>
+<ul>
+<li>Verify that hardware controllers are sending signals correctly.</li>
+<li>Identify duplicate messages, stuck notes, or unwanted continuous
+controller (CC) noise.</li>
+<li>Map custom control changes to software synthesizers.</li>
+<li>Debug latency, clock sync, and routing conflicts in complex
+setups.</li>
+</ul>
+<h3 id="the-structure-of-raw-midi-streams">The Structure of Raw MIDI
+Streams</h3>
+<p>Standard MIDI 1.0 messages are transmitted serially as sequences of
+8-bit bytes, universally represented in diagnostic tools as hexadecimal
+(hex) notation. A standard channel voice message consists of one status
+byte followed by one or two data bytes.</p>
+<p>The MIDI specification differentiates status and data bytes using the
+most significant bit (MSB):</p>
+<ul>
+<li><strong>Status Bytes (<code>0x80</code> to
+<code>0xFF</code>):</strong> The MSB is always <code>1</code>. These
+bytes indicate the type of action being performed and the MIDI channel
+it applies to.</li>
+<li><strong>Data Bytes (<code>0x00</code> to
+<code>0x7F</code>):</strong> The MSB is always <code>0</code>. These
+bytes supply the specific values for the action, ranging from 0 to 127
+in decimal.</li>
+</ul>
+<h3 id="how-a-midi-monitor-decodes-hex-into-commands">How a MIDI Monitor
+Decodes Hex into Commands</h3>
+<p>To turn a string of hex characters into human-readable text, the
+monitor parses the incoming byte stream sequentially through a lookup
+table and bit-masking rules.</p>
+<p>Consider a common raw hex sequence captured by the utility:
+<code>90 3C 64</code>.</p>
+<h4 id="1-parsing-the-status-byte-90">1. Parsing the Status Byte
+(<code>90</code>)</h4>
+<p>The utility splits the first byte into two 4-bit halves, known as
+nibbles:</p>
+<ul>
+<li><strong>The High Nibble (<code>9</code>):</strong> Defines the
+message type. In MIDI protocol, <code>9</code> represents a "Note On"
+command. Other common message identifiers include <code>8</code> (Note
+Off), <code>B</code> (Control Change), and <code>E</code> (Pitch
+Bend).</li>
+<li><strong>The Low Nibble (<code>0</code>):</strong> Indicates the MIDI
+channel. MIDI supports 16 channels, numbered 0 through F in hex
+(representing channels 1 through 16). Here, <code>0</code> corresponds
+to Channel 1.</li>
+</ul>
+<h4 id="2-parsing-the-first-data-byte-3c">2. Parsing the First Data Byte
+(<code>3C</code>)</h4>
+<p>Because the monitor identified the status as "Note On," it expects
+the next byte to be a pitch identifier (note number):</p>
+<ul>
+<li>The hex value <code>3C</code> converts to decimal
+<code>60</code>.</li>
+<li>The utility references a standard MIDI note chart where note
+<code>60</code> corresponds to middle C (commonly labeled as C4 or C3
+depending on the manufacturer standard).</li>
+</ul>
+<h4 id="3-parsing-the-second-data-byte-64">3. Parsing the Second Data
+Byte (<code>64</code>)</h4>
+<p>For a "Note On" message, the final byte represents the velocity (how
+hard the key was struck):</p>
+<ul>
+<li>The hex value <code>64</code> converts to decimal
+<code>100</code>.</li>
+<li>The utility interprets this as a key press with a velocity of 100
+out of a maximum of 127.</li>
+</ul>
+<h4 id="4-formatting-the-output">4. Formatting the Output</h4>
+<p>Once the sequence is processed, the utility outputs a clear,
+human-readable line in its log interface:</p>
+<p><code>[Channel 1] Note On: C4 | Velocity: 100</code></p>
+<h3 id="handling-complex-and-system-messages">Handling Complex and
+System Messages</h3>
+<p>Beyond standard note data, MIDI monitors decode more intricate
+events:</p>
+<ul>
+<li><strong>Control Change (<code>Bx yy zz</code>):</strong> The monitor
+decodes the first data byte (<code>yy</code>) to identify the controller
+(such as CC 64 for sustain pedal or CC 1 for modulation wheel) and the
+second data byte (<code>zz</code>) for the controller position
+(0–127).</li>
+<li><strong>Pitch Bend (<code>Ex ll mm</code>):</strong> Because pitch
+bend requires higher resolution, it pairs two 7-bit data bytes together
+to form a 14-bit value ranging from 0 to 16,383, which the monitor
+displays as a centered value (0 at 8,192).</li>
+<li><strong>System Exclusive (SysEx):</strong> SysEx messages begin with
+<code>F0</code> and end with <code>F7</code>. They transmit proprietary
+manufacturer data, firmware updates, or patch dumps. While the monitor
+cannot always parse proprietary internal parameters, it displays the
+manufacturer ID and the full byte payload for inspection.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/midi/article/what-is-a-midi-monitor-and-how-does-it-decode-hex';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/midi/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/midi/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
